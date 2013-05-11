@@ -18,7 +18,8 @@
     `SHOW TABLES;`
 
 + 查看表结构  
-    `DESC tb_name;`
+    `DESCRIBE tbl_name;`
+    `SELECT COLUMNS FROM tbl_name;`
 
 + 权限  
     `grant all on db.table to 'name'@'host'`
@@ -124,19 +125,5 @@
 干脆只用`:=`吧。
 
 -------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
