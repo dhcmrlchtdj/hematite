@@ -119,6 +119,127 @@ use `\\` to escape.`\\\` matched '\'.
 
 -------------------------------------------------------------------------------
 
+## 10
+
+use `Concat()` to concat values (columns or other literal).
+
+use `Trim()`, `LTrim()`, `RTrim()` to remove space.
+
+use `AS` rename column.
+
+`SELECT col_name AS new_name FROM tbl_name;`
+
+-------------------------------------------------------------------------------
+
+## 11
+
+### text
+
++ `Left(text, length)`
++ `Right(text, length)`
+
++ `Length(text)`
+
++ `SubString(text, start_position[, length])`
++ `Locate(pattern, text)`
+
++ `Upper(text)`
++ `Lower(text)`
+
++ `LTrim(text)`
++ `RTrim(text)`
+
++ `Soundex(text)`
+
+
+### date and time
+
++ `CurDate()`
++ `CurTime()`
++ `Now()`
+
++ `DateDiff(date, date)`
+
++ `Date(datetime)`
++ `Time(datetime)`
++ `Year(date)`
++ `Month(date)`
++ `Day(date)`
++ `Hour(time)`
++ `Minute(time)`
++ `Second(time)`
+
++ `DayOfWeek(datetime)`
+
++ `AddDate(date, date)`
++ `AddTime(time, time)`
++ `Date_Add()`
+
++ `Date_Format(datetime, format)`
+
+
+### numeric
+
++ `Pi()`
++ `Rand([seek])`
+
++ `Abs(n)`
++ `Sqrt(n)`
++ `Exp(n)`
++ `Mod(n,n)`
+
++ `Cos(n)`
++ `Sin(n)`
++ `Tan(n)`
+
+-------------------------------------------------------------------------------
+
+## 12
+
++ `AVG(column)`, `NULL` will be ignore.
++ `COUNT(column)`, `NULL` will be ignore if column is not `*`.
++ `MAX(column)`, `NULL` will be ignore.
++ `MIN(column)`, `NULL` will be ignore.
++ `SUM(column)`, `NULL` will be ignore.
+
+column can be `DISTINCT col_name`.
+
+-------------------------------------------------------------------------------
+
+## 13
+
+compare the two sql:
+
++ `SELECT col_name, COUNT(*) FROM tbl_name WHERE col_name='blahblah';`
++ `SELECT col_name, COUNT(*) FROM tbl_name GROUP BY col_name;`
+
+**caution**: if `GROUP BY` meet `NULL`, `NULL` will return as a group.
+
++ `SELECT col_name, COUNT(*) FROM tbl_name GROUP BY col_name WITH ROLLUP;`
+
+`WITH ROLLUP` will list all rows in a group.
+
++ `SELECT col_name, COUNT(*) FROM tbl_name GROUP BY col_name HAVING expr;`
+
+`HAVING` work as `WHERE`, but apply to group.
+
+
+**caution**: order of a `SELECT` clause is
+    `SELECT . FROM . [WHERE .] [GROUP BY . [HAVING .]] [ORDER BY .] [LIMIT .]`
+
+-------------------------------------------------------------------------------
+
+## 14
+
+`SELECT col_name FROM tbl_name WHERE col IN (SELECT clause)`;
+`SELECT col_name, (SELECT clause) FROM tbl_name;`
+
+-------------------------------------------------------------------------------
+
+## 15
+
+
+
 
 
 
