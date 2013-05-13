@@ -2,7 +2,7 @@
 
 -------------------------------------------------------------------------------
 
-## 3
+## 3. basic
 
 `SHOW DATABASES;`
 `USE db_name`
@@ -20,7 +20,7 @@ and more `HELP SHOWS;`
 
 -------------------------------------------------------------------------------
 
-## 4
+## 4. limit
 
 `SELECT col_name FROM tbl_name;`
 `SELECT c1, c2 FROM tbl_name;`
@@ -41,7 +41,7 @@ and more `HELP SHOWS;`
 
 -------------------------------------------------------------------------------
 
-## 5
+## 5. order by
 
 `SELECT col_name FROM tbl_name ORDER BY col_name;`
 `SELECT c1, c2 FROM tbl_name ORDER BY c1, c2;`
@@ -60,7 +60,7 @@ is shortcut for
 
 -------------------------------------------------------------------------------
 
-## 6
+## 6. where
 
 `SELECT col_name FROM tbl_name WHERE expr;`
 
@@ -78,7 +78,7 @@ any other operators applied to `NULL` just return `NULL`.
 
 -------------------------------------------------------------------------------
 
-## 7
+## 7. in
 
 
 `SELECT col_name FROM tbl_name WHERE expr [op expr];`
@@ -95,7 +95,7 @@ there ops are short circuit operator.
 
 -------------------------------------------------------------------------------
 
-## 8
+## 8. like
 
 `SELECT col_name FROM tbl_name WHERE col_name LIKE pattern;`
 
@@ -104,7 +104,7 @@ there ops are short circuit operator.
 
 -------------------------------------------------------------------------------
 
-## 9
+## 9. regexp
 
 `SELECT col_name FROM tbl_name WHERE col_name REGEXP pattern;`
 
@@ -119,7 +119,7 @@ use `\\` to escape.`\\\` matched '\'.
 
 -------------------------------------------------------------------------------
 
-## 10
+## 10. concat
 
 use `Concat()` to concat values (columns or other literal).
 
@@ -131,7 +131,7 @@ use `AS` rename column.
 
 -------------------------------------------------------------------------------
 
-## 11
+## 11. function
 
 ### text
 
@@ -194,7 +194,7 @@ use `AS` rename column.
 
 -------------------------------------------------------------------------------
 
-## 12
+## 12. function
 
 + `AVG(column)`, `NULL` will be ignore.
 + `COUNT(column)`, `NULL` will be ignore if column is not `*`.
@@ -206,7 +206,7 @@ column can be `DISTINCT col_name`.
 
 -------------------------------------------------------------------------------
 
-## 13
+## 13. group by
 
 compare the two sql:
 
@@ -229,14 +229,80 @@ compare the two sql:
 
 -------------------------------------------------------------------------------
 
-## 14
+## 14. subquery
 
 `SELECT col_name FROM tbl_name WHERE col IN (SELECT clause)`;
 `SELECT col_name, (SELECT clause) FROM tbl_name;`
 
 -------------------------------------------------------------------------------
 
-## 15
+## 15. on
+
+`ON` is same as `WHERE`.
+
+-------------------------------------------------------------------------------
+
+## 16. join
+
+**caution**: it is not case-sensitive while use `AS` to alias table.
+
++ self join
+    `WHERE expr AND expr`
+
++ inner join
+    `FROM t1 INNER JOIN t2`
+    `FROM t1, t2`
+
++ outer join
+    `FROM t1 LEFT OUTER JOIN t2`
+    `FROM t1 RIGHT OUTER JOIN t2` is same as `FROM t2 LEFT OUTER JOIN t1`
+
+inner join is intersection of t1 and t2.
+
+outer join is whole t1, plus intersection part of t2.
+
+-------------------------------------------------------------------------------
+
+## 17. union
+
+```
+SELECT col_name FROM tbl_name WHERE expr_1
+UNION
+SELECT col_name FROM tbl_name WHERE expr_2;
+```
+
++ can union many select clause at the same time.
++ each select clause must have same columns. order can be different.
+
+**caution**: `UNION` remove duplicate row by default.
+    `UNION ALL` do not eliminate duplicates.
+
+**caution**: `ORDER BY` after last select clause will be apply to all result.
+
+-------------------------------------------------------------------------------
+
+## 18. full text search
+
+```
+CREATE TABLE example (
+    note TEXT NOT NULL,
+    FILLTEXT (note)
+) ENGINE=Maria;
+```
+
+**caution**: don't enable FULLTEXT while import data to new table.
+    it will take some times to do it.
+    you can enable FULLTEXT after data imported.
+
+```
+SELECT col_name FROM tbl_name WHERE
+MATCH(note) AGAINST('pattern');
+```
+
+use `MATCH()` to specify colums to be searched.
+use `AGAINST()` to specify the search expression to be used.
+
+-------------------------------------------------------------------------------
 
 
 
