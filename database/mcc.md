@@ -304,8 +304,43 @@ use `AGAINST()` to specify the search expression to be used.
 
 -------------------------------------------------------------------------------
 
+## 19. insert
+
+`INSERT INTO tbl_name (col_name) VALUES (value);`
+`INSERT INTO tbl_name (col_name) VALUES (val1), (val2), (val3);`
 
 
+use `LOW_PRIORITY` to set priority for `INSERT`, `UPDATE`, `DELETE`.
+`INSERT LOW_PRIORITY INSERT`
+
+insert query result.
+`INSERT INTO tbl_name (col_name) SELECT column FROM other_table;`
+
+**caution**: mariadb use postion but not colums' name to insert value.
+
+-------------------------------------------------------------------------------
+
+## 20. update and delete
+
+`UPDATE tbl_name SET col_name = 'new_value' WHERE expr;`
+
+**caution**: don't forget `WHERE` clause.
+    without `WHERE`, it will update every row in table.
+
+use subquery in update clause.
+`UPDATE tbl_name SET col_name = (SELECT clause) WHERE expr;`
+
+use `IGNORE` to ignore error.
+`UPDATE IGNORE tbl_name SET col_name = 'new value' WHERE expr;`
 
 
+`DELETE FROM tbl_name WHERE expr;`
 
+**caution**: don't forget `WHERE` clause, or it will delete all rows in table.
+    use `TRUNCATE TABLE` clause to delete data in table, it is more quickly.
+
++ don't omit `WHERE` clause.
++ use primary key in `WHERE` clause.
++ there is **no** undo, be careful.
+
+-------------------------------------------------------------------------------
