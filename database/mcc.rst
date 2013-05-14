@@ -5,7 +5,7 @@
 basic
 ======
 
-.. code-block:: sql
+.. code:: sql
 
     SHOW DATABASES;
     USE db_name
@@ -27,7 +27,7 @@ and more :code:`HELP SHOWS;`
 limit
 ======
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name;
     SELECT c1, c2 FROM tbl_name;
@@ -37,7 +37,7 @@ limit
 
 **caution**: distinct is applied to **all** columns.
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name LIMIT length;
     SELECT col_name FROM tbl_name LIMIT start_position, length;
@@ -55,7 +55,7 @@ limit
 order by
 =========
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name ORDER BY col_name;
     SELECT c1, c2 FROM tbl_name ORDER BY c1, c2;
@@ -78,7 +78,7 @@ order by
 where
 ======
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE expr;
 
@@ -100,7 +100,7 @@ any other operators applied to :code:`NULL` just return :code:`NULL`.
 in
 ===
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE expr [op expr];
 
@@ -119,7 +119,7 @@ ops are short circuit operator.
 like
 =====
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE col_name LIKE pattern;
 
@@ -131,7 +131,7 @@ like
 regexp
 =======
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE col_name REGEXP pattern;
 
@@ -142,7 +142,7 @@ regexp
 **caution**: :code:`REGEXP` is not case-sensitive by default.
 use :code:`REGEXP BINARY` to force case-sensitive mode.
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE col_name REGEXP BINARY expr;
 
@@ -155,7 +155,7 @@ as
 
 use :code:`AS` rename column and table.
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name AS new_name FROM tbl_name;
     SELECT col_name FROM tbl_name AS new_name;
@@ -246,20 +246,20 @@ group by
 
 compare the two sql:
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name, COUNT(*) FROM tbl_name WHERE col_name='blahblah';
     SELECT col_name, COUNT(*) FROM tbl_name GROUP BY col_name;
 
 **caution**: if :code:`GROUP BY` meet :code:`NULL`, :code:`NULL` will return as a group.
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name, COUNT(*) FROM tbl_name GROUP BY col_name WITH ROLLUP;
 
 :code:`WITH ROLLUP` will list all rows in a group.
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name, COUNT(*) FROM tbl_name GROUP BY col_name HAVING expr;
 
@@ -268,7 +268,7 @@ compare the two sql:
 
 **caution**: order of a :code:`SELECT` clause is
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT . FROM . [WHERE .] [GROUP BY . [HAVING .]] [ORDER BY .] [LIMIT .]
 
@@ -277,7 +277,7 @@ compare the two sql:
 subquery
 =========
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE col IN (SELECT clause);
     SELECT col_name, (SELECT clause) FROM tbl_name;
@@ -299,14 +299,14 @@ join
 self join
 ----------
 
-.. code-block:: sql
+.. code:: sql
 
     WHERE expr AND expr
 
 inner join
 -----------
 
-.. code-block:: sql
+.. code:: sql
 
     FROM t1 INNER JOIN t2
     FROM t1, t2
@@ -314,7 +314,7 @@ inner join
 outer join
 -----------
 
-.. code-block:: sql
+.. code:: sql
 
     FROM t1 LEFT OUTER JOIN t2
     FROM t1 RIGHT OUTER JOIN t2
@@ -331,7 +331,7 @@ outer join is whole t1, plus intersection part of t2.
 union
 ======
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE expr_1
     UNION
@@ -350,7 +350,7 @@ union
 full text search
 =================
 
-.. code-block:: sql
+.. code:: sql
 
     CREATE TABLE example (
         note TEXT NOT NULL,
@@ -361,7 +361,7 @@ full text search
 **caution**: don't enable FULLTEXT while import data to new table.
 it will take some times to do it. you can enable FULLTEXT after data imported.
 
-.. code-block:: sql
+.. code:: sql
 
     SELECT col_name FROM tbl_name WHERE MATCH(note) AGAINST('pattern');
 
@@ -373,7 +373,7 @@ use :code:`AGAINST()` to specify the search expression to be used.
 insert
 =======
 
-.. code-block:: sql
+.. code:: sql
 
     INSERT INTO tbl_name (col_name) VALUES (value);
     INSERT INTO tbl_name (col_name) VALUES (val1), (val2), (val3);
@@ -381,17 +381,17 @@ insert
 use :code:`LOW_PRIORITY` to set priority for
 :code:`INSERT`, :code:`UPDATE`, :code:`DELETE`.
 
-.. code-block:: sql
+.. code:: sql
 
-    INSERT LOW_PRIORITY INSERT
+    INSERT LOW_PRIORITY INTO
 
-insert query result.
+insert data by query.
 
-.. code-block:: sql
+.. code:: sql
 
-    INSERT INTO tbl_name (col_name) SELECT column FROM other_table;
+    INSERT INTO tbl_name (col_name) SELECT other_col FROM other_table;
 
-**caution**: mariadb use postion but not colums' name to insert value.
+**caution**: mariadb use postion but not name of colums in insert clause.
 
 -------------------------------------------------------------------------------
 
@@ -401,7 +401,7 @@ update and delete
 update
 -------
 
-.. code-block:: sql
+.. code:: sql
 
     UPDATE tbl_name SET col_name = 'blahblah' WHERE expr;
 
@@ -410,20 +410,20 @@ without :code:`WHERE`, it will update every row in table.
 
 use subquery in update clause.
 
-.. code-block:: sql
+.. code:: sql
 
     UPDATE tbl_name SET col_name = (SELECT clause) WHERE expr;
 
 use :code:`IGNORE` to ignore error.
 
-.. code-block:: sql
+.. code:: sql
 
     UPDATE IGNORE tbl_name SET col_name = 'blahblah' WHERE expr;
 
 delete
 -------
 
-.. code-block:: sql
+.. code:: sql
 
     DELETE FROM tbl_name WHERE expr;
 
@@ -440,8 +440,212 @@ use :code:`TRUNCATE TABLE` clause to delete data in table, it is more quickly.
 create and manipulate table
 ============================
 
-.. code-block:: sql
+create
+-------
 
-   create table
+.. code:: sql
+
+   CREATE TABLE tbl_name (
+        key_example INT NOT NULL AUTO_INCREAMENT,
+        default_example INT NOT NULL DEFAULT 0,
+        PRIMARY KEY (key_example)
+   ) ENGINE=InnoDB;
+
+
+:code:`SELECT last_insert_id()` return the last :code:`AUTO_INCREAMENT` value.
+
+it is not allowed to use functions in :code:`DEFAULT`.
+only constants are supported.
+
+**caution**: can't set foreign key between tables use different engine.
+
+
+alter
+------
+
+**caution**: don't alter table contain data.
+
+.. code:: sql
+
+   ALTER TABLE tbl_name ADD col_define;
+   ALTER TABLE tbl_name DROP COLUMN col_name;
+
+   -- add foreign key
+   ALTER TABLE tbl1 ADD CONSTRAINT fk_tbl1_tbl2
+   FOREIGN KEY (col1) REDERENCES tbl2 (col2);
+
+
+delete
+-------
+
+.. code:: sql
+
+   DROP TABLE tbl_name;
+
+
+rename
+-------
+
+.. code:: sql
+
+    RENAME TABLE old_tbl_name TO new_tbl_name [, old2 TO new2];
+
+-------------------------------------------------------------------------------
+
+view
+=====
+
+view is virtual table.
+it doesn't contain any data but SQL query.
+view can be used at any where table be used.
+
+view cann't be indexed, nor have trigger or set associated.
+
+.. code:: sql
+
+   CREATE VIEW view_name AS
+   SELECT col_name FROM tbl_name WHERE expr;
+
+:code:`WHERE` clause while query a view will be combined with
+:code:`WHERE` clause while create view.
+
+view is a wrap to original tables.
+
+.. code:: sql
+
+   DROP VIEW view_name;
+   -- there is no alter clause for view.
+   -- just DROP and re CREATE, or REPLACE
+   CREATE OR REPLACE view_name AS SELECT col_name FROM tbl_name WHERE expr;
+
+-------------------------------------------------------------------------------
+
+stored procrdures
+==================
+
+stored procrdures collected statements for use.
+
+
+create simple procedure
+------------------------
+
+.. code:: sql
+
+   CREATE PROCEDURE proc_name()
+   BEGIN
+        SELECT col_name FROM tbl_name;
+   END;
+
+create procedure in cli, delimiter should be change temporary.
+otherwise it conflict with delimiter of select clause.
+
+.. code:: sql
+
+   DELIMITER //
+   CREATE PROCEDURE proc_name()
+   BEGIN
+        SELECT clause;
+   END//
+   DELIMITER ;
+
+use this procedure by :code:`CALL proc_name();`.
+it will return the columns be selected.
+
+
+get data by variable
+---------------------
+
+if a procedure has many select clause, use variable to store result.
+
+.. code:: sql
+
+   CREATE PROCEDURE proc_with_var (
+        OUT var_1 INT,
+        OUT var_2 INT
+   )
+   BEGIN
+        SELECT col_name INTO var_1 FROM tbl_name;
+        SELECT col_name INTO var_2 FROM tbl_name;
+   END;
+
+use this procedure by
+
+.. code:: sql
+
+   CALL proc_with_var(@v1, @v2);
+   SELECT @v1, @v2;
+
+**caution**: variable must begin with :code:`@`
+
+
+where clause in procedure
+------------------------------
+
+pass variable to procedure to filter data.
+
+.. code:: sql
+
+   CREATE PROCEDURE proc_name (
+        IN v1 INT,
+        OUT v2 INT
+   )
+   BEGIN
+        SELECT col_name FROM tbl_name
+        WHERE condition = v1
+        INTO v2;
+   END;
+
+   -- then use this procedure
+
+   CALL proc_name("blahblah", @result);
+   SELECT @result;
+
+
+logic in procedure
+-------------------
+
+.. code:: sql
+
+   CREATE PROCEDURE proc (
+        IN v1 BOOLEAN,
+        OUT v2 INT
+   ) COMMENT 'blahblah'
+   BEGIN
+        -- declare variable, initial by 0
+        DECLARE v3 INT DEFAULT 0;
+
+        -- ELSEIF and ELSE are supported
+        IF v1 THEN
+            SELECT col_name FROM tbl_name INTO v3;
+        ENDIF;
+
+        SELECT v3 INTO v2;
+   END;
+
+   CALL proc(true, @result);
+   SELECT @result;
+
+
+the statements in procedure can query by
+:code:`SHOW CREATE PROCEDURE proc_name;`.
+
+the :code:`COMMENT` will show in :code:`SHOW PROCEDURE STATUS;`.
+and this command will show all procedures.
+query only one procedure use :code:`SHOW PROCEDURE STATUS LIKE 'proc_name';`.
+
+
+drop procedure
+---------------
+
+.. code:: sql
+
+   DROP PROCEDURE proc_name;
+   DROP PROCEDURE IF EXISTS proc_name;
+
+-------------------------------------------------------------------------------
+
+cursor
+-------
+
 
 
