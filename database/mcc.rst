@@ -756,15 +756,92 @@ then :code:`COMMIT` is required for every statements.
 charset
 ========
 
+.. code:: sql
+
+   -- output all supported character sets
+   SHOW CHARACTER SET;
+   -- all supported collations
+   -- %_cs => case sensitive
+   -- %_ci => case insensitive
+   SHOW COLLATION;
+
+   -- character set and collation of server
+   -- that can be overwrited by database, table, even column
+   SHOW VARIABLES LIKE "character%";
+   SHOW VARIABLES LIKE "collation%";
+
+   -- set character set on create table
+   CREATE TABLE tbl_name (
+        col_name TEXT CHARACTER SET utf8 COLLATE utf8_general_ci
+   )
+   DEFAULT CHARACTER SET utf8
+   COLLATE utf8_general_ci;
+
+   -- COLLATE in SELECT clause
+   SELECT * FROM tbl_name ORDER BY col_name COLLATE utf8_general_ci;
+   -- also work with GROUP BY, HAVING, function, aliase and so on.
+
+-------------------------------------------------------------------------------
+
+user
+=====
+
+.. code:: sql
+
+   -- query users
+   USE mysql;
+   SELECT user FROM user;
+
+   -- create user
+   CREATE USER user_name IDENTIFIED BY "plain password";
+   CREATE USER user_name IDENTIFIED BY PASSWORD "hashed password";
+   -- it is not recommand to create user by
+   -- insert row into user table or GRANT statement
+
+   -- rename and delete
+   RENAME USER old_name TO new_name;
+   DROP USER user_name;
+
+   -- change password
+   SET PASSWORD FOR username = Password("new plain password");
+   SET PASSWORD = Password("new plain password") -- for self
 
 
+.. code:: sql
+
+   -- query privilege
+   SHOW GRANTS FOR user_name;
+   -- GRANT USAGE ON *.* TO 'user_name'@'%'
+   -- means no permission to do anything
+
+   -- set privilege
+   GRANT SELECT, INSERT ON db_name.tbl_name TO user_name;
+   REVOKE SELECT ON db_name.tbl_name FROM user_name;
 
 
+part of privileges
 
++ :code:`ALL`, all except :code:`GRANT OPTION`.
++ :code:`GRANT OPTION`, use of :code:`GRANT` and :code:`REVOKE`.
++ :code:`CREATE USER`,
+  include :code:`CREATE USER`, :code:`DROP USER`,
+  :code:`RENAME USER`, :code:`REVOKE ALL PRIVILEGE`.
++ :code:`CREATE`
++ :code:`CREATE TEMPORARY TABLES`
++ :code:`CREATE VIEW`
++ :code:`INDEX`, use of :code:`CREATE INDEX` and :code:`DROP INDEX`.
++ :code:`ALTER`
++ :code:`DROP`
++ :code:`INSERT`
++ :code:`SELECT`
++ :code:`UPDATE`
++ :code:`DELETE`
++ :code:`EXECUTE`, use of :code:`CALL`.
++ :code:`SHOW DATABASES`
++ :code:`SHOW VIEW`
 
+-------------------------------------------------------------------------------
 
-
-
-
-
+backup
+=======
 
