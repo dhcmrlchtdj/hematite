@@ -645,7 +645,86 @@ drop procedure
 -------------------------------------------------------------------------------
 
 cursor
--------
+=======
+
+mariadb support cursor in stored procedure and functions only.
+
+.. code:: sql
+
+   CREATE PROCEDURE cursor_example()
+   BEGIN
+        -- declare variable must before other statements
+        DECLARE var INT;
+
+        -- create cursor
+        DECLARE cur_name CURSOR
+        FOR
+        SELECT col_name FROM tbl_name;
+
+        -- open cursor
+        OPEN cur_name;
+
+        -- fetch data
+        FETCH cur_name INTO var;
+
+        -- close cursor
+        CLOSE cur_name;
+   END;
+
+-------------------------------------------------------------------------------
+
+trigger
+========
+
+a trigger is a group of statements that
+is automatically executed when event occur.
+
+**caution**: trigger are supported on table only, not view or temporary table.
+
+.. code:: sql
+
+   CREATE TRIGGER trigger_name
+   AFTER INSERT
+   ON tbl_name FOR EACH ROW
+   BEGIN
+        -- statements here
+   END;
+
+   -- event can be
+   -- BEFORE or AFTER
+   -- INSERT, UPDATE, DELETE
+
+   DROP TRIGGER trigger_name;
+
+**caution**: a trigger can be associated with only one event on one table.
+
+**caution**: if a :code:`BRFORE` trigger fail,
+the request(:code:`INSERT`, :code:`UPDATE`, :code:`DELETE`) will not execute.
+and if request fail, :code:`AFTER` trigger will not execute.
+
+trigger cann't be manipulate, just drop it and recreate.
+
+
+within :code:`INSERT` trigger, there is a virtual table named :code:`NEW`.
+it contains the row to be insert.
+
+within :code:`DELETE` trigger, virtual table :code:`OLD` contains
+the rows be deleted. it is read only.
+
+within :code:`UPDATE`, :code:`NEW` contain new value,
+:code:`OLD` contain old value.
+
+**caution**: it is not supported to :code:`CALL` procedures in trigger.
+
+-------------------------------------------------------------------------------
+
+transaction
+============
+
+
+
+
+
 
 
 
