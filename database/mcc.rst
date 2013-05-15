@@ -721,6 +721,46 @@ within :code:`UPDATE`, :code:`NEW` contain new value,
 transaction
 ============
 
+.. code:: sql
+
+   START TRANSACTION;
+   -- some statements
+   ROLLBACK;
+
+   START TRANSACTION;
+   -- some statements
+   COMMIT;
+
+:code:`ROLLBACK` work with :code:`INSERT`, :code:`UPDATE`, :code:`DELETE`,
+but not :code:`CREATE` or :code:`DROP`.
+
+set savepoint
+
+.. code:: sql
+
+   START TRANSACTION;
+   SAVEPONIT point_name;
+   -- some statements
+   ROLLBACK TO point_name;
+
+   -- SAVEPONIT will auto release after ROLLBACK or COMMIT
+   -- and can be release by
+   RELEASE SAVEPOINT point_name;
+
+mariadb auto commit statements,
+and can disable by :code:`SET AUTOCOMMIT=0;`.
+then :code:`COMMIT` is required for every statements.
+
+-------------------------------------------------------------------------------
+
+charset
+========
+
+
+
+
+
+
 
 
 
