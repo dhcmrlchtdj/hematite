@@ -865,3 +865,55 @@ performance
 + create index on columns that be used in where or order.
 + use :code:`UNION` instead of :code:`OR`.
 + :code:`FULLTEXT` is faster than :code:`LIKE`.
+
+-------------------------------------------------------------------------------
+
+data type
+==========
+
+string
+-------
+
++ ENUM
++ SET
++ CHAR
++ VARCHAR
++ TEXT
++ TINYTEXT
++ LONGTEXT
++ MEDIUMTEXT
+
+
+numeric
+--------
+
++ BIT
++ BOOLEAN(BOOL)
++ INT(INTEGER)
++ TINYINT
++ SMALLINT
++ MEDIUMINT
++ BIGINT
++ DECIMAL(DEC)
++ FLOAT
++ DOUBLE
++ REAL
+
+
+datetime
+---------
+
++ TIMESTAMP
++ DATETIME
++ DATE
++ TIME
++ YEAR
+
+
+binary
+-------
+
++ BLOB
++ TINYBLOB
++ MEDIUMBLOB
++ LONGBLOB
