@@ -842,6 +842,26 @@ part of privileges
 
 -------------------------------------------------------------------------------
 
-backup
-=======
+maintenance
+============
 
+.. code:: sql
+
+   ANALYZE TABLE tbl_name;
+   CHECK TABLE tbl_name;
+
+-------------------------------------------------------------------------------
+
+performance
+============
+
++ use :code:`EXPLAIN` to analyze a `SELECT` statement.
++ stored procedure is quicker than individual statements.
++ not use :code:`SELECT *`.
++ when import data
+  - turn off :code:`autocommit`.
+  - drop index, re-create them after import has completed.
+  - use :code:`ALTER TABLE` to temporary :code:`DISABLE KEYS`.
++ create index on columns that be used in where or order.
++ use :code:`UNION` instead of :code:`OR`.
++ :code:`FULLTEXT` is faster than :code:`LIKE`.
