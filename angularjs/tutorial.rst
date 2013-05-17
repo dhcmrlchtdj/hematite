@@ -211,7 +211,7 @@ event
 .. code:: js
 
     var controller_example = ["$scope", function(s) {
-        s.my_var = "blahblah";
+        s.my_var = 50;
         s.set_var = function(val) {
             s.my_var = val;
         };
@@ -221,6 +221,6 @@ event
 
     <p> {{ my_var }} </p>
     <label>range:
-    <input type="range" max=100 min=0 step=1 ng-change="set_var()"/>
+    <input type="range" max=100 min=0 step=1 ng-model="my_var" ng-change="set_var(my_var)"/>
     </label>
 
