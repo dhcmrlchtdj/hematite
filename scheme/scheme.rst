@@ -124,7 +124,7 @@ higher
     > (apply + '(1 2 3))
     6
 
-------------------------------------
+-------------------------------------------------------------------------------
 
 lambda function
 ================
@@ -137,6 +137,15 @@ lambda function
     > ((lambda (x y) (+ x y)) 1 2)
     3
 
+    > (define var 1)
+    > var
+    1
 
+    > (define func (lambda (x y) (+ x y)))
+    > (func 1 2)
+    3
+    > (define (func x y) (+ x y))
+    > (func 1 2)
+    3
 
 
