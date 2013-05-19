@@ -66,3 +66,27 @@ ssh
     # pub_key use `~/.ssh/id*.pub` by defualt
     # the key will be copied to `user@hostname:.ssh/authorized_keys`
 
+-------------------------------------------------------------------------------
+
+grub
+=====
+
+修改 :code:`/etc/default/grub` 里的设置，然后运行 :code:`% update-grub` 。
+或者 :code:`% grub-mkconfig -o /boot/grub/grub.cfg` 也可以吧。
+
+-------------------------------------------------------------------------------
+
+locale
+=======
+
+.. code::
+
+    % locale
+    % locale -a
+
+    % vim /etc/locale.gen
+    % locale-gen
+
+    % vim /etc/locale.conf # edit LANG and LC_*
+
+
