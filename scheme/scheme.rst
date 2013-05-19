@@ -53,6 +53,9 @@ data
     > (append '(1 2 3) '(4 5))
     (1 2 3 4 5)
 
+    > (length '(1 2 3))
+    3
+
 -------------------------------------------------------------------------------
 
 function
@@ -60,21 +63,28 @@ function
 
 .. code::
 
-    > ; (define func_name (lambda (arg) (statement)))
-      (define add (lambda (x y) (+ x y)))
+    > ; (define (func_name arg) (statement)))
+      (define (add x y) (+ x y)))
     > (add 1 2)
     3
 
     > ; (if (test) (then_do) (else_do))
       (if (= 1 0) #t #f)
     #f
+    > (if (null? '()) "is null" "not null")
+    "is null"
+    > (if (zero? 0) #t #f)
+    #t
+    > (if (list? '()) #t #f)
+    #t
 
+example
 
+.. code::
 
-
-
-
-
-
-
+    > (define (fib n)
+        (if (or (= n 0) (= n 1)) n
+            (+ (f (- n 1)) (f (- n 2)))
+        )
+      )
 
