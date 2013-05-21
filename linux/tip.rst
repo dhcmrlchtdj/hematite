@@ -27,4 +27,12 @@
     # comment ipv6 hosts
     #::1            localhost.localdomain   localhost
 
+-------------------------------------------------------------------------------
+
+scp
+====
+
+.. code::
+
+    % scp -2r -P [port] . user@hostname:path
 
