@@ -123,5 +123,6 @@ tap
     % qemu -net nic -net tap,ifname=tap0,script=no,downscript=no debian.qcow2
 
     # or use bridge
+    % echo 'allow br0' >> /etc/qemu/bridge.conf
     % qemu -net nic -net bridge,br=br0 debian.qcow2
 
