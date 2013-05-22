@@ -11,16 +11,79 @@ create image
 
 -------------------------------------------------------------------------------
 
+mount image
+============
+
+qcow2
+------
+
+.. code::
+
+    % modinfo nbd max_part=10
+    % lsmod | grep nbd
+    % ll /dev/nbd*
+
+    % qemu-nbd -c /dev/nbd0 debian.qcow2
+    % mount /dev/nbd0p1 /mnt/debian
+    % umount /mnt/debian
+    % qemu-nbd -d /dev/nbd0
+    % modprobe -r nbd
+
+raw
+----
+
+.. code::
+
+    mount -o loop,offset=32256 /path/to/image.img /mnt/mountpoint
+
+-------------------------------------------------------------------------------
+
+start emu
+===========
+
+.. code::
+
+    % qemu -enable-kvm -vga vmware debian.qcow2
+
+-------------------------------------------------------------------------------
+
+boot order
+===========
+
+.. code::
+
+    % qemu -hdb freebsd_memstick.img -boot menu=on freebsd.qcow2
+
+-------------------------------------------------------------------------------
+
+status
+=======
+
+press ``Ctrl-Alt-2`` enter console.
+
+-------------------------------------------------------------------------------
+
 network
 ========
 
-prepare
---------
+user mode
+----------
+
+use user's network, only works with the TCP and UDP protocols.
+
+.. code::
+
+    % qemu -net nic -net user debian.qcow2
+
+
+tap
+----
 
 .. code::
 
     # enable ip forward
     % sysctl net.ipv4.ip_forward=1
+    # or edit /etc/sysctl.conf
 
     # load tun
     % modprobe tun
@@ -30,17 +93,11 @@ prepare
     % find /lib/modules/ -iname 'tun.ko.gz'
     % insmod `find /lib/modules/ -iname 'tun.ko.gz'`
 
-    # check permission
-    % ll /dev/net/tun
+    # create tap
+    % tunctl -b -u `whoami`
 
-    ## create tap
-    ## tunctl -b -u `whoami`
-
-
-create bridge
---------------
-
-.. code::
+    ## check permission
+    ##% ll /dev/net/tun
 
     # archlinux for example
     % ip link
@@ -62,51 +119,9 @@ create bridge
     % brctl show
     % ip route
 
--------------------------------------------------------------------------------
+    # start qemu
+    % qemu -net nic -net tap,ifname=tap0,script=no,downscript=no debian.qcow2
 
-start emu
-===========
-
-.. code::
-
-    % echo 'allow br0' > /etc/qemu/bridge.conf
-    % qemu -enable-kvm -vga vmware -net nic -net bridge,br=br0 \
-    > -cdrom debian_netinst.iso debian.qcow2
-
--------------------------------------------------------------------------------
-
-mount
-======
-
-qcow2
-------
-
-.. code::
-
-    % modinfo nbd
-    % lsmod | grep nbd
-    # do not forget max_part
-    % modprobe nbd max_part=10
-
-    % qemu-nbd -c /dev/nbd0 debian.qcow2
-    % mount /dev/nbd0p1 /mnt/debian
-    % umount /mnt/debian
-    % qemu-nbd -d /dev/nbd0
-    % modprobe -r nbd
-
-raw
-----
-
-.. code::
-
-    mount -o loop,offset=32256 /path/to/image.img /mnt/mountpoint
-
--------------------------------------------------------------------------------
-
-boot
-=====
-
-.. code::
-
-    % qemu -hdb freebsd_memstick.img -boot menu=on freebsd.qcow2
+    # or use bridge
+    % qemu -net nic -net bridge,br=br0 debian.qcow2
 
