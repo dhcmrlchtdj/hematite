@@ -7,7 +7,7 @@ create image
 
 .. code::
 
-    % qemu-img -b image.iso -f qcow2 disk_image.qcow2 20G
+    % qemu-img -f qcow2 debian.qcow2 20G
 
 -------------------------------------------------------------------------------
 
@@ -33,8 +33,8 @@ prepare
     # check permission
     % ll /dev/net/tun
 
-    # create tap
-    % tunctl -b -u `whoami`
+    ## create tap
+    ## tunctl -b -u `whoami`
 
 
 create bridge
@@ -70,5 +70,43 @@ start emu
 .. code::
 
     % echo 'allow br0' > /etc/qemu/bridge.conf
-    % qemu -net nic -net bridge,br=br0 disk_image.qcow2
+    % qemu -enable-kvm -vga vmware -net nic -net bridge,br=br0 \
+    > -cdrom debian_netinst.iso debian.qcow2
+
+-------------------------------------------------------------------------------
+
+mount
+======
+
+qcow2
+------
+
+.. code::
+
+    % modinfo nbd
+    % lsmod | grep nbd
+    # do not forget max_part
+    % modprobe nbd max_part=10
+
+    % qemu-nbd -c /dev/nbd0 debian.qcow2
+    % mount /dev/nbd0p1 /mnt/debian
+    % umount /mnt/debian
+    % qemu-nbd -d /dev/nbd0
+    % modprobe -r nbd
+
+raw
+----
+
+.. code::
+
+    mount -o loop,offset=32256 /path/to/image.img /mnt/mountpoint
+
+-------------------------------------------------------------------------------
+
+boot
+=====
+
+.. code::
+
+    % qemu -hdb freebsd_memstick.img -boot menu=on freebsd.qcow2
 
