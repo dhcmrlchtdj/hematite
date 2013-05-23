@@ -108,3 +108,14 @@ starting MTA
 .. code::
 
     % aptitude purge exim4 exim4-base exim4-config exim4-daemon-light
+
+-------------------------------------------------------------------------------
+
+sudo
+=====
+
+.. code::
+
+    % adduser foo sudo
+
+
