@@ -134,4 +134,13 @@ cpu and memery
 
 .. code::
 
-    % qemu -m 1024 -smp 2
+    % qemu -smp 2 -m 1024
+
+-------------------------------------------------------------------------------
+
+mouse
+======
+
+.. code::
+
+    % qemu -usb -usbdevice tablet
