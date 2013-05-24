@@ -19,8 +19,9 @@ qcow2
 
 .. code::
 
-    % modinfo nbd max_part=10
+    % modinfo nbd
     % lsmod | grep nbd
+    % modprobe nbd max_part=10
     % ll /dev/nbd*
 
     % qemu-nbd -c /dev/nbd0 debian.qcow2
