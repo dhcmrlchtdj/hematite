@@ -73,7 +73,7 @@ use user's network, only works with the TCP and UDP protocols.
 
 .. code::
 
-    % qemu -net nic -net user debian.qcow2
+    % qemu -net nic,model=virtio -net user debian.qcow2
 
 
 tap
@@ -84,6 +84,7 @@ tap
     # enable ip forward
     % sysctl net.ipv4.ip_forward=1
     # or edit /etc/sysctl.conf
+    % cat /proc/sys/net/ipv4/ip_forward
 
     # load tun
     % modprobe tun
@@ -126,3 +127,11 @@ tap
     % echo 'allow br0' >> /etc/qemu/bridge.conf
     % qemu -net nic -net bridge,br=br0 debian.qcow2
 
+-------------------------------------------------------------------------------
+
+cpu and memery
+===============
+
+.. code::
+
+    % qemu -m 1024 -smp 2
