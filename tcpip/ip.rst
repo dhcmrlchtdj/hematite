@@ -5,6 +5,8 @@
 组成
 =====
 
+.. image:: ./ip-headers.jpg
+
 + [0-3]     version
     + ipv4 ``0100``
     + ipv6 ``0110``
