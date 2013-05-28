@@ -124,11 +124,48 @@ INVALID
 
 -------------------------------------------------------------------------------
 
-whitelist example
+example whitelist
 ==================
 
 .. code::
 
     iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT
     iptables -P INPUT DROP
+
+-------------------------------------------------------------------------------
+
+filter by interface
+====================
+
+.. code::
+
+    % iptables -A INPUT -i lo -j ACCEPT
+    # iptables -A INPUT --in-interface lo -j ACCEPT
+    # work on INPUT, FORWARD, PREROUTING chains.
+
+    % iptables -A OUTPUT -o lo -j ACCEPT
+    # iptables -A OUTPUT --out-interface -j ACCEPT
+    # work on FORWARD, OUTPUT, POSTROUTING chains.
+
+    % iptables -A INPUT ! -i lo -j ACCEPT
+    # invert
+
+-------------------------------------------------------------------------------
+
+example disallow ping
+======================
+
+.. code::
+
+    % iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j DROP
+
+-------------------------------------------------------------------------------
+
+save and restore
+=================
+
+.. code::
+
+    % iptables-save > /etc/iptables/example.rules
+    % iptables-restore < /etc/iptables/example.rules
 
