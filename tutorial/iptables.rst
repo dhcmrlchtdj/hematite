@@ -171,6 +171,28 @@ save and restore
 
 -------------------------------------------------------------------------------
 
+connection track
+=================
+
+packets are related to tracked connections in four different states.
+
++ NEW
++ ESTABLISHED
++ RELATED
++ INVALID
+
+all connection tracking is handled in the ``PREROUTING`` chain,
+except locally generated packets which are handled in ``OUTPUT`` chain.
+
+all state changes and calculations are done within nat table.
+
+first packet is NEW.
+followed packet is ESTABLISHED.
+packet which is related to another already ESTABLISHED connection is REALATED.
+beside, are INVALID
+
+-------------------------------------------------------------------------------
+
 match
 ======
 
@@ -221,7 +243,7 @@ match
 | --src-range        | -A INPUT -p tcp -m iprange --src-range 10.0.0.0-10.0.0.255   |
 |                    | -A INPUT -p tcp -m iprange ! --src-range 10.0.0.0-10.0.0.255 |
 +--------------------+--------------------------------------------------------------+
-| --dst-range        |                                                              |
+| --dst-range        | -A INPUT -p tcp -m iprange --dst-range 10.0.0.0-10.0.0.255   |
 +--------------------+--------------------------------------------------------------+
 | --length           | -A INPUT -p tcp -m length --length 1400:1500                 |
 |                    | -A INPUT -p tcp -m length ! --length 1500                    |
@@ -246,5 +268,4 @@ match
 
 target
 =======
-
 
