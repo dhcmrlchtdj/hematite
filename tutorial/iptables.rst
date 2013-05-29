@@ -269,3 +269,57 @@ match
 target
 =======
 
++------------+----------------------------------------------------------------------------------------------+
+| target     | example                                                                                      |
++============+==============================================================================================+
+| ACCEPT     | -A INPUT -j ACCEPT                                                                           |
++------------+----------------------------------------------------------------------------------------------+
+| DROP       | -A INPUT -j DROP                                                                             |
++------------+----------------------------------------------------------------------------------------------+
+| REJECT     | -A FORWARD -p tcp --dport 22 -j REJECT --reject-with-tcp-reset                               |
+|            | # icmp-net-unreachable, icmp-host-unreachable, icmp-port-unreachable,                        |
+|            | # icmp-proto-unreachable, icmp-net-prohibited, icmp-host-prohibited                          |
++------------+----------------------------------------------------------------------------------------------+
+| LOG        | -A FORWARD -p tcp -j LOG --log-level debug                                                   |
+|            | # debug, info, notice,warning, warn, err,error, crit, alert, emerg, panic                    |
+|            | -A FORWARD -p tcp -j LOG --log-tcp-options                                                   |
+|            | -A FORWARD -p tcp -j LOG --log-ip-options                                                    |
+|            | -A INPUT -p tcp -j LOG --log-prefix "INPUT packets"                                          |
+|            | -A INPUT -p tcp -j LOG --log-tcp-sequence                                                    |
++------------+----------------------------------------------------------------------------------------------+
+| ULOG       | -A INPUT -p tcp --dport 22 -j ULOG --ulog-nlgroup 2                                          |
+|            | -A INPUT -p tcp --dport 22 -j ULOG --ulog-prefix "SSH connection"                            |
+|            | -A INPUT -p tcp --dport 22 -j ULOG --ulog-cprange 100                                        |
+|            | -A INPUT -p tcp --dport 22 -j ULOG --ulog-qthreshold 10                                      |
++------------+----------------------------------------------------------------------------------------------+
+| REDIRECT   | -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080                           |
+|            | -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080-8090                      |
++------------+----------------------------------------------------------------------------------------------+
+| TTL        | -t mangle -A PREROUTING -i eth0 -j TTL --ttl-set 64                                          |
+|            | -t mangle -A PREROUTING -i eth0 -j TTL --ttl-dec 1                                           |
+|            | -t mangle -A PREROUTING -i eth0 -j TTL --ttl-inc 1                                           |
+|            | # ttl will decrement 1 and then dec/int work                                                 |
++------------+----------------------------------------------------------------------------------------------+
+| TOS        | -t mangle -A PREROUTING -p tcp --dport 22 -j TOS --set-tos 0x10                              |
++------------+----------------------------------------------------------------------------------------------+
+| TCPMSS     | -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RSTSYN -o eth0 -j TCPMSS --set-mss 1460      |
+|            | -t mangle -A POSTROUTING -p tcp --tcp-flags SYN,RSTSYN -o eth0 -j TCPMSS --clamp-mss-to-pmtu |
++------------+----------------------------------------------------------------------------------------------+
+| MASQUERADE | -t nat -A POSTROUTING -p tcp -j MASQUERADE --to-ports 1024-31000                             |
++------------+----------------------------------------------------------------------------------------------+
+| DNAT       | -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 10.0.0.0-10.0.0.255          |
+|            | -t nat -A PREROUTING --dst $INET_IP -p tcp --dport 80 -j DNAT --to-destination $HTTP_IP      |
++------------+----------------------------------------------------------------------------------------------+
+| SNAT       | -t nat -A POSTROUTING -p tcp -o eth0 -j SNAT --to-source 10.0.0.0-10.0.0.255:1024-32000      |
++------------+----------------------------------------------------------------------------------------------+
+| NETMAP     | -t mangle -A PREROUTING -s 10.0.0.0/24 -j NETMAP --to 10.5.6.0/24                            |
++------------+----------------------------------------------------------------------------------------------+
+| CLASSIFY   | -t mangle -A POSTROUTING -p tcp --dport 80 -j CLASSIFY --set-class 20:10                     |
++------------+----------------------------------------------------------------------------------------------+
+| DSCP       | -t mangle -A FORWARD -p tcp --dport 80 -j DSCP --set-dscp 1                                  |
+|            | -t mangle -A FORWARD -p tcp --dport 80 -j DSCP --set-dscp-class EF                           |
++------------+----------------------------------------------------------------------------------------------+
+| ECN        | -t mangle -A FORWARD -p tcp --dport 80 -j ECN --ecn-tcp-remove                               |
++------------+----------------------------------------------------------------------------------------------+
+| MARK       | -t mangle -A PREROUTING -p tcp --dport 22 -j MARK --set-mark 2                               |
++------------+----------------------------------------------------------------------------------------------+
