@@ -34,7 +34,19 @@ scp
 
 .. code::
 
-    % scp -2r -P [port] . user@hostname:path
+    # local to remote
+    % scp -2r [-P port] /local/path user@hostname:/remote/path
+    # remote to local
+    % scp -2r [-P port] user@hostname:/remote/path /local/path
+
+-------------------------------------------------------------------------------
+
+rsync
+======
+
+.. code::
+
+    % rsync -ahvzP -e "ssh -p 22" user@hostname:/remote/path /local/path
 
 -------------------------------------------------------------------------------
 
