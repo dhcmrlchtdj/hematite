@@ -2,16 +2,13 @@
  iptables
 ==========
 
+tables
+=======
+
 iptables splits packet hadling into three tables.
 
-+ filter
-+ nat
-+ mangle
-
--------------------------------------------------------------------------------
-
 filter
-=======
+-------
 
 filter table has three chains.
 
@@ -36,20 +33,18 @@ filter table has three rules.
 ``REJECT``
     drop packet and send IMCP reply back to client.
 
--------------------------------------------------------------------------------
 
 nat
-====
+----
 
 Network Address Translation.
 
 this table is used to translate the ``sourcr`` or ``destination`` field
 in packets.
 
--------------------------------------------------------------------------------
 
 mangle
-=======
+-------
 
 this table is used to alter certain fields in headers of ``IP`` packets.
 such as TTL, TOS.
@@ -323,3 +318,15 @@ target
 +------------+----------------------------------------------------------------------------------------------+
 | MARK       | -t mangle -A PREROUTING -p tcp --dport 22 -j MARK --set-mark 2                               |
 +------------+----------------------------------------------------------------------------------------------+
+
+-------------------------------------------------------------------------------
+
+NAT
+====
+
++ NAT network address translation
++ SNAT source network address translation
++ DNAT destination network address translation
++ PNAT port NAT (basic of SNAT and DNAT)
+
+SNAT is a synonym to masquerade.
