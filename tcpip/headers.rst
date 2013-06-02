@@ -23,15 +23,15 @@ ip
     + minimum is 576 octets.
     + a 1500-byte packet is the largest allowed by Ethernet at network layer.
 
-+ [32-46]   identification
++ [32-47]   identification
     + used to reassemb fragmented packets.
 
-+ [47-49]   flags
-    + 47 is reserved
-    + 48 set to 0 if the packet be fragmented else 1
-    + 49-50 set to 0 if it is last fragment else 1
++ [48-50]   flags
+    + 48 is reserved
+    + 49 set to 0 if the packet be fragmented else 1
+    + 50 set to 0 if it is last fragment else 1
 
-+ [50-63]   fragment offset
++ [51-63]   fragment offset
     + where in the datagram that this packet belongs.
     + first fragment has offset 0.
     + calculate in 64 bits.
@@ -144,6 +144,156 @@ udp
 icmp
 =====
 
+basic
+------
+
+.. image:: ./icmp-basic-headers.jpg
+
++ [0-3]     version
+    + always set to 4.
+
++ [4-7]     IHL (internet header length)
+    + length of header in 32 bit words.
+
++ [8-16]    TOS (type of service)
+    + set to 0.
+
++ [17-32]   total length
+    + length of header and data in 8 bit words.
+
++ [33-46]   identification
+
++ [47-49]   flags
+
++ [50-63]   fragment offset
+
++ [64-71]   TTL (time to live)
+
++ [72-79]   protocol
+    + ICMP version.
+    + always set to 1.
+
++ [80-95]   header checksum
+
++ [96-111]  source address
+
++ [112-127] destination address
+
++ [128-135] type
+    + IMCP type.
+
++ [136-143] code
+    + different types have different codes.
+
++ [144-159] checksum
 
 
+  +-------------------------+--------+
+  | type                    | number |
+  +=========================+========+
+  | echo reply              | 0      |
+  +-------------------------+--------+
+  | echo  request           | 8      |
+  +-------------------------+--------+
+  | destination unreachable | 6      |
+  +-------------------------+--------+
+  | source quench           | 4      |
+  +-------------------------+--------+
+  | time exceeded message   | 11     |
+  +-------------------------+--------+
+  | paramenter problem      | 12     |
+  +-------------------------+--------+
+  | information request     | 15     |
+  +-------------------------+--------+
+  | information reply       | 16     |
+  +-------------------------+--------+
 
+
+Echo Request/Reply
+-------------------
+
+.. image:: ./icmp-echo-headers.jpg
+
++ [160-175] identifier
++ [176-191] sequence number
+
+
+Destination Unreachable
+------------------------
+
+.. image:: ./icmp-destination-unreachable-headers.jpg
+
+code:
+
++ `0` network unreachable
++ `1` host unreachable
++ `2` protocol unreachable
++ `3` port unreachable
++ `4` fragmentation needed and DF set
+    + packet needs to be fragmented to be delivered.
++ `5` source route failed
++ `6` destruction network unknown
++ `7` destination host unknown
++ `8` source host isolated (obsolete)
++ `9` destination network administratively prohibited
++ `10` destination host administratively prohibited
++ `11` network unreachable for TOS
++ `12` host unreachable for TOS
++ `13` communication administratively prohibited by filtering
++ `14` host precedence violation
++ `15` precedence cutoff in effect
+
+
+source quench
+--------------
+
+.. image:: ./icmp-source-quench-headers.jpg
+
+
+redirect
+---------
+
+.. image:: ./icmp-redirect-headers.jpg
+
+code:
+
++ `0` redirect for network
++ `1` redirect for host
++ `2` redirect for TOS and network
++ `3` redirect for TOS and host
+
+
+TTL equals 0
+-------------
+
+.. image:: ./icmp-time-exceeded-headers.jpg
+
+time exceeded message.
+
+code:
+
++ `0` TTL equals 0 during transit
++ `1` TTL equals 0 during reassembly
+
+
+parameter problem
+------------------
+
+.. image:: ./icmp-parameter-problem-headers.jpg
+
++ `0` IP header bad (catchall error)
++ `1` required options missing
+
+
+timestamp request/reply
+------------------------
+
+.. image:: ./icmp-timestamp-headers.jpg
+
+obsolete
+
+
+information request/reply
+--------------------------
+
+.. image:: ./icmp-information-headers.jpg
