@@ -3,7 +3,7 @@
 
 .. code::
 
-    % chmod u+s /usr/bin/fbterm
+    $ chmod u+s /usr/bin/fbterm
 
 -------------------------------------------------------------------------------
 
@@ -35,9 +35,10 @@ scp
 .. code::
 
     # local to remote
-    % scp -2r [-P port] /local/path user@hostname:/remote/path
+    $ scp -2r [-P port] /local/path user@hostname:/remote/path
+
     # remote to local
-    % scp -2r [-P port] user@hostname:/remote/path /local/path
+    $ scp -2r [-P port] user@hostname:/remote/path /local/path
 
 -------------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ rsync
 
 .. code::
 
-    % rsync -ahvzP -e "ssh -p 22" user@hostname:/remote/path /local/path
+    $ rsync -ahvzP -e "ssh -p 22" user@hostname:/remote/path /local/path
 
 -------------------------------------------------------------------------------
 
@@ -54,3 +55,13 @@ shell history
 ==============
 
 :code:`Ctrl-R`
+
+-------------------------------------------------------------------------------
+
+bsdtar
+=======
+
+.. code::
+
+    $ bsdtar cvfa output.txz *
+    $ bsdtar xvf output.txz
