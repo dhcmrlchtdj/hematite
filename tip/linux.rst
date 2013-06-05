@@ -63,5 +63,61 @@ bsdtar
 
 .. code::
 
-    $ bsdtar cvfa output.txz *
-    $ bsdtar xvf output.txz
+    $ bsdtar cvaf output.txz *
+    $ bsdtar xvpf output.txz
+
+-------------------------------------------------------------------------------
+
+core dump
+==========
+
+enable
+-------
+
+.. code::
+
+    # get
+    $ ulimit -c
+
+    # set
+    $ ulimit -c unlimited
+    $ ulimit -c 1073741824  # 1gb
+
+
+path
+-----
+
+.. code::
+
+    # temporary
+    $ echo '/var/core/%t-%e-%p-%s.core' > /proc/sys/kernel/core_pattern
+    $ echo 0 > /proc/sys/kernel/core_uses_pid
+
+    # permanent
+    $ echo '
+    > kernel.core_pattern = /var/core/%t-%e-%p-%s.core
+    > kernel.core_uses_pid = 0' >> /etc/sysctl.conf
+    $ sysctl -p
+
+
+compress
+---------
+
+.. code::
+
+    $ echo '
+    > #!/usr/bin/env sh
+    > exec gzip - > /var/core/$1-$2-$3-$4.core.gz' > /path/to/script
+    $ echo '| /path/to/script %t %e %p %s' > /proc/sys/kernel/core_pattern
+
+
+exclude shared memory
+----------------------
+
+.. code::
+
+    $ cat /proc/<PID>/coredump_filter
+    $ echo 1 > /proc/<PID>/coredump_filter
+
+    $ man core
+

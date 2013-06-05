@@ -174,6 +174,8 @@ core file
     (gdb) generate-core-file
     (gdb) gcore
 
+    $ gdb -c core.xxx ./a.out
+
 -------------------------------------------------------------------------------
 
 attach
