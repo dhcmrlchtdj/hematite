@@ -121,3 +121,14 @@ exclude shared memory
 
     $ man core
 
+-------------------------------------------------------------------------------
+
+archlinux only
+===============
+
+.. code::
+
+    $ which google-chrome
+    /usr/bin/google-chrome
+    $ pacman -Qqo /usr/bin/google-chrome
+    google-chrome-dev
