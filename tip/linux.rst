@@ -132,3 +132,12 @@ archlinux only
     /usr/bin/google-chrome
     $ pacman -Qqo /usr/bin/google-chrome
     google-chrome-dev
+
+-------------------------------------------------------------------------------
+
+是否支持 64 位
+===============
+
+.. code::
+
+    $ grep lm /proc/cpuinfo
