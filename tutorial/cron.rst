@@ -10,6 +10,9 @@ basic control
     # list crontab
     $ crontab -l
 
+    # remove crontab
+    $ crontab -r
+
     # edit crontab
     $ crontab -e
 
