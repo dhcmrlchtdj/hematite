@@ -27,3 +27,20 @@ work with dropbox
     $ cd /path/to/project
     $ git remote add origin /path/to/dropbox/git/directory
     $ git push -u origin master
+
+
+multiple remote
+================
+
+.. code::
+
+    $ git remote add github git@github.com:user/porject.git
+    $ git remote add dropbox /path/to/project.git
+
+    $ git config -e
+    # [remote "origin"]
+    #   url = git@github.com:user/project.git
+    #   url = /path/to/project.git
+
+    $ git push -u origin master
+    $ git remote -v update
