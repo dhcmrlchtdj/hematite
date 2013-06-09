@@ -42,3 +42,31 @@ mysql 默认会在客户端空闲 8 小时后断开连接。
 .. code::
 
     > show full processlist;
+
+-------------------------------------------------------------------------------
+
+sql mode
+=========
+
+查看、修改使用的 sql mode
+
+.. code::
+
+    > SELECT @@sql_mode;
+    > SELECT @@GLOBAL.sql_mode;
+    > SELECT @@SESSION.sql_mode;
+    > SET GLOBAL sql_mode='modes'; -- need super privilege
+    > SET SESSION sql_mode='modes';
+
+常见的几个 sql mode
+
+ANSI
+    更改语法和行为，使之符合标准 SQL。
+
+STRICT_TRANS_TABLE
+    不能插入就放弃该语句。
+
+TRADITIONAL
+    插入的值不正确时，给出错误而不是警告。
+
+对于 InnoDB，还要考虑 ``innodb_strict_mode`` 。
