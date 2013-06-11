@@ -8,8 +8,8 @@ yield from
 yield-from clause acts as a "transparent channel"
 
 
-__getattr__ and __getattribute__
-=================================
+__getattr__, __getattribute__ and __setattr__
+==============================================
 
 + ``__getattribute__`` is invoked before looking.
 + ``__getattr__`` is invoked while attribute was not found.
@@ -30,3 +30,8 @@ if ``__getattribute__`` not raise ``AttributeError``,
 read `http://docs.python.org/3/reference/datamodel.html#special-lookup`_
 for more.
 
+use ``object.__setattr__(self, name, value)`` to assign attribute.
+
+可以使用 ``self.__dict__`` 直接对实例进行赋值，而不经过 ``__setattr__`` 。
+
+重写一个 ``__getattr__`` 应该是比较常见的情况。
