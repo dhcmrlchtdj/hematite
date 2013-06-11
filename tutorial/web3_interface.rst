@@ -123,8 +123,12 @@ web3.errors must support following method.
 application must not use any other methods or attributes of error object.
 
 
-return value
--------------
+value returned by application
+------------------------------
+
+if server supports asynchronous application (web3.async),
+application may return callable object which accepts no argument,
+else application return a tuple of (status, headers, body).
 
 server is responsible for ensuring that correct headers are sent to client.
 if the application omits a header required by HTTP, the server must add it.
