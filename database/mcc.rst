@@ -446,13 +446,13 @@ create
 .. code:: sql
 
    CREATE TABLE tbl_name (
-        key_example INT NOT NULL AUTO_INCREAMENT,
+        key_example INT NOT NULL AUTO_INCREMENT,
         default_example INT NOT NULL DEFAULT 0,
         PRIMARY KEY (key_example)
    ) ENGINE=InnoDB;
 
 
-:code:`SELECT last_insert_id()` return the last :code:`AUTO_INCREAMENT` value.
+:code:`SELECT last_insert_id()` return the last :code:`AUTO_INCREMENT` value.
 
 it is not allowed to use functions in :code:`DEFAULT`.
 only constants are supported.
