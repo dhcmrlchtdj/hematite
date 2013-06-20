@@ -27,7 +27,7 @@ raise an ``AttributeError`` exception.
 if ``__getattribute__`` not raise ``AttributeError``,
 ``__getattr__`` will not be invoked.
 
-read `http://docs.python.org/3/reference/datamodel.html#special-lookup`_
+read http://docs.python.org/3/reference/datamodel.html#special-lookup
 for more.
 
 use ``object.__setattr__(self, name, value)`` to assign attribute.
