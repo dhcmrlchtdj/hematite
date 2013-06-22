@@ -8,6 +8,7 @@ has_ipv6
 关于 :code:`socket.has_ipv6` ，可以直接看这个链接
 http://stackoverflow.com/questions/2075383/python-2-and-ipv6
 
+
 unicode normalize
 ==================
 
@@ -28,4 +29,12 @@ unicode normalize
     normalize("NFD", s2).encode() # b'n\xcc\x83'
 
 
+从命令行读取输入
+=================
 
+.. code:: python
+
+    import fileinput
+    with fileinput.input() as f_input:
+        for line in f_input:
+            print(line, end='')

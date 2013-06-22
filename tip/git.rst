@@ -44,3 +44,16 @@ multiple remote
 
     $ git push -u origin master
     $ git remote -v update
+
+在分支间建立联系
+=================
+
+.. code::
+
+    $ git branch local_xxx origin/xxx
+
+    # or
+    $ git co origin/xxx
+    $ git co -b local_xxx
+    $ git branch -u origin/xxx
+

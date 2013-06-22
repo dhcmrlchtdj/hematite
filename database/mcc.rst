@@ -22,7 +22,6 @@ basic
 
 and more :code:`HELP SHOWS;`
 
--------------------------------------------------------------------------------
 
 limit
 ======
@@ -50,7 +49,6 @@ limit
 
     SELECT tbl_name.col_name FROM db_name.tbl_name;
 
--------------------------------------------------------------------------------
 
 order by
 =========
@@ -73,7 +71,6 @@ order by
 
 **caution**: the postion of :code:`ORDER BY` and :code:`LIMIT``.
 
--------------------------------------------------------------------------------
 
 where
 ======
@@ -95,7 +92,6 @@ where
 use :code:`IS NULL` to detect :code:`NULL`.
 any other operators applied to :code:`NULL` just return :code:`NULL`.
 
--------------------------------------------------------------------------------
 
 in
 ===
@@ -114,7 +110,6 @@ ops are short circuit operator.
 + :code:`NOT BETWEEN`
 + :code:`NOT EXISTS`
 
--------------------------------------------------------------------------------
 
 like
 =====
@@ -126,7 +121,6 @@ like
 + :code:`%`, like :code:`.*` in regex. it will not match :code:`NULL`.
 + :code:`_`, like :code:`.` in regex.
 
--------------------------------------------------------------------------------
 
 regexp
 =======
@@ -139,7 +133,7 @@ regexp
 :code:`REGEXP` search pattern within string.
 (add :code:`^$` to work as :code:`LIKE`.)
 
-**caution**: :code:`REGEXP` is not case-sensitive by default.
+**caution**: :code:`REGEXP` is case-insensitive by default.
 use :code:`REGEXP BINARY` to force case-sensitive mode.
 
 .. code:: sql
@@ -148,7 +142,6 @@ use :code:`REGEXP BINARY` to force case-sensitive mode.
 
 use :code:``\\`` to escape. :code:``\\\`` matched :code:``\``.
 
--------------------------------------------------------------------------------
 
 as
 ===
@@ -160,7 +153,6 @@ use :code:`AS` rename column and table.
     SELECT col_name AS new_name FROM tbl_name;
     SELECT col_name FROM tbl_name AS new_name;
 
--------------------------------------------------------------------------------
 
 function
 =========
@@ -226,7 +218,6 @@ numeric
 + :code:`Sin(n)`
 + :code:`Tan(n)`
 
--------------------------------------------------------------------------------
 
 function
 =========
@@ -239,7 +230,6 @@ function
 
 column can be :code:`DISTINCT col_name`.
 
--------------------------------------------------------------------------------
 
 group by
 =========
@@ -272,7 +262,6 @@ compare the two sql:
 
     SELECT . FROM . [WHERE .] [GROUP BY . [HAVING .]] [ORDER BY .] [LIMIT .]
 
--------------------------------------------------------------------------------
 
 subquery
 =========
@@ -282,19 +271,17 @@ subquery
     SELECT col_name FROM tbl_name WHERE col IN (SELECT clause);
     SELECT col_name, (SELECT clause) FROM tbl_name;
 
--------------------------------------------------------------------------------
 
 on
 ===
 
 :code:`ON` is same as :code:`WHERE`.
 
--------------------------------------------------------------------------------
 
 join
 =====
 
-**caution**: it is not case-sensitive while use :code:`AS` to alias table.
+**caution**: it is case-insensitive while use :code:`AS` to alias table.
 
 self join
 ----------
@@ -326,7 +313,6 @@ inner join is intersection of t1 and t2.
 
 outer join is whole t1, plus intersection part of t2.
 
--------------------------------------------------------------------------------
 
 union
 ======
@@ -345,7 +331,6 @@ union
 
 **caution**: :code:`ORDER BY` after last select clause will be apply to all result.
 
--------------------------------------------------------------------------------
 
 full text search
 =================
@@ -368,7 +353,6 @@ it will take some times to do it. you can enable FULLTEXT after data imported.
 use :code:`MATCH()` to specify colums to be searched.
 use :code:`AGAINST()` to specify the search expression to be used.
 
--------------------------------------------------------------------------------
 
 insert
 =======
@@ -393,7 +377,6 @@ insert data by query.
 
 **caution**: mariadb use postion but not name of colums in insert clause.
 
--------------------------------------------------------------------------------
 
 update and delete
 ==================
@@ -435,7 +418,6 @@ use :code:`TRUNCATE TABLE` clause to delete data in table, it is more quickly.
 + use primary key in :code:`WHERE` clause.
 + there is **no** undo, be careful.
 
--------------------------------------------------------------------------------
 
 create and manipulate table
 ============================
@@ -490,7 +472,6 @@ rename
 
     RENAME TABLE old_tbl_name TO new_tbl_name [, old2 TO new2];
 
--------------------------------------------------------------------------------
 
 view
 =====
@@ -518,7 +499,6 @@ view is a wrap to original tables.
    -- just DROP and re CREATE, or REPLACE
    CREATE OR REPLACE view_name AS SELECT col_name FROM tbl_name WHERE expr;
 
--------------------------------------------------------------------------------
 
 stored procrdures
 ==================
@@ -642,7 +622,6 @@ drop procedure
    DROP PROCEDURE proc_name;
    DROP PROCEDURE IF EXISTS proc_name;
 
--------------------------------------------------------------------------------
 
 cursor
 =======
@@ -671,7 +650,6 @@ mariadb support cursor in stored procedure and functions only.
         CLOSE cur_name;
    END;
 
--------------------------------------------------------------------------------
 
 trigger
 ========
@@ -716,7 +694,6 @@ within :code:`UPDATE`, :code:`NEW` contain new value,
 
 **caution**: it is not supported to :code:`CALL` procedures in trigger.
 
--------------------------------------------------------------------------------
 
 transaction
 ============
@@ -751,7 +728,6 @@ mariadb auto commit statements,
 and can disable by :code:`SET AUTOCOMMIT=0;`.
 then :code:`COMMIT` is required for every statements.
 
--------------------------------------------------------------------------------
 
 charset
 ========
@@ -781,7 +757,6 @@ charset
    SELECT * FROM tbl_name ORDER BY col_name COLLATE utf8_general_ci;
    -- also work with GROUP BY, HAVING, function, aliase and so on.
 
--------------------------------------------------------------------------------
 
 user
 =====
@@ -840,7 +815,6 @@ part of privileges
 + :code:`SHOW DATABASES`
 + :code:`SHOW VIEW`
 
--------------------------------------------------------------------------------
 
 maintenance
 ============
@@ -850,7 +824,6 @@ maintenance
    ANALYZE TABLE tbl_name;
    CHECK TABLE tbl_name;
 
--------------------------------------------------------------------------------
 
 performance
 ============
@@ -866,7 +839,6 @@ performance
 + use :code:`UNION` instead of :code:`OR`.
 + :code:`FULLTEXT` is faster than :code:`LIKE`.
 
--------------------------------------------------------------------------------
 
 data type
 ==========
