@@ -38,3 +38,28 @@ unicode normalize
     with fileinput.input() as f_input:
         for line in f_input:
             print(line, end='')
+
+
+iter in loop
+=============
+
+.. code:: python
+
+    # while loop version
+    while True:
+        data = sock.recv(8192)
+        if data == b'':
+            break
+        do(data)
+
+    # for loop version
+    for data in iter(lambda: sock.recv(8192), b''):
+        do(data)
+
+    # example
+    q = (i for i in range(10))
+    [i for i in q] # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+    q = (i for i in range(10))
+    [i for i in iter(lambda: next(q), 5)] # [0, 1, 2, 3, 4]
+    # iter stop while ``next(q) == 5``
