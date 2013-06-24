@@ -68,3 +68,22 @@ iter in loop
     q = (i for i in range(10))
     [i for i in iter(lambda: next(q), 5)] # [0, 1, 2, 3, 4]
     # iter stop while ``next(q) == 5``
+
+
+
+keyword-only arguments
+=======================
+
+.. code:: python
+
+    def t(a, *, b, c=3):
+        print(a, b, c)
+
+    t(1, b=2) # 1 2 3
+    t(1, b=2, c=3) # 1 2 3
+    t(1, 2, b=2, c=3)
+    # TypeError: t() takes 1 positional argument but 2 positional arguments
+
+    tt = lambda *a, b, **c: print(a, b, c)
+    tt(1, b=2) # (1,) 2 {}
+    tt(1, b=2, c=3) # (1,) 2 {'c': 3}
