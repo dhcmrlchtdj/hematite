@@ -56,6 +56,11 @@ iter in loop
     for data in iter(lambda: sock.recv(8192), b''):
         do(data)
 
+    # another for looop version
+    from functools import partial
+    for data in iter(partial(sock.recv, 8192), b''):
+        do(data)
+
     # example
     q = (i for i in range(10))
     [i for i in q] # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
