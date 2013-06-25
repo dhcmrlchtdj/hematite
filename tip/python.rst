@@ -105,3 +105,14 @@ import
     import imp
     imp.reload("pkgname") # py3.3
 
+
+
+
+raise
+======
+
+.. code:: python
+
+    raise Exception
+    # equal to
+    raise Exception()
