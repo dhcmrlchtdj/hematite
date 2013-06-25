@@ -5,7 +5,8 @@
 
     $ chmod u+s /usr/bin/fbterm
 
--------------------------------------------------------------------------------
+
+
 
 禁用 ipv6
 ==========
@@ -27,7 +28,8 @@
     # comment ipv6 hosts
     #::1            localhost.localdomain   localhost
 
--------------------------------------------------------------------------------
+
+
 
 scp
 ====
@@ -40,7 +42,8 @@ scp
     # remote to local
     $ scp -2r [-P port] user@hostname:/remote/path /local/path
 
--------------------------------------------------------------------------------
+
+
 
 rsync
 ======
@@ -49,14 +52,16 @@ rsync
 
     $ rsync -ahvzP -e "ssh -p 22" user@hostname:/remote/path /local/path
 
--------------------------------------------------------------------------------
+
+
 
 shell history
 ==============
 
 :code:`Ctrl-R`
 
--------------------------------------------------------------------------------
+
+
 
 bsdtar
 =======
@@ -64,9 +69,10 @@ bsdtar
 .. code::
 
     $ bsdtar cvaf output.txz *
-    $ bsdtar xvpf output.txz
+    $ bsdtar xvf output.txz
 
--------------------------------------------------------------------------------
+
+
 
 core dump
 ==========
@@ -121,10 +127,13 @@ exclude shared memory
 
     $ man core
 
--------------------------------------------------------------------------------
+
+
+
+查找文件属于哪个包
+===================
 
 archlinux only
-===============
 
 .. code::
 
@@ -133,7 +142,8 @@ archlinux only
     $ pacman -Qqo /usr/bin/google-chrome
     google-chrome-dev
 
--------------------------------------------------------------------------------
+
+
 
 是否支持 64 位
 ===============
@@ -141,3 +151,20 @@ archlinux only
 .. code::
 
     $ grep lm /proc/cpuinfo
+
+
+
+
+dd
+===
+
+.. code::
+
+    $ dd bs=4M if=/path/to/archlinux.iso of=/dev/sdX
+
+    # restore
+    $ dd count=1 bs=512 if=/dev/zero of=/dev/sdX
+    $ cfdisk /dev/sdX
+    $ cgdisk /dev/sdX # for GPT
+
+``ddrescure``
