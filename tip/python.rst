@@ -87,3 +87,21 @@ keyword-only arguments
     tt = lambda *a, b, **c: print(a, b, c)
     tt(1, b=2) # (1,) 2 {}
     tt(1, b=2, c=3) # (1,) 2 {'c': 3}
+
+
+
+
+import
+=======
+
+.. code:: python
+
+    # load by name
+    import importlib
+    namespace = importlib.import_module("pkgname")
+    # reload
+    import importlib
+    importlib.reload("pkgname") # py3.4
+    import imp
+    imp.reload("pkgname") # py3.3
+
