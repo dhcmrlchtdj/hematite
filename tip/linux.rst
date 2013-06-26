@@ -168,3 +168,29 @@ dd
     $ cgdisk /dev/sdX # for GPT
 
 ``ddrescure``
+
+
+
+
+查看网卡速度
+=============
+
+.. code::
+
+    $ cat /sys/class/net/eth0/speed
+
+
+
+
+sshfs
+======
+
+.. code::
+
+    $ modprobe fuse
+
+    # mount
+    $ sshfs username@hostname:path /local/mount/point [ssh_options]
+
+    # unmount
+    $ fusermount -u /local/mount/point

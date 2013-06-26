@@ -13,18 +13,21 @@ source
     deb http://ftp.cn.debian.org/debian unstable main contrib non-free
     deb http://ftp.cn.debian.org/debian-multimedia unstable main non-free
 
--------------------------------------------------------------------------------
+
+
 
 gpg key
 ========
 
 .. code::
 
-    % apt-get install debian-keyring
-    % gpg --keyserver subkeys.pgp.net --recv-keys 1F41B907
-    % gpg --armor --export 1F41B907 | apt-key add -
+    $ apt-get install debian-keyring
+    $ gpg --keyserver subkeys.pgp.net --recv-keys 1F41B907
+    $ gpg --armor --export 1F41B907 | apt-key add -
 
--------------------------------------------------------------------------------
+
+
+
 
 network
 ========
@@ -45,14 +48,17 @@ network
     gateway 172.16.42.1
     dns-nameservers 202.197.224.4
 
--------------------------------------------------------------------------------
+
+
+
 
 services
 =========
 
 :code:`/etc/init.d/ssh restart`.
 
--------------------------------------------------------------------------------
+
+
 
 pcspkr
 =======
@@ -66,18 +72,20 @@ pcspkr
     blacklist pcspkr
     blacklist snd_pcsp
 
--------------------------------------------------------------------------------
+
+
 
 ssh
 ====
 
 .. code::
 
-    % ssh-copy-id -i pub_key -p port user@hostname
+    $ ssh-copy-id -i pub_key -p port user@hostname
     # pub_key use `~/.ssh/id*.pub` by defualt
     # the key will be copied to `user@hostname:.ssh/authorized_keys`
 
--------------------------------------------------------------------------------
+
+
 
 grub
 =====
@@ -85,37 +93,38 @@ grub
 修改 :code:`/etc/default/grub` 里的设置，然后运行 :code:`% update-grub` 。
 或者 :code:`% grub-mkconfig -o /boot/grub/grub.cfg` 也可以吧。
 
--------------------------------------------------------------------------------
+
+
 
 locale
 =======
 
 .. code::
 
-    % locale
-    % locale -a
+    $ locale
+    $ locale -a
 
-    % vim /etc/locale.gen
-    % locale-gen
+    $ vim /etc/locale.gen
+    $ locale-gen
 
-    % vim /etc/locale.conf # edit LANG and LC_*
+    $ vim /etc/locale.conf # edit LANG and LC_*
 
--------------------------------------------------------------------------------
+
+
 
 starting MTA
 =============
 
 .. code::
 
-    % aptitude purge exim4 exim4-base exim4-config exim4-daemon-light
+    $ aptitude purge exim4 exim4-base exim4-config exim4-daemon-light
 
--------------------------------------------------------------------------------
+
+
 
 sudo
 =====
 
 .. code::
 
-    % adduser foo sudo
-
-
+    $ adduser foo sudo
