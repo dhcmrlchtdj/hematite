@@ -116,3 +116,18 @@ raise
     raise Exception
     # equal to
     raise Exception()
+
+
+
+
+create instances without init
+==============================
+
+.. code:: python
+
+    class Example:
+        def __init__(self):
+            print("initial")
+
+    e1 = Example() # call __init__
+    e2 = Example.__new__(Example) # not call __init__
