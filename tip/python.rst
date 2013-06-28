@@ -9,6 +9,8 @@ has_ipv6
 http://stackoverflow.com/questions/2075383/python-2-and-ipv6
 
 
+
+
 unicode normalize
 ==================
 
@@ -29,8 +31,12 @@ unicode normalize
     normalize("NFD", s2).encode() # b'n\xcc\x83'
 
 
+
+
 从命令行读取输入
 =================
+
+通过管道和 py 交互
 
 .. code:: python
 
@@ -38,6 +44,9 @@ unicode normalize
     with fileinput.input() as f_input:
         for line in f_input:
             print(line, end='')
+
+
+
 
 
 iter in loop
@@ -71,6 +80,8 @@ iter in loop
 
 
 
+
+
 keyword-only arguments
 =======================
 
@@ -87,6 +98,8 @@ keyword-only arguments
     tt = lambda *a, b, **c: print(a, b, c)
     tt(1, b=2) # (1,) 2 {}
     tt(1, b=2, c=3) # (1,) 2 {'c': 3}
+
+
 
 
 
@@ -116,6 +129,7 @@ raise
     raise Exception
     # equal to
     raise Exception()
+
 
 
 

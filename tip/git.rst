@@ -7,6 +7,8 @@
     $ git ci
 
 
+
+
 删除 dangling blob
 ===================
 
@@ -14,6 +16,8 @@
 
     $ git fsck --full
     $ git gc --aggressive --prune=now
+
+
 
 
 work with dropbox
@@ -27,6 +31,8 @@ work with dropbox
     $ cd /path/to/project
     $ git remote add origin /path/to/dropbox/git/directory
     $ git push -u origin master
+
+
 
 
 multiple remote
@@ -45,6 +51,10 @@ multiple remote
     $ git push -u origin master
     $ git remote -v update
 
+
+
+
+
 在分支间建立联系
 =================
 
@@ -56,4 +66,3 @@ multiple remote
     $ git co origin/xxx
     $ git co -b local_xxx
     $ git branch -u origin/xxx
-

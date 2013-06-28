@@ -15,6 +15,8 @@ visual mode
 + :code:`U` => upper
 
 
+
+
 去除重复的行
 =============
 
@@ -24,4 +26,3 @@ visual mode
 
     :'<,'>sort
     :'<,'>s/\v(^.*$)(\n\1)+/\1/g
-

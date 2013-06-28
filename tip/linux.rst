@@ -194,16 +194,3 @@ sshfs
 
     # unmount
     $ fusermount -u /local/mount/point
-
-
-
-
-compile pthread programs
-=========================
-
-programs use Pthreads API must be compiled with ``-pthread`` options.
-
-it will
-
-+ define ``_REENTRANT`` macro.
-+ link `libpthread` library (what ``-lpthread`` do).

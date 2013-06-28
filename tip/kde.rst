@@ -7,5 +7,4 @@
 
 .. code::
 
-    % sed 's/StartServer=true/StartServer=false/i' ~/.config/akonadi/akonadiserverrc
-
+    $ sed 's/StartServer=true/StartServer=false/i' ~/.config/akonadi/akonadiserverrc
