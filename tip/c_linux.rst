@@ -57,3 +57,14 @@ http://gcc.gnu.org/onlinedocs/gcc-4.8.1/gcc/Thread_002dLocal.html
 
 另外，c11 倒是有个新的标识符 ``_Thread_local`` ，好像 llvm 支持了，
 可以看 http://clang.llvm.org/docs/LanguageExtensions.html#c11-thread-local
+
+
+
+
+
+查看使用的 pthread 版本
+========================
+
+.. code::
+
+    $ $(ldd /bin/ls | grep libc.so | awk '{print $3}')
