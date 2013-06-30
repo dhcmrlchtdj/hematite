@@ -68,3 +68,15 @@ http://gcc.gnu.org/onlinedocs/gcc-4.8.1/gcc/Thread_002dLocal.html
 .. code::
 
     $ $(ldd /bin/ls | grep libc.so | awk '{print $3}')
+
+
+
+
+
+backlog
+========
+
+就是 ``listen`` 的第二个参数啦，可以看 ``man 2 listen`` 。
+
+可以直接使用 ``sys/socket.h`` 里面定义的常量 ``SOMAXCONN`` 。
+这个值由 ``/proc/sys/net/core/somaxconn`` 决定，同时也是可使用的最大值。
