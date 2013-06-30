@@ -61,11 +61,11 @@ iter in loop
             break
         do(data)
 
-    # for loop version
+    # for loop version, use lambda
     for data in iter(lambda: sock.recv(8192), b''):
         do(data)
 
-    # another for looop version
+    # for looop version, use partial
     from functools import partial
     for data in iter(partial(sock.recv, 8192), b''):
         do(data)
@@ -76,7 +76,7 @@ iter in loop
 
     q = (i for i in range(10))
     [i for i in iter(lambda: next(q), 5)] # [0, 1, 2, 3, 4]
-    # iter stop while ``next(q) == 5``
+    # stop while `lambda: next(q)` return 5
 
 
 

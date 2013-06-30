@@ -8,6 +8,8 @@ yield from
 yield-from clause acts as a "transparent channel"
 
 
+
+
 __getattr__, __getattribute__ and __setattr__
 ==============================================
 
@@ -38,3 +40,11 @@ use ``object.__setattr__(self, name, value)`` to assign attribute.
 重写一个 ``__getattr__`` 应该是比较常见的情况。
 
 上面三个方法都是针对实例的。想要在类的层面进行，可以自己定义 ``metaclass`` 。
+
+
+
+
+__call__
+=========
+
+``__call__`` 是让实例变成可调用。
