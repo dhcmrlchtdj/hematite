@@ -145,3 +145,30 @@ create instances without init
 
     e1 = Example() # call __init__
     e2 = Example.__new__(Example) # not call __init__
+
+
+
+
+
+wraps
+======
+
+使用 ``functools.wraps`` 来包裹函数，可以在需要时使用未包裹的函数。
+
+.. code:: python
+
+    from functools import wraps
+
+    def blah(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            print("blahblah")
+        return wrapper
+
+    @blah
+    def example():
+        print("example")
+
+
+    example() # blahblah
+    example.__wrapped__() # example

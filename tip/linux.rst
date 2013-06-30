@@ -142,6 +142,10 @@ archlinux only
     $ pacman -Qqo /usr/bin/google-chrome
     google-chrome-dev
 
+    # 使用管道查找
+    $ which google-chrome | pacman -Qqo - | pacman -Qi -
+
+
 
 
 
