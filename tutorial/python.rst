@@ -102,13 +102,12 @@ https://github.com/inglesp/Discovering-Descriptors
 
 -------------------------------------------------------------------------------
 
-其实感觉就像是 ``property()`` 一样，那么有实际应用呢？
-其实前面的链接就讲到了，而且在 `bottle.py` 里还能找到相同的代码。
+其实感觉就像是 ``@property`` 一样。
 
 + https://github.com/inglesp/Discovering-Descriptors/blob/master/descriptors.py#L56
 + https://github.com/defnull/bottle/blob/master/bottle.py#L173
 
-用来做修饰器，达到缓存结果的效果。
+用来做修饰器，达到惰性求值，缓存结果的效果。
 
 .. code:: python
 
@@ -117,8 +116,9 @@ https://github.com/inglesp/Discovering-Descriptors
             self.func = func
 
         def __get__(self, instance, owner=None):
-            instance.__dict__[self.func.__name__] = self.func(instance)
-            return instance.__dict__[self.func.__name__]
+            value = self.func(instance)
+            setattr(instance, self.func.__name__, value)
+            return value
 
     class Example:
         @cached_property
@@ -128,9 +128,9 @@ https://github.com/inglesp/Discovering-Descriptors
             return 42
 
     e = Example()
-    print(e.__dict__) # {}
+    print(vars(e)) # {}
     print(e.slow_at_first_time) # return 42, after a long sleep
-    print(e.__dict__) # {'slow_at_first_time': 42}
+    print(vars(e)) # {'slow_at_first_time': 42}
     print(e.slow_at_first_time) # return 42, immediately
 
 
