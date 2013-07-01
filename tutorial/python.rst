@@ -135,7 +135,57 @@ https://github.com/inglesp/Discovering-Descriptors
 
 
 
+
+
 __call__
 =========
 
 ``__call__`` 是让实例变成可调用。
+
+
+
+
+
+metaclass
+==========
+
+``metaclass`` 是 ``type`` 的子类。
+
+在定义类的时候，会生成一个元类的实例，
+也就是调用 ``metaclass.__init__()`` 。
+在生成实例的时候，会调用元类的实例 ``metaclass_instance()`` ，
+也就是 ``metaclass_instance.__call__()`` 。
+
+
+
+
+
+
+context manager
+================
+
+http://docs.python.org/3/library/stdtypes.html#context-manager-types
+
+一般写 ``contextmanager`` 就是定义一个类，
+然后实现 ``__enter__`` 和 ``__exit__`` 。
+
+也可以用生成器来实现 ``contextmanager`` 。
+
+
+.. code:: python
+
+    from contextlib import contextmanager
+
+    @contextmanager
+    def gen_example():
+        print("enter")
+        yield
+        print("exit")
+
+
+
+    class cls_example:
+        def __enter__(self):
+            print("enter")
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            print("exit")
