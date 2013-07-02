@@ -11,6 +11,8 @@ trim space
     echo ${var// };
 
 
+
+
 替换
 =====
 
