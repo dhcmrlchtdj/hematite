@@ -84,13 +84,13 @@ https://github.com/inglesp/Discovering-Descriptors
 ``descriptor`` 也就是对 ``x`` 动些手脚，来完成特别的需求。
 
 只要 ``x`` 实现了相应的接口，
-也就是 ``__get__`` ， ``__set__`` 和 ``__del__`` ，
+也就是 ``__get__`` ， ``__set__`` 和 ``__delete__`` ，
 这些函数就会在相应的时候被调用。
 
 + 通过 ``x`` 自身来调用， ``x.__get__(a)`` 。
 + 通过实例 ``a`` 来调用，
   ``a.x`` 实际上执行了 ``type(a).__dict__['x'].__get__(a, type(a))`` 。
-  也就是通过类进行调用，通过第一个参数来指定实例。
+  ``type(a).__dict__['x']`` 得到的是 ``descriptor`` 的实例。
 + 通过类 ``A`` 来调用，
   ``A.x`` 实际执行 ``A.__dict__['x'].__get__(None, A)`` 。
 + 通过 super，有点复杂……
@@ -189,3 +189,19 @@ http://docs.python.org/3/library/stdtypes.html#context-manager-types
             print("enter")
         def __exit__(self, exc_type, exc_val, exc_tb):
             print("exit")
+
+
+
+
+
+
+
+__new__
+========
+
+.. code:: python
+
+    class example(type):
+        def __new__(cls, clsname, bases, clsdict):
+            return super().__new__(cls, clsname, bases, clsdict)
+
