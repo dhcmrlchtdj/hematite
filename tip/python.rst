@@ -172,3 +172,14 @@ wraps
 
     example() # blahblah
     example.__wrapped__() # example
+
+
+
+
+获取对象的内存大小
+===================
+
+.. code:: python
+
+    import sys
+    print(sys.getsizeof(lambda x: x))
