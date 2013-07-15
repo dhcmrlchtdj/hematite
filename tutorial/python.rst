@@ -115,7 +115,7 @@ https://github.com/inglesp/Discovering-Descriptors
         def __init__(self, func):
             self.func = func
 
-        def __get__(self, instance, owner=None):
+        def __get__(self, instance, owner):
             value = self.func(instance)
             setattr(instance, self.func.__name__, value)
             return value

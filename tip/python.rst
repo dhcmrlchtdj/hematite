@@ -183,3 +183,18 @@ wraps
 
     import sys
     print(sys.getsizeof(lambda x: x))
+
+
+
+
+timestamp
+==========
+
+.. code:: python
+
+    import time
+    int(time.time()) # integer
+
+    import datetime
+    datetime.datetime.now().strftime("%s") # string
+    str(int(time.time())) # faster way
