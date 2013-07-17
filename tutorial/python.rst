@@ -204,4 +204,3 @@ __new__
     class example(type):
         def __new__(cls, clsname, bases, clsdict):
             return super().__new__(cls, clsname, bases, clsdict)
-
