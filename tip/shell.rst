@@ -152,6 +152,7 @@ pip
 
 .. code::
 
-    $ pip list -l   # list
+    $ pip list -l   # list local packages
     $ pip list -lo  # out of date
     $ pip list -lo | awk '{print $1}' | xargs -n 1 pip install -U
+    $ pip list -lo | cut -d ' ' -f 1 | xargs -n 1 pip install -U
