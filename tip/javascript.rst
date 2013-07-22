@@ -25,3 +25,16 @@ timestamp
 不过 opera 不支持啊。
 
 还是用 :code:`el.scrollTo` 来滚动吧。
+
+
+
+
+
+
+
+HTMLElement
+============
+
+所有的 DOM 节点都继承了 HTMLElement。
+不过我们不能自己调用这个构造函数来构造新节点就是了。
+通过修改 HTMLElement 的原型（prototype），可以给节点添加方法。
