@@ -128,3 +128,63 @@ eval
 可以理解成，代码是在一个新的函数作用域中执行的。
 
 还是可以通过返回值以及修改外部变量的方式来交流就是了。
+
+
+
+
+
+
+DOM 节点属性
+=============
+节点属性算是一个坑。
+
+.. code:: javascript
+
+    var body = document.body;
+
+    body.id = 'property';
+    console.log( body.id );
+
+    body.setAttribute('id', 'attribute');
+    console.log( body.getAttribute('id') );
+
+    body.getAttributeNode('id').nodeValue = 'attributeNode';
+    console.log( body.getAttributeNode('id').nodeValue );
+
+上面三种方法都可以获取和修改节点的属性。
+
+:code:`getAttributeNode` 没啥亮点，这里不展开了。
+
+使用 :code:`getAttribute` 和 :code:`setAttribute`
+来操作节点的属性（attribute）在大部分情况下是个好选择，
+没有非常突出的问题。
+
+直接操作节点的属性（property）需要注意几点：
+
++ 属性名的限制
+
+  属性名在 js 和 html 中不是一一对应的。典型代表就是 :code:`className` 。
+  在 js 中，属性名称受 js 的命名限制，不能与保留字冲突，通常采用小骆驼命名法。
+
++ 自定义属性
+
+  可以直接用属性操作的只有 html 规定的标准属性，自定义的属性是取不到的。
+  不过 :code:`data-` 开头的自定义属性可以通过 :code:`dataset` 属性获取。
+
++ 表单
+
+  在表单中，使用属性（property）可以直接获取相应的表单项，
+  这里的相应指的是项的 :code:`id` 或者 :code:`name` 属性。
+  换句话说，这些属性被项覆盖了，也就无法通过属性（property）来获取和修改了，
+  这种时候就需要使用 :code:`getAttribute` 。
+
++ 链接
+
+  使用属性（property）来获取节点的 url ，
+  比如 :code:`src` :code:`href` :code:`action` ，
+  其结果都是被浏览器补全了的，
+  要获取 html 原始值，要使用 :code:`getAttribute` 。
+
+
+早期的 IE 版本从来都是地狱，这里不细说。
+css 样式是个比一般样式更大的坑，这里也不展开了。
