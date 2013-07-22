@@ -75,9 +75,8 @@ js 里有 :code:`setTimeout` 和 :code:`setInterval` 两种定时器，
 
 new
 ====
-我们可以把一个函数当成构造函数（constructor），来 :code:`new` 一下。
-解释下 :code:`new` 的时候，都干了什么。
-
+我们使用一个函数作为构造函数（constructor），来 :code:`new` 一下。
+下面解释下 :code:`new` 的时候，都干了什么。
 
 .. code:: javascript
 
@@ -90,9 +89,9 @@ new
 在上面这个例子里，构造函数 :code:`Example` 没有 :code:`return` 语句，
 而且里面引用了 :code:`this` ，那么 :code:`example` 到底是什么呢。
 
-:code:`new` 会先构造一个空对象（ :code:`{}` ），
-把这个对象绑定到构造函数的 :code:`this` 上并执行构造函数，
-或者说是在这个空对象上执行了构造函数，然后返回了这个空对象。
+实际上， :code:`new` 会先构造一个空对象（ :code:`{}` ），
+在这个空对象上执行构造函数（就是把这个对象绑定到构造函数的 :code:`this` 上），
+最后返回这个对象。
 
 .. code:: javascript
 
@@ -101,7 +100,7 @@ new
 
 就是上面这种感觉吧。
 
-那么，如果这个作为构造函数的函数，带有 :code:`return` 语句会怎么样？
+如果这个构造函数带有 :code:`return` 语句会怎么样？
 
 .. code:: javascript
 
@@ -117,3 +116,7 @@ new
 
 看了上面的代码，估计也能猜出来了一点。
 使用 :code:`new` 的时候，返回值是被无视的，返回的是新生成的那个对象。
+
+最后， :code:`new A` 和 :code:`new A()` 的效果是一样。
+只能说，:code:`new` 和构造函数以及括号，三者是个整体，
+如果插入括号改变运算优先级，会改变整个语句的语义。
