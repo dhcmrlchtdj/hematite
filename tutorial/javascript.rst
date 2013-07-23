@@ -93,27 +93,73 @@ new
 就是上面这种感觉吧。
 不过还是有区别的，手动生成的对象不会被视为构造函数的实例。
 
-如果这个构造函数带有 :code:`return` 语句会怎么样？
+如果构造函数带有 :code:`return` 语句会怎么样？
 
 .. code:: javascript
 
-    function Ex() {
+    function Ex1() {
         return 'wtf';
     }
 
-    ex = new Ex();
-    console.log(ex);
+    function Ex2() {
+        return ['wtf'];
+    }
 
-    ex2 = {}
-    console.log(Ex.call(ex2));
+    function Ex3() {
+        return {'ex3': 'wtf'};
+    }
+
+    console.log(new Ex1());
+    console.log(new Ex2());
+    console.log(new Ex3());
 
 看了上面的代码，估计也能猜出来了一点。
-使用 :code:`new` 的时候，返回值是被无视的，返回的是新生成的那个对象。
+使用 :code:`new` 的时候，返回值必须是对象类型值，
+如果返回基本类型的值， :code:`return` 会被无视掉，返回 :code:`this` 。
 
 最后， :code:`new A` 和 :code:`new A()` 的效果是一样。
 只能说，:code:`new` 和构造函数以及括号，三者是个整体，
 如果插入括号改变运算优先级，会改变整个语句的语义。
 
+
+
+new 续
+=======
+
+.. code:: javascript
+
+    (function() {
+        var ex2 = function() {
+            return this.name;
+        };
+
+        function Person(name) {
+            this.name = name;
+            this.ex1 = function() {
+                return this.name;
+            };
+            this.ex2 = ex2;
+        }
+
+        Person.prototype.ex3 = function() {
+            return this.name;
+        };
+
+        var a = Person('a');
+        var b = Person('b');
+        console.log(a.ex1 === b.ex1); // false
+        console.log(a.ex2 === b.ex2); // true
+        console.log(a.ex3 === b.ex3); // true
+    })();
+
+作为构造函数，其内部定义的属性都是直接赋给新对象的，所以都是不同的个体。
+对于内部的函数，虽然功能相同，但却是不同的函数。
+想要重用函数，就不能在构造函数内声明。
+可以在外部声明，在构造函数中获取引用。
+还可以赋值给构造函数的原型。
+
+联系存在于 *实例* 和 *构造函数的原型* 中，而不是 *实例* 和 *构造函数* 。
+原型里的的 :code:`constructor` 属性又指向了构造函数。
 
 
 
