@@ -44,3 +44,11 @@ HTMLElement
 节点文字
 =========
 可以使用 :code:`textContent` 来获取和修改节点包含的文本。
+
+
+
+
+
+Object.create
+==============
+:code:`Object.create` 的第一个参数是新对象的原型。
