@@ -198,3 +198,40 @@ sshfs
 
     # unmount
     $ fusermount -u /local/mount/point
+
+
+
+
+
+pip
+====
+
+以前找到的代码是这样的
+
+.. code::
+
+    $ pip freeze -l | cut -d = -f 1 | xargs pip instal -U
+    $ pip freeze -l | cut -d = -f 1 | xargs -n 1 pip search | grep -B2 'LATEST:'
+
+发现还可以这样
+
+.. code::
+
+    $ pip list -l   # list local packages
+    $ pip list -lo  # out of date
+    $ pip list -lo | awk '{print $1}' | xargs -n 1 pip install -U
+    $ pip list -lo | cut -d ' ' -f 1 | xargs -n 1 pip install -U
+
+
+
+
+
+
+wget
+=====
+
+.. code::
+
+    $ wget -rkl 1 'http://url'
+
+用来抓取文档还是很好用的。

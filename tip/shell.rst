@@ -133,26 +133,3 @@ whereis
 
     $ whereis ls
     ls: /usr/bin/ls /usr/share/man/man1/ls.1p.gz /usr/share/man/man1/ls.1.gz
-
-
-
-
-
-pip
-====
-
-以前找到的代码是这样的
-
-.. code::
-
-    $ pip freeze -l | cut -d = -f 1 | xargs pip instal -U
-    $ pip freeze -l | cut -d = -f 1 | xargs -n 1 pip search | grep -B2 'LATEST:'
-
-发现还可以这样
-
-.. code::
-
-    $ pip list -l   # list local packages
-    $ pip list -lo  # out of date
-    $ pip list -lo | awk '{print $1}' | xargs -n 1 pip install -U
-    $ pip list -lo | cut -d ' ' -f 1 | xargs -n 1 pip install -U
