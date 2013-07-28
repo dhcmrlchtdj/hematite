@@ -123,3 +123,79 @@ view model 即 js。
 
 调用的时候，使用 ``extend`` 方法，将要调用的方法放进去。
 可以使用调用多个方法，但是顺序有影响。
+
+
+
+
+throttle
+=========
+``throttle`` 是个内置的拓展，用来延迟计算。
+
+.. code:: javascript
+
+    function ViewModel() {
+        this.name = ko.observable('CamelCase');
+        this.upper = ko.computed(function() {
+            return this.name().toUpperCase();
+        }, this).extend({ throttle: 1000 });
+    }
+    ko.applyBindings(new ViewModel());
+
+上面这个例子，在 ``name`` 改变一秒后，才会重新计算 ``upper`` 。
+
+在与服务器交互的时候，尤其有用。
+可以等待数据都修改好之后，再一次性向服务器提交。
+下面的例子来自官网。
+
+.. code:: javascript
+
+    function ViewModel() {
+        this.pageSize = ko.observable(20);
+        this.pageIndex = ko.observable(1);
+        this.pageData = ko.observableArray();
+        ko.computed(function() {
+            var params = {
+                page: this.pageIndex(),
+                size: this.pageSize()
+            };
+            $.getJSON('url', params, this.pageData);
+        }).extend({ throttle: 1 });
+    }
+    var vm = new ViewModel();
+
+
+
+视图更新
+=========
+在上面的例子里，不使用 ``throttle`` 的话，
+每次修改 ``pageSize`` 或 ``pageIndex`` ，
+都会向服务器发起请求。
+加上 ``throttle`` 之后，则会等待修改都完成，才发起请求。
+
+下面讲下，请求是怎么被触发的。
+
+初始化视图的时候，会发起一次请求，这个不用说。
+修改 ``pageSize`` 之后又如何呢？
+
+关键在于 ``computed`` 。
+`ko` 在执行 ``computed`` 的时候，
+会记录下计算属性需要读取的 ``observable`` 对象。
+然后使用 ``subscribe`` 给这些对象加上回调函数，监视这些对象的修改。
+对象修改之后，回调函数会重新计算整个 ``computed`` 里的对象。
+
+如果不想因为某些数据的修改而触发更新，可以使用 ``peek`` 方法。
+
+.. code:: javascript
+
+    function ViewModel() {
+        this.update = ko.observable(1);
+        this.notUpdate = ko.observable(2);
+        this.sum = ko.computed(function() {
+            return this.update() + this.notUpdate.peek();
+        }, this);
+    }
+
+单纯修改 ``notUpdate`` 不会更新 ``sum`` ，
+要修改 ``update`` 时，才重新计算 ``sum`` ，包括 ``notUpdate`` 的修改。
+
+应该避免 ``computed`` 对象间的循环依赖。
