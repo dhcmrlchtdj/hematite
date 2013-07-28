@@ -82,3 +82,44 @@ view model 即 js。
 
     subBefore.dispose();
     subAfter.dispose();
+
+
+
+
+
+
+扩展绑定
+=========
+
+.. code:: javascript
+
+    ko.extenders.log = function(target) {
+        console.log('value: ' + target());
+        return target;
+    }
+
+    ko.extenders.num = function(target, precision) {
+        var ret = ko.computed({
+            read: target,
+            write: function(newValue) {
+                var val = Number(newValue).toFixed(precision);
+                target(val);
+            }
+        });
+        ret(target());
+        return ret;
+    };
+    var vm = {
+        before: ko.observable('100').extend({ log: undefined, num: 2 }),
+        after: ko.observable('100').extend({ num: 3, log: undefined })
+    };
+    ko.applyBindings(vm);
+
+
+首先是向 ``ko.extenders`` 添加新的方法。
+新方法的地一个参数是调用这个被拓展的 ``observable`` ，
+第二个参数是传进的参数。
+返回值应该是一个 ``observable`` 对象，可以是原来的，也可以是修改过的。
+
+调用的时候，使用 ``extend`` 方法，将要调用的方法放进去。
+可以使用调用多个方法，但是顺序有影响。
