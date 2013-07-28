@@ -127,6 +127,7 @@ view model 即 js。
 
 
 
+
 throttle
 =========
 ``throttle`` 是个内置的拓展，用来延迟计算。
@@ -165,6 +166,9 @@ throttle
 
 
 
+
+
+
 视图更新
 =========
 在上面的例子里，不使用 ``throttle`` 的话，
@@ -199,3 +203,47 @@ throttle
 要修改 ``update`` 时，才重新计算 ``sum`` ，包括 ``notUpdate`` 的修改。
 
 应该避免 ``computed`` 对象间的循环依赖。
+
+
+
+
+
+
+扩展绑定 续
+============
+除了使用 ``extenders`` 对对象进行拓展，还可以使用 ``fn`` 。
+
+首先是对象间的继承关系
+
+::
+
+    ko.subscribable
+    ├── ko.observable
+    │   └── ko.observableArray
+    └── ko.computed
+
+可以通过 ``ko.subscribable.fn`` 给对象添加方法。
+
+.. code:: javascript
+
+    ko.subscribable.fn.num = function(precision) {
+        var self = this; // `this` is the `observable` who call this method
+        var ret = ko.computed({
+            read: self,
+            write: function(newValue) {
+                var val = Number(newValue).toFixed(precision);
+                self(val);
+            }
+        });
+        ret(self());
+        return ret;
+    };
+
+    var vm = {
+        val: ko.observable('100').num(2)
+    };
+    ko.applyBindings(vm);
+
+和上面的差不多，一样返回一个 ``observable`` 的对象。
+唯一值得一提的就是用 ``this`` 来指代原来的 ``observable`` 对象。
+而 ``extenders`` 是使用第一个参数来获取原来的 ``observable`` 对象。
