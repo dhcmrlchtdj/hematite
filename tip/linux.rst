@@ -232,7 +232,7 @@ wget
 
 .. code::
 
-    $ wget -r -k -l 1 -np 'http://url'
+    $ wget -r -k -l 1 -np 'http://url'  -A html,css
 
 用来抓取文档还是很好用的。
 
@@ -240,3 +240,4 @@ wget
 + ``k`` 是转换链接地址。
 + ``l`` 是递归的深度。
 + ``np`` 是不抓取上级目录。
++ ``A`` 是要下载的后缀。
