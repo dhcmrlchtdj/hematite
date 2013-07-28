@@ -247,3 +247,28 @@ throttle
 和上面的差不多，一样返回一个 ``observable`` 的对象。
 唯一值得一提的就是用 ``this`` 来指代原来的 ``observable`` 对象。
 而 ``extenders`` 是使用第一个参数来获取原来的 ``observable`` 对象。
+
+
+
+
+
+event
+======
+在处理事件的时候，可以使用 ``ko.dataFor`` 和 ``ko.contextFor`` 获取元素的信息。
+
+.. code:: javascript
+
+    function ViewModel() {
+        this.value = ko.observable(1);
+    }
+
+    ko.applyBindings(new ViewModel());
+    //ko.applyBindings(new ViewModel(), document.querySelector('#context'));
+
+    document.body.addEventListener('click', function() {
+        console.log(ko.dataFor(this));
+        console.log(ko.contextFor(this));
+    });
+
+
+其中 ``dataFor`` 是视图， ``contextFor`` 是上下文。
