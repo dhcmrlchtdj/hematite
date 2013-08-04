@@ -78,6 +78,8 @@
 
 
 
+
+
 http 模块
 ==========
 
@@ -93,13 +95,43 @@ http 模块
 | tcp_nodelay       |       |
 +-------------------+-------+
 
-listen
--------
 
+每个 ``server`` 块都是个虚拟的服务器，
+``listen`` 和 ``server_name`` 定义了这个虚拟服务器。
 
-server_name
-------------
+``listen`` 定义了端口和地址，而 ``server_name`` 和请求中的 ``Host`` 对应。
 
+``server_name`` 默认是空值（ ``""`` ），（只）可以在头尾使用通配符 ``*`` ，
+也可以使用正则表达式。
 
-location
----------
+::
+
+    server_name example.com www.example.com;
+    server_name .example.com; # 会匹配 *.example.com 和 example.com
+    server_name fourm.example.com;
+    server_name *.example.com;
+    server_name www.example.*;
+    server_name ~^www\.example\.com$; # 正则要以 `~` 开头
+    server_name "~^(?P<name>\w{1,3})\.example\.com$"; # 带 `{}` 的正则要用引号包围
+
+在匹配多个 ``server_name`` 的情况下，会按照如下顺序进行选择：
+
+1. 完整的匹配
+2. 最长的前通配符匹配
+3. 最长的后通配符匹配
+4. 配置中出现的第一个匹配的正则
+
+::
+
+    # 假设有
+    server_name www.cn.example.com;
+    server_name *.cn.example.com;
+    server_name *.example.com;
+    server_name www.cn.*;
+    server_name www.*;
+    server_name ~^.*\.example\..*$;
+    # 匹配的顺序就是上面的顺序了
+
+``listen`` 的匹配优先级要比 ``server_name`` 高。
+
+``location`` 用来将虚拟地址映射到真实地址。
