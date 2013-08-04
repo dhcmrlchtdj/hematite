@@ -241,3 +241,11 @@ wget
 + ``l`` 是递归的深度。
 + ``np`` 是不抓取上级目录。
 + ``A`` 是要下载的后缀。
+
+
+
+
+systemd service
+================
+修改了 ``service`` 文件后，
+要使用 ``systemctl --system daemon-reload`` 来重新加载配置。
