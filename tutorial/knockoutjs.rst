@@ -1,5 +1,5 @@
-basic
-======
+基础
+=====
 
 Model-View-View Model (MVVM)
 
@@ -164,7 +164,8 @@ throttle
     }
     var vm = new ViewModel();
 
-
+看了一下代码， ``throttle`` 使用的是 ``setTimeout`` ，
+每次更新的时候，会取消先前的回调，设置新的回调函数。
 
 
 
@@ -252,8 +253,8 @@ throttle
 
 
 
-event
-======
+事件
+=====
 在处理事件的时候，可以使用 ``ko.dataFor`` 和 ``ko.contextFor`` 获取元素的信息。
 
 .. code:: javascript
