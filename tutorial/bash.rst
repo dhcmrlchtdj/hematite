@@ -151,3 +151,90 @@ bash 除了通常的数组，还支持关联数组，只有下标使用字符串
 
     declare -a ia # 声明一个普通数组
     declare -A aa # 声明一个关联数组
+
+
+
+
+
+
+
+字符串修改
+==========
+
+.. code:: bash
+
+    s="String"
+
+    # 大小写
+    echo ${s^}  # String 首字母大写
+    echo ${s^^} # STRING 大写
+    echo ${s,}  # string 首字母小写
+    echo ${s,,} # string 小写
+    echo ${s~}  # string 首字母反转
+    echo ${s~~} # sTRING 反转
+
+    # 长度
+    echo ${#s} # 6
+
+    # 截取
+    # ${parameter:offset:length}
+    echo ${s:1:3} # tri
+
+    # 替换
+    # ${parameter/pattern/string} 替换首个
+    # ${parameter//pattern/string} 替换全部
+    echo ${s/S/s} # string
+    echo ${s/S} # tring # "/string" 省略了，默认用空串替代
+
+    # 删去符合模式的字符
+    # {parameter#pattern} # 从头开始，最短
+    # {parameter##pattern} # 从头开始，最长
+    # {parameter%pattern} # 从尾开始，最短
+    # {parameter%%pattern} # 从尾开始，最长
+    ss="an example string"
+    echo "${ss#*a}"     # 'n example string'
+    echo "${ss##*a}"    # 'mple string'
+    echo "${ss% *}"     # 'an example'
+    echo "${ss%% *}"    # 'an'
+
+除了进行修改，还可以根据字符串是否为空，进行处理
+
+.. code:: bash
+
+    s="" # 字符串为空/也可以是未声明的字符串
+
+    # 如果为空，则使用 `-` 后的字符串
+    echo "'${s:-blah}'"     # 'blah'
+    echo "'${s}'"           # ''
+
+    # 如果为空，则使用 `=` 后的字符串进行赋值
+    echo "'${s:=blah}'"     # 'blah'
+    echo "'${s}'"           # 'blah'
+
+    # 如果不为空，则使用 `+` 后的字符串
+    echo "'${s:+blahblah}'" # 'blahblah'
+    echo "'${s}'"           # 'blah'
+
+
+
+
+
+
+新执行环境
+===========
+使用 ``(...)`` 是在一个新的 `shell` 里面执行括号中的命令。
+
+
+
+
+
+测试
+====
+``[`` 是函数， ``[[`` 是关键字。
+
+
+
+
+数值计算
+=========
+使用 ``((...))`` 可以进行数值计算，括号内变量无需 ``$`` ，可以直接引用。
