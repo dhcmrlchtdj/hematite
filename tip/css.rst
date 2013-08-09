@@ -53,3 +53,36 @@ font-face
 
 另外，在 html 里面，转写 unicode 是 ``&#xHHHH (&#xe000)`` ，
 而在 css 里面， ``content`` 里面是 ``\HHHH (\e000)`` 。
+
+
+
+
+画三角形的代码
+===============
+
+.. code:: css
+
+    div::before {
+        display: block;
+        width: 0;
+        height: 0;
+        border-bottom: 5px solid red;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+
+        content: "";
+    }
+
+
+
+
+清理浮动
+=========
+
+.. code:: css
+
+    .clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+    }
