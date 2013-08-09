@@ -135,3 +135,39 @@ http 模块
 ``listen`` 的匹配优先级要比 ``server_name`` 高。
 
 ``location`` 用来将虚拟地址映射到真实地址。
+
+::
+
+    location / {
+        proxy_pass http://frontend;
+    }
+    location /static {
+        root /var/www/static;
+    }
+
+``location`` 可以嵌套，可以使用正则。
+
+
+
+
+
+
+跳转
+=====
+使用 ``return`` 代替 ``rewrite`` 。
+
+::
+
+    # rewrite ^/(.*)$ http://domain.com/$1 permanent;
+    # rewrite ^ http://domain.com$request_uri? permanent;
+
+    return 301 http://domain.com$request_uri
+
+
+``rewrite`` 默认使用相对路径，绝对路径要加上 `http` 。
+
+::
+
+    rewrite ^/blog(/.*)$ blog.domain.com/$1 permanent;
+
+    rewrite ^/blog(/.*)$ http://blog.domain.com$1 permanent;
