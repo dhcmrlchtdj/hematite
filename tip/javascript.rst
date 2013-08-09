@@ -52,3 +52,25 @@ HTMLElement
 Object.create
 ==============
 :code:`Object.create` 的第一个参数是新对象的原型。
+
+
+
+
+
+
+
+
+鼠标移动事件
+=============
+
+``mouseenter`` 和 ``mouseleave`` 分别在进入和离开
+**注册事件的节点** 时被触发。
+类似于 css 中的 ``:hover`` 。
+
+``mouseover`` 和 ``mouseout`` 分别在进入和离开节点时触发，
+但是不仅仅是注册了事件的节点，在进入或离开其子节点时，同样会触发事件。
+
+专业点的说法是 ``mouseenter`` 和 ``mouseleave`` 不会冒泡（bubble），
+而 ``mouseover`` 和 ``mouseout`` 会冒泡。
+
+在节点上移动鼠标时，会触发 ``mouseover`` 事件，同样会冒泡。
