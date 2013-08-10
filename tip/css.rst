@@ -86,3 +86,65 @@ font-face
         display: block;
         clear: both;
     }
+
+
+
+
+
+居中
+=====
+http://coding.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-centering-css/
+
+``margin: 0 auto`` 用来居中见多了，今天看到个不一样的。
+
+.. code:: css
+
+    .center {
+        margin: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+    }
+
+如果上面的没看明白的话，拆开看
+
+.. code:: css
+
+    .horizontal {
+        margin: 0 auto;
+        width: 100px;
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+    .vertical {
+        margin: auto 0;
+        height: 100px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+    }
+
+这是居中的情况，如果要对位置进行调整，这么做
+
+.. code:: css
+
+    .right {
+        height: 100px;
+        width: 100px;
+        margin: auto;
+        position: absolute;
+        left: auto;
+        right: 20px;
+        top: 0;
+        bottom: 0;
+    }
+
+也就是把对应的调整为 ``auto`` 就可以了。
+
+
+对于图片的居中，高度也不用确定， 可以直接使用 ``height: auto`` 。
