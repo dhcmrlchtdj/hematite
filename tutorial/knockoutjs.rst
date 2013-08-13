@@ -272,4 +272,15 @@ throttle
     });
 
 
-其中 ``dataFor`` 是视图， ``contextFor`` 是上下文。
+其中 ``dataFor`` 是视图模型， ``contextFor`` 是上下文。
+
+
+
+
+
+event 绑定
+===========
+默认的 ``event`` 绑定有两个参数， ``data`` 和 ``event`` 。
+``event`` 是事件，就是平常事件处理函数的 ``event`` 。
+``data`` 和 ``this`` 都是指向了视图模型，
+就是自己手动绑定事件处理函数时，调用 ``ko.dataFor(this)`` 得到的那个内容。
