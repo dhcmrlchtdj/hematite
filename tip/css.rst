@@ -148,3 +148,22 @@ http://coding.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-cente
 
 
 对于图片的居中，高度也不用确定， 可以直接使用 ``height: auto`` 。
+
+
+
+
+
+
+
+文字溢出
+=========
+之前用 ``text-overflow`` 发现没有效果，后来发现是 ``white-space`` 的影响。
+
+.. code:: css
+
+    .ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: no-wrap;
+        width: 100%;
+    }
