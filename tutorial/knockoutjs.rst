@@ -284,3 +284,26 @@ event 绑定
 ``event`` 是事件，就是平常事件处理函数的 ``event`` 。
 ``data`` 和 ``this`` 都是指向了视图模型，
 就是自己手动绑定事件处理函数时，调用 ``ko.dataFor(this)`` 得到的那个内容。
+
+
+
+
+
+
+虚拟节点
+=========
+knockoutjs 可以直接在标签内部插入内容，使用注释来虚拟一个节点就可以了。
+
+.. code:: html
+
+    <!--ko text: name-->
+    <!--/ko-->
+
+虚拟的节点里不用写 ``data-bind`` 。
+
+
+自定义的绑定是不能用于虚拟节点的，需要一些特殊处理。
+
+首先要允许在虚拟节点中使用，
+``ko.virtualElements.allowedBindings.CustomBindingName = true;`` 。
+然后在绑定定义时，要使用 ``ko.virtualElements`` 来操作 DOM。
