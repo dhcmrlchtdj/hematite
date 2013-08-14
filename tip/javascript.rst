@@ -73,4 +73,4 @@ Object.create
 专业点的说法是 ``mouseenter`` 和 ``mouseleave`` 不会冒泡（bubble），
 而 ``mouseover`` 和 ``mouseout`` 会冒泡。
 
-在节点上移动鼠标时，会触发 ``mouseover`` 事件，同样会冒泡。
+在节点上移动鼠标时，会触发 ``mousemove`` 事件，同样会冒泡。
