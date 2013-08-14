@@ -1,7 +1,7 @@
 合并多个 commit
 ================
 
-.. code::
+::
 
     $ git reset --soft [hash]
     $ git ci
@@ -12,7 +12,7 @@
 删除 dangling blob
 ===================
 
-.. code::
+::
 
     $ git fsck --full
     $ git gc --aggressive --prune=now
@@ -23,7 +23,7 @@
 work with dropbox
 ==================
 
-.. code::
+::
 
     $ cd /path/to/dropbox/git/directory
     $ git init --bare project.git
@@ -38,15 +38,19 @@ work with dropbox
 multiple remote
 ================
 
-.. code::
+::
 
     $ git remote add github git@github.com:user/porject.git
     $ git remote add dropbox /path/to/project.git
 
     $ git config -e
-    # [remote "origin"]
-    #   url = git@github.com:user/project.git
-    #   url = /path/to/project.git
+    # 添加如下设置
+    $ cat .git/config
+    ...
+    [remote "origin"]
+        url = git@github.com:user/project.git
+        url = /path/to/project.git
+    ...
 
     $ git push -u origin master
     $ git remote -v update
@@ -58,7 +62,7 @@ multiple remote
 在分支间建立联系
 =================
 
-.. code::
+::
 
     $ git branch local_xxx origin/xxx
 
@@ -66,3 +70,34 @@ multiple remote
     $ git co origin/xxx
     $ git co -b local_xxx
     $ git branch -u origin/xxx
+
+
+
+
+
+和上游同步
+===========
+
+::
+
+    # 首先下载自己的分支
+    $ git clone 'git@github.com:dhcmrlchtdj/zsh-completions.git'
+
+    $ cd zsh-completions
+
+    # 然后添加上游分支
+    $ git remove add upstream 'git@github.com:zsh-users/zsh-completions.git'
+
+    # 最后同步
+    $ git fetch upstream
+    $ git merge --no-ff upstream/master
+
+
+
+
+在远程创建新分支
+=================
+
+::
+
+    $ git push origin <new_branch_name>
