@@ -74,3 +74,53 @@ Object.create
 而 ``mouseover`` 和 ``mouseout`` 会冒泡。
 
 在节点上移动鼠标时，会触发 ``mousemove`` 事件，同样会冒泡。
+
+
+
+
+
+动态插入 js
+============
+
+.. code:: javascript
+
+    var script = document.createElement('script');
+    node.src = '/path/to/js';
+    document.body.appendChild(node);
+
+上面是段动态加载脚本的代码，简单得很。
+
+在看 `seajs` 的加载代码时，看到一个以前没注意过的地方。
+
+.. code:: javascript
+
+    var head = document.head;
+    var baseElement = document.querySelector('base');
+    var node = document.createElement('script');
+    baseElement ?
+        head.insertBefore(node, baseElement) :
+        head.appendChild(node)
+
+其他东西都省略了，一个是插入在 `head` 里面，一个是插入在 `base` 之前。
+
+关于插入在 ``head`` 里，我找了半天就找到了
+http://stackoverflow.com/questions/12113412/dynamically-inject-javascript-file-why-do-most-examples-append-to-head/12113657#12113657
+和 http://www.jspatterns.com/the-ridiculous-case-of-adding-a-script-element/ 。
+
+没什么决定性的理由，
+不插入在 ``body`` 里面最合理的解释大概是 IE7 的 `Operation aborted` 吧。
+
+至于插入在 `base` 之前，是因为 IE，这个不讲了。
+
+下面讲下 ``base`` 元素。
+
+平常写路径的时候，经常使用相对路径，通过设置 ``base`` 的 ``href`` 属性，
+可以让相对路径不再相对于当前目录，而是相对于 ``base.href`` 的路径，
+就叫基本路径算了。
+
+如果指定了多个 ``base`` 或是里面有多个 ``href`` ，
+起作用的只有第一个 ``base`` 的第一个 ``href`` 。
+
+在 js 中，可以通过 ``node.baseURI`` 获取元素的基本路径。
+而 ``document.baseURI`` 是整个页面的基本路径，但要注意这个值是只读的。
+虽然不能修改 ``document.baseURI`` ，但是 ``base.href`` 是可以修改的。
