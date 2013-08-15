@@ -133,3 +133,20 @@ whereis
 
     $ whereis ls
     ls: /usr/bin/ls /usr/share/man/man1/ls.1p.gz /usr/share/man/man1/ls.1.gz
+
+
+
+
+
+
+
+
+输出到其他终端
+===============
+::
+
+    $ w
+    # 可以看到几个不同的 TTY
+    $ echo 'message' > /dev/pts/0
+
+通过重定向，可以输出到其他终端。
