@@ -86,7 +86,7 @@ multiple remote
     $ cd zsh-completions
 
     # 然后添加上游分支
-    $ git remove add upstream 'git@github.com:zsh-users/zsh-completions.git'
+    $ git remote add upstream 'git@github.com:zsh-users/zsh-completions.git'
 
     # 最后同步
     $ git fetch upstream
