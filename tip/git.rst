@@ -95,14 +95,20 @@ multiple remote
 
 
 
-在远程创建新分支
-=================
+在远程创添加删除分支
+=====================
 
 ::
 
     $ git push -u origin <new_branch_name>
 
 加个 ``-u`` 方便以后提交。
+
+
+::
+
+    $ git push origin --delete <branch_to_delete>
+    $ git push origin :<branch_to_delete>
 
 
 
