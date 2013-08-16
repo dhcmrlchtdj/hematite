@@ -125,3 +125,22 @@ http://stackoverflow.com/questions/12113412/dynamically-inject-javascript-file-w
 在 js 中，可以通过 ``node.baseURI`` 获取元素的基本路径。
 而 ``document.baseURI`` 是整个页面的基本路径，但要注意这个值是只读的。
 虽然不能修改 ``document.baseURI`` ，但是 ``base.href`` 是可以修改的。
+
+
+
+
+
+
+性能测试
+=========
+以前测试某种方法的性能，都是用 ``Date.now()`` ，偶然发现一个更简单的。
+
+https://gist.github.com/xionglun/6205140
+
+.. code::
+
+    console.time('id');
+    // code here
+    console.timeEnd('id');
+
+一直以来都只使用 ``console.log`` ，看来好好研究一下。
