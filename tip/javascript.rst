@@ -101,16 +101,17 @@ Object.create
         head.insertBefore(node, baseElement) :
         head.appendChild(node)
 
-其他东西都省略了，一个是插入在 `head` 里面，一个是插入在 `base` 之前。
+其他东西都省略了，一个是插入在 ``head`` 里面，一个是插入在 ``base`` 之前。
 
 关于插入在 ``head`` 里，我找了半天就找到了
 http://stackoverflow.com/questions/12113412/dynamically-inject-javascript-file-why-do-most-examples-append-to-head/12113657#12113657
 和 http://www.jspatterns.com/the-ridiculous-case-of-adding-a-script-element/ 。
 
 没什么决定性的理由，
-不插入在 ``body`` 里面最合理的解释大概是 IE7 的 `Operation aborted` 吧。
+不插入在 ``body`` 里面最合理的解释大概是 IE7 的 ``Operation aborted`` 吧。
+对于 `seajs` ，需要支持 css 的动态加载，所以选择了 ``head`` 吧。
 
-至于插入在 `base` 之前，是因为 IE，这个不讲了。
+至于插入在 ``base`` 之前，是因为 IE，这个不讲了。
 
 下面讲下 ``base`` 元素。
 
