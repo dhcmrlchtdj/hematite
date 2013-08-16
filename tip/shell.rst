@@ -1,11 +1,12 @@
 trim space
 ===========
 
-.. code::
+.. code:: bash
 
     var=" test  ";
     echo ${var// };
 
+这个要注意下，这样替换会把所有空格都替换掉而不仅仅是首尾空格。
 
 
 
@@ -139,8 +140,6 @@ whereis
 
 
 
-
-
 输出到其他终端
 ===============
 ::
@@ -150,3 +149,18 @@ whereis
     $ echo 'message' > /dev/pts/0
 
 通过重定向，可以输出到其他终端。
+
+
+
+
+
+
+echo 转义
+==========
+在 **脚本** 里面， ``echo`` 默认是不进行转义的。
+转义需要添加 ``-e`` 选项。
+
+.. code:: bash
+
+    echo "\ttest" # '\ttest'
+    echo -e "\ttest" # '        test'
