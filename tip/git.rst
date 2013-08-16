@@ -101,3 +101,16 @@ multiple remote
 ::
 
     $ git push origin <new_branch_name>
+
+
+
+
+查看暂存的内容
+===============
+偶尔会把一些修改丢到 ``stash`` 里面，后来就忘了内容……
+找了下发现可以用 ``-p`` 来查看修改的详细内容。
+
+::
+
+    $ git stash show
+    $ git stash show -p
