@@ -21,3 +21,5 @@
     $ sed -n "/p1/, +10p" filename  # 模式 1 及接下来 10 行 （共 11 行）
     $ sed -n "0~1p" filename    # 从 0 行开始，隔 1 行输出一次 （就是全文了）
     $ sed -n "1~5p" filename    # 第一行起，每 5 行输出一次
+
+    $ sed -r '/a.*?a/p' filename    # 使用拓展的正则
