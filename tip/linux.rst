@@ -249,3 +249,21 @@ systemd service
 ================
 修改了 ``service`` 文件后，
 要使用 ``systemctl --system daemon-reload`` 来重新加载配置。
+
+
+
+
+
+更新密匙
+=========
+archlinux only
+
+::
+
+    # 有必要的话，可以全部更新
+    $ rm /etc/pacman.d/gnupg
+    $ pacman-key --init
+
+    # 更新密匙
+    $ pacman-key --populate archlinux
+    $ pacman-key --refresh-keys
