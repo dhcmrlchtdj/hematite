@@ -167,3 +167,21 @@ http://coding.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-cente
         white-space: no-wrap;
         width: 100%;
     }
+
+
+
+
+
+
+垂直居中
+=========
+http://www.cnblogs.com/rubylouvre/archive/2013/07/09/3179534.html
+
+.. code:: css
+
+    .center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
