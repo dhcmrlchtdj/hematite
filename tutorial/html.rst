@@ -108,3 +108,20 @@ chrome 可以到 `<chrome://appcache-internals>`_ 查看缓存的资源。
 
 在缓存列表里加上时间戳或版本号只是解决第三步，
 需要更新缓存列表时，还要考虑前两步，也就是浏览器通常的缓存。
+
+
+
+
+
+html 实体符号
+==============
+
++ http://developers.whatwg.org/syntax.html#syntax-charref
++ http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
++ http://www.howtocreate.co.uk/sidehtmlentity.html
+
+在对特殊符号进行转义的时候，
+可以使用十进制（ ``&#nnnn;`` ），
+也可以使用十六进制（ ``&#xHHHH;`` ）。
+要注意一下，在 XML 中，十六进制的 ``x`` 必须是小写（html 里无所谓）。
+还有一部分符号可以用 ``&name;`` 的形式表示，符号名称可以去上面的链接找。
