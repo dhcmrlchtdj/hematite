@@ -145,3 +145,24 @@ https://gist.github.com/xionglun/6205140
     console.timeEnd('id');
 
 一直以来都只使用 ``console.log`` ，看来好好研究一下。
+
+
+
+
+
+获取脚本自己的链接地址
+=======================
+``seajs`` 的这段代码看了好久才明白过来，果然水平还不够啊。
+
+.. code:: javascript
+
+    var scripts = document.scripts;
+    var src = scripts[scripts.length - 1].src;
+
+关键在于，这段代码执行的时候， ``seajs`` 自己是已载入的最后一个脚本，
+所以可以使用 ``scripts[scripts.length - 1]`` 获取自己的标签。
+这样就不用关心之前已经引入了多少脚本，之后会引入多少脚本也完全不用担心。
+
+平常习惯等到页面完全载入了才执行脚本，
+所以看到 ``scripts`` 的第一反映是页面的所有脚本，
+就被自己绕进去了。
