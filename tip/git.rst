@@ -113,6 +113,7 @@ multiple remote
 
 
 
+
 查看暂存的内容
 ===============
 偶尔会把一些修改丢到 ``stash`` 里面，后来就忘了内容……
@@ -122,3 +123,13 @@ multiple remote
 
     $ git stash show
     $ git stash show -p
+
+
+
+
+查看某次的修改内容
+===================
+
+::
+
+    $ git show <object>
