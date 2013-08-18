@@ -126,6 +126,7 @@ http://stackoverflow.com/questions/12113412/dynamically-inject-javascript-file-w
 
 更新： ``base`` 只会影响之后的元素，把 css 和 js 放在 ``base`` 前面，
 是不受 ``base`` 的值影响的。
+所以 manifest 不受这个影响， http://developers.whatwg.org/semantics.html#the-base-element 。
 
 
 
