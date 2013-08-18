@@ -69,13 +69,13 @@ deepEqual(expr, expected [, msg])
 
 test(testName [, num], fn)
     测试， ``num`` 是内部断言的数量。
-    代码里可以使用 ``stop`` 和 ``start`` 两个函数，对异步函数进行测试，
+    代码里可以使用 ``stop`` 和 ``start`` 这两个函数对异步函数进行测试，
     比如回调前调用下 ``stop`` ，在回调函数里加上 ``start`` 。
     注意两者要成对出现。
 
 asyncTest(testName [, num], fn)
     异步测试。
-    可以省略掉 ``stop`` 调用，必须有 ``start`` 调用。
+    无需调用 ``stop`` ，但必须调用 ``start`` 。
 
 
 分组
@@ -94,4 +94,4 @@ module(moduleName [, option])
         });
 
     ``setup`` ``teardown`` 和测试的 ``fn`` 会绑定到相同的作用域，
-    所提可以通过 ``this`` 来共享变量。
+    所以可以通过 ``this`` 来共享变量。
