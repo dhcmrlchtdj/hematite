@@ -291,3 +291,121 @@ CommonJS Modules/1.1.1
 4. `.` 和 `..` 开头的标识是相对标识，否则为顶级标识。
 5. 顶级标识指向根目录。
 6. 相对标识是相对于调用 ``require`` 的模块的路径。
+
+
+变量声明
+=========
+我居然一直不知道这个特性：
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting
+
+.. code:: javascript
+
+    function ex1() {
+        a = 10;
+        var a;
+    }
+    // equal to
+    function ex2() {
+        var a;
+        a = 10;
+    }
+
+太恐怖了，一下子让 js 变得难以理解……
+
+.. code:: javascript
+
+    var g = 10;
+
+    (function test1() {
+        // 这个很好理解
+        console.log(g); // 10
+    })();
+
+    (function test2() {
+        // 这个也很好理解
+        var g = 100;
+        console.log(g); // 100
+    })();
+
+    (function test3() {
+        // 这个一开始看不懂
+        console.log(g); // undefined
+        var g = 100; // 这里是否赋值，其实没有影响，关键是声明了。
+    })();
+
+    (function test4() {
+        // 看到这里应该开始能理解了
+        g = 100;
+        console.log(g); // 100
+        var g = 1000; // 把声明和赋值分开看待。
+    })();
+
+    (function test5() {
+        // 更清晰点
+        console.log(g); // undefined
+        g = 100;
+        console.log(g); // 100
+        var g = 1000;
+        console.log(g); // 1000
+    })();
+
+到这里总结一下。在作用域的任何位置对变量进行声明，声明都对整个作用域有效。
+可以理解成声明提升到了作用域的顶端，但是，赋值操作并不会和声明一起提升，
+也就是说，变量声明但未赋值，所以就成了 ``undefined`` 了。
+
+然后继续看个例子：
+
+.. code:: javascript
+
+    (function test6() {
+        g = 100; // 到底是 window.g 还是函数作用域内的 g 呢？
+        console.log(g, window.g); // 100, 10
+        return;
+        var g; // 没错，连 return 都阻止不了 var 了。
+        console.log(g); // 不会执行的。
+    })()
+
+最后还有个疑问， ``function`` 和 ``var`` ，都会使变量作用于整个作用域，
+如果两个对上，会怎么样？
+
+.. code:: javascript
+
+    (function test8() {
+        // 已经知道 var 和 function 都是作用于整个作用域的，
+        // 作用时，哪个更靠前，和写的位置有没关系呢？
+        var x;
+        function x() {};
+
+        function y() {};
+        var y;
+
+        console.log(x, typeof x); // function x() {} "function"
+        console.log(y, typeof y); // function y() {} "function"
+        console.log(z, typeof z); // function z() {} "function"
+
+        return;
+
+        function z() {}; // 这个是顺便验证下 return 和 function 的优先顺序。
+    })();
+
+结果表明，和写的位置没关系， ``var`` 是最优先的，然后轮到 ``function`` ，
+而 ``return`` 虽然能干掉其他代码，但是管不了这俩。
+
+但是事情还没有结束，最后再提一点， ``var`` 和分支语句的较量。
+
+.. code:: javascript
+
+    (function test9() {
+        // 虽然会疑惑下，但也不是不能接受吧。
+        g = 100;
+        console.log(g, window.g); // 100, 10
+        if (false) {
+            var g;
+        }
+    })();
+
+其实 ``return`` 的跪了， ``if`` 的结局也是可以预料的。
+
+总结起来就是，不管在哪个位置，不管这里的代码会不会执行，
+只要 ``var`` 出现了，这个变量就在作用域中完成了声明。
+（一下子没了难以理解的感觉，只剩下理所当然了……）
