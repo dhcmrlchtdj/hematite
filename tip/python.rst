@@ -1,7 +1,3 @@
-========
- python
-========
-
 has_ipv6
 =========
 
@@ -202,3 +198,44 @@ timestamp
     import datetime
     datetime.datetime.now().strftime("%s") # string
     str(int(time.time())) # faster way
+
+
+
+
+
+替换
+=====
+最简单的替换用 ``str.replace`` 就可以搞定了。
+
+以前看 tornado 的代码，看到一个能对付更复杂情况的方法：
+
+.. code:: python
+
+    import re
+    re_escape = re.compile("""[<>"'&]""")
+    map_escape = {
+        "<": "&#x3C;",
+        ">": "&#x3E;",
+        '"': "&#x22;",
+        "'": "&#x27;",
+        "&": "&#x26;",
+    }
+    re_escape.sub(lambda m: map_escape[m.group(0)], DATA_HERE)
+
+使用正则来替换，关键是这里这个匿名函数。
+
+今天翻标准库，看到 http://hg.python.org/cpython/file/3.3/Lib/html/__init__.py
+里是这么替换的：
+
+.. code:: python
+
+    map_escape = str.maketrans({
+        "<": "&#x3C;",
+        ">": "&#x3E;",
+        '"': "&#x22;",
+        "'": "&#x27;",
+        "&": "&#x26;",
+    })
+    DATA_HERE.translate(map_escape)
+
+虽然没有正则灵活，但也基本够用了。
