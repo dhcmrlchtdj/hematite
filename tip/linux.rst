@@ -1,7 +1,7 @@
 让程序以 root 权限运行
 =======================
 
-.. code::
+::
 
     $ chmod u+s /usr/bin/fbterm
 
@@ -18,7 +18,7 @@
 
 动态关闭
 
-.. code::
+::
 
     # 1. vim /etc/sysctl.d/ipv6.conf
     net.ipv6.conf.all.disable_ipv6 = 1
@@ -34,7 +34,7 @@
 scp
 ====
 
-.. code::
+::
 
     # local to remote
     $ scp -2r [-P port] /local/path user@hostname:/remote/path
@@ -48,7 +48,7 @@ scp
 rsync
 ======
 
-.. code::
+::
 
     $ rsync -ahvzP -e "ssh -p 22" user@hostname:/remote/path /local/path
 
@@ -58,7 +58,7 @@ rsync
 shell history
 ==============
 
-:code:`Ctrl-R`
+``Ctrl-R``
 
 
 
@@ -66,7 +66,7 @@ shell history
 bsdtar
 =======
 
-.. code::
+::
 
     $ bsdtar cvaf output.txz *
     $ bsdtar xvf output.txz
@@ -80,7 +80,7 @@ core dump
 enable
 -------
 
-.. code::
+::
 
     # get
     $ ulimit -c
@@ -93,7 +93,7 @@ enable
 path
 -----
 
-.. code::
+::
 
     # temporary
     $ echo '/var/core/%t-%e-%p-%s.core' > /proc/sys/kernel/core_pattern
@@ -109,7 +109,7 @@ path
 compress
 ---------
 
-.. code::
+::
 
     $ echo '
     > #!/usr/bin/env sh
@@ -120,7 +120,7 @@ compress
 exclude shared memory
 ----------------------
 
-.. code::
+::
 
     $ cat /proc/<PID>/coredump_filter
     $ echo 1 > /proc/<PID>/coredump_filter
@@ -135,7 +135,7 @@ exclude shared memory
 
 archlinux only
 
-.. code::
+::
 
     $ which google-chrome
     /usr/bin/google-chrome
@@ -152,7 +152,7 @@ archlinux only
 是否支持 64 位
 ===============
 
-.. code::
+::
 
     $ grep lm /proc/cpuinfo
 
@@ -162,7 +162,7 @@ archlinux only
 dd
 ===
 
-.. code::
+::
 
     $ dd bs=4M if=/path/to/archlinux.iso of=/dev/sdX
 
@@ -179,7 +179,7 @@ dd
 查看网卡速度
 =============
 
-.. code::
+::
 
     $ cat /sys/class/net/eth0/speed
 
@@ -189,7 +189,7 @@ dd
 sshfs
 ======
 
-.. code::
+::
 
     $ modprobe fuse
 
@@ -208,14 +208,14 @@ pip
 
 以前找到的代码是这样的
 
-.. code::
+::
 
     $ pip freeze -l | cut -d = -f 1 | xargs pip instal -U
     $ pip freeze -l | cut -d = -f 1 | xargs -n 1 pip search | grep -B2 'LATEST:'
 
 发现还可以这样
 
-.. code::
+::
 
     $ pip list -l   # list local packages
     $ pip list -lo  # out of date
@@ -230,7 +230,7 @@ pip
 wget
 =====
 
-.. code::
+::
 
     $ wget -r -k -l 1 -np 'http://url'  -A html,css
 
@@ -267,3 +267,11 @@ archlinux only
     # 更新密匙
     $ pacman-key --populate archlinux
     $ pacman-key --refresh-keys
+
+
+
+
+更新 grub 设置
+===============
+修改好  ``/etc/default/grub`` ，
+然后执行 ``grub-mkconfig -o /boot/grub/grub.cfg`` 。
