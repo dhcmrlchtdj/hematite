@@ -164,3 +164,11 @@ echo 转义
 
     echo "\ttest" # '\ttest'
     echo -e "\ttest" # '        test'
+
+
+
+
+提示符
+=======
+在输出提示符前， shell 会执行 ``precmd`` 这个函数，
+可以在这里进行一些计算，修改提示符。
