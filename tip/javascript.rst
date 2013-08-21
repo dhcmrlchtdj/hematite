@@ -175,3 +175,26 @@ https://gist.github.com/xionglun/6205140
 inline 与 src
 ==============
 如果两者并存，那么优先下载脚本文件，而内联的代码不会执行。
+
+
+
+
+
+图片与脚本
+===========
+
+.. code:: javascript
+
+    var img = document.createElement('img'); // new Image() 也是一样的
+    img.src = './invalid.png'; // 马上发起请求了，然后失败了
+    img.onerror = function(e) {console.log(e);}; // 这次不会执行，失败时触发的是 null
+    document.body.appendChild(img);
+    img.src = '../invalid.png'; // 马上发起请求，继续失败，这次调用 error 了
+
+    var script = document.createElement('script');
+    script.src = './invalid.js'; // 没发起请求
+    document.body.appendChild(script); // 插入才发起请求
+    script.src = '../invalid.js'; // 不会发起请求
+
+修正一下：对于脚本标签，修改 ``src`` 后， ie9 会载入脚本，但不会执行，
+ie6/7/8 会载入并执行脚本。
