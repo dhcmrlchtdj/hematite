@@ -301,3 +301,56 @@ chrome cors
 用 chrome 调试本地页面的时候，
 可以加上 ``--allow-file-access-from-files`` 选项，
 这样就可以请求其他本地文件了。
+
+
+
+
+
+
+
+undefined 与 +
+===============
+没声明的 ``undefined`` 和声明为 ``undefined`` 是不一样的。
+
+.. code:: javascript
+
+    (function() {
+        console.log(undefined + 0); // NaN
+        console.log(undefined + false); // NaN
+        console.log(undefined + undefined); // NaN
+        console.log(undefined + null); // NaN
+        console.log(undefined + ""); // "undefined"
+        console.log(undefined + {}); // "undefined[object Obejct]"
+        console.log(undefined + []); // "undefined"
+        console.log(undefined + /pattern/); // "undefined/pattern/"
+        console.log(undefined + function(){}); // "undefinedfunction (){}"
+    })();
+
+上面是直接和 ``undefined`` 相加的情况，和变量声明为 ``undefined`` 是一样的。
+包括显式赋值为 ``undefined`` 和声明后没赋值的情况。
+
+但事实上，如果没有声明过，结果是抛出错误。
+
+.. code:: javascript
+
+    typeof(un) == "undefined"; // true
+
+    console.log(un + 0);
+    console.log(un + false);
+    console.log(un + undefined);
+    console.log(un + null);
+    console.log(un + "");
+    console.log(un + {});
+    console.log(un + []);
+    console.log(un + /pattern/);
+    console.log(un + function(){});
+
+虽然 ``un`` 的类型确实是 ``undefined`` ，但是尝试执行上面的语句，
+都只会得到 ``ReferenceError: un is not defined`` 。
+
+http://stackoverflow.com/questions/833661/what-is-the-difference-in-javascript-between-undefined-and-not-defined
+上的解释是：因为没有声明过，所以 ``un`` 是没有类型的，换句话说，类型没有定义，
+所以返回了 ``undefined`` 。
+（很巧的是， ``undefined`` 这个值的类型，也叫 ``undefined`` 。）
+
+因为 ``un`` 没有声明过，所以对其引用造成了运行时的错误。
