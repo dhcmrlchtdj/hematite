@@ -1,7 +1,7 @@
 timestamp
 ==========
 
-.. code::
+.. code:: javascript
 
     // get milliseconds since the epoch
     console.log( Date.now() ); // fastest
@@ -180,8 +180,9 @@ inline 与 src
 
 
 
-脚本图片音频视频
+动态修改资源地址
 =================
+下面都是 chrome 30.0.1599.14 dev 下的测试结果。
 
 .. code:: javascript
 
@@ -196,8 +197,93 @@ inline 与 src
     document.body.appendChild(script); // 插入才发起请求
     script.src = '../invalid.js'; // 不会发起请求
 
-修正一下：对于脚本标签，修改 ``src`` 后， ie9 会载入脚本，但不会执行，
-ie6/7/8 会载入并执行脚本。
+    var link = document.createElement('link');
+    link.href = './invalid.css'; // 不会发起请求
+    document.head.appendChild(link); // 还是没发起请求
+    link.rel = 'stylesheet'; // 发起请求了
+    link.href = '../invalid.css'; // 再次发起请求
 
-更新：多测试了一下，发现 ``audio`` 和 ``video`` 都和 ``img`` 是一路的，
-就算没插入文档，只要修改了 ``src`` ，马上发起请求。
+    link.rel = 'alternate'; // 修改类型
+    link.src = './invalid.html'; // 不会发起请求了
+    link.rel = 'stylesheet'; // 马上发起请求
+
+css 的特别之处在于， ``link`` 有其他用途，所以不会主动发起请求。
+一旦指定为 ``stylesheet`` （不管是在插入文档之前还是之后），
+行为方式和 ``img`` 一样。
+
+修正一下：网上说，修改 ``script`` 的 ``src`` 后，
+ie9 会载入脚本，但不会执行，ie6/7/8 会载入并执行脚本。
+
+
+.. code:: javascript
+
+    var iframe = document.createElement('iframe');
+    iframe.src = './invalid.html'; // 不发起请求
+    document.body.appendChild(iframe); // 发起请求
+    iframe.src = '../invalid.html'; // 修改后，马上发起请求
+
+``iframe`` 和 ``frame`` 都是一样的，插入文档后才会发起请求，
+更改地址，马上发起新请求。
+
+
+.. code:: javascript
+
+    var audio = document.createElement('audio');
+    audio.src = './invalid.mp3'; // 马上发起请求
+    audio.src = '../invalid.mp3'; // 更改后马上发起请求
+    audio.load(); // 会再次发起请求
+
+    var source = document.createElement('source');
+    var audio2 = document.createElement('audio'); // 插入之前的 audio 是无效的
+    source.src = './invalid.mp3'; // 没发起请求
+    audio2.appendChild(source); // 插入到 audio 或者 video 里面，马上发起请求
+    source.src = '../invalid.mp3'; // 没有发起请求
+    audio2.load(); // 要重新载入，才会发起请求
+    audio2.src = './invalid.mp3'; // source 无效了
+
+    var video = document.createElement('video');
+    video.appendChild(source); // 注意下，source 会从 audio2 移动到 video ，
+                                // 并且重新发起请求（虽然没有修改过 source）
+    video.poster = './invalid.png'; // 马上发起请求
+    video.onerror = function(e) {console.log(e);};
+    video.poster = '../invalid.png'; // 马上发起请求，虽然失败了，但是不会触发 onerror
+    video.src = './invalid.mp4'; // source 被抛弃了，马上发起请求，触发了 onerror
+
+    var track = document.createElement('track');
+    track.src = './invalid.srt'; // 没发起请求
+    video.appendChild(track); // 没发起请求
+    video.load(); // 没发起请求
+    video.controls = true; // 再点击下控制条的字幕，马上会发起请求
+    track.src = '../invalid.srt'; // 修改会马上发起请求
+    var track2 = document.createElement('track');
+    track2.src = './invalid.srt'; // 没发起请求
+    video.appendChild(track); // 发起请求
+
+``audio`` 和 ``video`` 都跟 ``img`` 是一路的，
+就算没插入文档，只要设置或修改了 ``src`` ，马上发起请求。
+另外，虽然有 ``new Audio()`` ，但是没有 ``new Video()`` 。
+还有，如果指定了 ``src`` ，就不会管内部有没有 ``source`` 了，
+这点又和 ``script`` 有点类似。即使开始使用的是 ``source`` ，
+一旦设置了 ``src`` ，马上就会把 ``source`` 抛弃掉。
+
+``source`` 在首次插入 ``audio`` 或 ``video`` 时，会尝试下载。
+（前面说了，如果 ``audio`` 或 ``video`` 有 ``src`` ，插入是无效的。）
+如果插入时没有 ``src`` ，没东西可下，也就没有请求了。
+插入之后再修改 ``src`` ，不会自动发起请求，要手动载入。
+注意下，不用插入到文档中，只要插入 ``audio`` 或 ``video`` 下面就可以了。
+
+``track`` 有点类似于样式表，都有个额外的控制因素。
+只要选择了加载字幕，那么 ``track`` 在插入和修改时，都会发生发起请求。
+如果不是动态添加字幕，而是一开始有带有字幕，就相当于一开始就选择了加载字幕。
+而完全动态添加的时候，必须要手动开启一下。（没看到相应的 js 命令啊……）
+
+
+.. code:: javascript
+
+    var embed = document.createElement('embed');
+    embed.src = './invalid.mov'; // 不会发起请求
+    document.body.appendChild(embed); // 发起请求
+    embed.src = '../invalid.mov'; // 不会发起请求
+
+``embed`` 和 ``script`` 比较像，都是插入时才会发起请求，
+而且之后再修改 ``src`` 都不起作用。
