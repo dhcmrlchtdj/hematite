@@ -251,13 +251,10 @@ ie9 会载入脚本，但不会执行，ie6/7/8 会载入并执行脚本。
 
     var track = document.createElement('track');
     track.src = './invalid.srt'; // 没发起请求
+    track.default = true; // 发起请求了
     video.appendChild(track); // 没发起请求
-    video.load(); // 没发起请求
-    video.controls = true; // 再点击下控制条的字幕，马上会发起请求
-    track.src = '../invalid.srt'; // 修改会马上发起请求
-    var track2 = document.createElement('track');
-    track2.src = './invalid.srt'; // 没发起请求
-    video.appendChild(track); // 发起请求
+    track.src = '../invalid.srt'; // 马上发起请求
+
 
 ``audio`` 和 ``video`` 都跟 ``img`` 是一路的，
 就算没插入文档，只要设置或修改了 ``src`` ，马上发起请求。
@@ -272,10 +269,15 @@ ie9 会载入脚本，但不会执行，ie6/7/8 会载入并执行脚本。
 插入之后再修改 ``src`` ，不会自动发起请求，要手动载入。
 注意下，不用插入到文档中，只要插入 ``audio`` 或 ``video`` 下面就可以了。
 
-``track`` 有点类似于样式表，都有个额外的控制因素。
-只要选择了加载字幕，那么 ``track`` 在插入和修改时，都会发生发起请求。
-如果不是动态添加字幕，而是一开始有带有字幕，就相当于一开始就选择了加载字幕。
-而完全动态添加的时候，必须要手动开启一下。（没看到相应的 js 命令啊……）
+``track`` 有个类似于样式表的额外控制因素，是否开启了字幕。
+可以简单理解成是 ``default`` 属性，而且必须是在插入 ``video`` 之前设置好。
+如果开启了字幕，那么插入和修改都会马上发起请求，
+如果没有开启字幕，不管插入还是修改，都不会发起请求。
+而且插入后再设置 ``default`` ，是不会开启字幕的。
+（可以通过插入设置了 ``default`` 但没有 ``src`` 的 ``track`` 来开启字幕。）
+只要开启了字幕，单个 ``track`` 是否设置了 ``default`` 就不是重点了。
+所有的插入修改操作，都会发起请求。
+（大体是这样，还有一些无法理解的细节……）
 
 
 .. code:: javascript
