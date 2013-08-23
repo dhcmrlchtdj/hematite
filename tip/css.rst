@@ -215,3 +215,63 @@ http://jinlong.github.io/blog/2013/08/13/centering-all-the-directions/
 
 + ``width:Npx;height:Mpx;position:absolute;margin:0;top:0;right:0;bottom:0;left:0``
   这个前面提过了。
+
+
+
+
+flex 布局
+==========
+一直没去看看，如今做个笔记。
+
+http://the-echoplex.net/flexyboxes/
+
+其实上面的链接更好懂，下面还是简单记一下。
+
+.. code:: html
+
+    <style>
+        #box {
+            border: 1px solid red;
+            width: 100%;
+            height: 300px;
+
+            display: flex;
+
+            flex-direction: row-reverse;
+            flex-wrap: wrap;
+
+            justify-content: space-around;
+            align-items: center;
+
+            /*align-self:auto;*/
+        }
+        .content {
+            border: 1px solid black;
+            width: 100px;
+            height: 100px;
+        }
+        #b1 {
+            order: 3;
+            align-self: center;
+        }
+        #b2 {
+            flex: 100px 1 2;
+        }
+        #b3 {
+            flex: 100px 3 1;
+        }
+    </style>
+
+    <div id="box">
+        <div class="content" id="b1">1</div>
+        <div class="content" id="b2">2</div>
+        <div class="content" id="b3">3</div>
+    </div>
+
+``flex-direction`` 设置排列方式，上到下，下到上，左到右，右到左都可以。
+``flex-wrap`` 设置在元素过多，发生溢出时，如何处理。
+``justify-content`` 和 ``align-items`` 设置排列位置，对齐平铺等等。
+
+在内部的块中，可以设置 ``order`` 改变排列的顺序，
+可以设置 ``align-self`` 改变位置，设置 ``flex`` 改变如何使用该元素进行填充，
+三个参数分别为伸缩的基准，空间剩余时的分配比例，空间不足时的分配比例。
