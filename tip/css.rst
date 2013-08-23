@@ -185,3 +185,33 @@ http://www.cnblogs.com/rubylouvre/archive/2013/07/09/3179534.html
         top: 50%;
         transform: translate(-50%, -50%);
     }
+
+
+
+
+居中
+=====
+http://jinlong.github.io/blog/2013/08/13/centering-all-the-directions/
+
+总结他人的总结
+
++ ``text-align:center`` 水平居中，用于文字或行内（inline）元素。
+
++ ``vertical-align:middle`` 垂直居中，用于文字或行内元素。
+  可配合 ``display:table`` 、 ``display::table-cell`` 使用。
+
++ ``line-height:(N)px;height:(N)px`` 用于垂直居中文字。
+
++ ``margin:0 auto;width:(N)px`` 水平居中。个人最常用的了。
+
++ ``position:absolute;left:50%;width:(N)px;margin-left:-(N/2)px``
+  也算常用了。
+
++ ``position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);`` 。
+  类似于负外边距的方法，特别在于不需要定义宽高，
+  ``translate`` 是相对于元素大小进行计算的。
+
++ ``display:flex;align-items:center;justify-content:center``
+
++ ``width:Npx;height:Mpx;position:absolute;margin:0;top:0;right:0;bottom:0;left:0``
+  这个前面提过了。
