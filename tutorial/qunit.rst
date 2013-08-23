@@ -42,7 +42,7 @@ No try-catch
 
 
 
-API
+api
 ====
 
 断言
@@ -95,30 +95,3 @@ module(moduleName [, option])
 
     ``setup`` ``teardown`` 和测试的 ``fn`` 会绑定到相同的作用域，
     所以可以通过 ``this`` 来共享变量。
-
-
-
-
-
-
-jasmine
-========
-
-.. code:: html
-
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <meta charset="utf-8" />
-            <title>Jasmine 2.0.0rc2</title>
-            <link rel="stylesheet" href="/path/to/jasmine.css" />
-            <script src="/path/to/jasmine.js"></script>
-            <script src="/path/to/jasmine-html.js"></script>
-            <script src="/path/to/boot.js"></script>
-        </head>
-        <body>
-            <script src="/path/to/test.js"></script>
-        </body>
-    </html>
-
-也是简单到不行，引入样式表和脚本就可以了。
