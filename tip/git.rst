@@ -72,6 +72,16 @@ multiple remote
     $ git branch -u origin/xxx
 
 
+去除分支的联系
+===============
+
+::
+
+    $ git branch --unset-upstream
+
+
+
+
 
 
 
