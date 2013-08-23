@@ -9,14 +9,11 @@ qunit
             <meta charset="utf-8" />
             <title>Test</title>
             <link rel="stylesheet" href="/path/to/qunit.css" />
-            <script src="/path/to/qunit.js"></script>
         </head>
         <body>
-            <h1 id="qunit-header">QUnit Test Suite</h1>
-            <h2 id="qunit-banner"></h2>
-            <div id="qunit-testrunner-toolbar"></div>
-            <h2 id="qunit-userAgent"></h2>
-            <ol id="qunit-tests"></ol>
+            <div id="qunit"></div>
+            <div id="qunit-fixture"></div>
+            <script src="/path/to/qunit.js"></script>
 
             <script src="/path/to/test.js"></script>
         </body>
@@ -48,18 +45,25 @@ api
 断言
 -----
 
-ok(assert [, msg])
-    ``assert`` 为真则通过测试。
+ok(expr, msg)
+    ``expr`` 为真则通过测试。
 
-equal(expr, expected [, msg])
-    用 ``==`` 比较 ``expr`` 和 ``expected`` ，为真则通过测试。
+equal(obj, expected, msg)
+    用 ``==`` 比较 ``obj`` 和 ``expected`` ，为真则通过测试。
     ``notEqual`` 用 ``==`` ，
     ``strictEqual`` 用 ``===`` ，
     ``notStrictEqual`` 用 ``!==`` 。
 
-deepEqual(expr, expected [, msg])
-    用于比较数组、对象。
-    比较基本类型使用的是 ``===`` ，碰到对象数组继续展开比较。
+deepEqual(obj, expected, msg)
+    比较基本类型使用的是 ``===`` ，碰到对象和数组会展开比较。
+    还有 ``notDeepEqual`` 。
+
+throws(fn, expected, msg)
+    ``fn`` 抛出的错误满足 ``expected`` ，则通过测试。
+    可以是错误的类型满足，也可以是错误信息满足。
+
+expect(amount)
+    类似于测试函数的第二个参数。用于表明该测试中有几个断言。
 
 
 测试
@@ -68,10 +72,14 @@ deepEqual(expr, expected [, msg])
 断言都是放在测试的 ``fn`` 里面的。
 
 test(testName [, num], fn)
-    测试， ``num`` 是内部断言的数量。
+    测试。
+
+    ``num`` 是内部断言的数量。
+
     代码里可以使用 ``stop`` 和 ``start`` 这两个函数对异步函数进行测试，
-    比如回调前调用下 ``stop`` ，在回调函数里加上 ``start`` 。
-    注意两者要成对出现。
+    比如回调前调用下 ``stop`` ，在回调函数最后加上 ``start`` 。
+    注意两者要成对出现。在有多对的时候，可以使用数字作为参数，
+    表明配对关系。
 
 asyncTest(testName [, num], fn)
     异步测试。
@@ -95,3 +103,10 @@ module(moduleName [, option])
 
     ``setup`` ``teardown`` 和测试的 ``fn`` 会绑定到相同的作用域，
     所以可以通过 ``this`` 来共享变量。
+
+
+控制
+-----
+可以通过 ``Qunit.config`` 来自定义配置。
+
+可以在整个测试前后，每个模块前后，每个测试前后，每个断言之后，注册回调函数。
