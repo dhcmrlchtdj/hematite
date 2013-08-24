@@ -1,18 +1,14 @@
-=========
- vim tip
-=========
-
 upper and lower
 ================
 
 normal mode
 ------------
-:code:`~` => change between lower and upper
+``~`` => change between lower and upper
 
 visual mode
 ------------
-+ :code:`u` => lower
-+ :code:`U` => upper
++ ``u`` => lower
++ ``U`` => upper
 
 
 
@@ -22,7 +18,13 @@ visual mode
 
 排序再替换。
 
-.. code::
+::
 
     :'<,'>sort
     :'<,'>s/\v(^.*$)(\n\1)+/\1/g
+
+
+
+标记跳转
+=========
+``m[a-z]`` 标记， ``\`[a-]`` 跳转。
