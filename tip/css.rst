@@ -275,3 +275,79 @@ http://the-echoplex.net/flexyboxes/
 在内部的块中，可以设置 ``order`` 改变排列的顺序，
 可以设置 ``align-self`` 改变位置，设置 ``flex`` 改变如何使用该元素进行填充，
 三个参数分别为伸缩的基准，空间剩余时的分配比例，空间不足时的分配比例。
+
+
+
+
+
+css 修改页面内容
+=================
+http://coding.smashingmagazine.com/2013/04/12/css-generated-content-counters/
+
+``content`` 的用法相当丰富啊。
+
+.. code:: css
+
+    content: none; /* 没东西 */
+    content: normal; /* none 一样 */
+
+    content: "prefix"; /* 字符串，可以使用 \HHHH 的形式进行转义 */
+    content: url(/path/to/image); /* 会被当成图片处理 */
+    content: attr(href); /* 引用标签的属性，没有该属性会返回空值， */
+
+    /* 下面两个可以配合 quotes 使用 */
+    quotes: "“" "”" "‘" "’";
+    content: open-quote;
+    content: close-quote;
+    /* 下面两个，在语义上表达嵌套 */
+    content: no-open-quote;
+    content: no-close-quote;
+
+    /* 上面的效果都是是可以组合起来的，组合之后 none normal 就没用了 */
+    content: open-quote " " "prefix" " " attr(href);
+
+还有最后一个用法：计数。
+
+.. code:: css
+
+    ul {
+        counter-reset: name; /* 把 name 重置为 0 */
+    }
+
+    li::before {
+        counter-increment: name; /* name++ */
+        content: counter(name); /* 获取 name */
+    }
+
+    /* 添加删除 li 的时候，会自动重新计算 */
+
+计数时还可以更加精确：
+
+.. code:: css
+
+    counter-reset: cnt1 -20 cnt2 100; /* 初始化多个计数器，设置初始值 */
+    counter-incremnt: cnt1 +10 cnt2 -10; /* 精确控制计数器的增减 */
+
+计数很适合用于目录之类的场景吧，可以自定义基数符号，自己添加分割符号：
+
+.. code:: css
+
+    content: counters(cnt, "."); /* 使用 . 分割，注意是 counters 不是 counter */
+
+    content: counter(cnt, "decimal");
+    content: counters(cnt, ".", "decimal");
+    /*
+        默认是使用数字，下面几种是可选值。
+        如果需要处理复杂情形，可以使用多个计数器，把结果拼起来。
+
+        decimal
+        decimal-leading-zero
+        lower-roman
+        upper-roman
+        lower-greek
+        upper-greek
+        lower-latin
+        upper-latin
+        lower-alpha
+        upper-alpha
+    */
