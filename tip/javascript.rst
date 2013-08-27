@@ -49,14 +49,6 @@ HTMLElement
 
 
 
-Object.create
-==============
-:code:`Object.create` 的第一个参数是新对象的原型。
-
-
-
-
-
 
 鼠标移动事件
 =============

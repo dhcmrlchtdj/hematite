@@ -7,11 +7,11 @@
 所谓提交按钮，也就是
 ``input[type=submit]`` 和 ``input[type=image]`` 和 ``button[type=submit]`` 。
 
-:code:`form.submit()` 不会触发 :code:`submit` 事件。
+``form.submit()`` 不会触发 ``submit`` 事件。
 
-另外一点，如果使用 :code:`display:none` 来隐藏元素，chrome 会无视这个元素。
+另外一点，如果使用 ``display:none`` 来隐藏元素，chrome 会无视这个元素。
 如果把提交按钮隐藏了， ``Enter`` 就无效了。
-应该使用 :code:`visibility:hidden` 来隐藏元素。
+应该使用 ``visibility:hidden`` 来隐藏元素。
 
 
 
@@ -20,7 +20,7 @@
 
 定时器
 =======
-js 里有 :code:`setTimeout` 和 :code:`setInterval` 两种定时器，
+js 里有 ``setTimeout`` 和 ``setInterval`` 两种定时器，
 前者是超时调用，后者是间歇调用，这个不用多说。
 
 那么，下面的代码，两者的区别在哪里？
@@ -44,21 +44,21 @@ js 里有 :code:`setTimeout` 和 :code:`setInterval` 两种定时器，
 这里我们忽略调度的细节，把要执行的函数想象成一个任务队列。
 
 
-:code:`setTimeout` 在 10 毫秒后调用函数，也就是把函数加入了任务队列。
+``setTimeout`` 在 10 毫秒后调用函数，也就是把函数加入了任务队列。
 如果队列中没有其他代码在执行或等待，结果就和预期的一样。
 如果队列中有很多其他函数正在等待，那么这个超时调用就要慢慢排队，
 等待的时间就有可能超过 10 毫秒。
 执行后，会再次尝试在 10 毫秒后调用函数，也就是重复前面的过程。
 
 
-:code:`setInterval` 则是每隔 10 毫秒，就尝试调用函数一次。
+``setInterval`` 则是每隔 10 毫秒，就尝试调用函数一次。
 也就是，10 毫秒时试一次，20 毫秒时试一次，30 毫秒时试一次……
 如果没碰上排队，就这样了。
 如果碰上要排队的情况，也就是没能调用函数，函数就加入任务队列，等待执行。
 特别的是，可能出现超过时间间隔，函数还在排队的情况。
 如果 10 毫秒加入队列的函数在 20 毫秒时还没执行，
 20 毫秒时的函数是不会加入队列的，也就是说，
-:code:`setInterval` 要调用的函数，不会在队列中出现两次。
+``setInterval`` 要调用的函数，不会在队列中出现两次。
 
 
 **总结** 就是，两者的区别在于对这个间隔的处理。
@@ -71,8 +71,8 @@ js 里有 :code:`setTimeout` 和 :code:`setInterval` 两种定时器，
 
 new
 ====
-我们使用一个函数作为构造函数（constructor），来 :code:`new` 一下。
-下面解释下 :code:`new` 的时候，都干了什么。
+我们使用一个函数作为构造函数（constructor），来 ``new`` 一个实例。
+下面解释下 ``new`` 的时候，都干了什么。
 
 .. code:: javascript
 
@@ -82,11 +82,11 @@ new
 
     example = new Example('wtf');
 
-在上面这个例子里，构造函数 :code:`Example` 没有 :code:`return` 语句，
-而且里面引用了 :code:`this` ，那么 :code:`example` 到底是什么呢。
+在上面这个例子里，构造函数 ``Example`` 没有 ``return`` 语句，
+而且里面引用了 ``this`` ，那么 ``example`` 到底是什么呢。
 
-实际上， :code:`new` 会先构造一个空对象（ :code:`{}` ），
-在这个空对象上执行构造函数（就是把这个对象绑定到构造函数的 :code:`this` 上），
+实际上， ``new`` 会先构造一个空对象（ ``{}`` ），
+在这个空对象上执行构造函数（就是把这个对象绑定到构造函数的 ``this`` 上），
 最后返回这个对象。
 
 .. code:: javascript
@@ -95,9 +95,10 @@ new
     Example.call(example, 'wtf');
 
 就是上面这种感觉吧。
-不过还是有区别的，手动生成的对象不会被视为构造函数的实例。
+不过还是有区别的，手动生成的对象不会被视为构造函数的实例，
+因为无法在 ``example`` 的原型链上找到 ``Example.prototype`` 。
 
-如果构造函数带有 :code:`return` 语句会怎么样？
+如果构造函数带有 ``return`` 语句会怎么样？
 
 .. code:: javascript
 
@@ -118,11 +119,11 @@ new
     console.log(new Ex3());
 
 看了上面的代码，估计也能猜出来了一点。
-使用 :code:`new` 的时候，返回值必须是对象类型的值，
-如果返回基本类型的值， :code:`return` 会被无视掉，返回 :code:`this` 。
+使用 ``new`` 的时候，返回值必须是对象类型的值，
+如果返回基本类型的值， ``return`` 会被无视掉，返回 ``this`` 。
 
-最后， :code:`new A` 和 :code:`new A()` 的效果是一样。
-只能说，:code:`new` 和构造函数以及括号，三者是个整体，
+最后， ``new A`` 和 ``new A()`` 的效果是一样。
+只能说， ``new`` 和构造函数以及括号，三者是个整体，
 如果插入括号改变运算优先级，会改变整个语句的语义。
 
 
@@ -165,7 +166,7 @@ new 续
 也可以赋值给构造函数的原型。
 
 实例和构造函数没有直接联系，而是共享了 *构造函数的原型* 。
-原型里的的 :code:`constructor` 属性又指向了构造函数。
+原型里的的 ``constructor`` 属性又指向了构造函数。
 
 
 
@@ -174,11 +175,11 @@ new 续
 
 eval
 =====
-:code:`eval` 能够获取执行时的作用域，
-执行的最后一条表达式会作为 :code:`eval` 的返回值。
+``eval`` 能够获取执行时的作用域，
+执行的最后一条表达式会作为 ``eval`` 的返回值。
 
-在 :code:`use strict` 的的约束下，
-:code:`eval` 无法在执行的作用域中声明新的变量或函数，
+在 ``use strict`` 的的约束下，
+``eval`` 无法在执行的作用域中声明新的变量或函数，
 可以理解成，代码是在一个新的函数作用域中执行的。
 
 还是可以通过返回值以及修改外部变量的方式来交流就是了。
@@ -207,9 +208,9 @@ DOM 节点属性
 
 上面三种方法都可以获取和修改节点的属性。
 
-:code:`getAttributeNode` 没啥亮点，这里不展开了。
+``getAttributeNode`` 没啥亮点，这里不展开了。
 
-使用 :code:`getAttribute` 和 :code:`setAttribute`
+使用 ``getAttribute`` 和 ``setAttribute``
 来操作节点的属性（attribute）在大部分情况下是个好选择，
 没有非常突出的问题。
 
@@ -217,27 +218,27 @@ DOM 节点属性
 
 + 属性名的限制
 
-  属性名在 js 和 html 中不是一一对应的。典型代表就是 :code:`className` 。
+  属性名在 js 和 html 中不是一一对应的。典型代表就是 ``className`` 。
   在 js 中，属性名称受 js 的命名限制，不能与保留字冲突，通常采用小骆驼命名法。
 
 + 自定义属性
 
   可以直接用属性操作的只有 html 规定的标准属性，自定义的属性是取不到的。
-  不过 :code:`data-` 开头的自定义属性可以通过 :code:`dataset` 属性获取。
+  不过 ``data-`` 开头的自定义属性可以通过 ``dataset`` 属性获取。
 
 + 表单
 
   在表单中，使用属性（property）可以直接获取相应的表单项，
-  这里的相应指的是项的 :code:`id` 或者 :code:`name` 属性。
+  这里的相应指的是项的 ``id`` 或者 ``name`` 属性。
   换句话说，这些属性被项覆盖了，也就无法通过属性（property）来获取和修改了，
-  这种时候就需要使用 :code:`getAttribute` 。
+  这种时候就需要使用 ``getAttribute`` 。
 
 + 链接
 
   使用属性（property）来获取节点的 url ，
-  比如 :code:`src` :code:`href` :code:`action` ，
+  比如 ``src`` ， ``href`` ， ``action`` ，
   其结果都是被浏览器补全了的，
-  要获取 html 原始值，要使用 :code:`getAttribute` 。
+  要获取 html 原始值，要使用 ``getAttribute`` 。
 
 
 早期的 IE 版本从来都是地狱，这里不细说。
@@ -257,6 +258,7 @@ css 样式是个比一般属性更大的坑，这里也不展开了。
     (function() {
         var window = this || (0, eval)('this');
     })()
+
 
 
 
@@ -409,3 +411,108 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var
 总结起来就是，不管在哪个位置，不管这里的代码会不会执行，
 只要 ``var`` 出现了，这个变量就在作用域中完成了声明。
 （一下子没了难以理解的感觉，只剩下理所当然了……）
+
+
+
+
+
+
+
+Object.create 继承
+===================
+http://docs.webplatform.org/wiki/concepts/programming/javascript/inheritance
+
+.. code:: javascript
+
+    function Super(name) {
+        this.name = name;
+    }
+    Super.prototype.getName = function() { return this.name; };
+
+    function newInherit(name, age) {
+        Super.call(this, name);
+        this.age = age;
+    }
+    newInherit.prototype = new Super();
+    newInherit.prototype.getAge = function() { return this.age; };
+
+    function createInherit(name, age) {
+        Super.call(this, name);
+        this.age = age;
+    }
+    createInherit.prototype = Object.create(Super.prototype, {
+        getAge: {
+            value: function() { return this.age;}
+        }
+    });
+    // createInherit.prototype.getAge = function() { return this.age; };
+
+能达到相同的效果，做法也很相似，只是用 ``Object.create`` 替换 ``new`` 。
+给子类的原型添加方法的时候，可以使用 ``Object.create`` 的语法，
+也可以直接在原型上修改。
+
+``new`` 实现继承，靠的是原型指向了父类的一个实例，靠这个实例访问父类的原型。
+``Object.create`` 实现继承也是一样的原理。
+
+.. code:: javascript
+
+    var p1 = new Super();
+    console.log(p1 instanceof Super); // true
+
+    var p2 = Object.create(Super.prototype);
+    console.log(p2 instanceof Super); // true
+
+先扯下 ``instanceof`` 关键字，
+MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数的原型，
+找到就返回 ``true`` ，否则返回 ``false`` 。
+
+也就是说，沿着 ``p1.__proto__`` 找到了 ``Super.prototype`` ，
+沿着 ``p2.__proto__`` 也找到了 ``Super.prototype`` 。
+（ ``Object.getPrototypeof(obj)`` 比 ``obj.__proto__`` 标准些。）
+
+那么 ``p1`` 和 ``p2`` 区别在哪里呢？
+其实相比 ``new`` ，
+``Object.create`` 就是去掉了绑定 ``this`` 后执行构造函数的过程，
+只是把把参数放到了新对象的原型上。
+注意下这里的原型是 ``__proto__`` 不是 ``prototype`` 。
+
+可以这么理解
+
+.. code:: javascript
+
+    function A() {}
+    var ex1 = Object.create(A.prototype);
+    console.log(ex1.__proto__ === A.prototype); // true
+    var ex2 = { __proto__: A.prototype };
+    console.log(ex2.__proto__ === A.prototype); // true
+
+**注意** ，这里是用 ``Object.create`` 来实现继承，不是用来创建实例的。
+
+
+
+
+最后两个例子
+
+.. code:: javascript
+
+    var ex1 = Object.create(null);
+    console.log(ex1 instanceof Object); // false
+    console.log(Object.getPrototypeof(ex1) === null); // true
+    console.log(ex1.__proto__ === undefined) // true
+    // 只能说 null 是个异类
+
+
+    function Super() {}
+    function Sub() {}
+    Sub.prototype = Object.create(Super.prototype);
+    var instance = new Sub();
+
+    console.log(instance instanceof Sub); // true
+    // instance.__proto__ === Sub.prototype
+    console.log(instance instanceof Super); // true
+    // instance.__proto__.__proto__ === Super.prototype
+
+    console.log(Sub.prototype instanceof Super); // true
+    // Sub.prototype.__proto__ === Super.prototype
+    console.log(Sub instanceof Super); // false
+    // Sub.__proto__ !== Super.prototype
