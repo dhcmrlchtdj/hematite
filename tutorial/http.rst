@@ -11,3 +11,21 @@ http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes
 ``Secure`` 要求 cookie 只通过 ``https`` 传输。
 ``HttpOnly`` 要求 cookie 只通过 ``http`` 设置。
 （包括 ``https`` ，这个的主要作用的阻止 ``document.cookie`` 读写 cookie。）
+
+
+
+
+
+http header
+============
+http://hooopo.writings.io/articles/d22fb477
+
+``X-Content-Type-Options: nosniff``
+    阻止浏览器猜测文件的 ``MIME`` 类型。
+
+``X-XSS-Protection: 1;mode=block``
+    激活 ie 内建的 xss 过滤机制
+
+``X-Frame-Options: SAMEORIGIN``
+    是否允许网页被嵌入 ``iframe/frame`` 。
+    ``SAMEORIGIN`` 是允许相同域名的网页， ``DENY`` 是阻止去爱不网页。
