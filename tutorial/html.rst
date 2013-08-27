@@ -261,3 +261,63 @@ track
 也就是说， ``sessionStorage`` 没有存储事件，读取不会触发存储事件，
 本页面修改 ``localStorage`` 也不会触发存储事件。
 通过参数可以得到键名，新旧值，引起事件的地址等。
+
+
+
+
+
+页面加载顺序
+=============
+JS 有可能会修改 DOM.
+JS 的执行有可能依赖最新样式。
+prefetch 优化
+
+定律一：资源是否下载依赖 JS 执行结果。
+定律二：JS 执行依赖 CSS 最新渲染。
+定律三：现代浏览器存在 prefetch 优化。
+
+
+
+
+
+
+
+ie 注释
+========
+http://docs.webplatform.org/wiki/concepts/proprietary_internet_explorer_techniques
+
+.. code:: html
+
+    <!--[if IE]>
+    IE can see this whereas other browsers think this is an inline comment
+    <![endif]-->
+
+    <!--[if IE 8]>
+    Only IE 8 can see this
+    <![endif]-->
+
+    <!--[if lte IE 8]>
+    All IEs up to version 8 can see this (lte = lower than, or equal)
+    <![endif]-->
+
+    <!--[if gt IE 8]>
+    IEs higher than version 8 can see this (gt = greater than)
+    <![endif]-->
+
+    <!--[if !IE]> -->
+    This is visible to every browser except IE
+    <!-- <![endif]-->
+
+
+.. code:: javascript
+
+    // ie4-9
+
+    /*@cc_on
+        @if (@_jscript_version >= 5.8)
+            // executed by IEs with JavaScript (aka JScript) engine >= v5.8 or higher (equals IE 8)
+            // See: http://de.wikipedia.org/wiki/JScript
+        @else
+            // executed by IEs older than IE 8
+        @end
+    @*/
