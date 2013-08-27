@@ -321,3 +321,34 @@ http://docs.webplatform.org/wiki/concepts/proprietary_internet_explorer_techniqu
             // executed by IEs older than IE 8
         @end
     @*/
+
+
+
+
+
+跨站 http 请求
+===============
+当网页请求不同域名的资源时，就会发起跨站 http 请求，
+也就是 cross-site http requests，又叫 CORS（cross origin resoirce sharing）。
+
++ http://docs.webplatform.org/wiki/tutorials/using_cors
++ https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
++ http://fetch.spec.whatwg.org
+
+html5 的新属性 ``crossorigin`` ，可以用于限制跨站请求。
+``crossorigin="anonymous"`` 不会设置 ``credentials`` ，
+``crossorigin="use-credentials"`` 会设置 ``credentials`` 。
+``credentials`` 意味着会交换信息。
+设置之后，请求的头部会加上 ``Origin: null`` 。
+
+
+可以通过 ``Access-Control-Allow-Origin`` 设置一个跨站白名单。
+
+通常 xhr 请求是不会携带 cookie 之类的信息的，但是可以开启。
+首先要在 http 头部设置 ``Access-Control-Allow-Credentials: true`` ，
+之后在发起请求前设置 ``withCredentials`` 。
+
+.. code:: javascript
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
