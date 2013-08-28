@@ -352,3 +352,21 @@ html5 的新属性 ``crossorigin`` ，可以用于限制跨站请求。
 
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
+
+
+
+
+
+
+
+图片加载
+=========
+http://timkadlec.com/2012/04/media-query-asset-downloading-results/
+
+关于图片加载的测试，如何避免载入多余图片。
+
+从结论上讲， ``img`` 无解，能动手脚的只有背景图片。
+直接隐藏也没有用，必须绕个弯。
+
+可以选择把父元素隐藏，这样就不会加载子元素的背景图片了。
+可以使用 `media query` 来为不同情况载入不同背景图片。
