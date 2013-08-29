@@ -590,6 +590,7 @@ MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数
 加法
 =====
 http://es5.github.io/x11.html#x11.6.1
+http://www.2ality.com/2012/01/object-plus-object.html
 
 前面谈类型其实是为了讲讲加法运算。
 具体看规范定义，下面简单描述下。
