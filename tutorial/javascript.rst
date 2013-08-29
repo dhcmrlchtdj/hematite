@@ -516,3 +516,126 @@ MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数
     // Sub.prototype.__proto__ === Super.prototype
     console.log(Sub instanceof Super); // false
     // Sub.__proto__ !== Super.prototype
+
+
+
+
+
+类型转换
+=========
++ http://ecma-international.org/ecma-262/5.1/#sec-9
++ http://es5.github.io/x9.html
++ http://es5.github.io/x8.html#x8.12.8
++ http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1
+
+下面挑着说。
+
++ ``Object`` 在转换为基本类型时，又分为转换为字符串和转换为数值。
+
+
++ 假值只有 ``Undefined`` ``Null`` ``false`` ``+0`` ``-0`` ``NaN`` 。
+  前两个是类型，但值都只有一种，两个 0 和起来，一共是 5 个假值。
+
+
++ 在转换为数字时， ``Undefined`` 是 ``NaN`` ，而 ``Null`` 是 ``+0`` ，
+  顺便一提 ``false`` 也是 ``+0`` 。
+
+  ``Object`` 要先转为数值基本类型，再转换为数值。
+
+
++ 在转换为整数时， ``NaN`` 被视为 ``+0`` 。
+
+  取整时是向 0 取整，公式为 ``sign(number) * floor(abs(number))`` 。
+
+
++ 在转换为字符串时， ``+0`` ``-0`` 都被转换为 ``0`` 。
+
+  ``Object`` 要先转换为字符串基本类型，再转换为字符串。
+
+
++ ``Undefined`` 和 ``Null`` 是不能转换为对象类型的。
+
+
++ ``Object`` 在转换为字符串型基本类型时，
+  1. 首先获取对象的 ``toString`` 方法。
+  2. 如果调用 ``toString`` 能返回基本类型的值，那么返回该值。
+  3. 获取对象的 ``valueOf`` 方法。
+  4. 如果调用 ``valueOf`` 能返回基本类型的值，那么返回该值。
+  5. 都不行了就抛出错误。
+
+
++ ``Object`` 在转换为数值型基本类型时，
+  只是把调用 ``valueOf`` 和 ``toString`` 的顺序对掉一下，
+  其他处理是一样的。
+
++ ``Object`` 在转换成基本类型时，如果没有规定要转换成什么类型，
+  默认是转换成数值型。
+
+  当然也有例外， ``Date`` 在没有规定转换类型的情况下，默认是转成字符串型的。
+
+
+最后给个演示代码：
+
+.. code:: javascript
+
+    var obj = {};
+    obj.valueOf = function() { return 100; };
+    obj.toString = function() { return "blah"; };
+
+    console.log(Number(obj)); // 100
+    console.log(String(obj)); // "blah"
+
+
+
+加法
+=====
+http://es5.github.io/x11.html#x11.6.1
+
+前面谈类型其实是为了讲讲加法运算。
+具体看规范定义，下面简单描述下。
+
+首先是计算左值右值，获取基本类型。
+然后看左右是否有字符串出现，出现了字符串，就把两者都转换为字符串再拼接起来。
+没有字符串，就把两者都转换成数值再相加。
+
+数值加法按如下方式处理
+
+1. 出现了 ``NaN`` ，返回 ``NaN`` 。
+2. ``Infinity`` 和 ``-Infinity`` ，返回 ``NaN`` 。
+3. 符号相同的无穷大相加，无穷大。
+4. 有限值与无穷大相加，无穷大。
+5. 两个 ``-0`` 结果是 ``-0`` ，
+   而 ``-0`` ``+0`` 还有 ``+0`` ``+0`` 的结果都是 ``+0`` 。
+6. 零值和非零值相加，结果是非零值。
+7. 绝对值相等但符号相反的两个值相加，结果是 ``+0`` 。
+8. 其他和正常加法定义一样了。
+
+
+尝试理解下：
+
+.. code:: javascript
+
+    console.log( {} + {} ); // "[object Object][object Object]"
+    // valueOf 返回的是对象，所以采用了 toString 的结果，
+    // 最后成了两个字符串相加
+
+    console.log( new Date() + [] ); // "XXXXXXXXXXXXXXX"
+    // Date 默认是转换成字符型，[] 的情况和 {} 相同，
+    // 所以也是字符串相加。
+
+    console.log( null + "blah" ); // "nullblah"
+    // null 就是 null，右边出现了字符串，所以成了 "null"。
+
+    console.log( null + false ); // 0
+    // null 和 false，没有字符串，所以两个都转换成数值，都是 +0 。
+
+    console.log( false + undefined ); // NaN
+    // 同样没有字符串，但是 undefined 转换后成了 NaN。
+
+    console.log( [] + NaN ); // "NaN"
+    // [] 返回的是字符串，那么就是字符串了。
+
+    var obj = {}; obj.valueOf = function() {return 9527;};
+    console.log( obj + true ); // 9528
+    // 自己定义了 valueOf，返回了基本类型的值，所以不会继续调用 toString 了。
+    // 最后变成两个数字相加。
