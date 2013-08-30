@@ -87,6 +87,15 @@ font-face
         clear: both;
     }
 
+    .clearfix:after {
+        content: " "; /* 旧浏览器不支持空内容 */
+        visiability: hidden;
+        display: block;
+        height: 0;
+        clear: both;
+    }
+    .clearfix { *zoom: 1; }
+
 
 
 
