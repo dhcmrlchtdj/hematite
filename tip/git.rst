@@ -143,3 +143,23 @@ multiple remote
 ::
 
     $ git show <object>
+
+
+
+
+
+
+修改以前的某个分支
+===================
+
+修改刚刚提交的分支，可以直接用 ``git commit --amend`` ，
+如果要修改更早的分支，需要 ``git rebase`` 出马。
+
+::
+
+    $ # 选择要修改的分支
+    $ git rebase -i <commit>
+
+把要修改的分支标记为 edit，保存退出，接着就会进入需要修改的分支。
+使用 ``git commit --amend`` 保持修改，这点是一样的。
+之后要使用 ``git rebase --continue`` 继续剩余的衍合。
