@@ -372,3 +372,29 @@ http://timkadlec.com/2012/04/media-query-asset-downloading-results/
 
 可以选择把父元素隐藏，这样就不会加载子元素的背景图片了。
 可以使用 `media query` 来为不同情况载入不同背景图片。
+
+
+
+
+
+id 和 class 命名
+=================
+http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#the-id-attribute
+http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#classes
+http://google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml?showone=ID_and_Class_Name_Delimiters#ID_and_Class_Name_Delimiters
+
+最近写 id 和 class 写得人都乱了，去查了下文档。
+
+id
+    必须是唯一的，不能有空格，不能是空值。
+    只有这三个限制，可以是纯数字，可以是标点，什么都可以。
+
+class
+    使用空格分隔不同的 class，没有其他限制了。
+
+这个条件未免太宽了点。
+
+google 的风格指南里面，推荐使用连字符（hyphen）作为分割符号。
+
+里面还有些奇怪的建议，比如在 css 里面使用单引号，css 的 url 不加引号，
+还有把所有可以省略的标签都省略掉。
