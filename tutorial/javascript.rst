@@ -640,3 +640,13 @@ http://www.2ality.com/2012/01/object-plus-object.html
     console.log( obj + true ); // 9528
     // 自己定义了 valueOf，返回了基本类型的值，所以不会继续调用 toString 了。
     // 最后变成两个数字相加。
+
+
+
+
+
+void
+=====
+毫无意义（？）的关键字。
+计算表达式并返回 ``undefined`` 。
+能够在 ``undefined`` 被覆盖的时候获取 ``undefined`` 。
