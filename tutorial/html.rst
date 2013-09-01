@@ -382,6 +382,8 @@ id 和 class 命名
 http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#the-id-attribute
 http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#classes
 http://google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml?showone=ID_and_Class_Name_Delimiters#ID_and_Class_Name_Delimiters
+http://www.w3.org/TR/html4/types.html#type-name
+http://www.w3.org/TR/CSS2/syndata.html#characters
 
 最近写 id 和 class 写得人都乱了，去查了下文档。
 
@@ -398,3 +400,21 @@ google 的风格指南里面，推荐使用连字符（hyphen）作为分割符�
 
 里面还有些奇怪的建议，比如在 css 里面使用单引号，css 的 url 不加引号，
 还有把所有可以省略的标签都省略掉。
+
+
+更新：
+现实和理想还是有差距的。
+
+一个是 css 无法识别这些特殊符号，
+一个是 ``document.querySelector`` 无法识别这些符号。
+（但是 ``document.getElementById`` 可以。）
+
+按照 html4 的标准，合法的命名是 ``[a-zA-Z][-_:.0-9a-zA-Z]`` 。
+不过实际上， ``:`` 和 ``.`` 在使用上还是有问题。
+
+根据 css 的规范，合法的符号有 ``[-_0-9a-zA-Z]`` 和其他一些符号，
+不能以数字开头，有两个符号不能是两个连字符或连字符加数字。
+关于其他符号可以看 http://mathiasbynens.be/notes/css-escapes 。
+
+取个交集再做个限制，按照 ``[a-z][-0-9a-z]`` 来写好了。
+分割使用连字符，下划线和骆驼什么的，通通不要出现。
