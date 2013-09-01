@@ -19,6 +19,7 @@ http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes
 http header
 ============
 http://hooopo.writings.io/articles/d22fb477
+http://www.imququ.com/post/web-security-and-response-header.html
 
 ``X-Content-Type-Options: nosniff``
     阻止浏览器猜测文件的 ``MIME`` 类型。
@@ -28,4 +29,10 @@ http://hooopo.writings.io/articles/d22fb477
 
 ``X-Frame-Options: SAMEORIGIN``
     是否允许网页被嵌入 ``iframe/frame`` 。
-    ``SAMEORIGIN`` 是允许相同域名的网页， ``DENY`` 是阻止去爱不网页。
+    ``SAMEORIGIN`` 是允许相同域名的网页， ``DENY`` 是阻止所有网页。
+
+``Strict-Transport-Security: max-age=60; includeSubDomains``
+    要求浏览器在 ``max-age`` 秒内，将链接重定向到 https。
+
+``Content-Security-Policy``
+    限定页面内各种资源的来源。
