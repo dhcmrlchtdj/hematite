@@ -94,7 +94,9 @@ font-face
         height: 0;
         clear: both;
     }
-    .clearfix { *zoom: 1; }
+    .clearfix {
+        *zoom: 1; /* 触发 hasLayout */
+    }
 
 
 
