@@ -175,7 +175,7 @@ http://coding.smashingmagazine.com/2013/08/09/absolute-horizontal-vertical-cente
     .ellipsis {
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: no-wrap;
+        white-space: nowrap;
         width: 100%;
     }
 
