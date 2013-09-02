@@ -61,46 +61,56 @@ atomic inline-level boxes
     如 ``inline-block`` 和 ``inline-table`` 。
 
 
--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+元素位置
+==========
++ http://www.w3.org/TR/CSS2/visuren.html#positioning-scheme
 
 元素的位置由 ``position`` 和 ``float`` 决定。
 
-正常流（normal flow）
-----------------------
-::
 
-    position: static | relative
-    float: none
++ 正常流（normal flow）
 
-元素一个挨着一个排列，在 BFC 中垂直分布，在 IFC 中水平分布。
+    ::
 
+        position: static | relative
+        float: none
 
-
-浮动（floats）
----------------
-::
-
-    position: static | relative
-    float: left | right
-
-在当前行排列。其他通常的元素会被挤到浮动元素的边缘。
-其他元素可以使用 ``clear`` 来避免被挤开。
-
-浮动且设置 ``position: relative`` 时，定位是相对于浮动后的位置进行的。
+    元素一个挨着一个排列，在 BFC 中垂直分布，在 IFC 中水平分布。
 
 
-绝对定位（absolute positioning）
----------------------------------
-::
++ 浮动（floats）
 
-    position: absolute | fixed
+    ::
 
-元素完全移出文档流，不再相互影响。
-元素定位依赖于其容器（containing block）和 ``top,bottom,left,right`` 。
+        position: static | relative
+        float: left | right
 
-``fixed`` 的容器是整个窗口（ ``viewport`` ）。
+    在当前行排列。其他通常的元素会被挤到浮动元素的边缘。
+    其他元素可以使用 ``clear`` 来避免被挤开。
+
+    浮动且设置 ``position: relative`` 时，定位是相对于浮动后的位置进行的。
 
 
++ 绝对定位（absolute positioning）
+
+    ::
+
+        position: absolute | fixed
+
+    元素完全移出文档流，不再相互影响。
+    元素定位依赖于其容器（containing block）和 ``top,bottom,left,right`` 。
+
+    ``fixed`` 的容器是整个窗口（ ``viewport`` ）。
+
+浮动和绝对定位都让元素脱离了文档流（flow），
+这样的元素称为溢出了。
 
 
 
@@ -181,3 +191,17 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
 + 没有内容的元素，元素自身的上下外边距。
 
 在叠加的时候，正值取最大的，负值取最小的。
+
+发生外边距叠加的详细条件：
+
+1. 在正常流中的，且属于同一个 BFC 的两个块级元素的外边距。
+2. 没有边界，内边距，没有进行浮动清理。
+3. 属于下面某种情况：
+   + 元素的上边距和第一个子元素的上边距。
+   + 元素的下边距和下个兄弟元素的上边距。
+   + 元素的下边距和最后一个子元素的下边距。
+   + 一个元素没有在内部创建 BFC，没有正常流的子元素（脱离了正常流的话没关系），
+     并且 ``min-height`` 为 0， ``height`` 为 0 或 auto。
+     这个元素的上下边距。
+
+
