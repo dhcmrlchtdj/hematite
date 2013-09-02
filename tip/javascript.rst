@@ -346,3 +346,106 @@ http://stackoverflow.com/questions/833661/what-is-the-difference-in-javascript-b
 （很巧的是， ``undefined`` 这个值的类型，也叫 ``undefined`` 。）
 
 因为 ``un`` 没有声明过，所以对其引用造成了运行时的错误。
+
+
+
+
+
+
+
+
+arguments
+==========
+``use strict`` 模式下， ``arguments`` 和形式参数没有关联，不会互相影响。
+
+.. code:: javascript
+
+    (function(a1, a2, a3) {
+        "use strict";
+        console.log(a1, a2, a3); // 1 2 3
+        a1 = 100;
+        arguments[1] = 200;
+        console.log(a1, a2, a3); // 1 2 3
+        console.log(arguments); // [2, 3]
+    }(1, 2, 3));
+
+但是在非严格模式下， ``arguments`` 有一点点坑。
+建议使用 ``Array.prototype.slice`` 复制一个 ``arguments`` ，
+避免对 ``arguments`` 的直接操作。
+
+下面讲下坑在哪里。
+
+首先，参数和 ``arguments`` 相互关联，对其中一个进行修改会影响另一个。
+
+.. code:: javascript
+
+    (function(a1, a2, a3) {
+        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,3]
+        a1 = 100;
+        arguments[1] = 200;
+        console.log(a1, a2, a3, arguments); // 100 200 3 [100, 200, 3]
+    }(1, 2, 3));
+
+但是，这个关联又不是十分紧密。
+
+.. code:: javascript
+
+    (function(a1, a2, a3) {
+        console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2]
+        a3 = 3;
+        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2]
+    }(1, 2));
+
+    (function(a1, a2, a3) {
+        console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2]
+        arguments[2] = 300;
+        console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2,300]
+    }(1, 2));
+
+我的理解是 ``arguments`` 作为实际参数，
+在 **初始化** 时，与 **对应** 的形式参数建立了联系，
+记录了配对的数量。（ **注意** ：这个配对数会减少，但不会增加。）
+之后，在 ``arguments`` 中添加新值、给没有配对的形式参数赋值，
+由于两者没有关联，结果没有互相影响。
+
+在进行一些数组操作时，配对数的影响很明显。
+
+.. code:: javascript
+
+    (function(a1, a2, a3) {
+        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,3]
+        Array.prototype.pop.call(arguments);
+        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2]
+        Array.prototype.push.call(arguments, 300);
+        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,300]
+        a3 = 30;
+        console.log(a1, a2, a3, arguments); // 1 2 30 [1,2,300]
+    }(1, 2, 3));
+
+在 ``pop`` 之后， ``a3`` 和 ``arguments`` 的联系就切断了，
+``shift`` 的情况要更加复杂。
+
+.. code:: javascript
+
+    (function(a1, a2, a3) {
+        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,3]
+        Array.prototype.shift.call(arguments);
+        console.log(a1, a2, a3, arguments); // 2 3 3 [2,3]
+        Array.prototype.unshift.call(arguments, 100);
+        console.log(a1, a2, a3, arguments); // 100 2 3 [100,2,3]
+        a3 = 30;
+        console.log(a1, a2, a3, arguments); // 100 2 30 [100,2,3]
+    }(1, 2, 3));
+
+虽然是第一个元素被移出 ``arguments`` ，但是断开联系的却是 ``a3`` 。
+也就是说，配对数量减少时，受影响的是后面的元素。
+
+另外，配对数只在 ``arguments`` 的元素个数（和 ``arguments.length`` 有点区别）
+小于配对数时，才会减小。
+
+如果修改了 ``arguments.length`` ， ``arguments`` 的表现会显得更加诡异。
+因为 ``pop`` ``shift`` 这些数组方法依赖于 ``length`` 属性，
+但是 ``arguments`` 的元素个数又不受 ``length`` 的影响。
+
+
+更准确的描述，需要去翻文档了。
