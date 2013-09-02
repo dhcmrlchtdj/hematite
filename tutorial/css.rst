@@ -1,7 +1,6 @@
 visual formatting model
 ========================
 + http://www.w3.org/TR/CSS2/visuren.html
-+ http://www.w3.org/TR/CSS2/visudet.html
 + https://developer.mozilla.org/en-US/docs/Web/CSS/Visual_formatting_model
 
 浏览器如何展示一个页面。
@@ -206,3 +205,19 @@ BFC 内的元素会根据 BFC 来计算其位置。
      这个元素的上下边距。
 
 
+
+
+
+容器（containing block）
+=========================
+http://www.w3.org/TR/CSS2/visudet.html#containing-block-details
+
+容器决定了元素如何排列
+
++ 根元素（html）的容器称为起始容器（initial containing block）。
++ 正常流中的元素，容器是最近的祖先的容器。
++ ``position:fixed`` 的元素，容器是整个浏览器窗口（viewport）。
++ ``position:absolute`` 的元素，容器是设置了 ``position`` 的祖先元素。
+  （寻找时是一层层向根元素推进的，如果都没设置，那么容器就是起始容器。）
+
+  （文字方向（direction）会造成一点影响，尤其是祖先是行内元素且有多行的时候。）
