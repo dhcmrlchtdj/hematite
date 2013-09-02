@@ -3,7 +3,6 @@ visual formatting model
 http://www.w3.org/TR/CSS2/visuren.html
 http://www.w3.org/TR/CSS2/visudet.html
 https://developer.mozilla.org/en-US/docs/Web/CSS/Visual_formatting_model
-https://developer.mozilla.org/en-US/docs/Web/CSS/Block_formatting_context
 
 浏览器如何展示一个页面。
 
@@ -101,10 +100,18 @@ atomic inline-level boxes
 
 ``fixed`` 的容器是整个窗口（ ``viewport`` ）。
 
--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 块级格式化上下文（block formatting context）
----------------------------------------------
+=============================================
+https://developer.mozilla.org/en-US/docs/Web/CSS/Block_formatting_context
 
 ::
 
@@ -118,6 +125,26 @@ BFC 会包含内部的所有元素。
 
 浮动和清理只会应用于相同的 BFC 中。
 
-（使用 ``overflow:hidden`` 来清理浮动的原理就在于此。）
+使用 ``overflow:hidden`` 来清理浮动的原理就在于此。
+BFC 内的元素会根据 BFC 来计算其位置。
 
 （ie 下面还受到 ``hasLayout`` 的影响。）
+
+
+
+
+
+
+
+
+替换元素（replaced element）
+===============================
+http://www.w3.org/TR/CSS21/conform.html
+https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
+
+经常出现的一个概念。
+
+这些元素的内部不受 css 约束，
+比如 ``img`` ``video`` ``input`` ``textarea`` 都是替换元素，
+另外 ``audio`` ``canvas`` 在某些场合下也是替换元素，
+使用 ``content`` 属性生成的内容属于匿名替换元素。
