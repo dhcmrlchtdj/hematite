@@ -153,8 +153,8 @@ BFC 内的元素会根据 BFC 来计算其位置。
 
 替换元素（replaced element）
 ===============================
-http://www.w3.org/TR/CSS21/conform.html
-https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
++ http://www.w3.org/TR/CSS21/conform.html
++ https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
 
 经常出现的一个概念。
 
@@ -197,6 +197,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
 1. 在正常流中的，且属于同一个 BFC 的两个块级元素的外边距。
 2. 没有边界，内边距，没有进行浮动清理。
 3. 属于下面某种情况：
+
    + 元素的上边距和第一个子元素的上边距。
    + 元素的下边距和下个兄弟元素的上边距。
    + 元素的下边距和最后一个子元素的下边距。
