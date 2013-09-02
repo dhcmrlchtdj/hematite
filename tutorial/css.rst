@@ -1,8 +1,8 @@
 visual formatting model
 ========================
-http://www.w3.org/TR/CSS2/visuren.html
-http://www.w3.org/TR/CSS2/visudet.html
-https://developer.mozilla.org/en-US/docs/Web/CSS/Visual_formatting_model
++ http://www.w3.org/TR/CSS2/visuren.html
++ http://www.w3.org/TR/CSS2/visudet.html
++ https://developer.mozilla.org/en-US/docs/Web/CSS/Visual_formatting_model
 
 浏览器如何展示一个页面。
 
@@ -148,3 +148,32 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/Replaced_element
 比如 ``img`` ``video`` ``input`` ``textarea`` 都是替换元素，
 另外 ``audio`` ``canvas`` 在某些场合下也是替换元素，
 使用 ``content`` 属性生成的内容属于匿名替换元素。
+
+
+
+
+
+
+
+
+外边距叠加（margin collapsing）
+================================
++ http://www.w3.org/TR/CSS2/box.html#collapsing-margins
++ https://developer.mozilla.org/en-US/docs/Web/CSS/margin_collapsing
+
+首先，浮动和绝对定位的元素不会发生外边距叠加。
+也就是说，只有正常流（normal flow）中的元素才会发生外边距叠加。
+（实际实验了下，两个浮动元素确实不会叠加，
+但是浮动元素与正常流中的元素是会发生叠加的。）
+（这个也可以理解为生成了 BFC，所以内部重新排列。body 是坑。）
+
+其次，水平方向不会进行外边距叠加。
+也就是说，只有上下外边距可能出现外编剧叠加的情况。
+
+三种情形下会发生外边距叠加：
+
++ 相邻的兄弟元素的上下外边距。
++ 父元素和第一个子元素的上边距或者是最后一个子元素的下边距。
++ 没有内容的元素，元素自身的上下外边距。
+
+在叠加的时候，正值取最大的，负值取最小的。
