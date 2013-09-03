@@ -12,7 +12,15 @@ visual formatting model
 元素会为其后代提供容器，但是元素在渲染时并不受容器限制。
 超出容器的情况，被称为溢出（overflow）。
 
--------------------------------------------------------------------------------
+
+
+
+
+
+元素类型
+==========
++ http://www.w3.org/TR/CSS2/visuren.html#box-gen
++ https://developer.mozilla.org/en-US/docs/Web/CSS/Visual_formatting_model
 
 元素的类型由 ``display`` 属性决定。
 
@@ -20,47 +28,30 @@ block-level
 ------------
 块级（block-level）属性有： ``block`` 、 ``list-item`` 和 ``table`` 。
 
-每个块级元素（block-level element），至少会有一个块级盒（block-level box）。
+除表格和可替换元素（replaced element）之外，
+块级元素都是块容器（block container box）。
 
-block-level boxes
+块容器和块级元素（block-level boxes）的交集称为块级盒元素（block boxes）。
+块容器中，除了有块级盒元素外，
+还有不可替换的行内块（non-replaced inline blocks）
+和不可替换的表格（non-replaced table cells）。
 
-block formatting context
-    块级格式化上下文
+块容器的特点是，其中的元素要么全为块级元素（block-level boxes），
+要么全为行级元素（inline-level boxes）。
+只要出现了块级元素，其他匿名元素会变成匿名块级元素。
+这些匿名元素会继承父元素的可继承属性，不可继承属性会被设置为初始值。
+（可不可是指在默认情况下，是否会进行继承。）
 
-blocks containing boxes
-
-block boxes
-
-
-匿名元素会继承父元素的可继承属性，不可继承属性会被设置为初始值。
-例如 ``display`` 就是不可继承的。
-
-块级盒容器（block containing boxes）内，
-要么全部是行内盒元素（inline-level boxes），
-要么全部是块级盒元素（block-level boxes）。
-
-如果出现混合的情况，匿名元素会作为块级盒元素处理。
 
 
 inline-level
 -------------
-行级（inline-level）属性有： ``inline`` 、 ``inline-block`` 和 ``inline-table`` 。
+行级（inline-level）属性有： ``inline`` 、 ``inline-block``
+和 ``inline-table`` 。
 
-inline-level boxes
-    可以分为 ``inline boxes`` 和 ``atomic inline-level boxes`` 。
-
-inline formatting context
-    行级格式化上下文
-
-inline boxes
-    参与 ``inline formatting context`` 。如 ``inline`` 。
-
-atomic inline-level boxes
-    不参与 ``inline formatting context`` 。
-    如 ``inline-block`` 和 ``inline-table`` 。
-
-
-
+行级元素（inline-level boxes）又分为
+行级盒元素（inline boxes）（如 ``inline`` ）
+和行级不可分元素（atomic inline-level boxes）（如 ``inline-block`` ）。
 
 
 
@@ -108,8 +99,7 @@ atomic inline-level boxes
 
     ``fixed`` 的容器是整个窗口（ ``viewport`` ）。
 
-浮动和绝对定位都让元素脱离了文档流（flow），
-这样的元素称为溢出了。
+浮动和绝对定位都让元素脱离了文档流（flow），这样的元素就溢出了。
 
 
 
@@ -141,7 +131,7 @@ BFC 内的元素会根据 BFC 来计算其位置。
 
 更新：
 
-原来以为根元素是指 ``body`` ，事实 ``root`` 才是根元素。
+原来以为根元素是指 ``body`` ，事实上 ``html`` 才是根元素。
 另外，似乎无法使用 ``overflow`` 在 ``body`` 中创建 BFC（？）。
 
 
@@ -176,12 +166,10 @@ BFC 内的元素会根据 BFC 来计算其位置。
 
 首先，浮动和绝对定位的元素不会发生外边距叠加。
 也就是说，只有正常流（normal flow）中的元素才会发生外边距叠加。
-（实际实验了下，两个浮动元素确实不会叠加，
-但是浮动元素与正常流中的元素是会发生叠加的。）
 （这个也可以理解为生成了 BFC，BFC 和内部元素，BFC 之间，都不会叠加。）
 
 其次，水平方向不会进行外边距叠加。
-也就是说，只有上下外边距可能出现外编剧叠加的情况。
+也就是说，只有上下外边距可能出现外边距叠加的情况。
 
 三种情形下会发生外边距叠加：
 
@@ -201,7 +189,7 @@ BFC 内的元素会根据 BFC 来计算其位置。
    + 元素的下边距和下个兄弟元素的上边距。
    + 元素的下边距和最后一个子元素的下边距。
    + 一个元素没有在内部创建 BFC，没有正常流的子元素（脱离了正常流的话没关系），
-     并且 ``min-height`` 为 0， ``height`` 为 0 或 auto。
+     并且 ``min-height`` 最终为 0， ``height`` 最终为 0 或 auto。
      这个元素的上下边距。
 
 
