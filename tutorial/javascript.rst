@@ -13,6 +13,10 @@
 如果把提交按钮隐藏了， ``Enter`` 就无效了。
 应该使用 ``visibility:hidden`` 来隐藏元素。
 
+更新：
+``button`` 有个容易忽略的地方，如果没有指定 ``type`` ，默认是 ``submit`` 。
+
+
 
 
 
@@ -442,7 +446,7 @@ http://docs.webplatform.org/wiki/concepts/programming/javascript/inheritance
     }
     createInherit.prototype = Object.create(Super.prototype, {
         getAge: {
-            value: function() { return this.age;}
+            value: function() { return this.age; }
         }
     });
     // createInherit.prototype.getAge = function() { return this.age; };
@@ -481,12 +485,12 @@ MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数
 .. code:: javascript
 
     function A() {}
+
     var ex1 = Object.create(A.prototype);
     console.log(ex1.__proto__ === A.prototype); // true
+
     var ex2 = { __proto__: A.prototype };
     console.log(ex2.__proto__ === A.prototype); // true
-
-**注意** ，这里是用 ``Object.create`` 来实现继承，不是用来创建实例的。
 
 
 
@@ -505,6 +509,7 @@ MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数
     function Super() {}
     function Sub() {}
     Sub.prototype = Object.create(Super.prototype);
+    Sub.prototype.constructor = Sub;
     var instance = new Sub();
 
     console.log(instance instanceof Sub); // true
@@ -516,6 +521,22 @@ MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数
     // Sub.prototype.__proto__ === Super.prototype
     console.log(Sub instanceof Super); // false
     // Sub.__proto__ !== Super.prototype
+
+
+
+
+
+
+原型
+=====
+自己看上面的文字都有点看乱了。
+
+``__proto__`` 和 ``prototype`` 都可以叫原型，但确实是不同的东西。
+
++ ``obj.__proto__`` 或者说 ``Object.getPrototypeOf(obj)`` ，
+  是对象的内部属性 ``[[Prototype]]`` 。
+
++ ``prototype`` 是函数属性，里面的 ``constructor`` 属性指向构造函数。
 
 
 
@@ -650,3 +671,53 @@ void
 毫无意义（？）的关键字。
 计算表达式并返回 ``undefined`` 。
 能够在 ``undefined`` 被覆盖的时候获取 ``undefined`` 。
+
+
+
+
+
+
+form
+=====
+
+.. code:: javascript
+
+    var form = document.querySelector("form");
+
+    form.name; // 表单名
+    // form 的 name 属性，可以用 document[name] 直接获取表单
+
+    form.elements; // 表单中的控制元素
+    form.length; // 表单元素的个数
+
+    form.enctype; // 编码方式
+    form.method; // 提交方式
+
+    form.submit(); // 提交表单，不会触发 submit 事件！
+    form.reset(); // 重置表单，这个会触发 reset 事件
+
+可以在提交事件中进行必要的检测，避免重复提交。
+
+
+.. code:: javascript
+
+    var input = document.querySelector("form input");
+
+    input.form; // 指向 form
+
+    input.type; // 类型
+    input.name; // 控件名
+    input.value; // 控件当前值
+
+
++ ``input`` 和 ``button`` 的类型是可以动态修改的， ``select`` 不行。
++ ``button`` 没有 ``readOnly`` 属性。
++ ``input.value`` 是修改后的值，要获得初始值，
+  可以使用 ``input.getAttribute("value")`` 。
+  ``textarea`` 可以使用 ``textContent`` 或者 ``innerHTML`` 。
++ chrome 的 ``focus`` 和 ``select`` 有 bug 。
++ 可以用 ``input.selectionStart`` 和 ``input.selectionEnd`` 来获取选中的部分。
+  ie9 以下可以使用 ``document.selection`` 。
++ 要选中部分元素可以用 ``input.setSelectionRange()`` 。
+  ie9 以下可以使用 ``input.createTextRange()`` 。
++ 可以通过 ``clipboardData.getData("text/plain")`` 获取剪贴板的内容。
