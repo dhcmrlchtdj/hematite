@@ -721,3 +721,31 @@ form
 + 要选中部分元素可以用 ``input.setSelectionRange()`` 。
   ie9 以下可以使用 ``input.createTextRange()`` 。
 + 可以通过 ``clipboardData.getData("text/plain")`` 获取剪贴板的内容。
+
+
+
+
+
+XMLHttpRequest
+===============
++ 使用 ajax 的方式提交表单的时候，
+  应该调用 ``xhr.setRequestHeader`` 将 ``Content-Type`` 设置为
+  ``application/x-www-form-urlencoded; charset=UTF-8`` 。
+  表单内容必须进行序列化。
+
+  如果觉得太麻烦，也可以使用 ``FormData`` 来生成表单数据，
+  那么设置 http 请求头和序列化都可以省了。
+
++ 使用 ``xhr.overrideMimeType`` 可以设置返回数据的 MIME 类型。
+  要在 ``xhr.send`` 之前调用。
+
++ 要确保避开缓存，去服务器请求数据，可以在链接后面加上 ``？blah`` ，
+  也就是查询字符串。如果本来带有查询字符串了，
+  可以用 ``&blah`` 附上一个无意义的键名。
+
++ 异步的请求可以设置一个超时时间， ``xhr.timeout`` 。
+  超时了就会触发 ``xhr.ontimeout`` 。
+
+  只有异步请求才可以设置超时。
+
++ ``xhr.onprogress`` 可以用于监视请求的进度。
