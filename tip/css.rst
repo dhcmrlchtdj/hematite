@@ -362,3 +362,15 @@ http://coding.smashingmagazine.com/2013/04/12/css-generated-content-counters/
         lower-alpha
         upper-alpha
     */
+
+
+
+
+
+
+负外边距
+=========
+外边距为负值分为两种情况。
+
+``margin-top`` 和 ``margin-left`` 会改变元素本身的位置。
+``margin-bottom`` 和 ``margin-right`` 则会改变相邻元素的的 ``margin`` 基准。
