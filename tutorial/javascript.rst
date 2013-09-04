@@ -423,6 +423,20 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var
 （一下子没了难以理解的感觉，只剩下理所当然了……）
 
 
+更新：
+
+.. code:: javascript
+
+    (function test10() {
+        var x = 100;
+        function x() {}
+
+        function y() {}
+        var y = 100;
+        console.log(x, y); // 100 100
+    })();
+
+这个也好解释， ``var`` 提升了， ``function`` 提升了，所以赋值就成了最后的操作。
 
 
 
