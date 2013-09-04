@@ -46,9 +46,10 @@ http://www.imququ.com/post/web-security-and-response-header.html
 =====
 + https://www.varnish-software.com/static/book/HTTP.html
 + http://www.mnot.net/cache_docs/
-+ http://www.zhangxinxu.com/wordpress/2013/05/caching-tutorial-for-web-authors-and-webmasters/
 
-和缓存相关的 http header 有九个。
+
+缓存可以细分浏览器缓存、代理缓存、网关缓存（CDN 就属于这种）。
+和缓存相关的 http header 有八个。
 
 +-------------------+---------+---------+
 | header            | request | reponse |
@@ -68,8 +69,6 @@ http://www.imququ.com/post/web-security-and-response-header.html
 | Vary              |         | X       |
 +-------------------+---------+---------+
 | Age               |         | X       |
-+-------------------+---------+---------+
-| Pragma            | X       | X       |
 +-------------------+---------+---------+
 
 叉表示发送时可以带上这个信息。
@@ -165,7 +164,25 @@ Age
 Pragma
     ``Pragma: no-cache``
 
-    不是规范中的内容，已经不再使用了。使用 ``Cache-Control: no-cache`` 代替。
+    不是规范中的内容，所以没在表格里列出来，而且已经不再使用了。
+    如果有需要，用 ``Cache-Control: no-cache`` 代替。
 
 
-最后，https 是不缓存的。 POST 请求基本也不缓存。
+
+
+缓存的处理的方式如下。
+
+1. 如果回应（response）明确表示不要缓存，不会缓存。
+
+2. 如果请求（request）需要认证或者走 https 等，不会缓存。
+
+3. 在如下的两种情况下，
+
+   + 缓存设置了过期时间，现在这个时间还没到。
+   + 缓存在近期还被使用，而且很久没修改过了。
+
+   那么，缓存会被认为是可用的。
+
+4. 如果缓存过期（stale）了，会向服务器确认（validate），看缓存是不是还能用。
+
+5. 如果没有联网，会使用过期的资源。
