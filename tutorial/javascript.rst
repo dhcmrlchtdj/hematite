@@ -299,6 +299,12 @@ CommonJS Modules/1.1.1
 6. 相对标识是相对于调用 ``require`` 的模块的路径。
 
 
+
+
+
+
+
+
 变量声明
 =========
 我居然一直不知道这个特性：
@@ -538,7 +544,11 @@ MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数
 
 + ``prototype`` 是函数属性，里面的 ``constructor`` 属性指向构造函数。
 
+继承时，查找的是实例的 ``__proto__`` ，也就是类的 ``prototype`` ，
+继续向上时，找的是类的 ``prototype.__proto__`` ，也就是父类的 ``prototype`` 。
 
+再重复一次，实例和构造函数没有直接联系，而是共享了 *构造函数的原型* 。
+``class.prototype === instance.__proto__`` 。
 
 
 
