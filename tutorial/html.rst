@@ -244,7 +244,10 @@ track
 只要标签没有关闭，访问其他页面后再回来， ``sessionStorage`` 不会丢失。
 ``localStorage`` 则是长期保存，而且可在多个标签中共享。
 
-保存的时候只能保存字符串。如果不是字符串，会自动调用 ``toString`` 进行转换。
+保存的时候只能保存字符串。如果不是字符串，会自动调用 ``String`` 进行转换，
+对于引用类型，也就是先 ``toString`` 再 ``valueOf`` 地进行尝试，
+得到基本类型，再转换成字符串。如果没能得到字符串，会抛出错误。
+
 要保存对象类型的值可以使用 JSON。
 
 
@@ -286,7 +289,7 @@ prefetch 优化
 
 ie 注释
 ========
-http://docs.webplatform.org/wiki/concepts/proprietary_internet_explorer_techniques
++ http://docs.webplatform.org/wiki/concepts/proprietary_internet_explorer_techniques
 
 .. code:: html
 
@@ -363,7 +366,7 @@ html5 的新属性 ``crossorigin`` ，可以用于限制跨站请求。
 
 图片加载
 =========
-http://timkadlec.com/2012/04/media-query-asset-downloading-results/
++ http://timkadlec.com/2012/04/media-query-asset-downloading-results/
 
 关于图片加载的测试，如何避免载入多余图片。
 
@@ -379,11 +382,11 @@ http://timkadlec.com/2012/04/media-query-asset-downloading-results/
 
 id 和 class 命名
 =================
-http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#the-id-attribute
-http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#classes
-http://google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml?showone=ID_and_Class_Name_Delimiters#ID_and_Class_Name_Delimiters
-http://www.w3.org/TR/html4/types.html#type-name
-http://www.w3.org/TR/CSS2/syndata.html#characters
++ http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#the-id-attribute
++ http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#classes
++ http://google-styleguide.googlecode.com/svn/trunk/htmlcssguide.xml?showone=ID_and_Class_Name_Delimiters#ID_and_Class_Name_Delimiters
++ http://www.w3.org/TR/html4/types.html#type-name
++ http://www.w3.org/TR/CSS2/syndata.html#characters
 
 最近写 id 和 class 写得人都乱了，去查了下文档。
 
