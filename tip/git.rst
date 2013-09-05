@@ -163,3 +163,26 @@ multiple remote
 把要修改的分支标记为 edit，保存退出，接着就会进入需要修改的分支。
 使用 ``git commit --amend`` 保持修改，这点是一样的。
 之后要使用 ``git rebase --continue`` 继续剩余的衍合。
+
+
+
+
+
+删除子模块
+===========
+::
+
+    $ git sm deinit path/to/sub_module
+    $ # remove module info in `.gitmodules`
+    $ git rm --cached path/to/sub_module
+
+
+::
+
+    $ # remove module info in `.gitmodules`
+    $ # remove module info in `.git/config`
+    $ git rm --cached path/to/sub_module
+    $ rm -r .git/modules/sub_module
+    $ git ad
+    $ git ci
+    $ rm path/to/sub_module
