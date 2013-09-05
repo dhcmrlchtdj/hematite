@@ -177,22 +177,6 @@ new 续
 
 
 
-eval
-=====
-``eval`` 能够获取执行时的作用域，
-执行的最后一条表达式会作为 ``eval`` 的返回值。
-
-在 ``use strict`` 的的约束下，
-``eval`` 无法在执行的作用域中声明新的变量或函数，
-可以理解成，代码是在一个新的函数作用域中执行的。
-
-还是可以通过返回值以及修改外部变量的方式来交流就是了。
-
-
-
-
-
-
 DOM 节点属性
 =============
 节点属性算是一个坑。
@@ -247,22 +231,6 @@ DOM 节点属性
 
 早期的 IE 版本从来都是地狱，这里不细说。
 css 样式是个比一般属性更大的坑，这里也不展开了。
-
-
-
-
-
-
-
-逗号运算符
-===========
-
-.. code:: javascript
-
-    (function() {
-        var window = this || (0, eval)('this');
-    })()
-
 
 
 
@@ -634,8 +602,8 @@ MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数
 
 加法
 =====
-http://es5.github.io/x11.html#x11.6.1
-http://www.2ality.com/2012/01/object-plus-object.html
++ http://es5.github.io/x11.html#x11.6.1
++ http://www.2ality.com/2012/01/object-plus-object.html
 
 前面谈类型其实是为了讲讲加法运算。
 具体看规范定义，下面简单描述下。
@@ -696,6 +664,75 @@ void
 计算表达式并返回 ``undefined`` 。
 能够在 ``undefined`` 被覆盖的时候获取 ``undefined`` 。
 
+
+
+
+
+eval
+=====
++ http://perfectionkills.com/global-eval-what-are-the-options/
+
+在直接执行的情况下， ``eval`` 能够获取执行时的作用域，
+执行的最后一条表达式会作为 ``eval`` 的返回值。
+
+在 ``use strict`` 的的约束下，
+``eval`` 无法在执行的作用域中声明新的变量或函数，
+可以理解成，代码是在一个新的函数作用域中执行的。
+
+还是可以通过返回值以及修改外部变量的方式来交流就是了。
+
+
+如果是间接执行， ``eval`` 会是在全局作用域中执行代码。
+
+.. code:: javascript
+
+    (function() {
+        var window = this || (0, eval)('this');
+    })()
+
+上面的代码中， ``(0, eval)`` 就是间接执行，通过全局作用域的中执行 ``this`` ，
+获取对 ``window`` 的引用。
+
+
+
+
+
+
+delete
+=======
++ http://perfectionkills.com/understanding-delete/
+
+简单讲，就是用来删除一个对象的属性（也包括数组的元素）。
+不能删除普通变量、函数、函数参数
+
+但事情往往没那么简单：
+
+.. code:: javascript
+
+    var x = 10;
+    console.log(x, delete x); // 10 false
+    y = 10;
+    console.log(y, delete y); // 10 true
+
+    try {
+        console.log(x); // 10
+        console.log(y); // ERROR
+    } catch (e) {
+        console.log(e.message); // y is not defined
+    }
+
+``x`` 没被删除， ``y`` 被删除了。
+按理说都是在全局作用域 ``window`` 下声明的变量。
+
+具体还是看给的链接吧。总结起来大概是说：
+
++ 在全局作用域或函数作用域中声明的变量和函数，不能删除。
++ 函数参数以及各种对象内置属性，不能删除。
++ eval 内声明的变量和函数，可以删除。
+
+再看看上面的代码，简单来说， ``x`` 是在全局作用域下声明的变量，所以不能删除。
+而 ``y`` 不是全局作用域下声明的变量，到处都找不到声明，所以丢到了全局作用域，
+成了 ``window`` 的一个属性，所以可以删除。
 
 
 
