@@ -46,10 +46,12 @@ http://www.imququ.com/post/web-security-and-response-header.html
 =====
 + https://www.varnish-software.com/static/book/HTTP.html
 + http://www.mnot.net/cache_docs/
++ https://developers.google.com/speed/articles/caching
++ https://developers.google.com/speed/docs/best-practices/caching
 
 
 缓存可以细分浏览器缓存、代理缓存、网关缓存（CDN 就属于这种）。
-和缓存相关的 http header 有八个。
+和缓存相关的头信息（http header）有八个。
 
 +-------------------+---------+---------+
 | header            | request | reponse |
@@ -76,7 +78,8 @@ http://www.imququ.com/post/web-security-and-response-header.html
 Expires
     ``Expires: GMT formatted date``
 
-    如果过期了，客户端就会发起新请求。这个过期时间不适合设置地太长。
+    如果过期了，客户端就会发起新请求。
+    google 推荐是一月到一年。
 
     适合用于 js, css 和图片。
 
@@ -168,6 +171,10 @@ Pragma
     如果有需要，用 ``Cache-Control: no-cache`` 代替。
 
 
+``Last-Modified`` 和 ``Etag`` 选一个就可以了，
+google 是推荐用 ``Last-Modified`` 。
+``Expires`` 和 ``Cache-Control: max-age=xxx`` ，
+google 推荐 ``Expires`` 。
 
 
 缓存的处理的方式如下。
