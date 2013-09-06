@@ -275,3 +275,14 @@ archlinux only
 ===============
 修改好  ``/etc/default/grub`` ，
 然后执行 ``grub-mkconfig -o /boot/grub/grub.cfg`` 。
+
+
+
+
+
+更新系统时间
+=============
+::
+
+    $ ntpd -q # 更新时间
+    $ hwclock -w # 保存时间
