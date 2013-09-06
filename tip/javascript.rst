@@ -71,6 +71,7 @@ HTMLElement
 
 动态插入 js
 ============
+动态加载 js 能够达成异步加载的效果。
 
 .. code:: javascript
 
