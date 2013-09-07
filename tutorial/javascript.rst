@@ -810,3 +810,73 @@ XMLHttpRequest
   只有异步请求才可以设置超时。
 
 + ``xhr.onprogress`` 可以用于监视请求的进度。
+
+
+
+
+
+
+valueOf
+========
++ http://es5.github.io/x15.2.html#x15.2.4
++ http://es5.github.io/x8.html#x8.6.2
++ http://es5.github.io/x15.4.html#x15.4.3.2
++ http://es5.github.io/x11.html#x11.4.3
++ http://es5.github.io/#x4.3.6
++ http://es5.github.io/#x4.3.8
+
+平常可以用 ``Object.prototype.toString`` 来判断对象类型，
+前面知道了， ``valueOf`` 和 ``toString`` 挺相近的，
+能不能用 ``valueOf`` 判断类型呢？翻下文档：
+
+``valueOf``
+    1. 进行 ``ToObject`` 转换。
+    2. 如果是宿主对象，那么结果由实现自己决定。
+    3. 返回第一步的转换结果。
+
+    感觉效果和 ``new Object`` 差不多啊，对类型判断完全没帮助。
+
+
+``toString``
+    1. ``undefined`` 返回 ``[object Undefined]`` 。
+    2. ``null`` 返回 ``[object Null]`` 。
+    3. 进行 ``ToObject`` 转换。
+    4. 获取对象的 ``[[Class]]`` 属性。
+    5. 返回 ``[object [[Class]]]`` 。
+
+    这个内部属性 ``[[Class]]`` 是个字符串，
+    内置对象的取值只有几种： ``Arguments`` ``Array`` ``Boolean``
+    ``Date`` ``Error`` ``Function`` ``JSON`` ``Math``
+    ``Number`` ``Object`` ``RegExp`` ``String`` 。
+
+    没错，没有 ``Null`` 和 ``Undefined`` ，所以在前面做了预判，实在是简单粗暴。
+
+
+``Array.isArray``
+    顺便看看这个。
+
+    1. 不是引用类型，返回 ``false`` 。
+    2. 如果 ``[[Class]]`` 是 ``"Array`` ，返回 ``true`` 。
+    3. 返回 ``false`` 。
+
+    其实和 ``Object.prototype.toString`` 一样是检查了 ``[[Class]]`` 。
+
+``typeof``
+    回到最基本的判断类型的方法。
+
+    1. 如果找不到，返回 ``undefined`` 。
+    2. 照表返回类型。表自己去链接看，下面简述。
+
+       + ``Null`` 型返回 ``object`` 。
+       + 其他基本类型就是基本类型
+         ``string`` ``number`` ``boolean`` ``undefined`` 。
+       + 实现了 ``[[Call]]`` 的对象，返回 ``function`` 。
+       + 没实现 ``[[Call]]`` 的原生（native）对象，返回 ``object`` 。
+       + 没实现 ``[[Call]]`` 的宿主（host）对象，
+         由具体实现自己定义，但不能是基本类型。
+
+    所谓原生对象，就是 ES 规范里面定义了的对象。
+    所谓宿主对象，执行环境提供的对象。
+
+    ``typeof`` 判断和 ``[[Class]]`` 完全没有关系。
+    ``undefined`` 和 ``null`` 确实有点特殊。
