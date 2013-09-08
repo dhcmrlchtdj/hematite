@@ -463,3 +463,16 @@ arguments
 在怪异模式下，返回 ``BackCompat`` 。
 在其他模式下，返回 ``CSS1Compat`` ，
 也就是说标准模式和进标准模式的返回值没有区别。
+
+
+
+
+
+获取文本
+=========
++ https://developer.mozilla.org/en-US/docs/Web/API/Node.textContent
+
+获取文本的时候， ``innerText`` 和 ``textContent`` 都是可以的。
+今天发现一点区别，查了下 MDN，
+说是 ``innerText`` 会保留样式，并且会触发重排（reflow）。
+但 ``textContent`` 不会。
