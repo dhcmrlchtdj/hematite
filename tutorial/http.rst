@@ -245,3 +245,69 @@ google 推荐 ``Expires`` 。
 + 压缩资源。
 
     包括多余的空格，gzip 压缩，图片优化等。
+
+
+
+
+
+
+evercookie
+===========
++ https://github.com/samyk/evercookie
++ https://hacks.mozilla.org/2010/03/privacy-related-changes-coming-to-css-vistited/
++ http://oldj.net/article/browser-history-sniffing/
+
+记录下里面提到的几种方法。
+
++ window.name
+
+    生存周期比 ``sessionStorage`` 还短。感觉不实用。
+
++ Etag
+
+    猜测是服务器发送一个唯一的 etag 来标识用户，
+    然后根据浏览器请求里的 ``If-None-Match`` 来判断用户。
+
++ css color
+
+    好神奇的东西，只能说是真会玩。用来判断用户访问过哪些网站。
+
+    .. code:: javascript
+
+        var a = document.createElement("a");
+        a.href = "http://url_to_test";
+        document.body.appendChild(a);
+        var color = window.getComputedStyle(a, null).getPropertyValue("color");
+
+    简单说就是，检查链接的颜色，根据链接颜色来判断用户是否访问过某个网站。
+    具体颜色和 css 有关系，但网站是自己的，怎么玩都可以。
+
+    缺点就是只能检查固定的列表，不能主动去发现了。
+
++ Storing cookies in RGB values of auto-generated,
+  force-cached PNGs using HTML5 Canvas tag to read pixels (cookies) back out.
+
+    这条没看懂。
+
+
+
+
+
+etag
+=====
+
+.. code:: python
+
+    def compute(data):
+        hasher = hashlib.sha1()
+        hasher.update(data)
+        return hasher.hexdigest()
+
+    def compare(etag, inm):
+        return inm.find(etag) >= 0
+
+tornado 中计算 etag 的代码，简化之后，大概就是如上的代码。
+
+计算使用的是 sha1。
+
+没看懂的是比较的时候，为什么是 ``>=0`` ，难道不应该是完全相等吗？
