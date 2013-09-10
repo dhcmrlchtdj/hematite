@@ -256,6 +256,7 @@ evercookie
 + https://github.com/samyk/evercookie
 + https://hacks.mozilla.org/2010/03/privacy-related-changes-coming-to-css-vistited/
 + http://oldj.net/article/browser-history-sniffing/
++ http://forums.mozillazine.org/viewtopic.php?f=37&t=1997621
 
 记录下里面提到的几种方法。
 
@@ -287,7 +288,11 @@ evercookie
 + Storing cookies in RGB values of auto-generated,
   force-cached PNGs using HTML5 Canvas tag to read pixels (cookies) back out.
 
-    这条没看懂。
+    看了下代码，大意是说，把内容加密成图片（把字存储在 RGB 里面）。
+    然后靠 ``canvas`` 把像素读出来，
+    用 ``String.fromCharCode`` 处理每个像素的 RGB 值，获取内容。
+
+    好扭曲。
 
 
 
