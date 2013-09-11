@@ -186,3 +186,20 @@ multiple remote
     $ git ad
     $ git ci
     $ rm path/to/sub_module
+
+
+
+
+
+查找修改记录
+=============
+在网上问 tornado 比较 Etag 的问题，结果人家让我自己用 ``git blame`` 去查记录。
+
+::
+
+    $ git blame -L 1100,+100 web.py
+
+用 ``git blame`` 可以查找是谁修改了代码，还有那次修改的分支编号。
+之后可以用 ``git show`` 查看详细信息。
+
+默认是整个文件，可以用 ``-L`` 参数指定位置，用法和 ``sed`` 差不多。
