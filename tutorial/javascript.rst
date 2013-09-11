@@ -880,3 +880,26 @@ valueOf
 
     ``typeof`` 判断和 ``[[Class]]`` 完全没有关系。
     ``undefined`` 和 ``null`` 确实有点特殊。
+
+
+
+
+
+事件监听
+=========
+照例放链接：
+
++ http://www.w3.org/TR/DOM-Level-3-Events/#dom-event-architecture
++ http://dom.spec.whatwg.org/#eventlistener
++ http://stackoverflow.com/questions/16273635/how-do-multiple-addeventlistener-work-in-javascript
+
+简单总结几点：
+
++ ``target.addEventListener`` 把回调函数添加到元素的监听队列上。
+  每个回调函数只会被绑定一次（同一事件，同一传播阶段）。
++ DOM2 中没有规定回调函数的执行顺序。
+  DOM3 中规定，调用要按照注册的顺序。
++ ``event.stopImmediatePropagation`` 会阻止 **之后** 的回调函数。
+  之前的回调函数先执行，不受影响。
++ 回调函数中的 ``this`` 指向了 ``event.currentTarget`` 。
+  ``event.target`` 是引起事件的元素。
