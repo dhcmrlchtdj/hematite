@@ -316,3 +316,24 @@ tornado 中计算 etag 的代码，简化之后，大概就是如上的代码。
 计算使用的是 sha1。
 
 没看懂的是比较的时候，为什么是 ``>=0`` ，难道不应该是完全相等吗？
+
+更新：
+
+厚着脸皮去邮件列表里问了一下，把 `Ben Darnell` 巨巨引了出来。
+
+``If-None-Match`` 不仅可以是单个编码，也可以是一个用逗号分割的编码列表。
+最正确的做法是将 ``Etag`` 和比较列表里的每个值进行比较，
+在这里使用 ``str.find`` 只是一个取巧的做法。
+巨巨说，由于计算 ``Etag`` 使用的是散列函数，不会出现逗号之类的特殊字符，
+所以也能正确工作。
+
+下面是原文：
+
+::
+
+    If-None-Match can be a list of etag values (comma-separated IIRC),
+    and I think there might also be some quoting rules.
+    Using a substring search works fine for hash-based etags
+    that will never contain commas or other special characters,
+    although it would be better to parse the If-None-Match header properly
+    and do an exact comparison to each of its elsements.
