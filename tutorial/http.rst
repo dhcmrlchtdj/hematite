@@ -174,6 +174,8 @@ Pragma
 
 ``Last-Modified`` 和 ``Etag`` 选一个就可以了，
 google 是推荐用 ``Last-Modified`` 。
+两个都提供的情况下，两个都要满足才算是没有过期。
+
 ``Expires`` 和 ``Cache-Control: max-age=xxx`` ，
 google 推荐 ``Expires`` 。
 
@@ -321,7 +323,8 @@ tornado 中计算 etag 的代码，简化之后，大概就是如上的代码。
 
 厚着脸皮去邮件列表里问了一下，把 `Ben Darnell` 巨巨引了出来。
 
-``If-None-Match`` 不仅可以是单个编码，也可以是一个用逗号分割的编码列表。
+``If-None-Match`` 不仅可以是单个编码，也可以是一个用逗号分割的编码列表，
+另外编码带了引号。
 最正确的做法是将 ``Etag`` 和比较列表里的每个值进行比较，
 在这里使用 ``str.find`` 只是一个取巧的做法。
 巨巨说，由于计算 ``Etag`` 使用的是散列函数，不会出现逗号之类的特殊字符，
@@ -337,3 +340,31 @@ tornado 中计算 etag 的代码，简化之后，大概就是如上的代码。
     that will never contain commas or other special characters,
     although it would be better to parse the If-None-Match header properly
     and do an exact comparison to each of its elsements.
+
+
+
+
+
+缓存 续
+========
+内容整理自 《HTTP 权威指南》。
+
++ 缓存处理步骤。
+
+    1. 请求的资源是否在缓存中？
+       + 是，2
+       + 否，4
+
+    2. 缓存的资源是否可用/足够新鲜（freshness）？
+       + 是，回应请求。
+       + 否，3。
+
+    3. 询问服务器，缓存是否可用。（再验证 revalidation。）
+       + 是，更新新鲜度，回应请求。
+       + 否，4。
+
+    4. 向服务器请求资源，放入缓存中。回应请求。
+
++ 使用 ``Cache-Control`` 或 ``Expires`` 进行新鲜度判断。
+
++ 使用 ``If-Modified-Since`` 或 ``If-None-Match`` 进行再验证。
