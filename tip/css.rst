@@ -374,3 +374,20 @@ http://coding.smashingmagazine.com/2013/04/12/css-generated-content-counters/
 
 ``margin-top`` 和 ``margin-left`` 会改变元素本身的位置。
 ``margin-bottom`` 和 ``margin-right`` 则会改变相邻元素的的 ``margin`` 基准。
+
+
+
+
+
+
+查找
+=====
++ http://redotheweb.com/2013/05/15/client-side-full-text-search-in-css.html
+
+其实感觉这做法有点傻，蛮记录下来。
+
+关键点是把内容放到一个属性里去，
+然后使用属性选择器和反向选择器的组合（ ``E:not([foo*="bar"])`` ），
+将不符合的内容隐藏。
+
+这样就作出了查找的效果。
