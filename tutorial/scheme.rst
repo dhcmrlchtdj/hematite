@@ -3,21 +3,21 @@
 
 + 布尔值
 
-    #t, #f
+    ``#t``, ``#f``
 
 + 数字
 
-    1, 1/2, 0.5, 1+1i
+    ``1``, ``1/2``, ``0.5``, ``1+1i``
 
 + 字符
 
-    #\h, #\e, #\l, #\l, #\o
+    ``#\h``, ``#\e``, ``#\l``, ``#\l``, ``#\o``
 
     语法有点奇葩，感觉不怎么用就是了。
 
 + 字符串
 
-    "hello", (string #\h #\e #\l #\l #\o)
+    ``"hello"``, ``(string #\h #\e #\l #\l #\o)``
 
     和单引号是不一样的，不一样。
 
@@ -27,27 +27,27 @@
 
 + 过程 procedure
 
-    (lambda (var) body)
+    ``(lambda (var) body)``
 
     就是函数啦。
 
 + 向量 vector
 
-    (vector 1 2 3)
+    ``(vector 1 2 3)``
 
     感觉用列表用的要多些啊。
 
 + 列表 list
 
-    '(1 2), (quote (1 2)), (list 1 2)
+    ``'(1 2)``, ``(quote (1 2))``, ``(list 1 2)``
 
 + 点对 dotted pair
 
-    '(1 . 2)
+    ``'(1 . 2)``
 
     和列表的区别在于点对最后没有结束符号。
 
-    (cons 1 2) 和 (cons 1 (cons 2 '())) 的区别。
+    ``(cons 1 2)`` 和 ``(cons 1 (cons 2 '()))`` 的区别。
 
     http://stackoverflow.com/questions/6006671/are-pair-and-list-different-in-scheme
 
