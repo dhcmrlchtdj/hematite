@@ -906,3 +906,25 @@ valueOf
 + DOM0 注册的事件，在冒泡阶段调用。
 + 在事件处理函数最后 ``return false`` 相当于 ``event.preventDefault()`` 。
   （这个特别拿来讲，是因为 jQuery 里面不一样。）
+
+
+
+
+触发事件
+=========
++ https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
+
+.. code:: javascript
+
+    var link = document.querySelector("#link");
+    var e = new CustomEvent("click", {
+        bubbles: false,
+        cancelable: false,
+        detail: { example: "value" }
+    });
+    link.dispatchEvent(e);
+
+可以用于触发事件。
+
+``CustomEvent`` 的第二个参数用于设置事件，是否冒泡，能否阻止。
+``detail`` 可以通过 ``event.detail`` 获取。
