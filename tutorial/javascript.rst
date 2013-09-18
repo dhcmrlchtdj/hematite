@@ -903,3 +903,6 @@ valueOf
   之前的回调函数先执行，不受影响。
 + 回调函数中的 ``this`` 指向了 ``event.currentTarget`` 。
   ``event.target`` 是引起事件的元素。
++ DOM0 注册的事件，在冒泡阶段调用。
++ 在事件处理函数最后 ``return false`` 相当于 ``event.preventDefault()`` 。
+  （这个特别拿来讲，是因为 jQuery 里面不一样。）
