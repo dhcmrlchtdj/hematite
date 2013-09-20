@@ -103,3 +103,17 @@
 + (\ **cond** (test expr) ... (\ **else** expr))
 + (\ **when** test expr ...)
 + (\ **unless** test expr ...)
+
+
+
+
+Continuation Passing Style
+===========================
++ http://c2.com/cgi/wiki?ContinuationPassingStyle
++ http://www.scheme.com/tspl4/further.html#./further:h3
+
+CPS 可以理解成函数没有返回值的编程风格。
+没有返回值，所以就将原来用于处理返回值的函数直接作为参数来传递。
+
+所以说，要玩 CPS，至少要能把函数当作参数来用。
+这个被传递的函数就称为 ``Continuation`` 。
