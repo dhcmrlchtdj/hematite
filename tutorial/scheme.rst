@@ -80,7 +80,7 @@
 
 + (let name ((var expr) ...) body ...)
   = ((letrec ((name (lambda (var ...) body ...))) name) expr ...)
-  = (letrec ((name (lambda (var ,,,) body ,,,))) (name expr ...))
+  = (letrec ([name (lambda (var ...) body ...)]) (name expr ...))
 
 定义函数
 
@@ -234,6 +234,38 @@ scheme 在处理一个表达式的时候要考虑两个问题：
     (lwp (lambda () (let f () (pause) (display "y") (f))))
     (lwp (lambda () (let f () (pause) (display "!") (f))))
     (lwp (lambda () (let f () (pause) (display "\n") (f))))
+    ;;(lwp (lambda () (define f (lambda () (pause) (display "\n") (f))) (f)))
+    ;;(lwp (lambda () (letrec ([f (lambda () (pause) (display "\n") (f))]) (f))))
     (start)
 
 这里的 ``pause`` 起到了 ``yield`` 语句的效果。
+
+要注意，在 ``pause`` 里，传递的 ``continuation`` （也就是 ``k`` ），
+并没有直接调用。也就是说， ``pause`` 调用的时候，执行了 ``lwp`` 和 ``start`` 。
+
+再按照执行的顺序看一次。
+
+1. 调用 ``lwp`` ，把函数（也就是协程要执行的代码）加入队列。
+2. 调用 ``start`` ，开始执行最初的协程。
+3. 协程里调用了 ``pause`` ，
+   把当前的执行环境加入到了队列中（这里没有执行 ``k`` ），
+4. 协程里调用了 ``start`` ，开始执行下一个协程。
+   注意， ``pause`` 没有返回，这个时候还没有进行输出。
+5. （经过一轮的执行， ``lwp-list`` 中的协程全都变成了 ``pause`` 加入的函数。
+   因为还在继续调用 ``start`` ，所以 ``(lambda () (k #f))`` 开始执行。）
+6. 协程里调用了 ``k`` ，所以 ``pause`` 返回了 ``#f`` 。
+   注意，没有执行 ``start`` 。
+7. ``pause`` 返回，原来的协程开始继续执行，进行输出。
+8. 原协程进行了递归调用，再次执行了 ``pause`` ，回到了过程 3。
+9. （其实这就结束了，就是这样的无限循环。）
+
+最后附上一个 js 的 ``call/cc`` ，
+来自 http://matt.might.net/articles/by-example-continuation-passing-style/
+
+.. code:: javascript
+
+    function callcc(f, cc) {
+        f(function (x, k) {
+            cc(x);
+        }, cc);
+    }
