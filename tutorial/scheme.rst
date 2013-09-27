@@ -284,3 +284,52 @@ cps
 
 接下来要讲的是 ``call/cc`` 和 ``cps`` 的关系。
 实际上呢，用 ``call/cc`` 写的程序，都可以用 ``cps`` 进行改写。
+
+先看两个简单的例子，
+第一个是用 ``cps`` 的方式改写一般程序，
+第二个是对 ``call/cc`` 程序进行改写。
+
+.. code:: scheme
+
+    (define reciprocal
+        (lambda (n)
+            (if (= n 0)
+                "oops!"
+                (/ 1 n))))
+    ;; (reciprocal 10) => 1/10
+
+    (define cps-reciprocal
+        (lambda (n success failure)
+            (if (= n 0)
+                (failure "oops!")
+                (success (/ 1 n)))))
+    ;; (cps-reciprocal 10 (lambda (x) x) (lambda (x) x)) => 1/10
+
+
+    (define product
+        (lambda (ls)
+            (call/cc
+                (lambda (break)
+                    (let f ([ls ls])
+                        (cond
+                            [(null? ls) 1]
+                            [(= (car ls) 0) (break 0)]
+                            [else (* (car ls) (f (cdr ls)))]))))))
+    ;; (product '(1 2 3 4 0)) => 0
+
+    (define cps-product
+        (lambda (ls k)
+            (let ([break k])
+                (let f ([ls ls] [k k])
+                    (cond
+                        [(null? ls) (k 1)]
+                        [(= (car ls) 0) (break 0)]
+                        [else (f (cdr ls)
+                            (lambda (x)
+                                (k (* (car ls) x))))])))))
+    ;; (cps-product '(1 2 3 4 0) (lambda (x) x)) => 0
+
+
+第一个好理解。
+第二个， 知道 ``let f`` 起个递归的作用，也能理解，就是递归的时候，
+``k`` 比较绕。
