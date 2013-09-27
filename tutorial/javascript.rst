@@ -1,3 +1,8 @@
+.. contents::
+
+
+
+
 提交表单
 =========
 如果表单中带有提交按钮，在点击 ``Enter`` 时就会提交表单。
@@ -928,3 +933,34 @@ valueOf
 
 ``CustomEvent`` 的第二个参数用于设置事件，是否冒泡，能否阻止。
 ``detail`` 可以通过 ``event.detail`` 获取。
+
+
+
+
+
+
+unicode
+========
++ http://www.2ality.com/2013/09/javascript-unicode.html
++ http://es5.github.io/x6.html
++ http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html#determining-the-character-encoding
+
+在解释器处理 js 时，代码使用 utf-16 进行编码。
+
+任何符号都可以使用 ``\uHHHH`` 的方式进行 unicode 转义。
+另外，在字符串里面，
+``0x00-0xFF`` 范围内的符号，还可以用 ``\xHH`` 的方式转义。
+
+.. code:: javascript
+
+    console.log("\u00F6" === "\xF6");
+    console.log("\xF6" === "ö");
+    console.log("ö" === "\u00F6");
+
+浏览器在载入 js 的时候：
+首先尝试能否通过 ``BOM`` 来确定编码；
+不能的话，检查有没有在 ``http`` 头部的 ``Content-Type`` 里指定了编码；
+没有的话，再尝试获取 ``script`` 标签的 ``charset`` 属性；
+最后尝试使用 ``<meta charset="utf-8">`` 指定的编码。
+
+上面的方式都不能获取编码，浏览器就只能自己猜了。
