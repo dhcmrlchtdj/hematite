@@ -357,3 +357,24 @@ cps
     ;; (cps-factorial 3 (lambda (x) x)) => 6
 
 这里使用传递的函数，来保存最后一步的计算状态，起到了和 ``call/cc`` 相同的效果。
+
+最后 ``cps-retry`` 的里保存的，是 ``(lambda (y) (k (* x y)))`` ，
+形成了一个闭包。
+在 ``cps-factorial`` 里，以 ``1`` 为参数，执行了该函数。
+
+改写一个 js 版本出来：
+
+.. code:: javascript
+
+    var retry;
+    var factorial = function(x, k) {
+        if (x === 0) {
+            retry = k;
+            k(1);
+        } else {
+            factorial(x - 1, function(y) { k(x * y); });
+        }
+    };
+    // factorial(3, console.log) === 6
+
+只能说，这个逻辑看着确实难受……
