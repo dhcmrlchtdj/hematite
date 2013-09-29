@@ -1,3 +1,6 @@
+.. contents::
+
+
 timestamp
 ==========
 
@@ -476,3 +479,21 @@ arguments
 今天发现一点区别，查了下 MDN，
 说是 ``innerText`` 会保留样式，并且会触发重排（reflow）。
 但 ``textContent`` 不会。
+
+
+
+
+
+
+contains
+=========
++ http://ejohn.org/blog/comparing-document-position/
+
+简单讲，就是判断节点 A 是不是节点 B 的子节点。
+
+暴力一点就是查找 A 的父节点，看是否是 B，或者遍历 B 的子节点。
+聪明点的可以用 John Resing 上面提到的办法，
+使用 ``contains`` 或 ``compareDocumentPosition`` 来判断。
+
+之前想到过，能否使用 ``insertBefore`` 来判断。
+可惜 ``insertBefore`` 只能处理直接后代的情况，在嵌套了多层的情况下，无法使用。
