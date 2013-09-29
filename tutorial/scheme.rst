@@ -112,6 +112,7 @@ Continuation Passing Style
 + http://c2.com/cgi/wiki?ContinuationPassingStyle
 + http://www.scheme.com/tspl4/further.html#./further:h3
 + http://www.scheme.com/tspl4/further.html#./further:h4
++ http://www.scheme.com/tspl4/answers.html
 
 CPS 可以理解成函数没有返回值的编程风格。
 没有返回值，所以就将原来用于处理返回值的函数直接作为参数来传递。
@@ -333,3 +334,26 @@ cps
 第一个好理解。
 第二个， 知道 ``let f`` 起个递归的作用，也能理解，就是递归的时候，
 ``k`` 比较绕。
+
+用上面提过的阶乘做例子：
+
+.. code:: scheme
+
+    (define retry #f)
+    (define factorial
+        (lambda (x)
+            (if (= x 0)
+                (call/cc (lambda (k) (set! retry k) 1))
+                (* x (factorial (- x 1))))))
+    ;; (factorial 3) => 6
+
+    (define cps-retry #f)
+    (define cps-factorial
+        (lambda (x k)
+            (let f ([x x] [k k])
+                (if (= x 0)
+                    (begin (set! cps-retry k) (k 1))
+                    (f (- x 1) (lambda (y) (k (* x y))))))))
+    ;; (cps-factorial 3 (lambda (x) x)) => 6
+
+这里使用传递的函数，来保存最后一步的计算状态，起到了和 ``call/cc`` 相同的效果。
