@@ -497,3 +497,10 @@ contains
 
 之前想到过，能否使用 ``insertBefore`` 来判断。
 可惜 ``insertBefore`` 只能处理直接后代的情况，在嵌套了多层的情况下，无法使用。
+
+
+
+Object.keys
+============
+在 python 里，可以使用 ``dir`` 来获取对象的属性，相当方便。
+在 js 里面，可以用 ``Object.keys`` 达到类似的效果。
