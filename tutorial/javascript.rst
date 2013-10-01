@@ -964,3 +964,135 @@ unicode
 最后尝试使用 ``<meta charset="utf-8">`` 指定的编码。
 
 上面的方式都不能获取编码，浏览器就只能自己猜了。
+
+
+
+
+
+web worker
+===========
++ https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers
++ http://docs.webplatform.org/wiki/apis/workers/Worker
++ http://docs.webplatform.org/wiki/apis/workers/WorkerGlobalScope
++ http://www.whatwg.org/specs/web-apps/current-work/multipage/workers.html
++ http://www.html5rocks.com/en/tutorials/workers/basics/
++ https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm
+
+浏览器的支持，实在很有限……
+下面的内容估计很快会过时，用来简单了解一下 ``web worker`` ，还是可以的吧。
+
+首先上例子：
+
+.. code:: javascript
+
+    // main.js
+    (function() {
+        "use strict";
+        var list = [1, 2, 3];
+        var worker = new Worker("worker.js");
+        worker.onmessage = function(e) {
+            console.log(e.data);
+            console.log(e.data === list);
+
+            worker.terminate();
+        };
+        worker.postMesage(list);
+    })();
+
+    // worker.js
+    (function() {
+        "use strict";
+        console.log("called immediately");
+
+        onmessage = function(e) {
+            postMessage(e.data);
+            console.log("will not be displayed");
+        };
+    })();
+
+在主线程里，通过 ``new Worker(url)`` ，来实例化一个 ``worker`` 。
+被载入的脚本会直接执行。
+
+主线程和 ``worker`` 线程通过 ``onmessage`` 事件和 ``postMessage`` 方法来通信。
+
+``postMessage`` 对数据没太多限制，可以直接传送大部分 js 对象。
+传送的值会被复制一份，就像例子里的数组，在内存中是不同的。
+具体限制可以看上面的链接，总之表达能力要比 JSON 强一些。
+
+从例子里还可以看到，可以在主线程中使用 ``terminate`` 关闭 ``worker`` 线程，
+后续代码不会继续执行。被关闭后，主线程里的 ``worker`` 对象也变得不可用。
+如果是在 ``worker`` 线程里，可以使用 ``close`` 来关闭线程自身。
+
+其实，在 ``worker`` 线程里，除了可以直接调用 ``close`` ，
+我们在例子里还直接对 ``onmessage`` 进行赋值，直接调用 ``postMessage`` 。
+这是因为 ``worker`` 线程是在一个特殊的作用域中执行的，
+叫做 ``WorkerGlobalScope`` 。
+
+
+
+WorkerGlobalScope
+------------------
+在 ``worker`` 线程里，
+可以使用 ``this`` 或者 ``self`` 来获取 ``WorkerGlobalScope`` 。
+像 ``postMessage`` ， ``onmessage`` ， ``close``
+都是在 ``WorkerGlobalScope`` 中定义的。
+
+除了和主线程通信， ``worker`` 线程还可以使用 ``XMLHttpRequest`` 方法，
+可以通过 ``importScripts`` 来引入其他脚本，甚至可以创建新的 ``worker`` 线程。
+但是不能在 ``worker`` 线程中修改 ``DOM`` ，也不能修改全局的 ``window`` 。
+
+``location`` 是用于创建该 ``worker`` 线程的脚本路径。
+调用 ``importScripts`` 方法的时候，脚本路径就是相对于 ``location`` 来解析的。
+``importScripts`` 是个同步的方法，从载入到执行。一步出错，就全部停止。
+
+``worker`` 线程里的计时器（ ``setTimeout`` 和 ``setInterval`` ）
+和主线程的计时器是分开的。
+
+
+
+shared worker
+--------------
+除了 ``Worker`` ，还有个 ``SharedWorker`` 。
+
+.. code:: javascript
+
+    // main.js
+    var sw = new SharedWorker("sharedworker.js");
+    sw.port.onmessage = function(e) {
+        console.log(e.data);
+    };
+    sw.port.postMessage("msg");
+
+    // sharedworker.js
+    var list = [];
+    onconnect = function(e) {
+        var port = e.source;
+        list.push(Date.now());
+        port.onmessage = function(e) {
+            console.log(e.data);
+        };
+        port.postMessage(list);
+    };
+
+叫做 share 了，肯定可以共享啦。
+打开多个标签，可以看到这些标签共享一个了 ``SharedWorker`` 线程。
+
+只要 ``new SharedWorker(url)`` 的 ``url`` 相同，就会共享相同的线程。
+
+
+inline worker
+--------------
+如果不想发起新的请求，也可以直接构造一个 ``worker`` 。
+需要用到 ``Blob`` 和 ``URL.createObjectURL`` 。
+
+.. code:: javascript
+
+    var workerSource = new Blob(
+        ["onmessage = function() { console.log('from worker'); };"],
+        { type: "application/javascript" }
+    );
+    var workerURL = URL.createObjectURL(workerSource); // 创建虚拟链接
+    var worker = new Worker(workerURL)
+    worker.postMesage();
+
+    URL.revokeObjectURL(workerSource); // 释放链接资源
