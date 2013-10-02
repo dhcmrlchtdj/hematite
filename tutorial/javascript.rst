@@ -1061,23 +1061,31 @@ shared worker
     sw.port.onmessage = function(e) {
         console.log(e.data);
     };
-    sw.port.postMessage("msg");
+    sw.port.postMessage(Date.now());
 
     // sharedworker.js
     var list = [];
+    var cnt = 0;
     onconnect = function(e) {
+        var id = cnt++;
         var port = e.source;
-        list.push(Date.now());
+        list.push(port);
         port.onmessage = function(e) {
-            console.log(e.data);
+            // 向每个页面发送消息
+            list.forEach(function(elem) {
+                elem.postMessage("from " + id + " " + e.data);
+            });
         };
-        port.postMessage(list);
     };
 
 叫做 share 了，肯定可以共享啦。
 打开多个标签，可以看到这些标签共享一个了 ``SharedWorker`` 线程。
 
 只要 ``new SharedWorker(url)`` 的 ``url`` 相同，就会共享相同的线程。
+
+只有打开多个标签的情况下， ``SharedWorker`` 线程才会保留。
+
+能想到的一个用途，测试用户是否打开了多个标签。
 
 
 inline worker
