@@ -1,3 +1,8 @@
+.. contents::
+
+
+
+
 数据类型
 =========
 
@@ -110,9 +115,10 @@
 Continuation Passing Style
 ===========================
 + http://c2.com/cgi/wiki?ContinuationPassingStyle
-+ http://www.scheme.com/tspl4/further.html#./further:h3
-+ http://www.scheme.com/tspl4/further.html#./further:h4
++ http://www.scheme.com/tspl4/further.html#SECTGFCONTINUATIONS
++ http://www.scheme.com/tspl4/further.html#SECTGFCPS
 + http://www.scheme.com/tspl4/answers.html
++ http://www.scheme.com/tspl4/examples.html#SECTEXENGINES
 
 CPS 可以理解成函数没有返回值的编程风格。
 没有返回值，所以就将原来用于处理返回值的函数直接作为参数来传递。
@@ -120,7 +126,7 @@ CPS 可以理解成函数没有返回值的编程风格。
 所以说，要玩 CPS，至少要能把函数当作参数来用。
 这个被传递的函数就称为 ``continuation`` 。
 
-下面的内容都整理自 tspl4。
+
 
 call/cc
 --------
@@ -378,3 +384,9 @@ cps
     // factorial(3, console.log) === 6
 
 只能说，这个逻辑看着确实难受……
+
+
+
+engine
+-------
+协程在调度的时候，是非抢占式的。而 ``engine`` 能够抢占式调度。
