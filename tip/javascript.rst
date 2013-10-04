@@ -371,7 +371,7 @@ arguments
         arguments[1] = 200;
         console.log(a1, a2, a3); // 1 2 3
         console.log(arguments); // [2, 3]
-    }(1, 2, 3));
+    })(1, 2, 3);
 
 但是在非严格模式下， ``arguments`` 有一点点坑。
 建议使用 ``Array.prototype.slice`` 复制一个 ``arguments`` ，
@@ -388,7 +388,7 @@ arguments
         a1 = 100;
         arguments[1] = 200;
         console.log(a1, a2, a3, arguments); // 100 200 3 [100, 200, 3]
-    }(1, 2, 3));
+    })(1, 2, 3);
 
 但是，这个关联又不是十分紧密。
 
@@ -398,13 +398,13 @@ arguments
         console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2]
         a3 = 3;
         console.log(a1, a2, a3, arguments); // 1 2 3 [1,2]
-    }(1, 2));
+    })(1, 2);
 
     (function(a1, a2, a3) {
         console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2]
         arguments[2] = 300;
         console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2,300]
-    }(1, 2));
+    })(1, 2);
 
 我的理解是 ``arguments`` 作为实际参数，
 在 **初始化** 时，与 **对应** 的形式参数建立了联系，
@@ -424,7 +424,7 @@ arguments
         console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,300]
         a3 = 30;
         console.log(a1, a2, a3, arguments); // 1 2 30 [1,2,300]
-    }(1, 2, 3));
+    })(1, 2, 3);
 
 在 ``pop`` 之后， ``a3`` 和 ``arguments`` 的联系就切断了，
 ``shift`` 的情况要更加复杂。
@@ -439,7 +439,7 @@ arguments
         console.log(a1, a2, a3, arguments); // 100 2 3 [100,2,3]
         a3 = 30;
         console.log(a1, a2, a3, arguments); // 100 2 30 [100,2,3]
-    }(1, 2, 3));
+    })(1, 2, 3);
 
 虽然是第一个元素被移出 ``arguments`` ，但是断开联系的却是 ``a3`` 。
 也就是说，配对数量减少时，受影响的是后面的元素。
@@ -504,3 +504,23 @@ Object.keys
 ============
 在 python 里，可以使用 ``dir`` 来获取对象的属性，相当方便。
 在 js 里面，可以用 ``Object.keys`` 达到类似的效果。
+
+
+
+
+
+arguments.length
+==================
+
+.. code:: javascript
+
+    function example(x, y, z) {
+        console.log(arguments.length, x, y, z);
+    }
+    example(); // 0, undefined, undefined, undefined
+    example(undefined); // 1, undefined, undefined, undefined
+
+这么一个例子就可以啦。
+
+直接判断是否为 ``undefined`` 是不靠谱的，
+应该借助 ``arguments.length`` 来判断参数个数。
