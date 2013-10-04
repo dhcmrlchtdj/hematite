@@ -1,3 +1,7 @@
+.. contents::
+
+
+
 upper and lower
 ================
 
@@ -28,3 +32,18 @@ visual mode
 标记跳转
 =========
 ``m[a-z]`` 标记， ``\`[a-z]`` 跳转。
+
+
+
+
+
+
+添加行号
+===========
++ http://stackoverflow.com/questions/627932/vi-regular-expressions-replacing-using-current-line-number
+
+::
+
+    :h sub-replace-expression
+
+    :%s/^/\=line(".")." "/g
