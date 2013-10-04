@@ -284,6 +284,16 @@ scheme 在处理一个表达式的时候要考虑两个问题：
         }, cc);
     }
 
+再更新一个 scheme 的 ``call/cc`` ，
+来自 http://c2.com/cgi/wiki?CallWithCurrentContinuation
+
+.. code::
+
+    (define (cps-call/cc k consumer)
+        (let ([reified-current-continuation (lambda (k1 v) (k v))])
+            (consumer k reified-current-continuation)))
+
+
 
 cps
 ----
