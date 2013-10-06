@@ -539,3 +539,42 @@ constructor && this
 如果没有使用 ``new`` ，
 在 ``use strict`` 的情况下 ``this === undefined`` ，
 非严格模式下 ``this === window`` 。
+
+
+
+
+
+
+Error && setTimeout
+======================
+举两个例子：
+
+.. code:: javascript
+
+    setTimeout(function A() {
+        setTimeout(function B() {
+            setTimeout(function C() {
+                throw new Error("error in C");
+            }, 1);
+        }, 1);
+    }, 1);
+
+可以看到，错误信息的堆栈信息里只有 ``C`` ，没有 ``A`` ``B`` 。
+因为超时调用的作用域是全局作用域。
+
+.. code:: javascript
+
+    try {
+        setTimeout(function() {
+            throw new Error("error message");
+        }, 1);
+    } catch (e) {
+        console.log(e);
+    }
+
+可以看到，错误没有被捕获。原因和之前提到的一样，
+回调函数执行的时候，作用域已经脱离了 ``setTimeout`` 的作用域。
+
+
+要处理回调中的异常，除了直接在回调函数里处理，
+还可以使用 ``window.onerror`` 。
