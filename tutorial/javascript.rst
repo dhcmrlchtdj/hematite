@@ -1104,3 +1104,36 @@ inline worker
     worker.postMesage();
 
     URL.revokeObjectURL(workerSource); // 释放链接资源
+
+
+
+
+
+
+
+抛出异常
+==========
+``throw`` 不仅可以抛出 ``Error`` ，还可以抛出各种变量。
+
+比如
+
+.. code:: javascript
+
+    throw "Error: oops";
+
+    throw new Error("oops");
+
+    throw {
+        name: "Error",
+        message: "oops",
+        toString: function() { return this.name + this.message; }
+    };
+
+如果没有捕获的话，会报错。要报错，所以会尝试把抛出的对象转换成字符串，
+对象会调用 ``toString`` 和 ``valueOf`` ，这个转换过程以前讲过，这里不提了。
+值得一提的是，即使没有打开控制台，一样会进行这种转换，
+所以 ``toString`` 还是会被调用。当然， ``try...catch``` 了就不会了。
+
+对于一个 ``Error`` ，最主要的可能是 ``message`` 和 ``name`` 了吧。
+所以可以自己抛出一个对象来模拟，然后对象里面可以添加更多的属性，
+传递更多信息。
