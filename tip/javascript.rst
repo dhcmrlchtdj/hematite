@@ -524,3 +524,18 @@ arguments.length
 
 直接判断是否为 ``undefined`` 是不靠谱的，
 应该借助 ``arguments.length`` 来判断参数个数。
+
+
+
+
+
+
+constructor && this
+======================
+
+在构造函数里面，
+可以使用 ``(this instanceof CONSTRUCTOR)`` 来判断是否使用了 ``new`` 。
+
+如果没有使用 ``new`` ，
+在 ``use strict`` 的情况下 ``this === undefined`` ，
+非严格模式下 ``this === window`` 。
