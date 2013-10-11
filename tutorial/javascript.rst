@@ -389,7 +389,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var
         }
     })();
 
-其实 ``return`` 的跪了， ``if`` 的结局也是可以预料的。
+其实 ``return`` 都跪了， ``if`` 的结局也是可以预料的。
 
 总结起来就是，不管在哪个位置，不管这里的代码会不会执行，
 只要 ``var`` 出现了，这个变量就在作用域中完成了声明。
@@ -861,7 +861,7 @@ valueOf
     顺便看看这个。
 
     1. 不是引用类型，返回 ``false`` 。
-    2. 如果 ``[[Class]]`` 是 ``"Array`` ，返回 ``true`` 。
+    2. 如果 ``[[Class]]`` 是 ``Array`` ，返回 ``true`` 。
     3. 返回 ``false`` 。
 
     其实和 ``Object.prototype.toString`` 一样是检查了 ``[[Class]]`` 。
