@@ -533,6 +533,8 @@ arguments.length
 constructor && this
 ======================
 
+这里讲的是构造函数，不是 ``prototype.constroctor`` 。
+
 在构造函数里面，
 可以使用 ``(this instanceof CONSTRUCTOR)`` 来判断是否使用了 ``new`` 。
 
@@ -540,6 +542,12 @@ constructor && this
 在 ``use strict`` 的情况下 ``this === undefined`` ，
 非严格模式下 ``this === window`` 。
 
+更新一点关于 ``constructor`` 的看法。
+测试了一下 ``prototype.constroctor`` ，发现对 ``instanceof`` 操作没有半点影响。
+
+不过在
+http://stackoverflow.com/questions/8453887/why-is-it-necessary-to-set-the-prototype-constructor
+，还是有人给 ``prototype.constroctor`` 找到了个实际应用中的例子。
 
 
 
