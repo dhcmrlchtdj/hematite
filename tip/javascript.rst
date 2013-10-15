@@ -586,3 +586,40 @@ Error && setTimeout
 
 要处理回调中的异常，除了直接在回调函数里处理，
 还可以使用 ``window.onerror`` 。
+
+
+
+
+
+
+
+
+map
+========
+
++ http://www.2ality.com/2013/10/dict-pattern.html
++ http://www.nczonline.net/blog/2012/10/09/ecmascript-6-collections-part-2-maps/
++ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+js 里面的对象经常被用作关联数组，第一个链接指出了一个小问题。
+
+.. code:: javascript
+
+    var map = {};
+    var key = "toString";
+    console.log(key in map); // true
+
+来自 ``Object.prototype`` 的属性和方法，会影响 ``in`` 的判断。
+
+一种做法是使用 ``Object.create`` 。
+
+.. code:: javascript
+
+    var map = Object.create(null);
+    var key = "toString";
+    console.log(key in map); // false
+    console.log(map instanceof Object); // false
+
+这样生成的对象不会继承 ``Object`` 。
+
+在 es6 里面会有内置的 ``Map`` 类型，不知道什么时候能用上。
