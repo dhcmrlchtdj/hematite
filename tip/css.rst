@@ -1,3 +1,9 @@
+.. contents::
+
+
+
+
+
 media queries
 ==============
 原来有了个 ``resolution`` 来代替 ``device-pixel-ratio`` 。
@@ -391,3 +397,18 @@ http://coding.smashingmagazine.com/2013/04/12/css-generated-content-counters/
 将不符合的内容隐藏。
 
 这样就作出了查找的效果。
+
+
+
+
+
+
+
+动画化与自适应
+================
+
++ http://css-tricks.com/animated-media-queries/
+
+其实关键只有一点，使用 ``transition`` 。
+
+自己没想到还能这么玩。
