@@ -295,3 +295,14 @@ max pid
 进程太多，突然发现编号变小了，估计到了最大值。
 
 上网查了下，由 ``/proc/sys/kernel/pid_max`` 决定，默认是 32768。
+
+
+
+
+
+配 ip
+===========
+
+::
+
+    $ ip addr add your.ip.addr.ess/mask.bits dev eth0
