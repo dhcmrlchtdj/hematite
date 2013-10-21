@@ -623,3 +623,47 @@ js 里面的对象经常被用作关联数组，第一个链接指出了一个�
 这样生成的对象不会继承 ``Object`` 。
 
 在 es6 里面会有内置的 ``Map`` 类型，不知道什么时候能用上。
+
+
+
+
+
+
+
+
+
+requestAnimationFrame
+=========================
++ https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame
++ http://www.nczonline.net/blog/2011/05/03/better-javascript-animations-with-requestanimationframe/
++ http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+
+文章都是 2011 年的了，但没怎么使用啊。
+
+.. code:: javascript
+
+    var i = 0;
+    requestAnimationFrame(function example(ts) {
+        if (++i < 100) {
+            console.log("requestAnimationFrame", new Date(), ts);
+            requestAnimationFrame(example);
+        }
+    });
+
+    var j = 0;
+    setTimeout(function example() {
+        if (++j < 100) {
+            console.log("setTimeout", new Date());
+            setTimeout(example, 16);
+        }
+    }, 0);
+
+感觉就像是省略了时间的 ``setTimeout`` ，同样是等主线程空闲之后执行回调函数。
+上面的代码基本上是在交替输出。
+
+当然还是有个特别点的地方， ``requestAnimationFrame`` 会给回调函数传递一个参数，
+表示回调函数被调用的时间（？）。
+
+和 ``setTimeout`` 一样有个返回值，用于终止回调。
+终止函数为 ``cancelAnimationFrame`` ，用法和 ``clearTimeout`` 一样，
+就不给例子了。
