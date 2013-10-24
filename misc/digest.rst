@@ -49,3 +49,28 @@ binux
 
 定义：能处理的异常
 当异常发生时，你知道应该如何恢复/继续执行
+
+
+
+
+
+
+Why Python uses 0-based indexing
+===================================
+
++ http://www.reddit.com/r/Python/comments/1p2za1/guido_van_rossum_why_python_uses_0based_indexing/
+
+为什么数组下标从 0 开始。
+
+Guido 表示，最后的决定是为了简化
+“获取数组前面 N 个元素”和“获取数组某位之后的 N 个元素”这两种操作。
+
+::
+
+    a[:n]
+    a[i:i+n]
+
+更准确些，应该说是 `下标从 0 开始` 和 `前闭后开区间` 合作，
+达到了简化操作的目的。
+
+如果数组的下标从 1 开始，就不能这么简便地进行这两种常见操作了。
