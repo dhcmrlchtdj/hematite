@@ -87,6 +87,29 @@ cheat sheet 之 链接与用户输入
 
 
 
+
+HTTP 头部的分割符号
+=======================
+
+有些头部的值，使用 ``;`` 分割。
+有些值，可以使用双引号包裹。
+
+::
+
+    Content-Disposition: attachment; filename="evil_file.exe;.txt"[CR][LF]
+
+在某些版本的 ie 里，像上面这样的头部就有问题。
+``;`` 会把 ``evil_file.exe;.txt`` 截断。
+
+
+另外，一个头部重复出现的情况要怎么处理，RFC 没有规定。
+这个取决与浏览器的实现。
+
+
+
+
+
+
 cheat sheet 之 HTTP 协议
 =========================
 
