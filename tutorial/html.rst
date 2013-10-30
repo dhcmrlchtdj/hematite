@@ -515,3 +515,95 @@ google 的风格指南里面，推荐使用连字符（hyphen）作为分割符�
 
 
 + 渲染表格的速度比一般元素要慢。
+
+
+
+
+
+
+file
+=========
+
++ https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
++ https://developer.mozilla.org/en-US/docs/Web/API/window.URL.createObjectURL
++ https://developer.mozilla.org/en-US/docs/Web/API/FileReader
+
+.. code:: html
+
+    <input type="file" id="f" />
+
+.. code:: javascript
+
+    var s = document.getElementById("f");
+    console.log(s.files); // 一个文件列表 FileList
+
+最初的时候，文件列表是空的。
+选择文件后，会触发标签的 ``change`` 事件，同时，
+文件列表会添加上一个文件对象（ ``File`` ），
+里面有文件名、文件大小、MIME 类型、文件的修改时间，
+都是只读的。
+
+``FileList`` 之所以是个列表，是因为可以同时上传多个文件。
+
+.. code:: html
+
+    <input type="file" id="f" multiple />
+
+.. code:: javascript
+
+    var s = document.getElementById("f");
+    var test = s.files;
+
+    s.onchange = function() {
+        console.log(s.files === test); // false
+    };
+
+加上 ``multiple`` 后，就可以上传多个文件。
+上面的代码还弄了个比较，可以发现，每次修改之后，
+都会创建一个全新的 ``FileList`` 。
+
+测试之后可以发现，如果修改文件的时候，
+如果选择的还是原来的文件（选择的顺序也要相同），
+是不会再次触发 ``change`` 事件的。
+
+
+图片预览
+----------
+
+选择的文件会被视为 ``File`` 对象，
+而 ``window.URL.createObjectUrl`` 可以将 ``File`` 对象转换成链接，
+这个链接可以直接用于 ``img`` 标签，所以可以作出预览图来。
+
+.. code:: javascript
+
+    var img = document.createElement("img");
+    img.src = window.URL.createObjectURL(input.files[0]);
+    img.onload = function() {
+        // 载入之后，删除对象，减少内存占用
+        window.URL.invokeObjectURL(img.src);
+    };
+
+除了图片外，只要浏览器支持，视频音频也都是可以的。
+
+
+读取文件
+-----------
+
+除了 ``window.URL.createObjectURL`` ，
+还可以用 ``FileReader`` 来操作文件。
+
+.. code:: javascript
+
+    input.onchange = function() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            console.log(e.target.result); // 打印读取的内容
+        };
+        reader.readAsBinaryString(input.files[0]);
+    };
+
+``FileReader`` 的详细 API，去上面翻链接。
+像是实现预览的时候，也可以用 ``FileReader.readAsDataURL`` 来实现。
+
+这样读取文件，最大的好处，是能够异步上传文件。
+既然能够读取文件了，就可以用 xhr 请求来上传。
