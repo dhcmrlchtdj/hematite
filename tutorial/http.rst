@@ -371,3 +371,22 @@ tornado 中计算 etag 的代码，简化之后，大概就是如上的代码。
 + 使用 ``Cache-Control`` 或 ``Expires`` 进行新鲜度判断。
 
 + 使用 ``If-Modified-Since`` 或 ``If-None-Match`` 进行再验证。
+
+
+
+
+
+
+
+cookie 限制
+===============
+
++ http://www.ietf.org/rfc/rfc2109.txt
+
+第 6.3 小节，就 cookie 的数量和大小限制，给出了几点建议。
+
++ 实现应该支持 300 个 cookie
++ 一个 cookie 可以有 4096 bytes
++ 每个域名支持 20 个 cookie
+
+里面还说，应用应该尽可能减小 cookie 的体积和数量。
