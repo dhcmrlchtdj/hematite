@@ -1,3 +1,7 @@
+.. contents::
+
+
+
 让程序以 root 权限运行
 =======================
 
@@ -306,3 +310,15 @@ max pid
 ::
 
     $ ip addr add your.ip.addr.ess/mask.bits dev eth0
+
+
+
+
+禁用 su
+=========
+
++ http://serverfault.com/questions/69216/disable-su-on-machine
+
+ssh 连上之后，还是可以靠 ``su`` 获取管理权限。
+
+可以修改 ``/etc/pam.d/su`` ，只允许 ``wheel`` 用户组调用 ``su`` 。
