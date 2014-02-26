@@ -160,7 +160,7 @@ echo 转义
 在 **脚本** 里面， ``echo`` 默认是不进行转义的。
 转义需要添加 ``-e`` 选项。
 
-.. code:: bash
+::
 
     echo "\ttest" # '\ttest'
     echo -e "\ttest" # '        test'
@@ -172,3 +172,11 @@ echo 转义
 =======
 在输出提示符前， shell 会执行 ``precmd`` 这个函数，
 可以在这里进行一些计算，修改提示符。
+
+
+find 批量移动
+==============
+
+::
+
+    find -name "*.bak" -exec bash -c 'mv $0 "${0/.bak/}"' {} \;
