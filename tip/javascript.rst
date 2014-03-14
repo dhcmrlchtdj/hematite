@@ -685,3 +685,46 @@ requestAnimationFrame
     })();
 
 来自 knockoutjs。
+
+
+
+如何包装类库
+==============
+
+.. code:: javascript
+
+    (function(undefined) {
+        "use strict";
+        var global = this || (0, eval)("this");
+
+        (function(factory) {
+            if (typeof(require) == "function" &&
+                typeof(exports) == "object" &&
+                typeof(module) == "object") {
+                // commonjs/nodejs
+                var target = module["exports"] || exports;
+                factory(target);
+            } else if (typeof(define) == "function" && define["amd"]) {
+                // amd
+                define(["exports"], factory);
+            } else {
+                // <script>
+                factory(global["libName"] = {});
+            }
+        })(function(libName) {
+            // code here
+        });
+    })();
+
+最外面一个自执行函数，获取个全局变量，没啥可说的。
+里面一个自执行函数，其实可以拆开，不过这样看起来高大上一些……
+真正的类库代码都在参数中，将类库的所有功能都暴露给 ``libName`` 。
+
+如果是直接引入，其实就是在给 ``window["libName"]`` 赋值，
+如果是 amd 引入，就是 ``define(["exports"], function(libName) {})`` ，
+如果时 node 引入，就是 ``(function(exports) {})()`` 。
+
+总之，就是通过一个中间层，使得类库能够适应各种环境。
+
+https://github.com/jrburke/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic
+http://nodejs.org/api/modules.html#modules_module_exports
