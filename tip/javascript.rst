@@ -667,3 +667,21 @@ requestAnimationFrame
 和 ``setTimeout`` 一样有个返回值，用于终止回调。
 终止函数为 ``cancelAnimationFrame`` ，用法和 ``clearTimeout`` 一样，
 就不给例子了。
+
+
+
+
+
+
+
+获取 global
+=============
+
+.. code:: javascript
+
+    (function(undefined) {
+        "use strict";
+        var global = this || (0, eval)("this");
+    })();
+
+来自 knockoutjs。
