@@ -1140,3 +1140,13 @@ inline worker
 
 更新一下，opera 没有调用 ``toString`` ，
 而是浏览器自己组合 ``name`` 和 ``message`` 。
+
+
+
+
+RegExp
+=========
+
+调用正则相关函数后，可以用 `RegExp.$_` 来获取刚才的结果。
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#grouping-back-references
