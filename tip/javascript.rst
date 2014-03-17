@@ -679,12 +679,24 @@ requestAnimationFrame
 
 .. code:: javascript
 
-    (function(undefined) {
+    (function() {
         "use strict";
         var global = this || (0, eval)("this");
     })();
 
-来自 knockoutjs。
+来自 knockoutjs，稍加修改。
+
+首先，这是外层，假如没有 `"use strict"` ，那么 `this` 应该指向 `window` 。
+
+由于 `"use strict"` 的关系， `this` 是 `undefined` ，所以执行的是后面的语句。
+就算直接执行 `eval("this")` ，同样是 `undefined` 。
+
+所以说，关键大概在 `(0, eval)` ，但实际上，返回的就是 `eval` 。
+真正的关键是直接调用还是间接调用。
+
+
+
+
 
 
 
@@ -695,7 +707,7 @@ requestAnimationFrame
 
     (function(undefined) {
         "use strict";
-        var global = this || (0, eval)("this");
+        var global = (0, eval)("this");
 
         (function(factory) {
             if (typeof(require) == "function" &&
@@ -728,3 +740,7 @@ requestAnimationFrame
 
 https://github.com/jrburke/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic
 http://nodejs.org/api/modules.html#modules_module_exports
+
+
+另外，外层的参数 undefined 其实没有任何特殊意义，只是为了压缩体积。
+后面代码出现 undefined 的时候，会被压缩工具替换掉。

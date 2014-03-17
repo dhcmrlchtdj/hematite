@@ -675,6 +675,9 @@ void
 
 eval
 =====
+eval 只操作字符串，不是字符串直接返回参数。
+
+
 + http://perfectionkills.com/global-eval-what-are-the-options/
 
 在直接执行的情况下， ``eval`` 能够获取执行时的作用域，
@@ -697,7 +700,6 @@ eval
 
 上面的代码中， ``(0, eval)`` 就是间接执行，通过全局作用域的中执行 ``this`` ，
 获取对 ``window`` 的引用。
-
 
 
 
