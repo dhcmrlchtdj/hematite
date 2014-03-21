@@ -607,3 +607,14 @@ file
 
 这样读取文件，最大的好处，是能够异步上传文件。
 既然能够读取文件了，就可以用 xhr 请求来上传。
+
+
+
+
+
+popstate event
+================
+``popstate`` 事件只在点击后退或调用 ``history.back`` 的情况下触发。
+有个 ``load`` 会触发 ``popstate`` 的 bug。
+
+``pushState`` 和 ``replaceState`` 是不会触发 ``popstate`` 的。
