@@ -677,8 +677,8 @@ eval
 =====
 eval 只操作字符串，不是字符串直接返回参数。
 
-
 + http://perfectionkills.com/global-eval-what-are-the-options/
++ http://www.2ality.com/2014/01/eval.html
 
 在直接执行的情况下， ``eval`` 能够获取执行时的作用域，
 执行的最后一条表达式会作为 ``eval`` 的返回值。
@@ -691,18 +691,29 @@ eval 只操作字符串，不是字符串直接返回参数。
 
 
 如果是间接执行， ``eval`` 会是在全局作用域中执行代码。
+就相当与是没有 ``use strict`` 的约束。
 
 .. code:: javascript
 
     (function() {
-        var window = this || (0, eval)('this');
+        "use strict";
+        var win = (0, eval)("this");
     })()
 
 上面的代码中， ``(0, eval)`` 就是间接执行，通过全局作用域的中执行 ``this`` ，
 获取对 ``window`` 的引用。
 
+关于什么时直接执行，间接执行。
+简单理解，间接执行肯定不是直接调用，而是经过一点计算。
+如果一个表达式的结果不一定是 eval，最后得到 eval，那么这就是间接执行了 eval。
 
 
+new Function
+=============
++ http://www.2ality.com/2014/01/eval.html
+
+``new Function`` 在全局作用域下构造函数，而不是在调用的块中构造。
+也就是说，无法构成一个闭包。
 
 
 delete
