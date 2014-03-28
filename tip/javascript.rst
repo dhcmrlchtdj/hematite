@@ -748,44 +748,56 @@ requestAnimationFrame
 如何包装类库
 ==============
 
+https://github.com/jrburke/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic
+http://nodejs.org/api/modules.html#modules_module_exports
+
+来自 knockoutjs，原版看代码，下面是梳理版。
+
 .. code:: javascript
 
     (function(undefined) {
         "use strict";
-        var global = (0, eval)("this");
 
-        (function(factory) {
-            if (typeof(require) == "function" &&
-                typeof(exports) == "object" &&
-                typeof(module) == "object") {
-                // commonjs/nodejs
-                var target = module["exports"] || exports;
-                factory(target);
-            } else if (typeof(define) == "function" && define["amd"]) {
-                // amd
-                define(["exports"], factory);
-            } else {
-                // <script>
-                factory(global["libName"] = {});
-            }
-        })(function(libName) {
+        var win = (0, eval)("this");
+        function factory(koExports) {
             // code here
-        });
+        }
+
+        if (typeof(define) == "function" && define.amd) {
+            define(["exports"], factory);
+        } else if (typeof(define) == "function" && define.cmd) {
+            define(function(require, exports, module) {
+                factory(exports);
+            });
+        } else if (typeof(module) != "undefined" && module.exports) {
+            factory(module.exports);
+        } else {
+            factory(win["ko"] = {});
+        }
     })();
 
-最外面一个自执行函数，获取个全局变量，没啥可说的。
-里面一个自执行函数，其实可以拆开，不过这样看起来高大上一些……
-真正的类库代码都在参数中，将类库的所有功能都暴露给 ``libName`` 。
+原版嵌套自执行函数，看着高大上一些，实际功能差不多啦。
+最外面一个自执行函数，获取个全局变量，之后类库的接口都暴露给 ``koExports`` 。
+如果是直接引入，其实就是在给 ``window["ko"]`` 赋值，
+如果是 amd 引入，就是 ``define(["exports"], function(koExports) {})`` ，
+如果时 node 引入，就是 ``(function(koExports) {})(module["exports"])`` ，
+cmd 那个自己随手加的。
 
-如果是直接引入，其实就是在给 ``window["libName"]`` 赋值，
-如果是 amd 引入，就是 ``define(["exports"], function(libName) {})`` ，
-如果时 node 引入，就是 ``(function(exports) {})()`` 。
-
-总之，就是通过一个中间层，使得类库能够适应各种环境。
-
-https://github.com/jrburke/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic
-http://nodejs.org/api/modules.html#modules_module_exports
+总结就是通过一个中间层（factory），使得类库能够适应各种环境。
 
 
 另外，外层的参数 undefined 其实没有任何特殊意义，只是为了压缩体积。
 后面代码出现 undefined 的时候，会被压缩工具替换掉。
+
+
+在使用别人的库的时候，可以像 fastclick 那样，简单粗暴。
+
+.. code:: javascript
+
+    if (typeof define !== "undefined" && define.amd) {
+        define(function() {
+            return FastClick;
+        });
+    } else {
+        window.FastClick = FaskClick;
+    }
