@@ -128,6 +128,51 @@ http://stackoverflow.com/questions/12113412/dynamically-inject-javascript-file-w
 
 
 
+引入 js
+========
+http://calendar.perfplanet.com/2010/the-truth-about-non-blocking-javascript/
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
+
++ defer
+
+  延迟执行。下载但不执行，不会阻塞其他内容的下载和渲染，
+  内容加载完（DOMContentLoaded）之后， **按顺序** 执行脚本。
+
+  mdn 不推荐对内联脚本设置 defer。
+
+
++ async
+
+  异步执行。下载并执行，不会阻塞其他内容的下载和渲染， **不保证** 执行顺序。
+
+  对内联脚本无效。
+
+
++ 动态载入
+
+  动态创建并插入。效果与 async 相同，适合不支持 async 的情况。
+
+
++ defer async 动态插入，虽然不阻塞内容加载，但是阻塞 window.onload 事件。
+  直到脚本执行完，才会触发 onload 事件。
+
+
++ DOMContentLoaded 在文档解析后触发。
+  onload 要等待一切资源下载完成才会触发，包括样式、图片、frame 等等等。
+
+
++ 使用 ``setTimeout(dynamicLoadScript, 0)`` 的方式动态载入脚本，
+  不会阻塞 onload 事件。不过这个 **不保证** 脚本执行和 onload 的先后顺序。
+
+
++ 靠 iframe 动态插入脚本。由于创建的 iframe 没有 src，无需下载，所以不会阻塞 onload。
+
+  创建一个 iframe，在 iframe 里面动态插入 script，
+  在脚本里使用 ``parent.window`` 获取外部环境。
+
+
+
+
 
 性能测试
 =========
