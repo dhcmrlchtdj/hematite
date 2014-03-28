@@ -951,6 +951,9 @@ valueOf
 ``CustomEvent`` 的第二个参数用于设置事件，是否冒泡，能否阻止。
 ``detail`` 可以通过 ``event.detail`` 获取。
 
+目前还可以使用 ``document.createEvent`` 来模拟事件，
+而且选项比 ``CustomEvent`` 更齐全。
+虽然会逐步废弃，不过，可以预见的未来（DOM4），还是可用的。
 
 
 
