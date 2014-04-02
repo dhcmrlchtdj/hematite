@@ -801,3 +801,14 @@ cmd 那个自己随手加的。
     } else {
         window.FastClick = FaskClick;
     }
+
+
+
+
+
+nodelist
+=========
+https://developer.mozilla.org/en-US/docs/Web/API/NodeList#A_.22live.22_collection
+
+`getElementsByTagName` 返回的 nodelist 会随 DOM 变化，
+而 `querySelectorAll` 返回的 nodelist 不会变。
