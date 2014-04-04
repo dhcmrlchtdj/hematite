@@ -812,3 +812,16 @@ https://developer.mozilla.org/en-US/docs/Web/API/NodeList#A_.22live.22_collectio
 
 `getElementsByTagName` 返回的 nodelist 会随 DOM 变化，
 而 `querySelectorAll` 返回的 nodelist 不会变。
+
+
+
+
+tilde ~
+========
+`~` 是取补码，所以 `~(-1)` 会得到 `0` 。这个技巧可以和数组巧妙结合。
+
+.. code:: javascript
+
+    if ( ~ (arr.indexOf("sth"))) {
+        console.log("sth in arr");
+    }
