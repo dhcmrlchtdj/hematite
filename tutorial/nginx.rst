@@ -1,3 +1,198 @@
+http://nginx.com/admin-guide/
+
+配置
+=====
+
+::
+
+    # 配置形式如下
+    directive parameters;
+
+    instruction {
+        directive parameters;
+    }
+
+可以用 `include` 指令引入其他配置
+
+::
+
+    include mime.types;
+
+简单的配置范例
+
+::
+
+    user nobody;
+    include mime.types;
+
+    http {
+        server {
+            listen 80 default;
+            location / {
+                proxy_pass http://localhost:8000;
+            }
+        }
+    }
+
+
+
+反向代理 reverse proxy
+========================
+
+::
+
+    http {
+        server {
+            listen 80;
+            location / {
+                proxy_pass http://localhost:8000;
+            }
+        }
+    }
+
+
+
+nginx 在代理时，会重写 `Host` 和 `Connection` 这两个 http header，同时去掉空值的 header。
+如果要修改 http header，可以使用 `proxy_set_header` 指令。
+
+::
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header Accept-Encoding "";
+        proxy_pass http://localhost:8000;
+    }
+
+nginx 在代理时，会对服务器的回应进行缓存，直到得到全部数据，再一次性发送。
+缓存相关的内容可以查看 http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffering 。
+
+
+
+负载均衡 load balancing
+=========================
+
++ http://nginx.org/en/docs/http/ngx_http_upstream_module.html
++ http://nginx.org/en/docs/http/load_balancing.html
+
+::
+
+    server {
+        upstream backend {
+            least_conn; # nginx 自带了三种负载均衡算法
+
+            server http://loachost:8000;
+            server http://loachost:8001;
+            server http://loachost:8002;
+        }
+        location / {
+            proxy_pass http://backend;
+        }
+    }
+
+
+
+压缩
+=====
+
+::
+
+    server {
+        gzip on;
+        gzip_min_length 1000;
+        gzip_proxied any;
+        gzip_types text/css text/javascript application/javascript
+            text/plain application/atom+xml application/rss+xml;
+    }
+
++ `gzip on` 指示 nginx 压缩 text/html 。
++ gzip_types 指定的类型，也会进行压缩。
++ 只有在回应的体积超过 gzip_min_length bytes 的时候，才会进行压缩。
+
+
+
+限制访问
+=========
+
+::
+
+    # 限制 ip 访问
+    # http://nginx.org/en/docs/http/ngx_http_access_module.html
+    location / {
+        allow 192.168.1.1/24;
+        allow 127.0.0.1;
+        deny 192.168.1.2;
+        deny all;
+    }
+
+    # 使用 http 验证
+    # http://nginx.org/en/docs/http/ngx_http_auth_basic_module.html
+    server {
+        auth_basic "closed website";
+        auth_basic_user_file conf/htpasswd;
+
+        location /public/ {
+            auth_basic off;
+        }
+    }
+
+    # 两者结合 满足任意一个即可
+    location / {
+        satisfy any;
+
+        allow 192.168.1.0/24;
+        deny all;
+
+        auth_basic "closed site";
+        auth_basic_user_file conf/htpassed;
+    }
+
+    # 限制链接数
+    http {
+        limit_conn_zone $binary_remote_addr zone=addr:10m;
+        server {
+            limit_conn addr 5;
+            location /download/ {
+                limit_conn addr 1;
+            }
+        }
+    }
+    # 限制速度
+    http {
+        limit_req_zone $binary_remote_addr zone=one:10m rate=1r/s;
+        server {
+            location /search/ {
+                limit_req zone=one burst=5;
+            }
+        }
+    }
+    # 限制带宽
+    location /download/ {
+        limit_rate_after 1m; # 最初的 1m 还是不限制的
+        limit_rate 50k;
+    }
+
+
+
+
+处理静态资源
+=============
+
+::
+
+    server {
+        root /www/data;
+        location / {
+        }
+
+        location /static/ {
+            root /www/static;
+        }
+    }
+
+
+
+
+
 编译安装
 =========
 
