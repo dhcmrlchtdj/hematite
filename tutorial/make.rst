@@ -10,14 +10,15 @@
 
     # comment
     target1 target2 target3: prerequisite1 prerequisite2
-        command1
-        command2
+        recipe1
+        recipe2
+        recipe3
 
 
 + ``#`` 是注释。
 + ``target`` 目标，可以看成函数名。
 + ``prerequisite`` 依赖，可以看成参数，必须是变量或者文件路径。也可以没有依赖。
-+ ``command`` 具体指令，其实就是 shell 命令。也可以没有具体指令。
++ ``recipe`` 具体指令，其实就是 shell 命令。也可以没有具体指令。
 + 没有依赖或指令的目标，叫做伪目标（phony target）。
 
 .. code:: makefile
@@ -112,8 +113,8 @@
 .. code:: makefile
 
     define macro_name
-        command1
-        command2
+        recipe1
+        recipe2
     endef
 
     target:
@@ -143,3 +144,12 @@
 ======
 
 make 里每个指令都会新建一个 shell 环境，变量、路径不会互相影响。
+
+
+
+执行 shell 命令
+=================
+
+``$()`` 被用于变量，所以不能在指令（recipe）中使用这种方式调用 shell 命令。
+要执行 shell 命令的时候，可以使用 ``\`command\``` ，也可以使用 ``$(shell command)`` 。
+
