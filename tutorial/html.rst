@@ -1,3 +1,6 @@
+contents::
+
+
 离线缓存
 =========
 也不是什么新鲜东西了，不过之前一直没了解。
@@ -618,3 +621,21 @@ popstate event
 有个 ``load`` 会触发 ``popstate`` 的 bug。
 
 ``pushState`` 和 ``replaceState`` 是不会触发 ``popstate`` 的。
+
+
+
+
+DOMParser
+===========
+http://domparsing.spec.whatwg.org/#the-domparser-interface
+
+看 yui 代码才知道了 ``DOMParser`` 的存在。
+
+.. code:: javascript
+
+    var parser = new DOMParser();
+    var dom = parser.parseFromString(html, "text/xml");
+
+类型也可以是 ``text/html`` ，
+不过 ``text/html`` 的结果会被 ``<html></html>`` 包裹起来，
+可能不符合预期。
