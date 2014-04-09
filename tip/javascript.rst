@@ -825,3 +825,21 @@ tilde ~
     if ( ~ (arr.indexOf("sth"))) {
         console.log("sth in arr");
     }
+
+
+Operator Precedence
+====================
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
+
+.. code:: javascript
+
+    var obj = new (function() {
+        // blahblah
+        return {
+            // blahblah
+        };
+    })();
+
+自执行函数用多了，一下子没反应过来。
+后来才意识到， ``new`` 的优先级比函数调用高。
