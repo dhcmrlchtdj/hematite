@@ -639,3 +639,19 @@ http://domparsing.spec.whatwg.org/#the-domparser-interface
 类型也可以是 ``text/html`` ，
 不过 ``text/html`` 的结果会被 ``<html></html>`` 包裹起来，
 可能不符合预期。
+
+
+
+beforeunload
+==============
+https://developer.mozilla.org/en-US/docs/Web/API/window.onbeforeunload
+https://developer.mozilla.org/en-US/docs/Web/Reference/Events/beforeunload
+
+.. code:: javascript
+
+    window.addEventListener("beforeunload", function(e) {
+        console.log(e);
+        return "confirm text";
+    });
+
+和其他事件不太一样，返回的字符串会作为提示，让用户确认是否刷新／关闭页面。
