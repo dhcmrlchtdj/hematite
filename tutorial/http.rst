@@ -20,6 +20,8 @@ http header about secure
 =========================
 http://hooopo.writings.io/articles/d22fb477
 http://www.imququ.com/post/web-security-and-response-header.html
+https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security
+https://developer.mozilla.org/en-US/docs/Web/Security/Securing_your_site
 
 ``X-Content-Type-Options: nosniff``
     阻止浏览器猜测文件的 ``MIME`` 类型。
