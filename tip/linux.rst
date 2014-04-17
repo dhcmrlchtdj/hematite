@@ -265,7 +265,7 @@ archlinux only
 ::
 
     # 有必要的话，可以全部更新
-    $ rm /etc/pacman.d/gnupg
+    $ rm -rf /etc/pacman.d/gnupg
     $ pacman-key --init
 
     # 更新密匙
