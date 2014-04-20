@@ -1,6 +1,117 @@
-========
- python
-========
+.. contents::
+
+Method Resolution Order
+========================
+https://www.python.org/download/releases/2.3/mro
+
+使用 python 这么久，现在才弄清楚 mro 是怎么弄的。
+
+首先，在父类没有交叉的时候，可以简单理解成 **深度优先遍历** 。
+不过 ``object`` 作为最基本的基类，是放在在最后的。
+
+.. code:: python
+
+    class A: pass
+    class B: pass
+    class C: pass
+    class D: pass
+    class E: pass
+    class F: pass
+
+    class X(A, B): pass
+    class Y(C): pass
+    class Z(D): pass
+
+    class M(X, Y): pass
+    class N(Z, E): pass
+
+    class WTF(M, N, F): pass
+    # DFS => WTF MXABYCNZDEF object
+    print(WTF.__mro__)
+
+不过深度优先这种方法在父类出现交叉的时候，就不管用了。
+虽然正常人不会写那么扭曲的代码，还是有必要了解一下。
+毕竟菱形交叉之类的情况还是可能出现的。
+
+.. code:: python
+
+    class A: pass
+    class B: pass
+    class C: pass
+    class D: pass
+    class E: pass
+    class F: pass
+
+    class X(A, B, C): pass
+    class Y(B, D, E): pass
+    class Z(E, F): pass
+
+    class M(X, Y, Z): pass
+
+比较容易的方法是从父类往下看，从子类开始看，比较麻烦。
+
+直接从 ``object`` 继承下来 ``ABCDEF`` 比较简单。
+``mro(A) = A + merge(O) = AO`` ， ``O`` 是 ``object`` 。
+
+然后，其他情况就不太好说明了，虽然原理其实很简单：
+
+::
+
+    mro(X) = X + merge(mro(A), mro(B), mro(C), ABC)
+           = X + merge(AO, BO, CO, ABC)
+           # merge 里面第一个是 A，虽然 A 在 ABC 中也出现了，
+           # 但是 A 在 ABC 中也是第一个，所以我们就把 A 提取出来。
+           = XA + merge(O, BO, CO, BC)
+           # O 是第一个，但是在 BO 中，O 不是第一个，所以我们考虑 BO 的第一个，也就是 B
+           # B 也出现在了 BC 中，是 BC 的第一个，可以提取出来
+           = XAB + merge(O, O, CO, C)
+           同样的道理提取出 C
+           = XABC + merge(O, O, O)
+           = XABCO
+
+可以发现，虽然过程好像挺复杂（好像也不复杂啊），结果就是深度优先。
+用这样的逻辑可以算出 ``mro(Y) = YBDEO`` ``mro(Z) = ZEFO`` 。
+计算 ``mro(M)`` 还是一样的逻辑，再演示一下：
+
+::
+
+    mro(M) = M + merge(mro(X), mro(Y), mro(Z), XYZ)
+           = M + merge(XABCO, YBDEO, ZEFO, XYZ)
+           = MX + merge(ABCO, YBDEO, ZEFO, YZ)
+           = MXA + merge(BCO, YBDEO, ZEFO, YZ)
+           # 这里考察 B 时，发现 Y 在 B 前面，所以转为考察 Y
+           = MXAY + merge(BCO, BDEO, ZEFO, Z)
+           = MXAYB + merge(CO, DEO, ZEFO, Z)
+           = MXAYBC + merge(O, DEO, ZEFO, Z)
+           # 可以看到，在其他父类都提取出来前，object 一直处于待机状态……
+           = MXAYBCD + merge(O, EO, ZEFO, Z)
+           = MXAYBCDZ + merge(O, EO, EFO)
+           = MXAYBCDZE + merge(O, O, FO)
+           = MXAYBCDZEF + merge(O, O, O)
+           = MXAYBCDZEFO
+
+输出 ``M.__mro__`` 可以看到一样的结果。
+简单的菱形交叉就不再示范了。
+
+会计算 mro 之后，就会明白为什么下面的代码会抛出错误：
+
+.. code:: pytho
+
+    class A: pass
+    class B(A): pass
+    class C(A, B): pass
+    # TypeError: Cannot create a consistent method resolution order (MRO) for bases A, B
+
+简单算一下就会得到 ``mro(C) = C + merge(AO, BAO, AB)`` ，
+``BAO`` 里， ``B`` 在 ``A`` 前面， ``AB`` 里面， ``A`` 在 ``B`` 前。
+结果就是无限循环，所以出错了。
+
+这应该就没了，mro 好像也就这么点内容，以前居然没好好学习下。
+
+
+
+
+
 
 yield from
 ===========
