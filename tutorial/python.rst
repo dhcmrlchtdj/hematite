@@ -29,9 +29,9 @@ https://www.python.org/download/releases/2.3/mro
     # DFS => WTF MXABYCNZDEF object
     print(WTF.__mro__)
 
-不过深度优先这种方法在父类出现交叉的时候，就不管用了。
+不过深度优先遍历在父类出现交叉的时候，就不管用了。
 虽然正常人不会写那么扭曲的代码，还是有必要了解一下。
-毕竟菱形交叉之类的情况还是可能出现的。
+毕竟菱形交叉的情况还是可能出现的。
 
 .. code:: python
 
@@ -59,17 +59,21 @@ https://www.python.org/download/releases/2.3/mro
 
     mro(X) = X + merge(mro(A), mro(B), mro(C), ABC)
            = X + merge(AO, BO, CO, ABC)
-           # merge 里面第一个是 A，虽然 A 在 ABC 中也出现了，
-           # 但是 A 在 ABC 中也是第一个，所以我们就把 A 提取出来。
+           # merge 里面第一个出现的是 A。
+           # 并且 A 在后面的 ABC 中也出现了，还是第一个（这很重要）。
+           # 所以我们就把 A 提取出来。
            = XA + merge(O, BO, CO, BC)
-           # O 是第一个，但是在 BO 中，O 不是第一个，所以我们考虑 BO 的第一个，也就是 B
-           # B 也出现在了 BC 中，是 BC 的第一个，可以提取出来
+           # 接下来 merge 里第一个是 O。
+           # 但是在后面的 BO 中，O 不是第一个，
+           # 所以我们考虑 BO 的第一个，也就是 B
+           # B 还出现在了 BC 中，是 BC 的第一个，可以提取。
            = XAB + merge(O, O, CO, C)
-           同样的道理提取出 C
+           # 同样的道理提取出 C
            = XABC + merge(O, O, O)
            = XABCO
 
-可以发现，虽然过程好像挺复杂（好像也不复杂啊），结果就是深度优先。
+可以发现，虽然过程好像挺复杂（好像也不复杂啊），
+但就结果来说，还是可以理解成深度优先遍历。
 用这样的逻辑可以算出 ``mro(Y) = YBDEO`` ``mro(Z) = ZEFO`` 。
 计算 ``mro(M)`` 还是一样的逻辑，再演示一下：
 
