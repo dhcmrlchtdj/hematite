@@ -1,5 +1,91 @@
 .. contents::
 
++ https://wiki.theory.org/BitTorrentSpecification
+
+torrent & magnet
+===================
+
++ http://en.wikipedia.org/wiki/Torrent_file
++ http://en.wikipedia.org/wiki/Magnet_URI_scheme
++ http://bittorrent.org/beps/bep_0009.html
+
+
+torrent
+---------
+
+一个 torrent 就是个二进制文件。里面的信息使用 bencode 编码过的哈希表。
+
+有几种情况
+
++ 带服务器/带多个服务器/不带服务器（使用 DHT)。
++ 单文件/多文件
+
+::
+
+    {
+        "info": {}, # 下面单独讲
+        # announce 和 nodes 选一个
+        "announce": "tracker", # tracker 地址
+        "announce-list: [ ["tracker1", "tracker2"], ["backup"], ... ], # 多 tracker
+        "nodes": [ ["host", "port"], ... ], # DHT
+        # 以下可选
+        "encoding": "utf-8?", # info["pieces"] 使用的编码
+        "created by": "name-version", # 客户端版本
+        "creation date": <timestamp>, # 创建日期
+        "comment": ""
+    }
+
+    "info": {
+        "piece length": <bytes>,
+        "pieces": "SHA1SHA1SHA1...", # 20-byte 的 SHA1 值直接相连
+        "private": 1, # 可选，是否启用 PT，开启（1）后只能通过 tracker 交换用户
+        # 单文件
+        "name": "name",
+        "length": <bytes>,
+        "md5sum": "32 hex string", # 可选，md5 编码
+        # 多文件
+        "name": "path", # 文件路径
+        "md5sum": "", # 没用，兼容
+        "files": [
+            # 注意路径的书写，自身是不带分割符的
+            {"path": ["x", "y", "z", "name"], "length": <bytes>},
+            {"path": ["name"], "length": <bytes>},
+            ...
+        ]
+    }
+
+
+magnet
+--------
+
+
+magnet 相对一个 torrent 缺失的部分称为 metadata。
+其实就是 info 部分啦。
+
+magnet 和 HTTP 的查询字符串使用相同的编码方式。
+组成大概是下面这样
+
+::
+
+    magnet:?
+        xt=urn:btih:<info-hash> &
+        dn=<name> &
+        tr=<tracker-url> &tr=<url>&tr=<url>
+
+    dn = display name = 下载 torrent 前显示的名字。可选
+    tr = tracker = tracker 地址，可以有多个。
+
+    xt = exact topic = urn。
+    把 torrent 的 info 进行 hex 编码的到的。长度为 40 个字符。
+    为了兼容以往的链接，要支持使用 base32 编码的情况，长度为 32 个字符。
+
+
+
+
+
+
+
+
 DHT
 =====
 
@@ -8,7 +94,6 @@ DHT
 + http://en.wikipedia.org/wiki/Mainline_DHT
 + http://en.wikipedia.org/wiki/BitTorrent_tracker
 
-+ https://wiki.theory.org/BitTorrentSpecification
 + http://www.bittorrent.org/beps/bep_0005.html
 
 
@@ -38,7 +123,6 @@ KRPC
 -----
 
 krpc 是一种 RPC 机制，使用 UDP 来传送数据，数据用 bencode 进行编码。
-（是因为决定用 krpc 的时候没有 JSON 吗？）
 
 krpc 传送的数据只有 3 种类型： ``query`` ， ``response`` ， ``error`` 。
 
