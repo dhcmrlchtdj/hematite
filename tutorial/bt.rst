@@ -9,7 +9,6 @@ torrent & magnet
 + http://en.wikipedia.org/wiki/Magnet_URI_scheme
 + http://bittorrent.org/beps/bep_0009.html
 
-
 torrent
 ---------
 
@@ -75,13 +74,10 @@ magnet 和 HTTP 的查询字符串使用相同的编码方式。
     dn = display name = 下载 torrent 前显示的名字。可选
     tr = tracker = tracker 地址，可以有多个。
 
-    xt = exact topic = urn。
-    把 torrent 的 info 进行 hex 编码的到的。长度为 40 个字符。
-    为了兼容以往的链接，要支持使用 base32 编码的情况，长度为 32 个字符。
-
-
-
-
+    xt = exact topic =
+    urn:btih
+    先对 info 进行 bencode，再计算 SHA1，再使用 base16 的到一个 40 个字符的字符串。
+    标准建立之前的链接是使用 base32 编码，长度为 32 个字符。
 
 
 
