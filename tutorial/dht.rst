@@ -1,20 +1,33 @@
 .. contents::
 
 
+http://en.wikipedia.org/wiki/Distributed_hash_table
+http://en.wikipedia.org/wiki/Kademlia
+http://en.wikipedia.org/wiki/Mainline_DHT
+http://en.wikipedia.org/wiki/BitTorrent_tracker
+
 https://wiki.theory.org/BitTorrentSpecification
 http://www.bittorrent.org/beps/bep_0005.html
-
 
 概念
 =====
 
-dht 协议以 kademila 为基础，使用 UDP 实现。
+发现自己之前写的东西连概念都没弄清楚。
+
++ DHT 是一种去中心化的分布式系统，类似于散列表。
++ Kademlia 是一种用于点对点连接的 DHT。
++ Mainline_DHT 是目前 BT 使用的 DHT，基于 Kademlia。
+
+下面提到 DHT 都是在讲 Mainline_DHT。
+
+在 DHT 之前，BT 下载需要一个服务器（tracker），通过服务器获得 peer 的信息。
+有了 DHT 之后，可以直接在其他 peer 那里交换信息，不需要通过服务器。
+想法是挺好，不过 DHT 在启动的时候，还是需要连上一个 tracker 或者 peer，
+才能开始获取其他 peer。
+
 
 peer 是实现了 BT 协议的客户端/服务器，使用 TCP 通信。
 node 是实现了 DHT 协议的客户端/服务器，使用 UDP 通信。
-
-dht 由 node 组成，存储了 peer 的地址。
-
 
 
 
@@ -59,7 +72,7 @@ node 的信息被编码成了 26-byte 的字符串，20 位是 node 的 ID，
 DHT
 ====
 
-dht 协议使用 krpc，有 4 种 query：
+DHT 使用 krpc，有 4 种 query：
 ``ping`` ， ``find_node`` ， ``get_peers`` ， ``announce_peer`` 。
 
 ping
