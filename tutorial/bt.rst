@@ -1,16 +1,19 @@
 .. contents::
 
+DHT
+=====
 
-http://en.wikipedia.org/wiki/Distributed_hash_table
-http://en.wikipedia.org/wiki/Kademlia
-http://en.wikipedia.org/wiki/Mainline_DHT
-http://en.wikipedia.org/wiki/BitTorrent_tracker
++ http://en.wikipedia.org/wiki/Distributed_hash_table
++ http://en.wikipedia.org/wiki/Kademlia
++ http://en.wikipedia.org/wiki/Mainline_DHT
++ http://en.wikipedia.org/wiki/BitTorrent_tracker
 
-https://wiki.theory.org/BitTorrentSpecification
-http://www.bittorrent.org/beps/bep_0005.html
++ https://wiki.theory.org/BitTorrentSpecification
++ http://www.bittorrent.org/beps/bep_0005.html
+
 
 概念
-=====
+-----
 
 发现自己之前写的东西连概念都没弄清楚。
 
@@ -32,7 +35,7 @@ node 是实现了 DHT 协议的客户端/服务器，使用 UDP 通信。
 
 
 KRPC
-======
+-----
 
 krpc 是一种 RPC 机制，使用 UDP 来传送数据，数据用 bencode 进行编码。
 （是因为决定用 krpc 的时候没有 JSON 吗？）
@@ -70,13 +73,13 @@ node 的信息被编码成了 26-byte 的字符串，20 位是 node 的 ID，
 
 
 DHT
-====
+--------
 
 DHT 使用 krpc，有 4 种 query：
 ``ping`` ， ``find_node`` ， ``get_peers`` ， ``announce_peer`` 。
 
 ping
------
+`````````
 
 判断死活的东西，互相传送 node ID。
 
@@ -104,7 +107,7 @@ ping
 
 
 find_node
--------------
+````````````
 
 用来寻找某个 node。
 收到该请求后，返回自己路由表中，与目标 node 距离最近的 8 个 node。
@@ -134,7 +137,7 @@ find_node
 
 
 get_peers
------------
+````````````
 
 查找拥有 torrent 的 peer。
 所以查询的参数包括 torrent 的 infohash。
@@ -189,7 +192,7 @@ get_peers
 
 
 announce_peer
----------------
+````````````````
 
 表示自己在下载某个 torrent。
 
@@ -229,3 +232,25 @@ announce_peer
             "id":"mnopqrstuvwxyz123456"
         }
     }
+
+
+
+routing table
+``````````````````
+
+node 会维护一张路由表，里面存储着其他 node 的信息。
+
+路由表里的节点是有优先级的。
+15 分钟内有交流的节点算是正常节点，15 分钟内没交流的节点视为问题节点。
+所谓交流，可以是对方响应请求，也可以是对方发起请求。
+
+node ID 是 sha1 编码的，sha1 有 160-bit，所以 ID 有 2^160 种可能。
+
+路由表在结构上，划分成了一个个格子（bucket），
+每个格子都可是当作一个长度为 8 的数组。
+在一个格子被装满后，会添加一个新的格子。
+（感觉有点不对劲啊。）
+
+要下载的时候，先取出 torrent 的 info_hash，去路由表中寻找距离最近的 node。
+如果对方知道哪些 node 在下载该 torrent，对方会返回相应节点的信息。
+如果对方不知道，那么返回的是距离接近的几个节点的信息。
