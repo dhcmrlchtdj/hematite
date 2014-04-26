@@ -1,3 +1,37 @@
+.. contents::
+
+
+argparse
+=============
+
+.. code:: python
+
+   ARGS = argparse.ArgumentParser(description="Web crawler")
+   ARGS.add_argument(
+       '--max_redirect', type=int, metavar='N', dest="redirect",
+       default=10, help='Limit redirection chains (for 301, 302 etc.)')
+   args = ARGS.parse_args()
+   print(args) # Namespace(redirect=10)
+
+上面的代码会输出如下信息：
+
+::
+
+    optional arguments:
+        --max_redirect N  Limit redirection chains (for 301, 302 etc.)
+
+``dest`` 是读取参数时的变量名（没有的话使用 ``max_redirect`` ），
+``metavar`` 是输出帮助时显示的参数名（没有的话显示 ``dest`` ），
+``type`` 可以用于类型转换，检查输入之类的事情。
+
+在读取 args 的时候，直接使用 ``args.redirect`` 读取，这个不是 ``dict`` ，
+不过可以用 ``vars(args)`` 转换成一个 ``dict`` 。
+
+
+
+
+
+
 has_ipv6
 =========
 
