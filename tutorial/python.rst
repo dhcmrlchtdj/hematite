@@ -1,5 +1,142 @@
 .. contents::
 
+
+
+yield from
+===========
+
++ https://docs.python.org/3/reference/expressions.html#yieldexpr
++ http://legacy.python.org/dev/peps/pep-0380/
++ https://groups.google.com/forum/#!topic/python-tulip/bmphRrryuFk
+
+要理解这东西，一个办法是先写点演示代码，去 `pythontutor.com`_ 看执行过程，
+然后再好好研究文档，弄清楚怎么回事。
+
+基本语法
+---------
+
+``result = yield from <expr>``
+
+yield-from 后面必须是个可以遍历（iterable）的对象，
+比如一个数组，比如一个生成器。
+
+``yield from range(10)`` 这种简单语句，
+可以等价于 ``for i in range(10): yield i`` 。
+
+这里主要是讲 ``<expr>`` 是个生成器的情况（不包括 ``<genexpr>`` ）。
+
+.. code:: python
+
+    def gen1():
+        yield from range(10)
+        print("gen1 stop")
+
+    def gen2():
+        yield from gen1()
+        print("gen2 stop")
+
+    def gen3():
+        yield from gen2()
+        print("gen3 stop")
+
+    def main():
+        for i in gen3():
+            print(i)
+
+    if __name__ == "__main__":
+        main()
+
+yield-from 相当于一个中间层，
+让调用者（ ``main`` ）和子生成器（ ``gen1()`` ）直接进行交互。
+在子生成器结束的时候，yield-from 才返回，继续执行下面的语句。
+
+
+返回值
+-------
+
+yield-from 和 yield 的返回值有很大区别。
+
+yield 的返回值是 ``.send(value)`` 接收的参数：
+
+.. code:: python
+
+    def gen1():
+        while 1:
+            ret = yield 1
+            print("yield return", ret)
+
+    g = gen1()
+    next(g)
+    g.send("test")
+
+yield-from 的返回值是子生成器的返回的值。
+更准确地说，是 ``StopIteration`` 的第一个参数。
+
+.. code:: python
+
+    def gen1():
+        yield from range(10)
+        return "end"
+        # raise StopIteration("end")
+
+    def gen2():
+        ret = yield from gen1()
+        print("yield from return", ret)
+
+    for i in gen2():
+        print(i)
+
+gen1 使用了 ``return value`` ，
+这在子生成器中等价于 ``raise StopIteration(value)`` 。
+两者在语义上是相同的，不过 return 要更直观些吧。
+
+之前曾经提到过，子生成器结束的时候，yield-from 才返回。
+所谓的结束，就是指这里的 StopIteration 了。
+
+
+异常
+------
+
+.. code:: python
+
+    def gen1():
+        yield from range(5)
+
+    def gen2():
+        yield from gen1()
+        print("gen2 continue")
+        yield from range(5)
+
+    def gen3():
+        yield from gen2()
+        print("gen3 continue")
+        yield from range(5)
+
+
+    g = gen3()
+    for i in g:
+        print(i)
+        if i == 3:
+            g.throw(StopIteration)
+
+之前提到， ``StopIteration`` 之后，yield-from 返回。
+上面的代码里， ``g`` 主动抛出 ``StopIteration`` ，结果就是最里层的 gen1 结束，
+gen2 继续执行。继续抛异常，gen2 结束，gen3 继续执行。
+
+
+把上面的 ``StopIteration`` 那句改成 ``g.throw(GeneratorExit)``
+或者 ``g.close()`` ，那么所有生成器都会停止。
+
+其他
+-----
+
+``inspect.getgeneratorstate`` 可以获取一个生成器的状态。
+
+
+
+
+
+
 Method Resolution Order
 ========================
 https://www.python.org/download/releases/2.3/mro
@@ -112,15 +249,6 @@ https://www.python.org/download/releases/2.3/mro
 
 这应该就没了，mro 好像也就这么点内容，以前居然没好好学习下。
 
-
-
-
-
-
-yield from
-===========
-
-yield-from clause acts as a "transparent channel"
 
 
 
