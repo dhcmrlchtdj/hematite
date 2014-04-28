@@ -134,34 +134,6 @@ exclude shared memory
 
 
 
-查找文件属于哪个包
-===================
-
-archlinux only
-
-::
-
-    $ which google-chrome
-    /usr/bin/google-chrome
-    $ pacman -Qqo /usr/bin/google-chrome
-    google-chrome-dev
-
-    # 使用管道查找
-    $ which google-chrome | pacman -Qqo - | pacman -Qi -
-
-
-
-
-yaourt cache
-=============
-
-::
-
-    $ "EXPORT=2" >> /etc/yaourtrc
-
-
-
-
 
 是否支持 64 位
 ===============
@@ -265,22 +237,6 @@ systemd service
 要使用 ``systemctl --system daemon-reload`` 来重新加载配置。
 
 
-
-
-
-更新密匙
-=========
-archlinux only
-
-::
-
-    # 有必要的话，可以全部更新
-    $ rm -rf /etc/pacman.d/gnupg
-    $ pacman-key --init
-
-    # 更新密匙
-    $ pacman-key --populate archlinux
-    $ pacman-key --refresh-keys
 
 
 
