@@ -152,6 +152,16 @@ archlinux only
 
 
 
+yaourt cache
+=============
+
+::
+
+    $ "EXPORT=2" >> /etc/yaourtrc
+
+
+
+
 
 是否支持 64 位
 ===============
