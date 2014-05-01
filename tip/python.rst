@@ -6,12 +6,12 @@ argparse
 
 .. code:: python
 
-   ARGS = argparse.ArgumentParser(description="Web crawler")
-   ARGS.add_argument(
-       '--max_redirect', type=int, metavar='N', dest="redirect",
-       default=10, help='Limit redirection chains (for 301, 302 etc.)')
-   args = ARGS.parse_args()
-   print(args) # Namespace(redirect=10)
+    ARGS = argparse.ArgumentParser(description="Web crawler")
+    ARGS.add_argument(
+        '--max_redirect', type=int, metavar='N', dest="redirect",
+        default=10, help='Limit redirection chains (for 301, 302 etc.)')
+    args = ARGS.parse_args()
+    print(args) # Namespace(redirect=10)
 
 上面的代码会输出如下信息：
 
