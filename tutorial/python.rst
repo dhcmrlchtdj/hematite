@@ -3,6 +3,52 @@
 
 
 
+__new__
+========
+
++ https://docs.python.org/3/reference/datamodel.html#object.__new__
+
+
+
+.. code:: python
+
+    class example(type):
+        def __new__(cls, clsname, bases, clsdict):
+            return super().__new__(cls, clsname, bases, clsdict)
+
+
+
+
+tail recursion elimination
+============================
+
++ http://neopythonic.blogspot.com/2009/04/tail-recursion-elimination.html
++ http://neopythonic.blogspot.com/2009/04/final-words-on-tail-calls.html
++ http://en.wikipedia.org/wiki/Tail_call
+
+python 没有尾递归消除，蟒爹说了几点原因：
+
+1. 尾递归消除意味着干掉中间无用的栈信息。出错的时候就无法得到完整的调用栈。
+2. 尾递归消除不是优化，而是一种特性。
+   用户依赖该特性会导致代码只能在实现了尾递归消除的解释器运行。
+3. 递归对 scheme 之类的语言来说，是基础功能。
+   但是在 python 世界中，递归没有那么重要的地位。
+4. 尾递归可以轻易改写成循环，至少比实现尾递归消除来得容易。
+
+题外话，前段时间看王垠 blog 才知道，递归是 Dijkstra 提出来的。
+
+除了尾递归，还有个东西叫做尾调用（tail call），
+类似的优化技术叫尾调用优化（tail call optimization）。
+顾名思义，递归是调用自己，调用是调用其他函数，好像也没其他区别了吧。
+
+排除掉尾递归的情况，尾调用会出现栈溢出，完全是逻辑有问题吧？
+
+在需要尾调用又不好改写的时候，可以考虑 ``return func, (args,)`` ，
+变成 cps 的代码。这种做法被称为 trampoline，具体可以查 wiki。
+
+
+
+
 metaclass
 ==========
 
@@ -12,18 +58,6 @@ metaclass
 也就是调用 ``metaclass.__init__()`` 。
 在生成实例的时候，会调用元类的实例 ``metaclass_instance()`` ，
 也就是 ``metaclass_instance.__call__()`` 。
-
-
-
-
-__new__
-========
-
-.. code:: python
-
-    class example(type):
-        def __new__(cls, clsname, bases, clsdict):
-            return super().__new__(cls, clsname, bases, clsdict)
 
 
 
