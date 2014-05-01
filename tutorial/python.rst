@@ -2,6 +2,49 @@
 
 
 
+
+metaclass
+==========
+
+``metaclass`` 是 ``type`` 的子类。
+
+在定义类的时候，会生成一个元类的实例，
+也就是调用 ``metaclass.__init__()`` 。
+在生成实例的时候，会调用元类的实例 ``metaclass_instance()`` ，
+也就是 ``metaclass_instance.__call__()`` 。
+
+
+
+
+__new__
+========
+
+.. code:: python
+
+    class example(type):
+        def __new__(cls, clsname, bases, clsdict):
+            return super().__new__(cls, clsname, bases, clsdict)
+
+
+
+
+execution
+===========
+
+`https://docs.python.org/3/reference/executionmodel.html`_
+
+即使使用 ``from A import B`` 的形式导入，还是会执行整个 ``A`` 。
+
+类中的代码是在定义后执行的，而不是创建实例的时候。
+
+.. code:: python
+
+    class A:
+        print("execute")
+
+
+
+
 yield from
 ===========
 
@@ -135,8 +178,6 @@ gen2 继续执行。继续抛异常，gen2 结束，gen3 继续执行。
 
 
 
-
-
 Method Resolution Order
 ========================
 https://www.python.org/download/releases/2.3/mro
@@ -252,12 +293,9 @@ https://www.python.org/download/releases/2.3/mro
 
 
 
-
-
 instance attribute
 ===================
 
-仔细通读
 http://docs.python.org/3/reference/datamodel.html#customizing-attribute-access
 
 这几个方法都是作用于实例的。
@@ -309,10 +347,10 @@ __setattr__
 
 
 
+
 descriptor
 ===========
 
-仔细通读
 http://docs.python.org/3/reference/datamodel.html#implementing-descriptors
 
 然后看看
@@ -379,27 +417,10 @@ https://github.com/inglesp/Discovering-Descriptors
 
 
 
-
 __call__
 =========
 
 ``__call__`` 是让实例变成可调用。
-
-
-
-
-
-metaclass
-==========
-
-``metaclass`` 是 ``type`` 的子类。
-
-在定义类的时候，会生成一个元类的实例，
-也就是调用 ``metaclass.__init__()`` 。
-在生成实例的时候，会调用元类的实例 ``metaclass_instance()`` ，
-也就是 ``metaclass_instance.__call__()`` 。
-
-
 
 
 
@@ -426,24 +447,8 @@ http://docs.python.org/3/library/stdtypes.html#context-manager-types
         print("exit")
 
 
-
     class cls_example:
         def __enter__(self):
             print("enter")
         def __exit__(self, exc_type, exc_val, exc_tb):
             print("exit")
-
-
-
-
-
-
-
-__new__
-========
-
-.. code:: python
-
-    class example(type):
-        def __new__(cls, clsname, bases, clsdict):
-            return super().__new__(cls, clsname, bases, clsdict)
