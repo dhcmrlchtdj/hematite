@@ -30,8 +30,6 @@ argparse
 
 
 
-
-
 has_ipv6
 =========
 
@@ -78,7 +76,6 @@ unicode normalize
 
 
 
-
 iter in loop
 =============
 
@@ -111,7 +108,6 @@ iter in loop
 
 
 
-
 keyword-only arguments
 =======================
 
@@ -128,8 +124,6 @@ keyword-only arguments
     tt = lambda *a, b, **c: print(a, b, c)
     tt(1, b=2) # (1,) 2 {}
     tt(1, b=2, c=3) # (1,) 2 {'c': 3}
-
-
 
 
 
@@ -163,7 +157,6 @@ raise
 
 
 
-
 create instances without init
 ==============================
 
@@ -176,6 +169,24 @@ create instances without init
     e1 = Example() # call __init__
     e2 = Example.__new__(Example) # not call __init__
 
+
+
+
+dynamic create class
+=========================
+
+.. code:: python
+
+    import types
+    cls_body = {
+        "__init__": lambda self: print(self),
+    }
+    CLS = types.new_class(
+        "class name",
+        (base_class,),
+        {"metaclass": type}, # namespace
+        lambda ns: ns.update(cls_body)
+    )
 
 
 
@@ -206,8 +217,6 @@ wraps
 
 
 
-
-
 获取对象的内存大小
 ===================
 
@@ -215,8 +224,6 @@ wraps
 
     import sys
     print(sys.getsizeof(lambda x: x))
-
-
 
 
 
@@ -232,7 +239,6 @@ timestamp
     import datetime
     datetime.datetime.now().strftime("%s") # string
     str(int(time.time())) # faster way
-
 
 
 
