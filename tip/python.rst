@@ -1,6 +1,47 @@
 .. contents::
 
 
+EAFP & LBYL
+==============
+
++ https://docs.python.org/3/glossary.html#term-eafp
++ https://docs.python.org/3/glossary.html#term-lbyl
++ https://docs.python.org/3/c-api/intro.html#exceptions
++ http://stackoverflow.com/questions/598157/cheap-exception-handling-in-python
+
+Easier to Ask for Forgiveness than Permission
+
+.. code:: python
+
+    try:
+        return mapping[key]
+    except KeyError:
+        pass
+
+Look Before You Leap
+
+.. code:: python
+
+    if key in mapping:
+        return mapping[key]
+    else:
+        pass
+
+python 更推荐 EAFP 的写法。
+
++ python 处理 try-except 结构的开销不大。
++ LBYL 的写法不是原子操作。
+
+感觉好像不是很有说服力。用 dict 做了下测试。
+
++ try-except 出现错误时的开销是没错误时的两倍。
++ EAFP 在没错误时性能比 LBYL 好，不过优势很小。
+
+感觉 EAFP 在性能上没有什么问题，更多的是编码习惯上的事情。
+
+
+
+
 argparse
 =============
 
