@@ -6,11 +6,12 @@ __new__
 
 + https://docs.python.org/3/reference/datamodel.html#object.__new__
 
-.. code:: python
+``__new__`` 是类方法，返回该类的实例。
+在实现 ``__new__`` 的时候，通常用父类的 ``__new__`` 方法创建实例，
+再对实例进行修改，最后返回实例。
+然后解释器会去执行势力的 ``__init__`` 方法。
 
-    class example(type):
-        def __new__(cls):
-            return super().__new__(cls)
+如果 ``__new__`` 返回的不是类的实例， ``__init__`` 就不会被调用。
 
 
 
