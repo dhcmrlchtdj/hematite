@@ -7,9 +7,9 @@ __new__
 + https://docs.python.org/3/reference/datamodel.html#object.__new__
 
 ``__new__`` 是类方法，返回该类的实例。
-在实现 ``__new__`` 的时候，通常用父类的 ``__new__`` 方法创建实例，
+实现 ``__new__`` 的时候，通常用父类的 ``__new__`` 方法创建实例，
 再对实例进行修改，最后返回实例。
-然后解释器会去执行势力的 ``__init__`` 方法。
+然后解释器会去执行实例的 ``__init__`` 方法。
 
 如果 ``__new__`` 返回的不是类的实例， ``__init__`` 就不会被调用。
 
@@ -82,6 +82,43 @@ metaclass
 
 到了最后，其实只有 ``metaclass.__prepare__`` 需要通过学习，
 不能从以往经验中推导出来。
+
+最后给一个不实用的例子：
+
+.. code:: python
+
+    class Meta(type): # metaclass 是 type 的子类
+        @classmethod # 这是类方法
+        def __prepare__(cls, name, bases, **kwds):
+            print("======", "meta.__prepare__", "======")
+            ns = super().__prepare__(name, bases, **kwds)
+            print("class name", name)
+            print("base classes", bases)
+            print("kwds", kwds)
+            print("namespace", ns)
+            return ns # 返回一个 dict
+
+        def __init__(self, name, bases, namespace, **kwds):
+            print("======", "meta.__init__", "======")
+            super().__init__(name, bases, namespace, **kwds)
+            print("class name", name)
+            print("base classes", bases)
+            print("namespace", namespace)
+            print("kwds", kwds)
+            print("create class", self)
+
+        def __call__(self, *args, **kwds):
+            print("======", "meta.__call__", "======")
+            instance = super().__call__(*args, **kwds) # 会去调用类（下面的A）的 __init__ 方法
+            print("args", args)
+            print("kwds", kwds)
+            print("instance", instance)
+            return instance # 要返回生成的实例（下面的a）
+
+    class A(metaclass=Meta):
+        def __init__(self, x):
+            print("------", "__init__", "------")
+    a = A()
 
 
 
