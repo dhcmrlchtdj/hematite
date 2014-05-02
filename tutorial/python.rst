@@ -13,6 +13,21 @@ __new__
 
 如果 ``__new__`` 返回的不是类的实例， ``__init__`` 就不会被调用。
 
+``__new__`` 虽然是类方法，但是不需要 ``@classmethod`` 修饰。
+调用 ``super().__init__`` 的时候，必须把类传进去。
+
+``__new__`` 收到的参数和 ``__init__`` 相同。
+
+.. code:: python
+
+    class Singleton:
+        _instance = None
+        def __new__(cls, *args, **kwds):
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+            return cls._instance
+
+
 
 
 
