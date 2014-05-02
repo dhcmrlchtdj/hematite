@@ -1,20 +1,86 @@
 .. contents::
 
 
-
-
 __new__
 ========
 
 + https://docs.python.org/3/reference/datamodel.html#object.__new__
 
-
-
 .. code:: python
 
     class example(type):
-        def __new__(cls, clsname, bases, clsdict):
-            return super().__new__(cls, clsname, bases, clsdict)
+        def __new__(cls):
+            return super().__new__(cls)
+
+
+
+
+metaclass
+============
+
++ https://docs.python.org/3/reference/datamodel.html#customizing-class-creation
++ http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example/
+
+普通的类由 ``type(class_name, base_classes, namespace)`` 生成，
+可以通过指定 metaclass 修改该过程。
+
+在定义一个类的时候，解释器会：
+
+1. 决定元类（metaclass）
+
+    - 如果没有父类，也没定义元类，那么使用 type。
+    - 如果指定了元类，并且这个元类不是 type 的实例，使用指定的元类。
+    - 如果指定的元类是 type 的实例，或者存在父类，
+      使用元类（most derived metaclass）。
+
+        首先找出所有元类，包括使用 metaclass 定义的元类以及父类的元类。
+        然后找出这些元类的公共子类。
+
+        如果找不到公共子类，会抛出 ``TypeError`` 。
+
+        这里提一点，所有的元类都是 type 的子类。
+
+2. 创建命名空间（namespace）
+
+    如果元类定义了 ``__prepare__`` ，
+    会使用 ``namespace = metaclass.__prepare__(class_name, base_classes, **kwds)``
+    来生成命名空间。
+    否则 ``namespace = dict()`` 。
+
+    ``metaclass.__prepare__`` 是类方法，可以对命名空间进行修改，
+    比如使用 ``OrderedDict`` 代替普通 ``dict`` 。
+
+3. 执行类代码
+
+    可以理解成 ``exec(class_body, globals(), namespace)`` 。
+
+    这步主要是修改命名空间（？）。
+
+4. 生成类对象
+
+    ``metaclass(class_name, base_classes, namespace, **kwds)``
+    生成真正的类对象，然后把类传递给修饰器（decorator），
+    最后类被绑定在了本地命名空间里。
+
+    在这里，可以通过修改 ``metaclass.__init__`` 达到修改类的目的。
+
+元类不仅可以影响创建类的过程，还可以影响创建实例的过程。
+每次创建实例的时候，会调用 ``metaclass.__call__`` 。
+
+很简单的概念被上面的解释弄乱了。
+*class 是 metaclass 的 instance。*
+这样就容易理解了吧。
+
+.. code:: python
+
+    new_class = metaclass(...)
+    # 生成实例会调用 __init__ 是理所当然的嘛
+
+    new_instance = new_class(...)
+    # 实例（new_class）可以调用，肯定在类（metaclass）里定义了 __call__ 啊
+
+到了最后，其实只有 ``metaclass.__prepare__`` 需要通过学习，
+不能从以往经验中推导出来。
 
 
 
@@ -49,21 +115,8 @@ python 没有尾递归消除，蟒爹说了几点原因：
 
 
 
-metaclass
-==========
-
-``metaclass`` 是 ``type`` 的子类。
-
-在定义类的时候，会生成一个元类的实例，
-也就是调用 ``metaclass.__init__()`` 。
-在生成实例的时候，会调用元类的实例 ``metaclass_instance()`` ，
-也就是 ``metaclass_instance.__call__()`` 。
-
-
-
-
-execution
-===========
+execution class body
+======================
 
 `https://docs.python.org/3/reference/executionmodel.html`_
 
@@ -385,16 +438,15 @@ __setattr__
 descriptor
 ===========
 
-http://docs.python.org/3/reference/datamodel.html#implementing-descriptors
++ http://docs.python.org/3/reference/datamodel.html#implementing-descriptors
++ https://github.com/inglesp/Discovering-Descriptors
 
-然后看看
-https://github.com/inglesp/Discovering-Descriptors
+``@classmethod`` 和 ``@staticmethod`` 就是用 descriptor 实现的。
 
 调用 ``a.x`` 的时候，其实是这么一个过程，
 先是 ``a.__dict__['x']`` ，也就是查找实例属性，如果没找到，
 接着查找 ``type(a).__dict__['x']`` ，也就是查找类属性，
 这样一步步往父类查找。（元类会被略过。）
-
 
 ``descriptor`` 也就是对 ``x`` 动些手脚，来完成特别的需求。
 
