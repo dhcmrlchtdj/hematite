@@ -1,11 +1,25 @@
-=======
- mysql
-=======
+.. contents::
 
-.. code::
 
-    > ? show
+重置密码
+=========
 
++ https://wiki.archlinux.org/index.php/MySQL#Reset_the_root_password
++ https://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html#resetting-permissions-generic
+
+::
+
+    $ # 停止服务
+    $ systemctl stop mysqld
+
+    $ # 无需密码 禁用远程连接
+    $ mysqld_safe --skip-grant-tables --skip-networking
+
+    $ # 登录修改密码
+    $ mysql -uroot mysql
+    mysql> UPDATE mysql.user SET Password=PASSWORD('MyNewPass') WHERE User='root';
+    mysql> FLUSH PRIVILEGES;
+    mysql> exit;
 
 
 
