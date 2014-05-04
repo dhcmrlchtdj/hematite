@@ -496,14 +496,14 @@ descriptor
 
 这东西的作用类似于 ``@property`` 修饰器，
 事实上， ``@property`` 、 ``@classmethod`` 、 ``@staticmethod``
-都可以用 descriptor 实现的。
+都可以用 descriptor 实现。
 
 
 descriptor 是什么
 ------------------
 
 实现了 ``__get__`` 或 ``__set__`` 或 ``__delete__`` 的类，
-会被是为 descriptor。
+被称为 descriptor。
 
 只实现了 ``__get__`` 的被叫做 non-data descriptor（比如 staticmethod/classmethod）。
 实现了 ``__set__`` 或 ``__delete__`` 的叫做 data descriptor（比如 property）。
