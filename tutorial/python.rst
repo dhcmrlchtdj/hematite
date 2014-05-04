@@ -84,7 +84,7 @@ metaclass
 每次创建实例的时候，会调用 ``metaclass.__call__`` 。
 
 很简单的概念被上面的解释弄乱了。
-*class 是 metaclass 的 instance。*
+**class 是 metaclass 的 instance。**
 这样就容易理解了吧。
 
 .. code:: python
@@ -192,7 +192,7 @@ yield from
 + http://legacy.python.org/dev/peps/pep-0380/
 + https://groups.google.com/forum/#!topic/python-tulip/bmphRrryuFk
 
-要理解这东西，一个办法是先写点演示代码，去 `pythontutor.com`_ 看执行过程，
+要理解这东西，一个办法是先写点演示代码，去 pythontutor.com 看执行过程，
 然后再好好研究文档，弄清楚怎么回事。
 
 基本语法
@@ -491,60 +491,89 @@ __setattr__
 descriptor
 ===========
 
-+ http://docs.python.org/3/reference/datamodel.html#implementing-descriptors
-+ https://github.com/inglesp/Discovering-Descriptors
++ https://docs.python.org/3/reference/datamodel.html#implementing-descriptors
++ https://docs.python.org/3/howto/descriptor.html
 
-``@classmethod`` 和 ``@staticmethod`` 就是用 descriptor 实现的。
-
-调用 ``a.x`` 的时候，其实是这么一个过程，
-先是 ``a.__dict__['x']`` ，也就是查找实例属性，如果没找到，
-接着查找 ``type(a).__dict__['x']`` ，也就是查找类属性，
-这样一步步往父类查找。（元类会被略过。）
-
-``descriptor`` 也就是对 ``x`` 动些手脚，来完成特别的需求。
-
-只要 ``x`` 实现了相应的接口，
-也就是 ``__get__`` ， ``__set__`` 和 ``__delete__`` ，
-这些函数就会在相应的时候被调用。
-
-+ 通过 ``x`` 自身来调用， ``x.__get__(a)`` 。
-+ 通过实例 ``a`` 来调用，
-  ``a.x`` 实际上执行了 ``type(a).__dict__['x'].__get__(a, type(a))`` 。
-  ``type(a).__dict__['x']`` 得到的是 ``descriptor`` 的实例。
-+ 通过类 ``A`` 来调用，
-  ``A.x`` 实际执行 ``A.__dict__['x'].__get__(None, A)`` 。
-+ 通过 super，有点复杂……
+这东西的作用类似于 ``@property`` 修饰器，
+事实上， ``@property`` 、 ``@classmethod`` 、 ``@staticmethod``
+都可以用 descriptor 实现的。
 
 
-也就是说，实例 ``a`` 的属性 ``x`` 是个实现了 ``__get__`` 方法的实例，
-那么获取 ``a.x`` 时，就会调用 ``x.__get__`` 来获取相应的值。
-我们把 ``x`` 叫做 ``descriptor`` 。
+descriptor 是什么
+------------------
 
--------------------------------------------------------------------------------
+实现了 ``__get__`` 或 ``__set__`` 或 ``__delete__`` 的类，
+会被是为 descriptor。
 
-其实感觉就像是 ``@property`` 一样。
+只实现了 ``__get__`` 的被叫做 non-data descriptor（比如 staticmethod/classmethod）。
+实现了 ``__set__`` 或 ``__delete__`` 的叫做 data descriptor（比如 property）。
 
-+ https://github.com/inglesp/Discovering-Descriptors/blob/master/descriptors.py#L56
-+ https://github.com/defnull/bottle/blob/master/bottle.py#L173
+**注意** ，解释器只处理类属性（class.__dict__）中的 descriptor 实例。
 
-用来做修饰器，达到惰性求值，缓存结果的效果。
+
+descriptor 的调用过程
+-----------------------
+
+大体上，可以分为实例调用和类调用两种情况。
+
+``instance.attribute`` 会被转换成
+``type(instance).__dict__["attribute"].__get__(instance, type(instance))`` 。
+注意是在 ``type(instance)`` 中去寻找 ``attribute`` 的。
+
+这里还要注意实例属性中定义了同名变量的情况。
+处理的优先级是这样的
+``data descriptor > instance variable > non-data descriptor`` 。
+再直白点就是实例属性能覆盖 non-data descriptor，不能覆盖 data descriptor。
 
 .. code:: python
 
-    class cached_property:
+    class DataDescriptor:
+        def __get__(self, instance, klass): return "DATA"
+        def __set__(self, instance, value): pass
+        def __delete__(self, instance): pass
+    class NonDataDescriptor:
+        def __get__(self, instance, klass): return "NON_DATA"
+
+    class example:
+        data = DataDescriptor()
+        non_data = NonDataDescriptor()
+        def __init__(self):
+            self.data = "data"
+            self.non_data = "non_data"
+    ex = example()
+    print(ex.data, ex.non_data) # "DATA", "non_data"
+
+
+``klass.attribute`` 会被转换成
+``klass.__dict__["attribute"].__get__(None, klass)`` 。
+这里就没什么要特别注意的地方了。
+
+最后，要注意一下 ``__getattribute__`` ，
+上面讲的查找转换都是由 ``__getattribute__`` 完成的，
+如果代码中覆盖了原生的 ``__getattribute__`` ，
+就不会自动调用 descriptor 方法了。
+
+
+实例
+------
+
+howto 里面举了不少例子，下面再提供一个：用来缓存计算结果的修饰器。
+
+.. code:: python
+
+    class CacheProperty:
         def __init__(self, func):
             self.func = func
-
-        def __get__(self, instance, owner):
-            value = self.func(instance)
-            setattr(instance, self.func.__name__, value)
-            return value
+        def __get__(self, inst, klass):
+            val = self.func(inst)
+            setattr(inst, self.func.__name__, val)
+            return val
 
     class Example:
-        @cached_property
+        @CacheProperty
         def slow_at_first_time(self):
             import time
-            time.sleep(10)
+            time.sleep(5)
             return 42
 
     e = Example()
