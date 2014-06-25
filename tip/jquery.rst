@@ -25,3 +25,12 @@
   还会调用 ``event.stopPropagation()`` 。
 
   这点和标准的事件处理函数不一样，要注意下。
+
+
+
+
+ajax FormData
+===============
+
+在使用 jquery 发送 FormData 的时候，
+要加上 ``processData: false`` 和 ``contentType: false`` 。
