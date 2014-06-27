@@ -1,6 +1,18 @@
 .. contents::
 
 
+homebrew
+==========
+
+::
+
+    $ # install `Xcode`
+    $ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+    $ brew tap caskroom/cask
+    $ brew install brew-cask
+    $ brew tap caskroom/versions
+
+
 
 nginx
 ========
