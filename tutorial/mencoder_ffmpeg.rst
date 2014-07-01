@@ -1,11 +1,11 @@
-=====================
- mencoder and ffmpeg
-=====================
+.. contents::
+
+
 
 information
 ============
 
-.. code::
+::
 
     $ ffmpeg -i input.mpg
     $ mplayer -ao dummy -vo dummy -identify input.mpg
@@ -18,7 +18,7 @@ information
 codecs and formats
 ===================
 
-.. code::
+::
 
     $ mencoder -ovc help
     $ mencoder -oav help
@@ -33,7 +33,7 @@ codecs and formats
 rescale
 ========
 
-.. code::
+::
 
     $ mencoder input.mpg -oav copy -ovc copy -vf scale=1280:720 -o output.avi
 
@@ -45,7 +45,7 @@ rescale
 extract
 ========
 
-.. code::
+::
 
     # audio
     $ mencoder input.mpg -of rawaudio -ovc copy -aid 0 -oac faac \
@@ -68,7 +68,7 @@ extract
 add external audio
 ===================
 
-.. code::
+::
 
     $ mencoder -oac copy -audiofile filename
 
@@ -81,7 +81,7 @@ add external audio
 threads
 ========
 
-.. code::
+::
 
     $ mencoder -ovc lavc -lavcopts threads=N
 
@@ -94,7 +94,7 @@ threads
 encoding options
 =================
 
-.. code::
+::
 
     # very hight quality
     $ mencoder -ovc lavc -lavcopts \
@@ -115,7 +115,7 @@ encoding options
 merge videos
 =============
 
-.. code::
+::
 
     $ mencoder -oac copy -ovc copy part1.avi part2.avi -o full.avi
 
@@ -128,7 +128,7 @@ merge videos
 录制视频
 =========
 
-.. code::
+::
 
     $ ffmpeg -f x11grab -s wxga -r 30 -i :0.0 output.mp4
     # -f 输入来源
@@ -137,3 +137,19 @@ merge videos
     # -i 从 0.0 处开始录制，可以自己制定偏移量
     # `man 1 ffmpeg-utils` 可以找到各种比例的缩写和帧率的缩写
     # `man 1 ffmpeg` 找 x11 可以看到示例
+
+
+
+mov to gif
+=============
+
+https://gist.github.com/dergachev/4627207
+
+::
+
+    $ ffmpeg -i in.mov -s 600x400 -pix_fmt rgb24 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > out.gif
+
++ ``-r 10`` tells ffmpeg to reduce the frame rate from 25 fps to 10
++ ``-s 600x400`` tells ffmpeg the max-width and max-height
++ ``--delay=3`` tells gifsicle to delay 30ms between each gif
++ ``--optimize=3`` requests that gifsicle use the slowest/most file-size optimization
