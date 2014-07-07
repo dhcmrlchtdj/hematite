@@ -215,7 +215,7 @@ http://jinlong.github.io/blog/2013/08/13/centering-all-the-directions/
 + ``text-align:center`` 水平居中，用于文字或行内（inline）元素。
 
 + ``vertical-align:middle`` 垂直居中，用于文字或行内元素。
-  可配合 ``display:table`` 、 ``display::table-cell`` 使用。
+  可配合 ``display:table`` 、 ``display:table-cell`` 使用。
 
 + ``line-height:(N)px;height:(N)px`` 用于垂直居中文字。
 
