@@ -34,3 +34,15 @@ pyenv 配置。
     export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
     eval "$(pyenv init -)"
     pyenv virtualenvwrapper_lazy
+
+
+
+idea
+=======
+
+http://blog.jetbrains.com/idea/2013/09/jdk7_compatibility/
+
+::
+
+    $ vim ~/Applications/IntelliJ\ IDEA\ 13\ CE.app/Contents/Info.plist
+    $ # search `JVMVersion`
