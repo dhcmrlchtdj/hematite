@@ -399,3 +399,23 @@ http://wiki.nginx.org/Phases
 +--------------------+--+-------------------------+
 | post action        |  | post_action             |
 +--------------------+--+-------------------------+
+
+
+多个后端
+==========
+
+::
+
+    server {
+        listen 80;
+        proxy_intercept_errors on;
+
+        location / {
+            proxy_pass http://localhost:9001;
+            error_page 404 = @fallback;
+        }
+        location @fallback {
+            proxy_pass http://localhost:9002;
+        }
+
+出现 404 的页面会被转向到 fallback。
