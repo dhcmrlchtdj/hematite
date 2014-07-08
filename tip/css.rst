@@ -412,3 +412,13 @@ http://coding.smashingmagazine.com/2013/04/12/css-generated-content-counters/
 其实关键只有一点，使用 ``transition`` 。
 
 自己没想到还能这么玩。
+
+
+
+
+
+
+表格大小
+============
+
+设置了表格宽度，还要加上 ``table {table-layout: fixed;}`` 才能限制住内容。
