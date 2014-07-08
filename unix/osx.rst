@@ -46,3 +46,16 @@ http://blog.jetbrains.com/idea/2013/09/jdk7_compatibility/
 
     $ vim ~/Applications/IntelliJ\ IDEA\ 13\ CE.app/Contents/Info.plist
     $ # search `JVMVersion`
+
+
+
+
+
+jvm
+=====
+
+查看安装的多个 JVM 的位置。
+
+::
+
+    $ /usr/libexec/java_home -V
