@@ -209,3 +209,20 @@ http://www.w3.org/TR/CSS2/visudet.html#containing-block-details
   （寻找时是一层层向根元素推进的，如果都没设置，那么容器就是起始容器。）
 
   （文字方向（direction）会造成一点影响，尤其是祖先是行内元素且有多行的时候。）
+
+
+
+
+import
+========
++ http://www.stevesouders.com/blog/2009/04/09/dont-use-import/
++ https://developer.mozilla.org/en-US/docs/Web/CSS/@import
+
+一直认为不该在 css 中使用 import。
+直到最近开发的时候，看到别人用 import 来组织 css 文件。
+项目中只引用该文件，而该文件中只有 import 语句，
+具体代码分布在各个被导入的模块中。
+
+这能让开发环境中代码更加清晰。
+
+在网上搜了一下，果然有这种用法。以前居然没注音到。
