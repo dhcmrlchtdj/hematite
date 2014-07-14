@@ -1170,3 +1170,63 @@ RegExp
 调用正则相关函数后，可以用 `RegExp.$_` 来获取刚才的结果。
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#grouping-back-references
+
+
+
+
+string to number
+===================
+
++ http://speakingjs.com/es5/ch11.html
+
+字符串到数字
+
++ Number(blah)
+
+    - 调用 ``ToNumber``
+      + 必须是合法数字，可以是 0x 开头的十六进制，前后空格会被忽略。
+      + "-Infinity" 也是合法的，注意大小写。
+
+    - 无参数返回 0
+
++ ``+blah``
+
+    - 调用 ``ToNumber``
+
++ ``parseFloat(blah)``
+
+    - 参数会先被转换成字符串
+    - 最左最长合法数字表达
+
+数字到整数
+
++ Number.isInteger()
+
+    - 检查是否是数字
+
++ Math.round, Math.ceil, Math,floor, Math.trunc
+
+    - 各种取整
+
++ ``blah | 0`` ``blah << 0`` ``blah >> 0``
+
+    - signed 32-bit
+
++ ``blah >>> 0``
+
+    - unsigned 32-bit
+
+数字表示
+
++ js 有个 safe integer（Number.MAX_SAFE_INTEGER）的概念，
+  范围是 ``-(2^53) < i < 2^53`` 。
+
++ Array 只支持 [0, 2^32 - 1)
+
++ ``>>>`` 支持 [0, 2^32) ， ``<<`` ``>>`` 支持 [2^31, 2^31)
+
+也就是说，整数保证在 32-bit 能表达的范围内，才比较安全。
+
+
+
+
