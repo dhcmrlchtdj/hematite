@@ -69,3 +69,17 @@ iterm2 && macvim
 刷新 chrome 或者 redo 的时候，经常不小心在 vim  里按了 cmd-r，然后就悲剧了。
 
 可以在个人设置里面添加快捷键，把 cmd-r 忽略掉。
+
+
+
+chrome
+=======
+
++ http://peter.sh/experiments/chromium-command-line-switches/
+
+开启某些选项
+
+::
+
+    $ open -a Google\ Chrome --args --allow-file-access-from-files
+    $ open -a Google\ Chrome --args --disable-web-security
