@@ -843,3 +843,14 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Oper
 
 自执行函数用多了，一下子没反应过来。
 后来才意识到， ``new`` 的优先级比函数调用高。
+
+
+
+form reset
+==============
+
++ https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement.reset
+
+MDN 说 disabled 的元素不会被重置，实际编码发现，hidden 的元素也不会被重置。
+
+可以考虑不用 hidden，依靠 css 来隐藏元素。
