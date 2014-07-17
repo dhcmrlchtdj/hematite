@@ -217,3 +217,33 @@ multiple remote
     $ #git pull -p
 
 ``--prune`` 的缩写。
+
+
+
+
+单独的工作配置
+================
+
+::
+
+    $ cat ~/.zshrc
+    ...
+    zstyle ':chpwd:profiles:/path/to/directory(|/|/*)' profile myprofile
+    chpwd_profile_default() {
+      [[ ${profile} == ${CHPWD_PROFILE} ]] && return 1
+      unset GIT_AUTHOR_NAME
+      unset GIT_AUTHOR_EMAIL
+      unset GIT_COMMITTER_NAME
+      unset GIT_COMMITTER_EMAIL
+    }
+    chpwd_profile_myprofile() {
+      [[ ${profile} == ${CHPWD_PROFILE} ]] && return 1
+      export GIT_AUTHOR_NAME="NAME"
+      export GIT_AUTHOR_EMAIL="EMAIL"
+      export GIT_COMMITTER_NAME="NAME"
+      export GIT_COMMITTER_EMAIL="EMAIL"
+    }
+    chpwd_profiles
+    ...
+
+需要 grml 支持，mac 下有大小写的坑。
