@@ -422,3 +422,59 @@ http://coding.smashingmagazine.com/2013/04/12/css-generated-content-counters/
 ============
 
 设置了表格宽度，还要加上 ``table {table-layout: fixed;}`` 才能限制住内容。
+
+
+
+
+
+font-family
+=============
+
+下面是与标准有关文档
+
++ https://developer.mozilla.org/en-US/docs/Web/CSS/font-family
++ http://docs.webplatform.org/wiki/css/properties/font-family
++ http://www.w3.org/TR/CSS21/fonts.html#font-family-prop
++ http://www.w3.org/TR/css3-fonts/#font-family-prop
+
+下面是对文档的小结
+
++ font-family 属性会被子节点继承
++ 使用 , 分隔多个 font-family
++ 渲染每个字符的时候，都会按 font-family 指定的顺序查找一遍。（注：ie6 不会）
++ font-family 分为 family-name 和 generic-family 两种
++ 如果 family-name 包含 css identifier 以外的符号，应该用引号包裹。
+  不好理解的话都加上就对了。可以看下面那篇实践相关文档。
++ family-name 和保留字同名的时候，应该用引号包裹。
+  保留字包括 generic-family 和 inherit initial default
++ generic-family 有 serif sans-serif monospace cursive fantasy
++ generic-family 属于关键字，不能用引号包裹
++ generic-family 应该出现在最后
++ 确实没有的字符使用 U+FFFD 表示，�
++ 匹配 family-name 的时候是不区分大小写的
+
+下面是与实践有关的文档
+
++ http://mathiasbynens.be/notes/unquoted-font-family
++ http://mothereff.in/font-family
++ http://lepture.com/zh/2014/chinese-fonts-and-yue-css
++ https://github.com/hr6r/font-family
++ https://github.com/zenozeng/fonts.css
++ https://github.com/AlloyTeam/Mars/blob/master/solutions/font-family.md
+
+下面是简单总结
+
++ mac 无衬线有 Helvetica Neue, Hiragino Sans GB, Heiti SC
++ mac 衬线有 Georgia, Songti SC
++ win 无衬线有 Arial, Tahoma, Microsoft YaHei
++ win 衬线有 SimSun
++ ios 有 Heiti SC
++ android 有 Roboto, Droid Sans Fallback, Droid Sans
++ linux 用户自己会搞定
++ 最直接的方法还是 generic-family
++ 基本策略是先英文后中文，让大部分情况下退化到系统默认设置的字体
++ 编码和语言都对浏览器选择字体有影响
++ 我猜编码大概与 Content-Type 及 <meta charset> 有关，
+  语言与 Content-Language 及浏览器设置有关，待详细测试
++ 设置好 utf-8 和 zh-CN
++ ``font-family: Helvetica Neue, Arial, Microsoft YaHei, SimSun, sans-serif``
