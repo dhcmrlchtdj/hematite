@@ -1,0 +1,130 @@
+.. contents::
+
+
+1
+==========
++ conditional requests: header 中包含了一些条件，在执行方法前，会先对这些条件进行判断
++ 常见的是用于缓存
++ 还可以在 PUT DELETE 的时候，避免重复操作之类的情况。
+
+
+2
+=========
++ http 1.1 规定了两种验证方式，修改日期和内容标签
++ 验证有强弱之分
++ 内容发生变化时，强验证必须变化，弱验证可以不变
++ 不同内容的强验证都是不同的，但弱验证可能相同
++ 对内容进行 hash 是一种常用的强验证方法
+
+2.2
+----------
++ Last-Modified = HTTP-date
++ 服务器最后一次修改内容的时间
++ Last-Modified 通常被视为弱验证
+
+2.3
+----------
++ Etag = [ weak ] opaque-tag
++ weak = "W/" 这个必须大写
++ opaque-tag = %x21/%x23-7e/obs-text 就是 " 以外的可见字符
++ 'Etag: "xyz"' 'Etag: W/"xyz"'
++ 默认强验证，可以加个前缀表示弱验证
+
++ 强比较：两个都是强验证，opaque-tag 完全相同
++ 弱比较：opaque-tag 完全相同
+
+2.4
+----------
++ 服务器应该尽可能把 Last-Modified 和 Etag 都加上
++ 客户端同样要尽可能把时间和标签都加上
+
+
+3
+==========
+
+3.1
+----------
++ If-Match = "*" / 1#entity-tag
++ If-Match = "xyz", "abc"
++ 常用于 POST PUT DELETE，避免出现出现多用户同时修改文件的情况
++ 服务器必须使用强比较
++ 服务器必须在执行方法前检查该属性
++ 如果属性值为 "*"，仅在资源不存在时，视为不符合条件
++ 如果属性值为 tag 列表，当没有一个与资源的 tag 相同时，视为不符合条件
++ 不符合条件的情况下，不允许执行方法
++ 不符合条件的情况下，可以返回 412，如果服务器确定资源的现状已经满足该请求了，也可以返回 2xx
+
+3.2
+----------
++ If-None-Match = "*" / 1#entity-tag
++ 主要用于 GET
++ 服务器必须使用弱比较
++ 服务器必须在执行方法前检查该属性
++ 如果属性值为 "*"，当在资源存在时，视为不符合条件
++ 如果属性值为 tag 列表，当资源的 tag 存在与列表中，视为不符合条件
++ 不符合条件的情况下，不允许执行方法
++ 不符合条件的情况下，对 GET HEAD 返回 304，对其他方法返回 412
+
+3.3
+----------
++ If-Modified-Since = HTTP-data
++ 只用于 GET 和 HEAD
++ 如果有 If-None-Match，必须忽略 If-Modified-Since
++ 服务器应该在执行方法前检查该属性
++ 如果资源的修改日期小于等于该属性值，应该返回 304
+
+3.4
+----------
++ If-Unmodified-Since = HTTP-date
++ 常用于 POST PUT DELETE，避免出现出现多用户同时修改文件的情况
++ 如果有 If-Match，必须忽略 If-Unmodified-Since
++ 服务器必须在执行方法前检查该属性
++ 如果资源的修改日期大于该属性值，服务器不允许执行该方法
++ 不执行的情况下可以返回 412，如果服务器确定资源的现状已经满足该请求了，也可以返回 2xx
+
+3.5
+----------
++ If-Range 的作用与 If-Match 和 If-Unmodified-Since 相近。
+
+小结
+----------
++ If-None-Match / If-Modified-Since 用于更新客户端缓存
++ If-Match / If-Unmodified-Since 用于更新服务器资源
+
+
+
+5
+==========
++ CONNECT OPTIONS TRACE 是没有 conditional request 概念的，
+  如果出现相关的 header field，服务器必须忽略掉
+
+6
+==========
+1. 有 If-Match
+
+   + 满足，到 3
+   + 不满足，返回 412
+
+2. 有 If-Unmodified-Since
+
+   + 满足，到 3
+   + 不满足，返回 412
+
+3. 有 If-None-Match
+
+   + 满足，到 5
+   + 不满足
+
+     - 是 GET 或 HEAD，返回 304
+     - 其他方法，返回 412
+
+4. 有 If-Modified-Since，并且是 GET 或 HEAD
+
+   + 满足，到 5
+   + 不满足，返回 304
+
+5. 方法为 GET，并且有 Range 和 If-Range
+
+   + 满足，返回 206
+
+6. 按照方法的语义，正常执行

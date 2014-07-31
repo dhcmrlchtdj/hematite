@@ -79,15 +79,18 @@
 3.3.3
 ``````````
 + 检查 message-body 的长度依照如下算法：
-1. 响应 HEAD 请求，或响应状态为 1xx，204，304。不带 message-body
-2. 响应 CONNECT 请求，且响应状态为 2xx。不带 message-body
-3. 如果同时出现 Transfer-Encoding 和 Content-Length，Transfer-Encoding 的优先级高
-3.1 带有 Transfer-Encoding，使用 chunked 作为最后编码。长度需要解析完 chunked 才知道
-3.2 带有 Transfer-Encoding，不用 chunked 作为最后编码。直到关闭连接为止，收到的全部信息都视为 message-body
-4. 没有 Transfer-Encoding，有多个 Content-Length 或 Content-Length 不合法。关闭本次连接
-5. 没有 Transfer-Encoding，Content-Lengh 合法。长度为 Content-Length 的值
-6. 不满足上述情况的 request。视为不带 message-body
-7. 不满足上述情况的 response。直到关闭连接为止，收到的全部信息都视为 message-body
+
+  1. 响应 HEAD 请求，或响应状态为 1xx，204，304。不带 message-body
+  2. 响应 CONNECT 请求，且响应状态为 2xx。不带 message-body
+  3. 如果同时出现 Transfer-Encoding 和 Content-Length，Transfer-Encoding 的优先级高
+
+     1. 带有 Transfer-Encoding，使用 chunked 作为最后编码。长度需要解析完 chunked 才知道
+     2. 带有 Transfer-Encoding，不用 chunked 作为最后编码。直到关闭连接为止，收到的全部信息都视为 message-body
+
+  4. 没有 Transfer-Encoding，有多个 Content-Length 或 Content-Length 不合法。关闭本次连接
+  5. 没有 Transfer-Encoding，Content-Lengh 合法。长度为 Content-Length 的值
+  6. 不满足上述情况的 request。视为不带 message-body
+  7. 不满足上述情况的 response。直到关闭连接为止，收到的全部信息都视为 message-body
 
 3.4
 ----------
