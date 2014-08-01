@@ -90,7 +90,8 @@
 
 + Accept-Charset / Accept-Language，和 Accept 类似，不满足可以不理会
 
-+ Accept-Encoding 编码方式
++ Accept-Encoding 内容的编码方式
++ Accept-Encoding 限制的是 Content-Encoding
 + identity（不要编码）, compress, gzip, * （任意编码）。 Accept-Encoding: identity;q=0, \*;q=0
 + 没有等同于任意编码
 + 服务器无法满足 Accept-Encoding 的时候，应该返回未编码的结果

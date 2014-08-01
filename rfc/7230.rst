@@ -71,6 +71,8 @@
 + recipient 必须能够处理 chunked
 + sender 只能将信息 chunked 一次
 + 使用多种方式进行编码时（比如同时进行 gzip 和 chunked），chunked 必须是最后一种。
++ Transfer-Encoding 是 HTTP/1.1 中定义的
++ Transfer-Encoding 也可以出现在 request 中
 
 3.3.2
 ``````````
