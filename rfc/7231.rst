@@ -57,19 +57,20 @@
 + GET 没有定义 payload 的语义
 + GET 的缓存可以用于 GET 和 HEAD
 
-+ HEAD 是只要 header field 的 GET 
++ HEAD 是只要 header field 的 GET
 + 但两个方法得到的 header field 不是严格相等的
 + HEAD 经常被用于测试链接是否可用
 + HEAD 请求的结果会影响 GET 的缓存
 
 + POST 请求只有在明确指定了缓存方式的情况下才能进行缓存
-+ POST 路径 A，返回 200，并且 Content-Location 的值为 A，那么结果会被缓存，之后 GET  路径 A 会使用该缓存
++ POST 路径 A，返回 200，并且 Content-Location 的值为 A，
+  那么结果会被缓存，之后 GET  路径 A 会使用该缓存
 
 + PUT 是使用 payload 创建或替换资源，增
 + POST 是根据资源的语义去处理 payload，改
 + PUT 创建资源，必须返回 201
 + PUT 修改资源，必须返回 200 或 204
-+ PUT 返回的 header field 中不能有与验证有关的 header，比如 Etag, Last-Modifued
++ PUT 返回的 header field 中不能有与验证有关的 header，比如 Etag, Last-Modified
 
 + DELETE 是消除资源与路径的联系
 + DELETE 的 payload 没有语义
@@ -92,7 +93,8 @@
 
 + Accept-Encoding 内容的编码方式
 + Accept-Encoding 限制的是 Content-Encoding
-+ identity（不要编码）, compress, gzip, * （任意编码）。 Accept-Encoding: identity;q=0, \*;q=0
++ identity（不要编码）, compress, gzip, * （任意编码）。
+  Accept-Encoding: identity;q=0, \*;q=0
 + 没有等同于任意编码
 + 服务器无法满足 Accept-Encoding 的时候，应该返回未编码的结果
 
@@ -113,7 +115,8 @@
 7
 ==========
 + HTTP-date = IMF-fixdate / obs-date
-+ Internet Message Format 见 RFC5322，废弃的有两种， RFC850 和 ANSI C 的 asctime()
++ Internet Message Format 见 RFC5322，废弃的有两种，
+  RFC850 和 ANSI C 的 asctime()
 + 使用的都是 UTC，并且区分大小写
 + Date: Sun, 06 Nov 1994 08:49:37 GMT
 + Date 表示响应被创建的时间
@@ -122,7 +125,8 @@
 
 + Location: URI-reference
 + Location 可以是相对路径
-+ 3xx 时，user agent 应该在必要时给 Location 加上 fragment。必要是指当前路径有，但 Location 没有 fragment 的情况
++ 3xx 时，user agent 应该在必要时给 Location 加上 fragment。
+  必要是指当前路径有，但 Location 没有 fragment 的情况
 
 
 + Vary = "*" / field-name，不分大小写
