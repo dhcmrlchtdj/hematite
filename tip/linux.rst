@@ -54,7 +54,11 @@ rsync
 
 ::
 
-    $ rsync -ahvzP -e "ssh -p 22" user@hostname:/remote/path /local/path
+    $ rsync -avi -e "ssh -p 22" user@hostname:/remote/path /local/path
+    $ rsync /path/to/src /path/to/dest
+
++ 发现开启 ``-z`` 后，速度反而更慢了
++ 也就大文件时， ``-zP`` 可能派上用处
 
 
 
