@@ -29,3 +29,25 @@ window phone 上可以靠 css 搞定。
 
 safari 的双击还支持翻页功能，所以禁用缩放没有效果。
 一种方案是是用 touch 事件代替 click 事件。
+
+
+
+
+
+
+图片格式
+==========
+信息来源
++ http://www.bookofspeed.com/chapter5.html
++ https://hacks.mozilla.org/2014/08/using-mozjpeg-to-create-efficient-jpegs/
++ https://imageoptim.com/
+
+简单总结
++ 使用 png8 代替静态 gif， ``$ optipng *.gif``
++ 对 gif 动画进行优化， ``$ gifsicle -O2 before.gif > after.gif``
++ png 和 gif 用于页面布局，jpeg 用于展示照片等色彩丰富的图片
++ 去除 jpeg 中的无用信息， ``$ jpegtran -copy none -optimize before.jpg > after.jpg``
++ 变换为 progressive 图片， ``$ jpegtran -progressive before.jpg > after.jpg``
++ favico 最好小于 1k，可以限制只使用 16 色来进一步压缩图标
+  ``$ convert -colors 16 someimage.png favicon.ico``
++ png 压缩工具太多，分不清楚
