@@ -7,7 +7,7 @@ source
 
 试了很久，终于找到可以用的源了。
 
-.. code::
+::
 
     # /etc/apt/source.list
     deb http://ftp.cn.debian.org/debian unstable main contrib non-free
@@ -19,7 +19,7 @@ source
 gpg key
 ========
 
-.. code::
+::
 
     $ apt-get install debian-keyring
     $ gpg --keyserver subkeys.pgp.net --recv-keys 1F41B907
@@ -34,7 +34,7 @@ network
 
 网络比较简单。
 
-.. code::
+::
 
     # /etc/network/interfaces
     auto lo
@@ -55,7 +55,7 @@ network
 services
 =========
 
-:code:`/etc/init.d/ssh restart`.
+``/etc/init.d/ssh restart``
 
 
 
@@ -63,10 +63,10 @@ services
 pcspkr
 =======
 
-使用 :code:`lsmod | grep sp` 来查找装载了哪些模块。
-在 :code:`/etc/modprobe.d/` 下创建文件，就会在开机时载入相关配置。
+使用 ``lsmod | grep sp`` 来查找装载了哪些模块。
+在 ``/etc/modprobe.d/`` 下创建文件，就会在开机时载入相关配置。
 
-.. code::
+::
 
     # /etc/modprobe.d/blacklist.conf
     blacklist pcspkr
@@ -78,7 +78,7 @@ pcspkr
 ssh
 ====
 
-.. code::
+::
 
     $ ssh-copy-id -i pub_key -p port user@hostname
     # pub_key use `~/.ssh/id*.pub` by defualt
@@ -90,24 +90,8 @@ ssh
 grub
 =====
 
-修改 :code:`/etc/default/grub` 里的设置，然后运行 :code:`% update-grub` 。
-或者 :code:`% grub-mkconfig -o /boot/grub/grub.cfg` 也可以吧。
-
-
-
-
-locale
-=======
-
-.. code::
-
-    $ locale
-    $ locale -a
-
-    $ vim /etc/locale.gen
-    $ locale-gen
-
-    $ vim /etc/locale.conf # edit LANG and LC_*
+修改 ``/etc/default/grub`` 里的设置，然后运行 ``$ update-grub`` 。
+或者 ``$ grub-mkconfig -o /boot/grub/grub.cfg`` 也可以吧。
 
 
 
@@ -115,7 +99,7 @@ locale
 starting MTA
 =============
 
-.. code::
+::
 
     $ aptitude purge exim4 exim4-base exim4-config exim4-daemon-light
 
@@ -125,6 +109,51 @@ starting MTA
 sudo
 =====
 
-.. code::
+::
 
     $ adduser foo sudo
+
+
+locale
+=======
++ http://serverfault.com/questions/301896/how-to-fix-locale-settings-in-debian-squeeze
++ https://wiki.debian.org/Locale
+
+之前碰到下面这个问题
+
+::
+
+    $ locale
+    locale: Cannot set LC_CTYPE to default locale: No such file or directory
+    locale: Cannot set LC_ALL to default locale: No such file or directory
+    LANG=en_US.utf8
+    LANGUAGE=
+    LC_CTYPE=UTF-8
+    LC_NUMERIC="en_US.utf8"
+    LC_TIME="en_US.utf8"
+    LC_COLLATE="en_US.utf8"
+    LC_MONETARY="en_US.utf8"
+    LC_MESSAGES="en_US.utf8"
+    LC_PAPER="en_US.utf8"
+    LC_NAME="en_US.utf8"
+    LC_ADDRESS="en_US.utf8"
+    LC_TELEPHONE="en_US.utf8"
+    LC_MEASUREMENT="en_US.utf8"
+    LC_IDENTIFICATION="en_US.utf8"
+    LC_ALL=
+
+    $ locale -a
+    C
+    C.UTF-8
+    en_US.utf8
+    POSIX
+
+重新安装 ``locale`` ，执行 ``dpkg-reconfigure locales`` 和 ``locale-gen`` ，
+通通没效果，LC_CTYPE 就是不听话。
+虽然自己 ``export LC_CTYPE=en_US.UTF-8`` 也可以，但是不科学啊。
+
+最后找到了上面的链接， ``update-locale LC_CTYPE=en_US.UTF-8`` ，
+会在 /etc/defaults/locale 中添加 LC_CTYPE=en_US.UTF-8，问题解决。
+
+debian 的 wiki 里提到了相关文件，却没提到有 update-locale 这个命令呀。
+相比之下，果然 arch 的 wiki 更简单友好……
