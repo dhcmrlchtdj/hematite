@@ -118,6 +118,7 @@ locale
 =======
 + http://serverfault.com/questions/301896/how-to-fix-locale-settings-in-debian-squeeze
 + https://wiki.debian.org/Locale
++ https://help.ubuntu.com/community/Locale
 
 之前碰到下面这个问题
 
@@ -156,4 +157,6 @@ locale
 会在 /etc/defaults/locale 中添加 LC_CTYPE=en_US.UTF-8，问题解决。
 
 debian 的 wiki 里提到了相关文件，却没提到有 update-locale 这个命令呀。
-相比之下，果然 arch 的 wiki 更简单友好……
+
+更新：在网上搜了下，连 ubuntu 的 wiki 都提到了。
+debian 为什么提供了命令却藏着不说呢，鼓励大家手动改配置吗……
