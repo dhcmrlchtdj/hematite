@@ -83,3 +83,10 @@ chrome
 
     $ open -a Google\ Chrome --args --allow-file-access-from-files
     $ open -a Google\ Chrome --args --disable-web-security
+
+
+
+$PATH
+========
+
+系统自带的在 ``/etc/paths``
