@@ -37,31 +37,6 @@ pyenv 配置。
 
 
 
-idea
-=======
-
-http://blog.jetbrains.com/idea/2013/09/jdk7_compatibility/
-
-::
-
-    $ vim ~/Applications/IntelliJ\ IDEA\ 13\ CE.app/Contents/Info.plist
-    $ # search `JVMVersion`
-
-
-
-
-
-jvm
-=====
-
-查看安装的多个 JVM 的位置。
-
-::
-
-    $ /usr/libexec/java_home -V
-
-
-
 
 iterm2 && macvim
 =================
@@ -69,7 +44,6 @@ iterm2 && macvim
 刷新 chrome 或者 redo 的时候，经常不小心在 vim  里按了 cmd-r，然后就悲剧了。
 
 可以在个人设置里面添加快捷键，把 cmd-r 忽略掉。
-
 
 
 chrome
@@ -90,3 +64,40 @@ $PATH
 ========
 
 系统自带的在 ``/etc/paths``
+
+
+
+idea
+=======
+
+http://blog.jetbrains.com/idea/2013/09/jdk7_compatibility/
+
+::
+
+    $ vim ~/Applications/IntelliJ\ IDEA\ 13\ CE.app/Contents/Info.plist
+    $ # search `JVMVersion`
+
+
+
+
+java
+=====
+
+查看 JVM 位置
+
+::
+
+    $ /usr/libexec/java_home -V
+
+
+设置 JAVA_HOME
+
+::
+
+    export JAVA_HOME=$(/usr/libexec/java_home)
+
+
+如果运行 java 程序时出现 ``LSOpenURLsWithRole() failed with error -10810`` ，
+可能是缺少了 ``libserver.dylib`` ，
+详细看 http://apple.stackexchange.com/questions/136975/lsopenurlswithrole-failed-with-error-10810 。
+简单讲就是做个软链， ``bundle/Libraries/libserver.dylib -> jre/lib/server/libjvm.dylib`` 。
