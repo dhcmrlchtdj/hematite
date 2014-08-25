@@ -139,3 +139,132 @@ HTTP2 lastest draft (2014.08.12)
 + 可以通过 SETTINGS_MAX_CONCURRENT_STREAMS 来限制 stream 的并发数
 + 这个只是限制接受到该信息的那方
 + 并发连接，只计算处于 open/half-closed 状态的 stream
+
+
+5.2 flow control
+-------------------
++ 使用 WINDOW_UPDATE frame 进行流控制
+
+
+5.3 stream priority
+----------------------
++ 可以在 HEADERS 中初始化优先级
++ 也可以在 PRIORITY 中修改优先级
+
+
+5.4 error handling
+-------------------
++ 错误分为两类：connection error 和 stream error
+
+5.4.1 connection error handling
+`````````````````````````````````
++ 出现 connection error 的时候，应该发送一个 GOAWAY frame，
+  使用的 stream 是最后一次收到 frame 的那个 stream
++ GOAWAY 描述错误原因
++ 发送了 GOAWAY 后，必须关闭 TCP 连接
++ 任何时候，想要断开连接，都应该发送一个 GOAWAY
++ GOAWAY 这东西，丢了就丢了，可以不管
+
+5.4.2 stream error handling
+``````````````````````````````
++ 出现 stream error 的时候，应该发送一个 RST_STREAM frame，
+  使用出错的那个 stream
++ 一样在 RST_STREAM 这描述错误类型
+
+
+
+6 frame definitions
+====================
++ 前面讲过 frame 的结构，使用一个 8-bit 来标识类型
+
+6.1 DATA
+----------
++ type = 0x0
++ 用来传输任意长度的数据，比如 HTTP 的 payload
++ 必须与某个 stream 关联，如果 stream identifier 为 0x0，视为错误
++ DATA 允许携带在数据后面携带 padding，主要是出于安全考虑
+
+6.2 HEADERS
+------------
++ type = 0x1
++ 用于开启 stream，同时携带 header block fragment
++ 必须与某个 stream 关联，如果 stream identifier 为 0x0，视为错误
+
+6.3 PRIORITY
+--------------
++ type = 0x2
++ 可以在任意状态下发送该 frame
++ 用于改变当前 stream 的优先级
++ 权重是个 8-bit 数字，1~256
++ 必须与某个 stream 关联，如果 stream identifier 为 0x0，视为错误
+
+7 error codes
+===============
++ 罗列了 RST_STREAM 和 GOAWAY 中的错误类型，不摘抄了
++ 对于未知的错误类型，不允许进行任何处理，或者视为 INTERNAL_ERROR(0x2)
+
+8 HTTP message exchanges
+=========================
++ HTTP/2 只修改了 HTTP/1.1 的一部分，具体讲是 RFC7230
+
+8.1 HTTP request/response exchanges
+-------------------------------------
++ client 开启一个新的 stream 并发送 request。
++ server 使用该 stream 返回 response。
++ request/response 的结构如下
+
+  0. 针对 response，可以返回零到多个的 HEADERS，但返回值必须是 1xx
+  1. 首先是一个 HEADERS，用于传输 http header
+  2. 然后是零到多个的 DATA，用于传输 http payload
+  3. 最后可能有一个 HEADERS，用于传输 trailer-part
+  4. 上面提到 HEADERS 的地方，后面都允许有 CONTINUATION
+
++ 最后一个 frame 必须设置 END_STREAM flag
++ 由于 CONTINUATION 是没有 flag 的，所以由 HEADERS 来携带那个 END_STREAM flag。
+  也就是说，即使 HEADERS 设置了 END_STREAM，后面还是可能有 CONTINUATION 在传输
++ 过程中的状态变化如下
+
+  - client HEADERS ==> client open ~ server open
+  - client END_STREAM ==> client half closed (local) ~ server half closed (remote)
+  - server END_STREAM ==> client closed ~ server closed
+
+8.1.1 upgrading from HTTP/2
+``````````````````````````````
++ HTTP/2 不支持 status code 101 (Switching Protocols)
+
+8.1.2 HTTP header fields
+``````````````````````````````
+
+8.1.2.1 pseudo-header fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ HTTP/2 没有 start-line，而是使用 pseudo-header
++ 不允许自定义 pseudo-header，只能用文档规定的几个
++ pseudo-header 使用 ``:`` 开头
+
+8.1.2.3 request pseudo-header fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ :method
++ :scheme 允许 http/https 之外的协议
++ :authority
++ :path 使用 http/https 协议时不能为空
++ 没有 HTTP/1.1 之类的版本信息
+
+8.1.2.4 response pseudo-header fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ :status 就只有这个
+
+
+
+8.2 server push
+------------------
++ 可以设置 SETTINGS_ENABLE_PUSH 为 0 来禁用 server push
++ 中间人在收到服务器的 push 请求时，可以不发给客户端
++ 服务器只能 push 可缓存的 response
++ push 的方法只能是安全方法（常用的只有 GET），并且不能携带 request body
+
+
+8.2.1 push requests
+``````````````````````
++ server push 就是服务器发出的 request，放在 PUSH_PROMISE 中
++ 使用的是 PUSH_PROMISE frame
++ 
