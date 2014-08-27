@@ -478,3 +478,32 @@ font-family
   语言与 Content-Language 及浏览器设置有关，待详细测试
 + 设置好 utf-8 和 zh-CN
 + ``font-family: Helvetica Neue, Arial, Microsoft YaHei, SimSun, sans-serif``
+
+
+
+
+
+position:fixed on mobile
+=========================
++ http://benfrain.com/easy-css-fix-fixed-positioning-android-2-2-2-3/
++ http://bradfrostweb.com/blog/mobile/fixed-position/
+
+看了下关于 position:fixed 在移动端的兼容问题。
+
++ ios 5 开始支持
++ ios 4 及更旧版本虽然不支持，但从份额上看，应该不用考虑了
++ android 3 和 4 都完整支持
++ android 2.3 部分支持，要求禁用页面缩放
++ android 2.2 部分支持，但效果为滚动停止后跳到相应位置
++ android 2.1 不支持，但从份额上看，应该不用考虑了
++ 针对移动端页面，禁用缩放完全可以接受，可以认为 2.3 没有问题
+    ``<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no"/>``
++ 2.2 可以通过设置 ``-webkit-backface-visibility: hidden;`` 来解决
+
+
+最后再记录下 js 方案。
+
+需要 fixed 的大体上有两种情况，其一是弹层，其二是固定的工具栏。
+第二种情况还可以考虑 iscroll 之类的工具，不用自带滚动。
+第一种情况，我感觉也能用类似的处理方案，直接禁用页面滚动，
+一个页面高度的遮罩层，然后把弹层定位在页面下方。
