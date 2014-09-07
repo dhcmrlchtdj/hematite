@@ -4,7 +4,7 @@
 
 #### 效果
 + z-index 实际上有两种效果
-+ 一是在元素（box）当前栈（stacking context）内的高度（stack level）
++ 一是设置元素（box）在当前栈（stacking context）内的高度（stack level）
 + 二是创建一个新的栈（stacking context）
 
 #### 取值
