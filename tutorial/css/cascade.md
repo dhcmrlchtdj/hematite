@@ -55,8 +55,8 @@
 ### cascading order
 
 + 优先级上 style > id > class > tag > *
-+ class 这个优先级包括各种属性相关的选择器和伪类
-+ tag 这个优先级也包括伪元素
++ class 这个级别包括各种属性相关的选择器和伪类
++ tag 这个级别包括伪元素
 
 ---
 
