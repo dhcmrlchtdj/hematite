@@ -301,3 +301,5 @@ ssh 连上之后，还是可以靠 ``su`` 获取管理权限。
 ==============
 
 ``$ tail -f /path/to/log``
+
+``$ less -F /path/to/log`` 然后 ``SHIFT+f``
