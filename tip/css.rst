@@ -425,6 +425,14 @@ http://coding.smashingmagazine.com/2013/04/12/css-generated-content-counters/
 
 
 
+max-width
+============
+
+.. code:: css
+
+    _width: expression(this.clientWidth > 100 ? "100px" : "auto");
+    max-width: 100px;
+
 
 
 font-family
