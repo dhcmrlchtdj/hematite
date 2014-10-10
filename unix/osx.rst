@@ -1,6 +1,18 @@
 .. contents::
 
 
+
+python package
+===============
+brew 更新 python，会导致依赖 python 的包出问题，pip 的包也都找不到解释器。
+
+pip 的问题可以用重新安装解决
+
+::
+
+    $ pip3 freeze -l | grep -v '^\-e' | cut -d = -f 1  | xargs pip3 install --force-reinstall -U
+
+
 homebrew
 ==========
 
