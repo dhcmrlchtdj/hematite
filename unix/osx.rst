@@ -1,6 +1,28 @@
 .. contents::
 
 
+hostname
+============
++ http://apple.stackexchange.com/questions/30552/os-x-computer-name-not-matching-what-shows-on-terminal
++ http://apple.stackexchange.com/questions/88463/terminal-shows-hostname-from-old-machine-not-new-machine
+
+osx 下面有 ``HostName`` ``ComputerName`` ``LocalHostName`` 这三个玩意。
+可以用 ``scutil --get xxxName`` 来读取，
+可以用 ``scutil --set xxxName xxx`` 来设置，
+然后用 ``scutil --set xxxName ""`` 来删除。
+
+根据 ``man 8 configd`` ，这些设置是保存在
+``/Library/Preferences/SystemConfiguration/preferences.plist`` 。
+
+LocalHostName 是 ``System > Network > HostNames > LocalHostName``
+ComputerName 是 ``System > System > ComputerName``
+HostName 是 ``System > System > HostName``
+
+LocalHostName 和 ComputerName 可以在 System Preferences > Sharing 里面设置，
+不知道 HostName 有没有 gui 界面。
+
+
+
 
 python package
 ===============
