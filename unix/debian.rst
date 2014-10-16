@@ -55,7 +55,11 @@ network
 services
 =========
 
-``/etc/init.d/ssh restart``
++ https://wiki.debian.org/Daemon
+
+::
+
+    $ service ssh restart
 
 
 
