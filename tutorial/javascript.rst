@@ -1,6 +1,18 @@
 .. contents::
 
 
+解析 html 字符串
+=================
++ https://developer.mozilla.org/en-US/docs/Web/API/DOMParser
+
+.. code:: javascript
+
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(htmlString, "text/html");
+
+
+
+
 
 
 提交表单
