@@ -52,9 +52,9 @@
 
 ### non-browserify module
 
-有人维护的前端代码，应该都是支持 browserify 的。
-不支持也还有各种 transform 能搞定。
-实在不行，写个 polyfill 也是分分钟的事情。
+其实现在不支持 browserify 的前端代码反而比较少见。
+不过就算真的不支持 browserify，也还有 browserify-shim 和一大堆的 transform 在。
+再搞不定，写个 polyfill 也是分分钟的事情。
 
 ```js
 require("module-name");
@@ -67,10 +67,11 @@ module.exports = window.MODULE_NAME;
 
 + 相比使用 combo，browserify 能保留文件间的依赖关系。
 + 相比使用加载器，browserify 不用担心部分代码加载失败的问题。
-+ 相比加载器配合 combo，browserify 确实没什么优势。
++ 相比加载器配合 combo，browserify 支持 npm，多少也算一点点优势。
 + 需要动态加载代码的时候，browserify 确实不如直接用加载器。
-    - 或者应该说这时就算用了 browserify，还是需要一个加载器。
+    - 或者应该说就算用了 browserify，还是需要一个加载器。
 + 多页面共享基础库时，browserify 不能利用页面缓存，是个不足之处，不过 combo 同样不能。
+    - 文档里有一些关于多页面共用代码的建议，但我感觉没什么帮助。
 
 总体来说，browserify 差不多就是保留了依赖关系的 combo。
 即使使用了 browserify，需要动态加载脚本的场景，一个加载器还是必不可少的。
@@ -79,7 +80,8 @@ module.exports = window.MODULE_NAME;
 
 ### tip
 
-+ 我不直接使用 npm 安装依赖，原因有三
-    - 不能多版本共存
++ 我不直接使用 npm 安装依赖，原因有二
     - 前端依赖和开发工具的依赖混在一起
     - 不好对依赖的代码进行修改
++ 不过 substack 本人不推荐相对路径的写法，开发时不容易分辨关系。
+    - 个人感觉 subtsack 给的处理方式中，最好的是软链，`ln -s ../lib node_modules/app`。
