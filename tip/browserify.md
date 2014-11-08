@@ -78,10 +78,13 @@ module.exports = window.MODULE_NAME;
 
 ---
 
-### tip
+### node_modules
 
-+ 我不直接使用 npm 安装依赖，原因有二
-    - 前端依赖和开发工具的依赖混在一起
++ 我不直接使用 npm 安装依赖，原因有三
+    - 不能多版本共存
+    - 前端依赖和开发工具依赖混在一起
     - 不好对依赖的代码进行修改
-+ 不过 substack 本人不推荐相对路径的写法，开发时不容易分辨关系。
-    - 个人感觉 subtsack 给的处理方式中，最好的是软链，`ln -s ../lib node_modules/app`。
++ 不过 substack 本人不推荐相对路径的写法。
+    - 路径过深会导致开发时不容易分辨依赖关系。
+
+subtsack 建议的方案之一是 `ln -s ../lib node_modules/app`，个人感觉不错。
