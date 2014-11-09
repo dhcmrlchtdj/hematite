@@ -2,6 +2,11 @@
 
 ---
 
++ https://github.com/substack/browserify-handbook
++ http://browserify.org/articles.html
+
+---
+
 ### output
 
 + browserify 生成的代码，简化后差不多是下面这样的。
