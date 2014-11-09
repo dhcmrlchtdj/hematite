@@ -85,7 +85,7 @@ module.exports = window.MODULE_NAME;
 
 ### node_modules
 
-+ 我不直接使用 npm 安装依赖，原因有三
++ 不赞同使用 npm 安装依赖，原因有三
     - 不能多版本共存
     - 前端依赖和开发工具依赖混在一起
     - 不好对依赖的代码进行修改
