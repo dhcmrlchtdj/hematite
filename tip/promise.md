@@ -4,7 +4,8 @@
 
 + https://github.com/kriskowal/q/blob/v1/design/README.js
 + http://blog.getify.com/promises-part-1/
-+ http://www.html5rocks.com/en/tutorials/es6/promises/
++ https://blog.domenic.me/youre-missing-the-point-of-promises/
++ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 + http://people.mozilla.org/~jorendorff/es6-draft.html
 
 ---
@@ -39,7 +40,7 @@ $.post({
 
 + 简单情况下，promise 在写法上没什么优势。
 + 多层回调嵌套的情况下，由于可以链式调用，逻辑可以更连贯，还是有优势的。
-+ 实际上，promise 还是在传递回调函数，只是*换了个位置*。
++ 实际上，promise 还是在传递回调函数，只是换了个位置。
 
 ---
 
@@ -100,9 +101,10 @@ promise 就是针对异步调用的事件机制。
 
 ### promise && pain points
 
-promise 拥有 addEventListener 的能力，却没有 removeEventListener 的能力。
-了解不多，不知道还有哪些痛点。
++ promise 拥有 addEventListener 的能力，却没有 removeEventListener 的能力。
++ ie678，`catch` 是保留字。
 
+了解不多，不知道还有哪些痛点。
 总之，promise 还太过简陋。
 就像 on 比 addEventListener 好用一样，promise 还需要一个更称手的工具。
 
@@ -110,6 +112,15 @@ promise 拥有 addEventListener 的能力，却没有 removeEventListener 的能
 
 ### promise && usage
 
+```js
+var p1 = new Promise(function(resolve, reject) { resolve(true); });
+var p2 = Promise.resolve(123);
+var p3 = Promise.all([p1, p2]);
+var p4 = Promise.reject(new Error('string'));
+var p5 = Promise.race([p3, p4]);
+var p6 = p5.then(function(value) { console.log(value); });
+var p7 = p6.catch(function(reason) { console.log(reason); });
+```
 
 ---
 
