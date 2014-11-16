@@ -4,6 +4,7 @@
 
 + https://github.com/kriskowal/q/blob/v1/design/README.js
 + http://blog.getify.com/promises-part-1/
++ http://www.html5rocks.com/en/tutorials/es6/promises/
 + http://people.mozilla.org/~jorendorff/es6-draft.html
 
 ---
@@ -34,16 +35,19 @@ $.post({
 }).done(callback);
 ```
 
-就我之前的体验来说，promise 在写法上没什么优势。
-更直白些，promise 只是把回调函数换了个位置。
+就我之前的体验来说
+
++ 简单情况下，promise 在写法上没什么优势。
++ 多层回调嵌套的情况下，由于可以链式调用，逻辑可以更连贯，还是有优势的。
++ 实际上，promise 还是在传递回调函数，只是*换了个位置*。
 
 ---
 
 ### promise && callback hell
 
-说好的能解决 callback hell 呢？
-
-话说回来，callback hell 到底是什么？
++ promise 就是为了解决嵌套回调吗？
++ 还是在回调，那说好的能解决 callback hell 呢？
++ 话说回来，callback hell 到底是什么？
 
 ---
 
@@ -54,31 +58,65 @@ $.post({
 + 而是失去了回调函数的控制权
 
 > 为什么要害怕失去控制权？
-> 是为了使用第三方代码时更加安全。
-
----
-
-### promise && callback hell
-
-通过换一种写法，从传递回调函数，变成了监听状态。
-
-之前是异步调用在完成时调用回调函数。
-现在时异步调用在完成时告知结果。
-
-> 如果第三方提供的异步调用不安全，返回的 promise 又能安全到哪去？
-> 再封装一层就可以了。
+> 因为不知道异步调用会怎么处理回调函数。
 
 ---
 
 ### js concurrency
 
-区分两个概念
+小插曲，区分两个概念。
 
 + concurrency 并发，交替执行多个任务，真正在执行的只有一个
 + parallelism 并行，同时执行多个任务
 
-js 执行时采取的是并发的方式。
+js 在执行时采取并发的方式执行多任务。
+
+---
+
+### DOM event
+
+从 DOM 事件机制来看 js 如何添加任务，会发现其发展过程是从传递回调变成监听状态。
+
+```js
+window.onload = callback;
+window.addEventListener("load", callback);
+```
 
 ---
 
 ### promise && event
+
+promise 就是针对异步调用的事件机制。
+
+通过换一种写法，从把回调函数传递给异步调用，变成了监听异步调用的执行状态。
+
+之前是异步调用在完成时调用回调函数，如何使用回调函数由异步调用决定。
+现在时异步调用在完成时告知结果，如何使用结果，由当前程序控制。
+
+> 如果第三方提供的异步调用不安全，返回的 thenable 对象又能安全到哪去？
+> 对第三方提供的 thenable 对象进行一次封装，就能得到足够安全的 promise。
+
+---
+
+### promise && pain points
+
+promise 拥有 addEventListener 的能力，却没有 removeEventListener 的能力。
+了解不多，不知道还有哪些痛点。
+
+总之，promise 还太过简陋。
+就像 on 比 addEventListener 好用一样，promise 还需要一个更称手的工具。
+
+---
+
+### promise && usage
+
+
+---
+
+### promise && yield
+
+http://wiki.ecmascript.org/doku.php?id=strawman:async_functions
+
+---
+
+END
