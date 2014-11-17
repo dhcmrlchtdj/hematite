@@ -6,7 +6,7 @@
 + http://blog.getify.com/promises-part-1/
 + https://blog.domenic.me/youre-missing-the-point-of-promises/
 + https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-+ http://people.mozilla.org/~jorendorff/es6-draft.html
++ http://people.mozilla.org/~jorendorff/es6-draft.html#sec-promise-objects
 
 ---
 
@@ -99,17 +99,6 @@ promise 就是针对异步调用的事件机制。
 
 ---
 
-### promise && pain points
-
-+ promise 拥有 addEventListener 的能力，却没有 removeEventListener 的能力。
-+ ie678，`catch` 是保留字。
-
-了解不多，不知道还有哪些痛点。
-总之，promise 还太过简陋。
-就像 on 比 addEventListener 好用一样，promise 还需要一个更称手的工具。
-
----
-
 ### promise && usage
 
 ```js
@@ -121,6 +110,34 @@ var p5 = Promise.race([p3, p4]);
 var p6 = p5.then(function(value) { console.log(value); });
 var p7 = p6.catch(function(reason) { console.log(reason); });
 ```
+
+---
+
+### promise && usage
+
+```js
+var p1 = Promise.reject();
+var p2 = Promise.resolve(p1);
+p1 === p2; // true
+
+var p3 = new Promise(function(resolve, reject) {
+    throw new Error("blah"); // reject(new Error("blah");
+});
+
+var p4 = Promise.all([p1, p2, p3]); // reject one OR resolve all
+var p5 = Promise.race([p1, p2, p3, p4]); // reject OR resolve the first
+```
+
+---
+
+### promise && pain points
+
++ promise 拥有 addEventListener 的能力，却没有 removeEventListener 的能力。
++ ie678，`catch` 是保留字。
+
+了解不多，不知道还有哪些痛点。
+总之，promise 还太过简陋。
+就像 on 比 addEventListener 好用一样，promise 还需要一个更称手的工具。
 
 ---
 
