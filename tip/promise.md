@@ -2,6 +2,13 @@
 
 ---
 
+修改了几次后，内容变得相当凌乱……
+因为我自己对 promise 的理解也已经变得相当混乱……
+
+难以理解的地方就直接看链接的一手资料吧。
+
+---
+
 + https://github.com/kriskowal/q/blob/v1/design/README.js
 + http://blog.getify.com/promises-part-1/
 + https://blog.domenic.me/youre-missing-the-point-of-promises/
@@ -63,6 +70,21 @@ $.post({
 
 ---
 
+### promise
+
+使用 promise 之后，情况就发生了改变。
+
+之前是异步调用在完成时调用回调函数，如何使用回调函数由异步调用决定。
+现在是异步调用在完成时返回执行结果，如何处理返回值由当前程序控制。
+
+> 不还是在传递回调吗？怎么就有控制权了？
+> 只要返回的 promise 符合 `Promise/A+` ，那么行为就是可测的。
+
+> 如果第三方提供的异步调用不安全，怎么保证返回的 thenable 对象符合 `Promise/A+` ？
+> 对第三方提供的 thenable 对象进行一次封装，就能得到符合 `Promise/A+` 的 promise。
+
+---
+
 ### js concurrency
 
 小插曲，区分两个概念。
@@ -74,28 +96,34 @@ js 在执行时采取并发的方式执行多任务。
 
 ---
 
-### DOM event
+### event
 
-从 DOM 事件机制来看 js 如何添加任务，会发现其发展过程是从传递回调变成监听状态。
+事件机制是 js 中常见的一种回调方式。
 
 ```js
-window.onload = callback;
 window.addEventListener("load", callback);
+stream.on("data", callback);
+```
+
+要说的话，我个人感觉 promise 和 event 很像。
+
+```js
+var ret = asyncCall();
+ret.on("fulfilled", callback);
+ret.then(callback);
 ```
 
 ---
 
+
 ### promise && event
 
-promise 就是针对异步调用的事件机制。
+promise 和 event 都是在回调，但是侧重点不同。
 
-通过换一种写法，从把回调函数传递给异步调用，变成了监听异步调用的执行状态。
+event 想要达到的效果，就是在不同事件发生时被触发，要求的就是异步处理。
 
-之前是异步调用在完成时调用回调函数，如何使用回调函数由异步调用决定。
-现在时异步调用在完成时告知结果，如何使用结果，由当前程序控制。
-
-> 如果第三方提供的异步调用不安全，返回的 thenable 对象又能安全到哪去？
-> 对第三方提供的 thenable 对象进行一次封装，就能得到足够安全的 promise。
+promise 处理的则是函数调用没有返回值的情况，是不得已采取了异步的方式。
+理想情况应该是这些异步调用变为同步。
 
 ---
 
