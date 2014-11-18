@@ -105,7 +105,7 @@ window.addEventListener("load", callback);
 stream.on("data", callback);
 ```
 
-要说的话，我个人感觉 promise 和 event 很像。
+要说的话，我个人感觉 promise 和 event 在很多地方都很像。
 
 ```js
 var ret = asyncCall();
@@ -115,15 +115,15 @@ ret.then(callback);
 
 ---
 
-
 ### promise && event
 
-promise 和 event 都是在回调，但是侧重点不同。
+不过，虽然都是在回调，但差别也很大。
+`ret.on` 的 `ret` 是个事件通道，`ret.then` 的 `ret` 是 promise。
+见 http://yuilibrary.com/yui/docs/promise/#diff 。
 
+两者的要达到的目标也不太一样。
 event 想要达到的效果，就是在不同事件发生时被触发，要求的就是异步处理。
-
-promise 处理的则是函数调用没有返回值的情况，是不得已采取了异步的方式。
-理想情况应该是这些异步调用变为同步。
+promise 处理的则是函数调用没有返回值的情况，理想情况下，这些调用应该是同步的。
 
 ---
 
