@@ -4,20 +4,22 @@
 new vs bind
 ============
 
++ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+
 .. code:: javascript
 
     var fn = function(val) {
         this.value = val;
     };
     var context = {};
-    var Constructor = fn.bind(context);
-    var o = new Constructor(10);
+    var Constructor = fn.bind(context, 5);
+    var o = new Constructor();
 
     // context -> {}
-    // o -> { value: 10}
+    // o -> { value: 5}
 
-即使 bind 过的函数，当作构造函数时，this 还是指向生成的新对象啊。
-
+即使 bind 过，当作构造函数时，this 还是指向生成的新对象。
+不过参数绑定还是生效的。
 
 
 timestamp
