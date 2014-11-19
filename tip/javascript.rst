@@ -1,6 +1,25 @@
 .. contents::
 
 
+new vs bind
+============
+
+.. code:: javascript
+
+    var fn = function(val) {
+        this.value = val;
+    };
+    var context = {};
+    var Constructor = fn.bind(context);
+    var o = new Constructor(10);
+
+    // context -> {}
+    // o -> { value: 10}
+
+即使 bind 过的函数，当作构造函数时，this 还是指向生成的新对象啊。
+
+
+
 timestamp
 ==========
 
