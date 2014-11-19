@@ -253,3 +253,13 @@ caret && tilde
 ================
 + ``^`` 是广度优先
 + ``~`` 是深度优先
+
+
+
+pacth
+======
+
+::
+
+    $ git format-patch -2 # pick 2 commit
+    $ git am -i /path/to/patch
