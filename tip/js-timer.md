@@ -82,20 +82,7 @@ var chromeSetInterval = function(fn, timeout) {
 // 但 firefox 的 setInterval 是这种感觉
 // 这也是我学习 js 时，对 setInterval 的理解
 // 应该算 bug 吧
-var firefoxSetInterval = function(fn, timeout) {
-    var last = Date.now();
-    var _innerTimeout;
-    setTimeout(function _inner() {
-        fn();
-        var now = Date.now()
-        _innerTimeout = now - last;
-        _innerTimeout = (_innerTimeout > timeout ?
-                         timeout - _innerTimeout % timeout :
-                         timeout);
-        last = now;
-        setTimeout(_inner, _innerTimeout);
-    }, timeout);
-};
+// 代码删了，感觉逻辑不对，改天重写
 ```
 
 ---
@@ -126,7 +113,7 @@ setTimeout(function f() {
 
 ### requestAnimationFrame
 
-requestAnimationFrame 在前文描述的 event loop 的 3 里面，属于 macrotask 吧。
+requestAnimationFrame 在前文描述的 event loop 的 3 里面，应该算是属于 macrotask 吧。
 
 在执行的时候和 microtask 有点类似，会按照注册的顺序，一次性执行所有的 requestAnimationFrame 回调。
 
@@ -139,44 +126,111 @@ event loop 3 的最后一步，会渲染页面。
 
 > call a specified function ... before the next repaint
 
+回调的间隔不是 60fps 的 1000/60 ms，而是看浏览器什么时候开始渲染页面。
+即使整个 event-loop 处在空闲的状态，没到渲染的时候，渲染函数都不会执行。
+
 ---
 
 #### polyfill
 
-简单讲就是，requestAnimationFrame 的特性太复杂，不可能原原本本模拟出来。
+因为回调间隔和浏览器渲染页面相关，所以靠 setTimeout 是不可能原原本本模拟出来的。
+目前好像没有其他方法能获取浏览器下次渲染页面的时间吧。
 
 ```js
 var myRequestAnimationFrame = requestAnimationFrame || function(fn) { setTimeout(fn, 1000/60); };
 ```
 
+---
 
+### setImmediate
 
+可预见的未来内，chrome/firefox 都不会支持 setImmediate，不得不说是悲剧……
 
+setImmediate 也是在 macrotask 中设置回调，但是没有 4ms 的限制。
+下面直接讲讲如何用其他手段模拟 setImmediate。
 
+---
 
+### postMessage
 
+说是 chrome 下用 postMessage 模拟出来的 setImmediate，性能比 ie 下原生的 setImmediate 还好。
+所以为什么不好好实现一个 postMessage 呢……
 
+---
 
+简单实现
 
+```js
+var addMacrotask = function(cb) {
+    var ch = Date.now();
+    window.addEventListener("message", function(e) {
+        if (e.data !== ch) return;
+        cb();
+    });
+    window.postMessage(ch, "*");
+};
 
+```
 
+---
+
+### script onreadystatechange
+
+给不支持 postMessage 的 ie6-8 用。
+
+```js
+var addMacrotask = function(cb) {
+    var body = document.body;
+    var script = doc.createElement("script");
+    script.onreadystatechange = function() {
+        script.onreadystatechange = null;
+        body.removeChild(script);
+        script = null;
+        cb();
+    };
+    document.body.appendChild(script);
+};
+```
+
+---
+
+### process.nextTick
+
+node 提供的这个方法，在 node 0.9 之前，是类似 setImmediate 的存在。
+但从 node 0.9 开始，变成添加 microtask 了。
+
+后面讲讲如何从浏览器中的 microtask。
+
+---
+
+### mutation observers
+
+除了 mutation observe，同步的 xhr 请求使用了 microtask，html5.1 的 sortable 也用到了microtask。
+但是，这么一列举，会发现根本没一个通用的方法在所有浏览器中操作 microtask。
+
+---
+
+下面是个简单的实现。
+
+```js
+var addMicrotask = function(cb) {
+    var observer = new MutationObserver(cb);
+    var node = document.createTextNode("");
+    observer.observe(node, {characterData: true});
+    node.data = 0;
+};
+```
+
+---
 
 + https://html.spec.whatwg.org/multipage/webappapis.html
 + https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Timers
-
-
-
-
-
-
-
-
-
-
-
-
-+ http://www.nczonline.net/blog/2013/07/09/the-case-for-setimmediate/
-+ https://html.spec.whatwg.org/multipage/webappapis.html#event-loops
 + https://github.com/YuzuJS/setImmediate
 + https://github.com/kriskowal/asap
++ http://www.nczonline.net/blog/2013/07/09/the-case-for-setimmediate/
 
+---
+
++ https://promisesaplus.com/#point-67
++ https://bugzilla.mozilla.org/show_bug.cgi?id=686201
++ https://code.google.com/p/chromium/issues/detail?id=146172
