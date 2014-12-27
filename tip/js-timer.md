@@ -9,7 +9,7 @@
 虽然要讲的是 timer，不过 event loop 这东西还是要简单提一下。
 
 1. 从 task queues 中取出待执行任务，然后执行该任务。
-2. 执行 microtasks，直到 microtask queues 为空。
+2. 执行 microtask，直到 microtask queues 为空。
 3. 渲染页面。
 4. 回到 1。
 
@@ -68,7 +68,7 @@ setInterval 需要在执行后继续设置回调，如何理解“每”实在�
 > Let task be a task that runs the following substeps:
 > 3. If the repeat flag is true, then call timer initialisation steps again, passing them the same method arguments, the same method context, with the repeat flag still set to true, and with the previous handle set to handler.
 
-个人认为，从上面这段话理解的话，setInterval 是在执行完当前回调之后，才设置下个回调的。
+从上面这段话理解的话，setInterval 是在执行完当前回调之后，才设置下个回调的，并且参数不变。
 
 ```js
 // 文档描述的 setInteval 类似这种感觉
@@ -147,14 +147,14 @@ var myRequestAnimationFrame = requestAnimationFrame || function(fn) { setTimeout
 可预见的未来内，chrome/firefox 都不会支持 setImmediate，不得不说是悲剧……
 
 setImmediate 也是在 macrotask 中设置回调，但是没有 4ms 的限制。
-下面直接讲讲如何用其他手段模拟 setImmediate。
+下面讲讲如何用其他手段模拟 setImmediate。
 
 ---
 
 ### postMessage
 
-说是 chrome 下用 postMessage 模拟出来的 setImmediate，性能比 ie 下原生的 setImmediate 还好。
-所以为什么不好好实现一个 postMessage 呢……
+据说 chrome 下用 postMessage 模拟出来的 setImmediate，性能比 ie 下原生的 setImmediate 还好。
+所以为什么不好好实现一个 setImmediate 呢……
 
 ---
 
@@ -169,7 +169,6 @@ var addMacrotask = function(cb) {
     });
     window.postMessage(ch, "*");
 };
-
 ```
 
 ---
@@ -181,14 +180,14 @@ var addMacrotask = function(cb) {
 ```js
 var addMacrotask = function(cb) {
     var body = document.body;
-    var script = doc.createElement("script");
+    var script = document.createElement("script");
     script.onreadystatechange = function() {
         script.onreadystatechange = null;
         body.removeChild(script);
         script = null;
         cb();
     };
-    document.body.appendChild(script);
+    body.appendChild(script);
 };
 ```
 
@@ -199,18 +198,21 @@ var addMacrotask = function(cb) {
 node 提供的这个方法，在 node 0.9 之前，是类似 setImmediate 的存在。
 但从 node 0.9 开始，变成添加 microtask 了。
 
-后面讲讲如何从浏览器中的 microtask。
+后面讲讲如何在浏览器中添加 microtask。
 
 ---
 
-### mutation observers
+### mutation observers && Object.observe
 
-除了 mutation observe，同步的 xhr 请求使用了 microtask，html5.1 的 sortable 也用到了microtask。
-但是，这么一列举，会发现根本没一个通用的方法在所有浏览器中操作 microtask。
+能够利用的有 MutationObserver 和 Object.observe，都算比较新的功能吧，兼容性上肯定是无法满足要求了。
+
+另外在同步的 xhr 请求和 html5.1 的 sortable 也设置了 microtask。
+
+这么一看，就会发现根本没一个通用的方法在所有浏览器中添加 microtask。
 
 ---
 
-下面是个简单的实现。
+下面是简单实现。
 
 ```js
 var addMicrotask = function(cb) {
@@ -218,6 +220,28 @@ var addMicrotask = function(cb) {
     var node = document.createTextNode("");
     observer.observe(node, {characterData: true});
     node.data = 0;
+};
+
+var addMicrotask = function(cb) {
+    var obj = {};
+    Object.observe(obj, cb);
+    obj.change = true;
+};
+```
+
+---
+
+### Promise
+
+把 promise 放在这里，是因为没在文档里找到说明。
+
+测试了下，chrome 下面是 microtask，firefox 下面是 macrotask。
+
+---
+
+```js
+var addTask = function(cb) {
+    Promise.resolve().then(cb);
 };
 ```
 
