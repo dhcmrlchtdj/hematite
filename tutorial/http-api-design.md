@@ -19,14 +19,14 @@
 ---
 
 + 发生错误时，返回 200，在返回值中给出错误信息。
-
-感觉错误没必要太复杂，一个唯一的 `error_code` 配合完善的说明文档就可以了。
-没有错误的时候，不带 `error` 或者 `error` 的值不为真即可，检查起来也简单些。
++ 唯一的 `error_code` 配合完整的说明文档。
++ 在 `error_code` 不够用的时候，在 data 中放需要的额外信息。
++ 有错时，`error_code` 为真值，方便判断。
 
 ```json
 {
-    data: null,
-    error: [ NULL | 0 | ERROR_CODE ]
+    error: [0 | error_code],
+    data: [NULL | error_data]
 }
 ```
 
