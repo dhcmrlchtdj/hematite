@@ -24,7 +24,7 @@
 
 ### example
 
-+ `J-Component`
++ `J-element-name`
 
 ---
 
@@ -32,12 +32,12 @@
 
 ### syntax
 
-`u-utilityName`
+`u-utility-name`
 
 ### example
 
 + `u-cf`
-+ `u-floatLeft`
++ `u-float-left`
 + `u-block`
 
 ---
@@ -46,11 +46,11 @@
 
 ### syntax
 
-`is-stateName`
+`state-name`
 
 ### example
 
-+ `is-active`
++ `active`
 
 ---
 
@@ -58,7 +58,7 @@
 
 ### syntax
 
-`[<namespace>-]<ComponentName>[--modifierName][__elementName[--modifierName]]`
+`[namespace-]<Component>[--modifier][__element[--modifier]]`
 
 ### example
 
@@ -69,3 +69,4 @@
 + `List__item`
 + `List__item--highlight`
 + `List__item__title`
++ `List__item__body`
