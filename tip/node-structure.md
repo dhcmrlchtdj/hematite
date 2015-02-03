@@ -15,10 +15,11 @@
 ```
 $ tree -FL 1 --dirsfirst
 .
+├── bin/
 ├── lib/
 ├── src/
-├── bin/
 ├── test/
+├── vendor/
 ├── LICENSE
 ├── README.md
 └── package.json
