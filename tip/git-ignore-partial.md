@@ -11,10 +11,21 @@
 
 ---
 
+## 忽略 npmrc 里登录信息的例子
+
 ```
 $ # triggered on checkout
 $ git config filter.npmrc.smudge "cat"
 $ # triggered on add
-$ git config filter.npmrc.clean "sed '/\\/\\//d'"
+$ git config filter.npmrc.clean "sed '/\/\//d'"
 $ echo "npmrc filter=npmrc" >> .gitattributes
+```
+---
+
+## 忽略 source map 的例子
+
+```
+[filter "ignoreSourceMap"]
+    smudge = "sed '/^[/][/*]# sourceMappingURL=/d'"
+    clean = "sed '/^[/][/*]# sourceMappingURL=/d'"
 ```
