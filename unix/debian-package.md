@@ -5,6 +5,10 @@ $ # 查看安装了哪些包
 $ aptitude search '~i!~M'
 ```
 
+```
+# 查看文件属于哪个包
+$ dpkg -S /usr/bin/ls
+```
 
 
 ## 必备的
