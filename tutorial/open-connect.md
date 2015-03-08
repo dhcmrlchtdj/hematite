@@ -83,3 +83,8 @@ ca-cert = /etc/ssl/certs/my-ca-cert.pem
 $ # 开机自动启动
 ...
 ```
+
+### 坑
+
+1. openconnect 死活连接不上，不知道为什么。
+2. ca 的日期不要写 9999，要跪。mac 上不能自己选 ca，会由于过期导致认证失败。
