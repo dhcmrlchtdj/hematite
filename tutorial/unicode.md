@@ -3,6 +3,7 @@
 ---
 
 + http://unicode.org/faq/utf_bom.html
++ http://www.cl.cam.ac.uk/~mgk25/unicode.html
 + http://lucumr.pocoo.org/2014/1/9/ucs-vs-utf8/
 
 ---
@@ -33,3 +34,24 @@ byte order mark
 | EF BB BF    | UTF-8                 |
 
 utf8 的 BOM 完全是多余的
+
+---
+
+utf8 到 code point
+
+| U-00000000 - U-0000007F | 0xxxxxxx                                              |
+| U-00000080 - U-000007FF | 110xxxxx 10xxxxxx                                     |
+| U-00000800 - U-0000FFFF | 1110xxxx 10xxxxxx 10xxxxxx                            |
+| U-00010000 - U-001FFFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx                   |
+| U-00200000 - U-03FFFFFF | 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx          |
+| U-04000000 - U-7FFFFFFF | 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx |
+
+由于 unicode 最大只到 `10ffff`，所以最多只用到 4 bytes。
+
+---
+
+utf8 到 unicode 的换算
+
+1. byte 前面几个 1，代表这个 code point 一共占用多少 byte，以一个 0 和后面分割
+2. 后续的 byte 都以 `10` 开头
+3. 把剩下的 XXX 连起来，就得到 code point
