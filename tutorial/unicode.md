@@ -5,6 +5,7 @@
 + http://unicode.org/faq/utf_bom.html
 + http://www.cl.cam.ac.uk/~mgk25/unicode.html
 + http://lucumr.pocoo.org/2014/1/9/ucs-vs-utf8/
++ http://port70.net/~nsz/42_utf8.html
 
 ---
 
