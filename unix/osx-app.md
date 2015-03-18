@@ -2,7 +2,7 @@
 
 ## brew cask
 
-dobe-air
+adobe-air
 android-file-transfer
 appcleaner
 dash
@@ -16,11 +16,49 @@ intellij-idea-ce
 iterm2
 java
 omnidisksweeper
-osxfuse
 remote-desktop-connection
 skitch
-sparrow
+sparrow (!)
 spectacle
 the-unarchiver
 virtualbox
 xquartz
+
+
+## homebrew
+
+android-platform-tools
+aria2
+bash
+brew-cask
+coreutils
+ctags
+curl
+ffmpeg
+fontconfig
+fontforge
+git
+gnu-sed
+htop-osx
+iftop
+luajit
+macvim
+maven
+mitmproxy
+mpv
+mysql
+nginx
+node
+openssl
+p7zip
+python
+python3
+sqlite
+ssh-copy-id
+the_silver_searcher
+tmux
+tree
+unar
+wget
+zsh
+zsh-completions
