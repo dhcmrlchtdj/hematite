@@ -11,25 +11,24 @@ $ dpkg -S /usr/bin/ls
 ```
 
 
-## 必备的
+## 用得上的
 
 ```
+aptitude
+build-essential
+curl
 git
 htop
+iftop
+man-db
 nginx-full
+nodejs-legacy
+npm
+python3
+python3-pip
 sudo
 tmux
 vim-nox
+wget
 zsh
-```
-
-
-
-## 常用的
-```
-nodejs-legacy npm
-python3 python3-pip
-postgresql postgresql-server-dev-all
-mariadb-server
-sqlite3
 ```
