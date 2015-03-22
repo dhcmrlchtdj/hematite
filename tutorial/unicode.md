@@ -56,3 +56,10 @@ utf8 到 unicode 的换算
 1. byte 前面几个 1，代表这个 code point 一共占用多少 byte，以一个 0 和后面分割
 2. 后续的 byte 都以 `10` 开头
 3. 把剩下的 XXX 连起来，就得到 code point
+
+---
+
++ utf16 的优势在于 BMP
++ bmp 内的符号只要 2byte，比 utf8 小
++ 字符串长度只要计算 byte 数量，不用关心 byte 的内容
++ 不过计算长度时完全不管 surrogate pair 就不能忍了
