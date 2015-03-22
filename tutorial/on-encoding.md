@@ -108,12 +108,6 @@
 
 ---
 
-## rest
-
-+ 字符和 byte 的关系，基本清晰了
-
----
-
 ## unicode && javascript
 
 ---
