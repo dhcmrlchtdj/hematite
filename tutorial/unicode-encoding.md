@@ -174,4 +174,13 @@
 
 ---
 
+## link
+
++ http://speakingjs.com/es5/ch24.html
++ http://unicode.org/faq/utf_bom.html
++ http://lucumr.pocoo.org/2014/1/9/ucs-vs-utf8/
++ https://mathiasbynens.be/notes/javascript-encoding
+
+---
+
 EOF
