@@ -81,6 +81,8 @@
 
 + 最小是 8bit，不够了就再来 8bit
 
+| code point              | utf8                                                  |
+| --                      | --                                                    |
 | U+00000000 - U+0000007F | 0xxxxxxx                                              |
 | U+00000080 - U+000007FF | 110xxxxx 10xxxxxx                                     |
 | U+00000800 - U+0000FFFF | 1110xxxx 10xxxxxx 10xxxxxx                            |
