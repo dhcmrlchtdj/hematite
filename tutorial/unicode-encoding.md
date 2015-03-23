@@ -157,21 +157,21 @@
 ### js encoding
 
 + es5
-+ js 处理代码时，使用的是 utf16 编码 (http://es5.github.io/x6.html#x6)
++ js 处理代码时，内部使用的是 utf16 编码 (http://es5.github.io/x6.html#x6)
 + 字符串和正则和标示符都可以使用 `\uhhhh`
-+ 字符串不会根据 utf16 去计算 code point，而是将内容视为 code unit 组成的序列 (http://es5.github.io/x8.html#x8.4)
-+ 理解成，js 处理的字符的时候，是每次读取 16bit
-+ 既然处理上完全无视了 surrogate pair，说成是 ucs2 也没多大问题把……
++ js 中的字符串是 utf16 的 code unit 组成的，而不是 unicode 的 code point (http://es5.github.io/x8.html#x8.4)
++ js 字符串的相关操作，也都是针对 utf16 的 code unit 的
++ 既然处理上完全无视了 surrogate pair，理解成 ucs2 也没多大问题吧……
 
 ---
 
 ### js encoding
 
 + es6
-+ 字符是 16bit 的序列，然后这 16bit 被视为 utf16 的 code unit (https://people.mozilla.org/~jorendorff/es6-draft.html#sec-ecmascript-language-types-string-type)
-+ 部分操作会使用 utf16 编码，把字符映射回 unicode 的 code point，也就说说不会无视 surrogate pair
-+ 字符串是 code point 组成的序列 (https://people.mozilla.org/~jorendorff/es6-draft.html#sec-literals-string-literals)
++ es6 的字符串，还是 utf16 的 code unit，和 es5 一样。 (https://people.mozilla.org/~jorendorff/es6-draft.html#sec-ecmascript-language-types-string-type)
++ 不过部分字符串操作会将字符串解码为 unicode 的 code point 后再执行，也就是说会处理 surrogate pair
++ 但是字符串字面量是 unicode 的 code point 组成的，之后会被 utf16 编码 (https://people.mozilla.org/~jorendorff/es6-draft.html#sec-literals-string-literals)
 
 ---
 
-END
+EOF
