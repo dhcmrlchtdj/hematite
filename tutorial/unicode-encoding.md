@@ -69,6 +69,18 @@
 
 ---
 
+## utf16
+
+| Code point                               | UTF-16 code unit(s)                      |
+| --                                       | --                                       |
+| xxxx xxxx xxxx xxxx                      | xxxx xxxx xxxx xxxx                      |
+| 0000 0000 000p pppp, xxxx xxyy yyyy yyyy | 1101 10qq qqxx xxxx, 1101 11yy yyyy yyyy |
+
++ utf16 到 code point 的对应，好像也不直观
++ qqqq = ppppp − 1
+
+---
+
 ## ucs2
 
 + ucs2 在 `U+0000` 到 `U+ffff` 这个范围内，和 utf16 的编码是完全相同的
