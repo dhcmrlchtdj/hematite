@@ -74,3 +74,18 @@ Guido 表示，最后的决定是为了简化
 达到了简化操作的目的。
 
 如果数组的下标从 1 开始，就不能这么简便地进行这两种常见操作了。
+
+
+
+
+conway's law
+=============
+
+在 https://github.com/substack/webapps-of-the-future 看到这么一句调侃
+
+::
+
+    java programmers built Angular
+    rails programmers built Ember
+
+团队的结构影响最终产物的结构，好像确实是这样……
