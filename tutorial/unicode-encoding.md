@@ -109,7 +109,8 @@
 ## utf8
 
 + unicode 只编码到 `10ffff`，所以最多也就 4byte，不会比 utf16/utf32 更糟
-+ 如果 utf8 都不够用了，utf16/utf32 什么的早就死了
++ <del>如果 utf8 都不够用了，utf16/utf32 什么的早就死了</del>
++ 最多只能表示 31bit，还不如 utf32
 + 没有 byte order 问题，每次读取一个 byte，就知道下个符号多大
 + 0x800 到 0xffff 都需要 3byte，所以像汉字等符号需要的空间比 utf16 要大不少
 + 赢在 0x0 到 0x7f 只要 1byte，而且与 ascii 完全兼容
