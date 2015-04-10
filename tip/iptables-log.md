@@ -9,6 +9,7 @@
 ```
 $ iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j LOG --log-level debug # 增加日志
 $ iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j DROP # 阻止 ping 请求
+
 $ tail -f /var/log/kern.log # 查看日志
 ```
 
@@ -17,4 +18,15 @@ $ tail -f /var/log/kern.log # 查看日志
 
 ---
 
+```
+$ iptables -N logdrop # 创建一个新的 chain
+$ iptables -A logdrop -j LOG --log-level debug # 进入的都打日志
+$ iptables -A logdrop -j DROP # 进入的都丢掉
 
+$ iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j logdrop # 要阻止的请求丢到新的 chain 里面
+
+$ tail -f /var/log/kern.log # 查看日志
+```
+
+感觉和之前的方法好像没区别啊……
+总之这样也可以就是了。
