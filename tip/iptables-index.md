@@ -2,4 +2,4 @@
 
 ---
 
-`iptables -nL` 列出的规则，计数是从 1 开始，不是 0。
+`iptables -nvL --line-numbers` 可以看出，行号是 1 开始的
