@@ -18,7 +18,7 @@ wntfs () {
     fi
     echo $line >> /etc/fstab
     device=$(diskutil info "$1" | grep "Device Node" | cut -d ':' -f2 | tr -d ' ')
-    diskutil unmount "$FILENAME"
+    diskutil unmount "$1"
     diskutil mount $device
 }
 ```
