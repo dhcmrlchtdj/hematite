@@ -7,9 +7,22 @@
 
 ---
 
-## top-down operator precedence
++ classic recursive descent
++ top down operator precedence
++ shunting yard
++ precedence climbing
+
+---
+
+## classic recursive descent
 
 为每个操作符编写独立函数。实现与语法能够对应起来。
+
+---
+
+## top-down operator precedence
+
+http://javascript.crockford.com/tdop/tdop.html
 
 ---
 
