@@ -83,3 +83,12 @@ $ adduser myname sudo
 $ ssh-copy-id -i pub_key -p port user@hostname
 ```
 ---
+
+## visudo
+
+```
+$ update-alternatives --config editor
+$ visudo
+```
+
+---
