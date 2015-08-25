@@ -91,4 +91,9 @@ $ update-alternatives --config editor
 $ visudo
 ```
 
+```
+root ALL=(ALL:ALL) ALL
+someone ALL=(ALL) NOPASSWD:ALL
+```
+
 ---
