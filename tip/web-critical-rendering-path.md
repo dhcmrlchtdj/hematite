@@ -23,7 +23,7 @@ https://developers.google.com/web/fundamentals/performance/critical-rendering-pa
 
     - devtools 中叫做 `Layout`
     - 计算的结果就是我们熟知的 `box model`
-    - 重新计算的过程就是所谓的 `reflow`
+    - 一个更熟悉的叫法是 `reflow`
 
 5. 将 `render tree` 绘制到页面上
 
