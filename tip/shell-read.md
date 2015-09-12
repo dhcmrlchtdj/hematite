@@ -5,7 +5,7 @@ http://ryanstutorials.net/bash-scripting-tutorial/bash-input.php
 
 ---
 
-一直都是用 `$n` 的形式读取变量，现在才知道 `read` 这么好用
+一直都是用 `$n` 的形式读取变量，没试过用 `read` 读取输入
 
 ```sh
 #!/usr/bin/env bash
