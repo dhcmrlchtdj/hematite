@@ -17,3 +17,7 @@ https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&%20closures/apC.
 > arrow-functions are really just codifying into the language syntax a common
 > mistake of developers, which is to confuse and conflate "this binding" rules
 > with "lexical scope" rules.
+
+个人观点，es6 的不少语法“糖”完全是在增加心智负担……
+
+---
