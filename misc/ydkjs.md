@@ -34,3 +34,16 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 另外 es6 新增的箭头函数不能 `new`，所以倒也不存在优先级问题。
 
 ---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/this%20&%20object%20prototypes/ch5.md
+
+对于原型链上同名属性的写入，之前一直忽视了。
+
+1. 如果该属性可写，那么会在当前对象上写入
+2. 如果该属性只读，那么当前对象无法写入同名属性
+3. 如果该属性是个 `descriptor`， 写入时会调用 `setter` 而不会在当前对象写入，
+如果 `setter` 不存在则无法写入
+
+不过 2/3 两点也不是绝对的，还是可以用 `Object.defineProperty` 直接定义在当前对象上。
+
+---
