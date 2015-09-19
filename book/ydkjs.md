@@ -47,3 +47,12 @@ https://github.com/getify/You-Dont-Know-JS/blob/master/this%20&%20object%20proto
 不过 2/3 两点也不是绝对的，还是可以用 `Object.defineProperty` 直接定义在当前对象上。
 
 ---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch2.md
+
+`===` 并不一定准确，有两个例外， `-0` 和 `NaN`。
+
++ `Object.is(0, -0) === false` 但 `(0 === -0) === true`
++ `Object.is(NaN, NaN) === true` 但 `(NaN === NaN) === false`
+
+---
