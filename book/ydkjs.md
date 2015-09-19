@@ -92,3 +92,47 @@ https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch4.m
 `if (a == null) {}` 这种写法其实是很明确的。
 
 ---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch5.md
+
+> In other words, the completion value of a block is like an implicit return
+> of the last statement value in the block.
+
+`statement` 是有返回值的。
+如果用 `eval` 执行语句，可以拿到语句的返回值。
+
+---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch5.md
+
+> JSON is truly a subset of JS syntax, but JSON is not valid JS grammar by itself
+
+因为 `labeled statements` 中的 `label` 是标示符而不是字符串。
+
+---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch5.md
+
+> ASI is (formally speaking) a syntactic error correction procedure.
+
+还是感觉是否加 `;` 属于个人习惯。
+
+---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch5.md
+
+> You can also mix named parameters with the arguments array and be safe, as
+> long as you follow one simple rule: **never refer to a named parameter and its
+> corresponding arguments slot at the same time**.
+
+---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch5.md
+
+> The code in the `finally` clause always runs (no matter what), and it always
+> runs right after the `try` (and `catch` if present) finish, before any other
+> code runs.
+
+即使 `try` 语句中 `return` 了，还是可以在 `finally` 里面抛出异常或者修改 return 的值。
+
+---
