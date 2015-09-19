@@ -66,3 +66,29 @@ https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch3.m
 另外，es6 的 `Object#toString` 也不在使用 `[[Class]]` 了。
 
 ---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch4.md
+
+> JavaScript coercions always result in one of the scalar primitive values,
+> like `string`, `number`, or `boolean`. There is no coercion that results in
+> a complex value like `object` or `function`.
+
++ 运行时类型转化叫 _type coercion_
++ 编译时的类型转换叫 _type casting_
+
+---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch4.md
+
+`parseInt(1 / 0, 19) === 18`，居然还有这种玩法。
+
+---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch4.md
+
+> The coercion between `null` and `undefined` is safe and predictable, and no
+> other values can give false positives in such a check.
+
+`if (a == null) {}` 这种写法其实是很明确的。
+
+---
