@@ -56,3 +56,13 @@ https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch2.m
 + `Object.is(NaN, NaN) === true` 但 `(NaN === NaN) === false`
 
 ---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch3.md
+
+> You'll note that there are no Null() or Undefined() native constructors,
+> but nevertheless the "Null" and "Undefined" are the internal [[Class]] values exposed.
+
+这个似乎有点问题，`null` 和 `undefined` 是没有 `[[Class]]` 的。
+另外，es6 的 `Object#toString` 也不在使用 `[[Class]]` 了。
+
+---
