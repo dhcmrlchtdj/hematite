@@ -142,6 +142,7 @@ https://github.com/getify/You-Dont-Know-JS/blob/master/async%20&%20performance/c
 > ES6 now specifies how the event loop works, which means technically it's
 > within the purview of the JS engine, rather than just the hosting environment
 
-不管是 `macrotask` 还是 `microtask`，都是 html 的概念，js 里面叫做 `job`。
+不管是 `macrotask` 还是 `microtask`，都是 html 的概念。
+在 js 里对应的概念是 `job`。
 
 ---
