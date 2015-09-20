@@ -136,3 +136,12 @@ https://github.com/getify/You-Dont-Know-JS/blob/master/types%20&%20grammar/ch5.m
 即使 `try` 语句中 `return` 了，还是可以在 `finally` 里面抛出异常或者修改 return 的值。
 
 ---
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/async%20&%20performance/ch1.md
+
+> ES6 now specifies how the event loop works, which means technically it's
+> within the purview of the JS engine, rather than just the hosting environment
+
+不管是 `macrotask` 还是 `microtask`，都是 html 的概念，js 里面叫做 `job`。
+
+---
