@@ -9,8 +9,9 @@
 ```sh
 # server / post-receive
 
-read oldrev newrev ref
-echo "$oldrev $newrev $ref" >> receive.log
+while read oldrev newrev ref; do
+    echo "$oldrev $newrev $ref" >> receive.log
+done
 ```
 
 ```sh
