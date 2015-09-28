@@ -19,3 +19,7 @@ done
 
 echo "$1 $2 $3" >> commit-msg.log
 ```
+
+---
+
+`post-receive` 的 `stdout/stderr` 都会被发送给用户。
