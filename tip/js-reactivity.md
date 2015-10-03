@@ -6,10 +6,10 @@ https://github.com/kriskowal/gtor
 
 ---
 
-|          | Singular         | Plural              |
-| -------- | ---------------- | ------------------- |
-| Spatial  | `Value`          | `Iterable<Value>`   |
-| Temporal | `Promise<Value>` | `Observable<Value>` |
+|                  | Singular         | Plural              |
+| ---------------- | ---------------- | ------------------- |
+| sync / Spatial   | `Value`          | `Iterable<Value>`   |
+| async / Temporal | `Promise<Value>` | `Observable<Value>` |
 
 ---
 
@@ -24,19 +24,19 @@ https://github.com/kriskowal/gtor
 
 singular reactive value
 
-|             | unicast | broadcast |
-| ----------- | ------- | --------- |
-| strong type |         | future    |
-| weak type   | task    | promise   |
+|             | unicast(cancelable) | broadcast |
+| ----------- | ------------------- | --------- |
+| strong type |                     | future    |
+| weak type   | task                | promise   |
 
 ---
 
 plural reactive value
 
-|         | unicast            | broadcast            |
-| ------- | ------------------ | -------------------- |
-| one-way |                    | publisher/subscriber |
-| two-way | productor/consumer |                      |
+|         | unicast(cancelable) | broadcast            |
+| ------- | ------------------- | -------------------- |
+| one-way |                     | publisher/subscriber |
+| two-way | productor/consumer  |                      |
 
 productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 subscriber 出现
 
@@ -46,3 +46,8 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 离散性数据适合推送，连续性数据适合拉取或轮询
 
 ---
+
++ a generator function returns an iterator. `Iteration<T>`
++ a asynchronous function returns a promise. `Promise<T>`
++ a asynchronous generator function return a promise iterator. `Promise<Iteration<T>>`
++ an iterator returns an iteration, but a promise iterator returns a promise for an iteration.
