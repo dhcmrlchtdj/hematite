@@ -21,9 +21,11 @@ action   = iptables[name=F2B-SSH, port=ssh, protocol=tcp]
 bantime  = 36000
 ```
 
-`filter` 和 `action` 都是用自带的，暂时没去研究怎么写。
-注意下 `port=ssh` 更换成使用的端口。
+`filter` 和 `action` 都有现成的。
+注意下把 `port=ssh` 更换成使用的端口。
 
 ---
 
-重启 `fail2ban` 之后，检查下 `iptables -nL` 的输出是否正确。
+重启 `fail2ban` 后规则就生效了。
+可以执行 `fail2ban-client status` 看下当前的配置是否生效了。
+可以看下 `iptables -nL` 的输出是否符合预期。
