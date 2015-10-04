@@ -26,4 +26,4 @@ bantime  = 36000
 
 ---
 
-重启 `fail2ban` 之后，检查下 `iptables -Ln` 的输出是否正确。
+重启 `fail2ban` 之后，检查下 `iptables -nL` 的输出是否正确。
