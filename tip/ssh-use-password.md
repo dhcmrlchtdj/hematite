@@ -2,7 +2,7 @@
 
 ---
 
-# http://unix.stackexchange.com/questions/15138/how-to-force-ssh-client-to-use-only-password-auth
+http://unix.stackexchange.com/questions/15138/how-to-force-ssh-client-to-use-only-password-auth
 
 ---
 
