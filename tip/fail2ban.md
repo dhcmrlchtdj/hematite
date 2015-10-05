@@ -39,5 +39,5 @@ bantime  = 36000
 # filter.d/nginx.conf
 [Definition]
 
-failregex = ^<HOST> - - \[[\]]+\] "\x05\x01\x00" 400 172 "-" "0"$
+failregex = ^<HOST> \- \- \S+ \"\S+?\" 400 .+$
 ```
