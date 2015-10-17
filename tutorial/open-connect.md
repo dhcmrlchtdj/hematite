@@ -21,7 +21,7 @@ $ git co $(git tag | tail -n1) # 切换到稳定分支
 
 $ # 依赖／依赖／还是依赖
 $ aptitude install libgnutls28-dev libwrap0-dev libpam0g-dev liblz4-dev libseccomp-dev libreadline-dev libnl-route-3-dev libkrb5-dev
-$ aptitude install libprotobuf-c0-dev libtalloc-dev libhttp-parser-dev libpcl1-dev  libopts25-dev autogen  protobuf-c-compiler gperf
+$ aptitude install libprotobuf-c-dev libtalloc-dev libhttp-parser-dev libpcl1-dev libopts25-dev autogen protobuf-c-compiler gperf
 $ aptitude install autoconf automake autogen git2cl xz-utils
 
 $ autoreconf -fvi # 生成 configure
@@ -57,7 +57,7 @@ $ # 修改 iptables
 $ iptables -A INPUT -p tcp -m state --state NEW --dport 9000 -j ACCEPT
 $ iptables -A INPUT -p udp -m state --state NEW --dport 9001 -j ACCEPT
 $ iptables -t nat -A POSTROUTING -j MASQUERADE
-$ iptables-save >>> /etc/iptables/rules.v4 # 保存规则，需要安装 iptables-persistent
+$ iptables-save | tee /etc/iptables/rules.v4 # 保存规则，需要安装 iptables-persistent
 
 $ vim /etc/syslog.conf # 开启 ipv4 转发 net.ipv4.ip_forward=1
 $ sysctl -p /etc/sysctl.conf
