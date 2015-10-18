@@ -14,3 +14,16 @@ Address: 216.58.219.14
 ```
 
 ---
+
+## host
+
+```
+$ host example.com
+$ host -a example.com
+```
+
+---
+
+dig
+ping
+traceroute
