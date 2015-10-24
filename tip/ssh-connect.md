@@ -25,8 +25,8 @@ HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,ssh-rsa-cert-v01@
 服务端支持哪些则是使用 `HostKey`。
 
 ```
-HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
 ```
 
 ---
@@ -36,20 +36,14 @@ key exchange 是用来加密数据的。
 `KexAlgorithms` `Ciphers` `MACs` 都是相关的参数。
 
 ```
-KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
-Ciphers chacha20-poly1305@openssh.com,aes256-ctr,aes256-gcm@openssh.com,aes192-ctr,aes128-ctr
+KexAlgorithms curve25519-sha256@libssh.org
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-512,hmac-sha2-256-etm@openssh.com,hmac-sha2-256
 ```
 
 ---
 
-SSH 连接建立的时候
+要建立 ssh 连接的时候，上面的参数都必须匹配才行
+可以将输出开到 debug3 看对方支持哪些算法，实际使用了哪种算法
 
-1. key exchange, `KexAlgorithms`
-2. authentication, `HostKeyAlgorithms`
-3. symmetric ciphers, `Ciphers`
-4. message authentication codes, `MACs`
-
-如果 `Ciphers` 支持 `AE cipher mode`，会跳过第四步，如果不支持，会选择想要的 MAC。
-
-每一步都需要 server 和 client 匹配。
+另外，如果使用的 Ciphers 支持 AE，就不会再使用 MACs 加密了。
