@@ -7,5 +7,16 @@
 ---
 
 ```
-ProxyCommand
+Host <relay>
+    User <user>
+    HostName <ip>
+    Port <port>
+
+Host <server>
+    User <user>
+    HostName <ip>
+    Port <port>
+    ProxyCommand ssh <relay> -W %h:%p
 ```
+
+使用 `ProxyCommand` 来自动登录跳板机
