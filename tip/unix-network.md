@@ -1,29 +1,44 @@
-## nslookup
+# iputils
 
-使用的 dns
+`iputils` 提供了 `ping` 和 `tracepath`
+
+基本的连接情况
 
 ```
-$ nslookup
-> google.com
-Server:     8.8.8.8
-Address:    8.8.8.8#53
-
-Non-authoritative answer:
-Name:   google.com
-Address: 216.58.219.14
+$ ping -c3 google.com
+$ tracepath -n google.com
 ```
 
 ---
 
-## host
+# ldns
+
+`ldns` 提供了 `drill`
+
+dns 查询
 
 ```
-$ host example.com
-$ host -a example.com
+$ drill google.com
 ```
 
 ---
 
-dig
-ping
-traceroute
+# traceroute
+
+`traceroute` 和 `tracepath` 功能接近
+
+```
+$ traceroute -n google.com
+```
+
+---
+
+# bind
+
+`bind-tools` 提供了 `dig` `nslookup` `host`
+
+```
+$ dig google.com
+$ host google.com
+$ nslookup google.com
+```
