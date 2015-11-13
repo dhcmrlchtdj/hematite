@@ -1,64 +1,68 @@
 # osx app
 
-## brew cask
+---
 
-adobe-air
-android-file-transfer
-appcleaner
-dash
-dropbox
-evernote
-firefox
-google-chrome
-google-chrome-canary
-imageoptim
-intellij-idea-ce
-iterm2
-java
-omnidisksweeper
-remote-desktop-connection
-skitch
-sparrow (!)
-spectacle
-the-unarchiver
-virtualbox
-xquartz
+## tap
 
+caskroom/cask
+homebrew/dupes
+mpv-player/mpv
+
+---
 
 ## homebrew
 
-android-platform-tools
-aria2
-bash
-brew-cask
 coreutils
-ctags
-curl
-ffmpeg
-fontconfig
-fontforge
+gawk
 git
 gnu-sed
 htop-osx
-iftop
-luajit
-macvim
-maven
 mitmproxy
-mpv
-mysql
 nginx
-node
-openssl
-p7zip
-python
-python3
-sqlite
+screen
+siege
 ssh-copy-id
 the_silver_searcher
 tmux
 tree
-unar
+vim
 wget
 zsh
 zsh-completions
+
+lua
+luajit
+node
+python
+python3
+
+aria2
+gifify
+mpv
+
+ansible
+docker
+docker-machine
+ffmpeg
+imagemagick
+
+---
+
+## cask
+
+adobe-air
+appcleaner
+dropbox
+evernote
+firefox
+flux
+google-chrome
+google-chrome-canary
+imageoptim
+iterm2
+java
+omnidisksweeper
+skitch
+sparrow (!)
+spectacle
+virtualbox
