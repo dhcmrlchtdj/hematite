@@ -23,6 +23,16 @@ $ drill google.com
 
 ---
 
+# iproute2
+
+`iproute2` 提供了 `ss`，类似 `netstat`
+
+```
+$ ss -tna
+```
+
+---
+
 # traceroute
 
 `traceroute` 和 `tracepath` 功能接近
@@ -41,4 +51,14 @@ $ traceroute -n google.com
 $ dig google.com
 $ host google.com
 $ nslookup google.com
+```
+
+---
+
+# net-tools
+
+`net-tools` 提供了 `netstat`
+
+```
+$ netstat -tna
 ```
