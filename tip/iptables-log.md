@@ -30,3 +30,13 @@ $ tail -f /var/log/kern.log # 查看日志
 
 感觉和之前的方法好像没区别啊……
 总之这样也可以就是了。
+
+---
+
+防止恶意攻击导致日志暴涨，可以限制下日志的频率
+
+```
+$ iptables -A logdrop -j LOG \
+        --log-prefix "prefix:" --log-level warning \
+        -m limit --limit 6/m --limit-burst 2
+```
