@@ -3,7 +3,7 @@
 ---
 
 https://stribika.github.io/2015/01/04/secure-secure-shell.html
-http://security.stackexchange.com/questions/50878/ecdsa-vs-ecdh-vs-ed25519-vs-curve25519
+https://wiki.mozilla.org/Security/Guidelines/OpenSSH
 
 ---
 
@@ -19,7 +19,7 @@ signature 是验证连接的服务器。
 `HostKeyAlgorithms` 可以用来选择加密方式。
 
 ```
-HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,ssh-rsa-cert-v01@openssh.com,ssh-rsa
+HostKeyAlgorithms ssh-ed25519,ssh-rsa
 ```
 
 服务端支持哪些则是使用 `HostKey`。
@@ -37,7 +37,7 @@ key exchange 是用来加密数据的。
 
 ```
 KexAlgorithms curve25519-sha256@libssh.org
-Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-512,hmac-sha2-256-etm@openssh.com,hmac-sha2-256
 ```
 
