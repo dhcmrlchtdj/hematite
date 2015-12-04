@@ -31,10 +31,25 @@ https://googleonlinesecurity.blogspot.com/2013/11/a-roster-of-tls-cipher-suites-
 ---
 
 这个 cipher 怎么选，网上都是扔一个列表出来，然后也没一个对比。
-各种缩写可以看 `man 1 ciphers`。
 
-选得差不多了，继续用 `openssl ciphers -V` 检查选定了哪些组合。
+各种缩写可以看 `man 1 ciphers`，可以用 `openssl ciphers -V` 检查缩写选定了哪些组合。
+
+---
+
+在 ssllab 上测试了一下，放了六个。
 
 ```
-$ openssl ciphers -V 'kECDHE+aRSA:kDHE+aRSA:aECDSA:!SHA1'
+ECDHE-RSA-AES128-GCM-SHA256
+DHE-RSA-AES128-GCM-SHA256
+
+ECDHE-RSA-AES256-SHA384
+
+ECDHE-RSA-AES256-SHA
+ECDHE-RSA-AES128-SHA
+DHE-RSA-AES128-SHA
 ```
+
+前面两个是 AESGCM，应该是比较靠谱的。
+第三个和前面一样属于 tls1.2，不支持 AESGCM 时可以凑合下。
+剩下三个都是为了兼容老旧平台。
+没去自己编译 nginx，所以就没上 chacha20-poly1305 了。
