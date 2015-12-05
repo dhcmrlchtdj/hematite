@@ -2,6 +2,8 @@
 
 ---
 
+https://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/elb-security-policy-table.html
+https://github.com/letsencrypt/letsencrypt/wiki/Ciphersuite-guidance
 https://wiki.mozilla.org/Security/Server_Side_TLS
 https://googleonlinesecurity.blogspot.com/2013/11/a-roster-of-tls-cipher-suites-weaknesses.html
 
@@ -36,20 +38,12 @@ https://googleonlinesecurity.blogspot.com/2013/11/a-roster-of-tls-cipher-suites-
 
 ---
 
-在 ssllab 上测试了一下，放了六个。
-
 ```
+ECDHE-RSA-CHACHA20-POLY1305
 ECDHE-RSA-AES128-GCM-SHA256
-DHE-RSA-AES128-GCM-SHA256
-
-ECDHE-RSA-AES256-SHA384
-
-ECDHE-RSA-AES256-SHA
+ECDHE-RSA-AES256-GCM-SHA384
+ECDHE-RSA-AES128-SHA256
 ECDHE-RSA-AES128-SHA
-DHE-RSA-AES128-SHA
 ```
 
-前面两个是 AESGCM，应该是比较靠谱的。
-第三个和前面一样属于 tls1.2，不支持 AESGCM 时可以凑合下。
-剩下三个都是为了兼容老旧平台。
-没去自己编译 nginx，所以就没上 chacha20-poly1305 了。
+具体可以参考 aws 的文档，然后在 ssllab 上跑一下。
