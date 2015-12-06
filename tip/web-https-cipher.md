@@ -38,12 +38,18 @@ https://googleonlinesecurity.blogspot.com/2013/11/a-roster-of-tls-cipher-suites-
 
 ---
 
+要支持哪些 cipher，可以参考 aws 的文档，然后在 ssllab 上跑一下。
+
 ```
-ECDHE-RSA-CHACHA20-POLY1305
-ECDHE-RSA-AES128-GCM-SHA256
-ECDHE-RSA-AES256-GCM-SHA384
-ECDHE-RSA-AES128-SHA256
-ECDHE-RSA-AES128-SHA
+ECDHE-ECDSA-CHACHA20-POLY1305
+ECDHE-ECDSA-AES128-GCM-SHA256
+ECDHE-ECDSA-AES128-SHA256
+ECDHE-ECDSA-AES128-SHA
 ```
 
-具体可以参考 aws 的文档，然后在 ssllab 上跑一下。
+Kx，只要 `ECDHE` 就行了，不支持的都是些比较旧的平台。
+Au，`ECDSA` 或者 `RSA`，ECDSA 说是性能更好些。
+Enc，支持就 `CHACHA20-POLY1305` 和 `AES128-GCM`，CHACHA 说是性能更好些。
+不支持就 `AES128+SHA256` ，再不支持只能 `AES128+SHA` 了。
+后面两个安全性不如前面来得高，看需要兼容哪些旧平台了。
+另外目前 AES128 就够了，什么时候不够了可以上 AES256。
