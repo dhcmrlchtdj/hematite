@@ -6,3 +6,10 @@
 | ---------- | ------------------------- | ---------- | ----------- |
 | bandwagon  | California, QuadraNet     | 150        | 2%          |
 | 123systems | Los Angeles, ColoCrossing | 200        | 25%         |
+
+---
+
+## blacklist
+
++ 123systems
+    - uptime
