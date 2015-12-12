@@ -12,3 +12,9 @@ http://docs.ansible.com/ansible/intro_adhoc.html
 $ ansible all -a "ls"
 $ ansible all -m shell -a "ls"
 ```
+
+需要权限的命令，可以使用 become
+
+```
+$ ansible all -m shell -a 'sudo pacman -Syu --noconfirm' -b --ask-become-pass
+```
