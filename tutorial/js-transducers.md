@@ -2,10 +2,10 @@
 
 ---
 
-+ http://clojure.org/transducers
 + http://phuu.net/2014/08/31/csp-and-transducers.html
-+ http://jlongster.com/Transducers.js--A-JavaScript-Library-for-Transformation-of-Data
 + https://speakerdeck.com/othree/transducer
++ http://jlongster.com/Transducers.js--A-JavaScript-Library-for-Transformation-of-Data
++ http://clojure.org/transducers
 
 ---
 
@@ -13,8 +13,8 @@ transducers are composable algorithmic transformations
 
 + reducing function transformers
 + 与输入、输出解耦，只关注核心的转换过程
-+ 独立于输入输出，所以可以用于各种不同的数据或者场景
-+ 只进行转换，所以能够进行组合
++ 独立于输入输出，可以用于各种不同的数据结构
++ 只进行转换，可以轻易的组合起来
 
 ---
 
@@ -245,7 +245,7 @@ var concat = function(arr, input) {
 var mapper = function(transform) {
     return function(update) {
         return function(result, input) {
-            return update(result, transform(input);
+            return update(result, transform(input));
         };
     };
 };
@@ -259,13 +259,9 @@ mapper(inc)(concat)
 ---
 
 ```
-var compose(f, g) {
-    return function transducer(reducingFN) {
-        var ff = f(reducingFN);
-        var gg = g(reducingFN);
-        return function(result, input) {
-            // how?
-        };
+var compose = function(f, g) {
+    return function transducer(reducing) {
+        return g(f(reducing));
     };
 };
 
@@ -274,3 +270,8 @@ arr.reduce(compose(
     filterer(isEven)
 )(concat), []);
 ```
+
+compose 就是我们前面说的可组合的具体体现
+并且组合是针对 reducing function 进行的，数据处理一步到位，没有中间分配的过程
+
+不过 compose 的顺序确实很容易让人迷惑
