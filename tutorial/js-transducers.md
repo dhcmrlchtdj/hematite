@@ -64,7 +64,7 @@ var concat = function(arr, input) {
 ```
 var map = function(transform, arr) {
     return arr.reduce(function(result, input) {
-        return concat(result, inc(input));
+        return concat(result, transform(input));
     }, []);
 };
 map(inc, [1,2,3,4]); // [2,3,4,5]
@@ -153,7 +153,7 @@ incEven([1,2,3,4]);
 
 ---
 
-稍微回到主题，transducer 是真对 reducing function 的转换
+稍微回到主题，transducer 是针对 reducing function 的转换
 那么，其结果肯定是用于 reduce 的
 
 我们再对上面的 map/filter 进行一些研究
@@ -173,13 +173,13 @@ arr.reduce(compose(
 ```
 var map = function(transform, arr) {
     return arr.reduce(function(result, input) {
-        return concat(result, inc(input));
+        return concat(result, transform(input));
     }, []);
 };
 
 var mapping = function(transform) {
     return function(result, input) {
-        return concat(result, transform(input);
+        return concat(result, transform(input));
     };
 };
 ```
