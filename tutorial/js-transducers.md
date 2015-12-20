@@ -160,11 +160,11 @@ incEven([1,2,3,4]);
 期待的形式，应该是类似于这样的
 
 ```
-arr.reduce(mapper(inc), []);
-arr.reduce(filterer(isEven), []);
+arr.reduce(mapping(inc), []);
+arr.reduce(filtering(isEven), []);
 arr.reduce(compose(
-    mapper(inc),
-    filterer(isEven)
+    mapping(inc),
+    filtering(isEven)
 ), []);
 ```
 
@@ -177,7 +177,7 @@ var map = function(transform, arr) {
     }, []);
 };
 
-var mapper = function(transform) {
+var mapping = function(transform) {
     return function(result, input) {
         return concat(result, transform(input);
     };
@@ -195,7 +195,7 @@ var filter = function(predicate, arr) {
     }, []);
 };
 
-var filterer = function(predicate) {
+var filtering = function(predicate) {
     return function(result, input) {
         if (predicate(input)) {
             return concat(result, input);
@@ -210,7 +210,7 @@ var filterer = function(predicate) {
 不过，埋了一个小坑，我们要知道如何将输入转换成输出，也就是 concat
 
 ```
-var mapper = function(transform) {
+var mapping = function(transform) {
     return function(update) {
         return function(result, input) {
             return update(result, transform(input));
@@ -218,7 +218,7 @@ var mapper = function(transform) {
     };
 };
 
-var filterer = function(predicate) {
+var filtering = function(predicate) {
     return function(update) {
         return function(result, input) {
             if (predicate(input)) {
@@ -230,8 +230,8 @@ var filterer = function(predicate) {
     };
 };
 
-// arr.reduce(mapper(inc)(concat), []);
-// arr.reduce(filterer(isEven)(concat), []);
+// arr.reduce(mapping(inc)(concat), []);
+// arr.reduce(filtering(isEven)(concat), []);
 ```
 
 到这里，我们再仔细看一下两段代码
@@ -242,7 +242,7 @@ var concat = function(arr, input) {
     return arr;
 };
 
-var mapper = function(transform) {
+var mapping = function(transform) {
     return function(update) {
         return function(result, input) {
             return update(result, transform(input));
@@ -250,7 +250,7 @@ var mapper = function(transform) {
     };
 };
 
-mapper(inc)(concat)
+mapping(inc)(concat)
 ```
 
 这里，我们得到了一个 (whatever, input -> whatever) -> (whatever, input -> whatever) 的转换
@@ -265,13 +265,26 @@ var compose = function(f, g) {
     };
 };
 
-arr.reduce(compose(
-    mapper(inc),
-    filterer(isEven)
-)(concat), []);
+var incEven = compose(mapping(inc), filtering(isEven));
+
+arr.reduce(incEven(concat), []);
 ```
 
 compose 就是我们前面说的可组合的具体体现
 并且组合是针对 reducing function 进行的，数据处理一步到位，没有中间分配的过程
 
 不过 compose 的顺序确实很容易让人迷惑
+不喜欢的话，改造 API 变成链式调用也是可以的
+
+```
+var incEven = filtering(isEven).mapping(inc);
+arr.reduce(incEven(concat), []);
+```
+
+---
+
+transducer 很纯粹，只是帮我们构造 reducing function
+
+JS 原生的只有 Array#reduce
+想要用在其他地方，其实还是需要我们构建自己的 reduce 函数
+同时，构建自己的 reduce 函数，还能带来许多其他特性，比如延迟求值等
