@@ -6,6 +6,58 @@ http://berb.github.io/diploma-thesis/community/index.html
 
 ---
 
+## Infrastructures
+
+http://berb.github.io/diploma-thesis/community/033_archmodel.html
+
+---
+
+## concurrency & scalability
+
+http://berb.github.io/diploma-thesis/community/023_concurrency.html
+
+---
+
+concurrent 主要从三个方面提高性能
+
++ reduce latency
+    大任务被拆分成小任务，通过并行执行小任务来缩短总时间。
++ hide latency
+    遇到必须等待的任务时，切换到另一个可以立刻执行的任务。
++ increase throughput
+    同时执行多个任务，能提高整体吞吐量
+
+---
+
+concurrency 是程序的某种属性。
+两个任务的执行时间发生重叠，就可以认为是 concurrency。
+比如 A 执行到一半，先去执行 B，之后再继续执行 A。
+
+parallelism 是运行状态。
+两个任务是同时执行的，才是 parallelism。
+比如一台双核的机器执行 A 和 B。
+
+concurrent 的难点在于执行顺序的控制。
+parallel 则是确定的顺序。
+
+---
+
++ sequential concurrency
+    显式的流程控制，比如 coroutine
++ declarative concurrency
+    隐式的流程控制，比如事件
++ message-passing concurrency
+    任务之间，只运行通过某种机制传递消息。
++ shared-state concurrency
+    多个任务可以贡献一个状态。需要注意一致性和正确性。
+
+---
+
+vertical scale 是增强节点的能力。比如双核变四核
+horizontal scale 是增加节点。比如一台变两台
+
+---
+
 ## IO models
 
 http://berb.github.io/diploma-thesis/community/041_overview.html
