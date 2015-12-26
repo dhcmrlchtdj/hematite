@@ -15,4 +15,5 @@ http://blog.chinaunix.net/uid-28387257-id-4543179.html
 + multiplicative-increase/multiplicative-decrease (MIMD)
 + additive-increase/additive-decrease (AIAD)
 
-用于保证带宽分配的公平性
+AIMD 被用于保证带宽分配的公平性
+重复进行 AIMD 的结果是竞争双方的带宽会收敛到近似的值
