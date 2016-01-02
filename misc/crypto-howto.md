@@ -6,7 +6,7 @@ https://blog.helong.info/blog/2015/06/05/modern-crypto/
 ---
 
 + encrypting data
-    1. NaCl/libsodium
+    1. NaCL/libsodium
     2. Chacha20-Poly1305
     3. AES-GCM
 
@@ -30,16 +30,16 @@ https://blog.helong.info/blog/2015/06/05/modern-crypto/
     3. PBKDF2
 
 + asymmetric encryption
-    - 使用 NaCl
+    - 使用 NaCL
     - 不要使用 RSA。不得不用 RSA 时，至少用 RSA-OAEP
 
 + asymmetric signatures
-    - NaCl
+    - NaCL
     - Ed25519
     - RFC6979
 
 + Diffie-Hellman
-    1. NaCl
+    1. NaCL
     2. Curve25519
     3. DH-2048 with a standard 2048 bit group
 
