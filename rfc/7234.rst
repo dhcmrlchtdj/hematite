@@ -179,7 +179,7 @@
   - "max-stale=10"，表示允许超过 freshness_lifetime 多少秒，
     没有设置具体时间表示无穷大，超过多久都无所谓
   - "min-fresh=5"，freshness_lifetime 的最小值
-  - ”no-cache"，每次都必须向服务器验证缓存是否可用
+  - "no-cache"，每次都必须向服务器验证缓存是否可用
   - "no-store"，禁止对本次连接的 request 和 response 进行缓存
   - "no-transform"，禁止中间服务器对 payload 进行操作，比如进行压缩之类的行为
   - "only-if-cached"，只允许返回缓存的 response，没有就返回 504
