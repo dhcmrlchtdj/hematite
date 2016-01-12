@@ -11,6 +11,12 @@ https://github.com/kriskowal/gtor
 | sync / Spatial   | `Value`          | `Iterable<Value>`   |
 | async / Temporal | `Promise<Value>` | `Observable<Value>` |
 
+单值／多值 在 空间／时间 上的表现形式
+
+---
+
+## Concepts
+
 ---
 
 |                            | getter   | setter    |
@@ -19,6 +25,8 @@ https://github.com/kriskowal/gtor
 | Iterable<Value> / array    | iterator | generator |
 | Promise<Value> / deferred  | promise  | resolver  |
 | Observable<Value> / stream | reader   | writer    |
+
+前述的四种类型，对应的 getter 和 setter
 
 ---
 
@@ -47,7 +55,24 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 
 ---
 
-+ a generator function returns an iterator. `Iteration<T>`
-+ a asynchronous function returns a promise. `Promise<T>`
-+ a asynchronous generator function return a promise iterator. `Promise<Iteration<T>>`
-+ an iterator returns an iteration, but a promise iterator returns a promise for an iteration.
+## Primitives
+
+---
+
+前面讲了分类和概念，下面分析每种 primitive
+
+---
+
+### iterator
+
++ iterator 是同步的
++ iterator 的返回值叫做 iteration，包含值和是否完成 { value, done }
++ generator function 的返回值是 iterator，生成器返回迭代器
++ iterator 是 lazy，而 array 是 eager
+
+---
+
+### generator functions
+
++ generators 和 iterators 都是 unicast 的
++ iterator 可以通过 `.next()` `.throw()` 向 generator 传递信息
