@@ -76,3 +76,17 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 
 + generators 和 iterators 都是 unicast 的
 + iterator 可以通过 `.next()` `.throw()` 向 generator 传递信息
+
+---
+
+### asynchronous values
+
++ promise / resolver / deferred，读／写／统称
++ resolver 可以理解为只有一个返回值的 generator，可以 return/throw，
+    只有一个返回值，自然就没有 yield 了。
+---
+
+### asynchronous functions
+
++ 将 promise 和 generator functions 结合起来，可以模拟 asynchronous functions。
+    （指的是 async/await 那种形式）
