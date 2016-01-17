@@ -90,3 +90,27 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 
 + 将 promise 和 generator functions 结合起来，可以模拟 asynchronous functions。
     （指的是 async/await 那种形式）
+
+---
+
+### promise queues
+
++ 通常意义上的队列，需要队列中先有元素才能进行读取
++ promise queue 在每次被读取时都返回一个 promise，所以读取可以先于写入
++ 返回的是 promise，所以多次读取的时候，可能出现后读取的 promise 先返回的情况
++ 按我理解，stream 主要特点之一就是多返回值，这里用了其他方式实现了时间纬度的多返回值
+
+| value        | getter    | setter    |
+| ------------ | --------- | --------- |
+| PromiseQueue | queue.get | queue.set |
+
++ 实现上可以用队列存储所有待处理的 promise。
+    每次 get 都新增一个 promise，每次 set 都解析一个 promise。
+
+---
+
+### semaphores
+
++ 信号量用于控制数据的读写权限，是阻塞的
++ 在反应式编程中，不会采取阻塞的做法，而会采用非阻塞的 promise
++ 可以用 promise 来模拟 mutex，用 promise queue 模拟 semaphore
