@@ -113,4 +113,23 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 
 + 信号量用于控制数据的读写权限，是阻塞的
 + 在反应式编程中，不会采取阻塞的做法，而会采用非阻塞的 promise
-+ 可以用 promise 来模拟 mutex，用 promise queue 模拟 semaphore
++ 可以用 promise 来模拟 mutex，用 promise queue 模拟 semaphore。
++ 在 promise resolve 的时候，就相当于拿到了锁。
+    在模拟 semaphore 的时候，promise queue 中 resolve 的 promise 是固定的。
+    每次操作消耗一个 promise，操作结束之后再将 queue 中的下一个 promose 给 resolve 了。
+
+---
+
+### promise buffers
+
++ 如果要实现一个 producer-consumer 的模型，可以将 promise queue 用于数据缓存。
++ productor 生成数据后，放到名为 buffer 的 promise queue 中，然后 consumer 从 buffer 中读取数据。
++ 再添加另一个 promise queue，每次 consumer 读取时都往里面添加一个 promise。
+    productor 就可以通过这个队列判断 consumer 读取了多少数据
++ stream 的场景之一，就是 producer-consumer
++ 在 promise 中可以将 defer 隐藏起来，只给出 resolve/reject，返回一个 promise。
+    在 stream 中也可以将 buffer 隐藏起来，只给出 write/close/abort，返回一个 read stream。
+
+| value          | getter           | setter            |
+| -------------- | ---------------- | ----------------- |
+| promise buffer | promise iterator | promise generator |
