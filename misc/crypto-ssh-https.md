@@ -207,6 +207,8 @@ chacha20-poly1305 或者 AESGCM，没条件的 MAC 上 SHA2。
 
 ## refs
 
+---
+
 关于各种场景选择哪些加密方式，https://gist.github.com/tqbf/be58d2d39690c3b366ad
 关于 SSH 加密算法的选择，https://stribika.github.io/2015/01/04/secure-secure-shell.html
 各种 HTTPS 相关知识，https://blog.cloudflare.com/
