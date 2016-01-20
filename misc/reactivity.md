@@ -133,3 +133,21 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 | value          | getter           | setter            |
 | -------------- | ---------------- | ----------------- |
 | promise buffer | promise iterator | promise generator |
+
+---
+
+### promise iterators
+
++ iterator 是空间维度的，但如果 iterator 返回的是 promise，就可以转换成时间维度
+
+---
+
+### promise generators
+
++ 和普通的 generator 一样
+
+---
+
+### asynchronous generator functions
+
++ generator function 返回 iterator，asynchronous function 返回 promise。
