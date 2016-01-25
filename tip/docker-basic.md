@@ -19,7 +19,14 @@ $ docker rmi
 ```
 
 ```
+# get image
 $ docker pull base/archlinux
-$ docker run -i -t base/archlinux /bin/bash
-# setup...
+```
+
+```
+# run container
+$ docker run --rm -it base/archlinux /bin/bash
+
+# login running container
+$ docker exec <container-hash> /bin/bash
 ```
