@@ -65,7 +65,7 @@ typedef struct queue {
     STAILQ_ENTRY(queue) next;
     long val;
 } QUEUE;
-typedef STAILQ_HEAD(stailhead, queue) QUEUE_HEAD;
+typedef STAILQ_HEAD(queue_head, queue) QUEUE_HEAD;
 
 QUEUE *ptr;
 
