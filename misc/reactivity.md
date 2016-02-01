@@ -151,3 +151,10 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 ### asynchronous generator functions
 
 + generator function 返回 iterator，asynchronous function 返回 promise。
++ 对于两者的组合，作者认为关键问题是返回值应该是什么。
++ A) 返回 promise，resolve 后是个 iterator。实质上是个 asynchronous function。
++ B) 返回 iterator，next 时返回的是个 promise，resolve 后是个 iteration。实质上是个 generator function。
++ C) 返回 iterator，next 时返回的是个 iteration，其 value 是个 promise。实质上是个 generator function。
++ 后两种方法，初看区别不大。关键区别是错误处理是怎么控制的。
+    B 方案，错误处理是 promise 控制的；C 方案，错误处理是 iterator 控制的。
++ 使用 B 方案，可以更好地和 yield/await 等操作整合起来。
