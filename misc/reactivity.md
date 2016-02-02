@@ -158,3 +158,15 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 + 后两种方法，初看区别不大。关键区别是错误处理是怎么控制的。
     B 方案，错误处理是 promise 控制的；C 方案，错误处理是 iterator 控制的。
 + 使用 B 方案，可以更好地和 yield/await 等操作整合起来。
+
+---
+
+### observables
+
++ 作者将离散的信息称为 signal，将连续的信息称为 behavior
++ signal 是由生产者推送的，即 push。
+    behavior 是由消费者拉取的，即 pull/poll。
+    因为 behavior 是连续的，理论上值是不间断的，只能是主动获取某个时刻的值。
++ 不像 stream，observable 是没有 back-pressure 的。
++ signal 与 stream 的一个区别在于 signal 可以有多个生产者和多个消费者。
++ behavior 没有 setter，而应该是个根据条件返回值的函数
