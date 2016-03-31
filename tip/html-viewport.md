@@ -69,3 +69,20 @@ https://developer.apple.com/library/ios/documentation/AppleApplications/Referenc
     只能认为，文档太久……
 + 当只设置 `width` 时，上面说了 `device-width` 的情况，不再提了。感觉后面不靠谱
 + 当同时设置了 initial-scale 和 width 时，文档的说法是会维持比例，可是这个是什么和什么的比例呀……
+
+---
+
+https://developers.google.com/speed/docs/insights/ConfigureViewport
+https://developers.google.com/web/fundamentals/design-and-ui/responsive/fundamentals/set-the-viewport
+
+google 的说法
+
+---
+
++ 推荐使用 `<meta name=viewport content="width=device-width, initial-scale=1">`
++ 没有 viewport 时是自动适配 width 是个范围而不是固定值，从 800 到 1024
++ `width=device-width` 时，iOS 和 WP 在旋转的时候会选择缩放页面而不是重排
++ `width=device-width` 将页面宽度设置为 dip 的大小
++ 加上 `initial-scale=1` 会让 css pixel:dip = 1:1
++ Hardware pixel／Device-independent pixel／CSS pixel
++ `devicePixelRatio = physical pixels / dips`
