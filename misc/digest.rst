@@ -89,3 +89,15 @@ conway's law
     rails programmers built Ember
 
 团队的结构影响最终产物的结构，好像确实是这样……
+
+
+
+
+一个前端的自我修养
+==================
+
+http://taobaofed.org/blog/2016/03/23/the-growth-of-front-end/
+
+技术圈里流行一个笑话，说的是一个人，工作了三年，却只有一年的经验，因为后面两年都在重复第一年的工作。
+
+心有戚戚
