@@ -4,9 +4,16 @@
 
 ## tap
 
+```
+$ brew tap
 caskroom/cask
+caskroom/versions
+homebrew/core
 homebrew/dupes
+homebrew/services
+homebrew/versions
 mpv-player/mpv
+```
 
 ---
 
@@ -51,11 +58,10 @@ imagemagick
 ## cask
 
 adobe-air
+android-file-transfer
 appcleaner
 dropbox
 evernote
-firefox
-flux
 google-chrome
 google-chrome-canary
 imageoptim
@@ -65,4 +71,6 @@ omnidisksweeper
 skitch
 sparrow (!)
 spectacle
+steam
 virtualbox
+xquartz
