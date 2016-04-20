@@ -83,6 +83,7 @@ google 的说法
 + 没有 viewport 时是自动适配 width 是个范围而不是固定值，从 800 到 1024
 + `width=device-width` 时，iOS 和 WP 在旋转的时候会选择缩放页面而不是重排
 + `width=device-width` 将页面宽度设置为 dip 的大小
+    （即 physical pixels / devicePixelRatio，比如 iphone5 为 640/2=320，iphone6p 为 1242/3=414）
 + 加上 `initial-scale=1` 会让 css pixel:dip = 1:1
 + Hardware pixel／Device-independent pixel／CSS pixel
 + `devicePixelRatio = physical pixels / dips`
