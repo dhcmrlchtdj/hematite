@@ -46,3 +46,16 @@ JS 中部分 API 是自下而上的，把社区或其他社区的实践吸收到
 在 mac 上测试得差不多了，跑到 docker 里跑一下，发现 linux 下没有完整的 Foundation 支持。
 真的是不会再爱了……
 只能说，swift 的目标就不是通用的编程语言。
+
+---
+
+关于 lua
+
+有 math.floor／math.ceil，但是没有 math.round。
+搜了一下，邮件列表里居然还有争论是否需要 math.round。
+然后有人回复说 `math.floor(n) = -math.ceil(-n)` 所以 ceil/floor 也可以去掉的一个。
+哈哈哈
+
+`elseif` 也算是个槽点吧，和 python 一样没有简单明了的 else if，非要奇怪组合。
+
+
