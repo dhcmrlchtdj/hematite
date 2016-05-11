@@ -49,4 +49,11 @@ if (x == y) {
 
 bool only
 
+# type
 
+string(bytes)
+number(integer + float)
+boolean(true / false)
+nil
+
+everything are values, no reference
