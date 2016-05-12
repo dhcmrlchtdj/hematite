@@ -58,4 +58,28 @@ JS 中部分 API 是自下而上的，把社区或其他社区的实践吸收到
 
 `elseif` 也算是个槽点吧，和 python 一样没有简单明了的 else if，非要奇怪组合。
 
+---
 
+关于 swift
+
+终于把 swift 浏览完了。后面看得比较快。
+看一个语言应该关注什么呢。
+
+基本类型
+基本的逻辑语句
+类型和继承
+extension 扩展对象
+protocol 定义接口
+泛型
+异常处理
+ARC
+optional chaining
+
+很特别的一点是 nil 机制吧。
+optional chaining 和 optional value，到处 `?` 和 `!`。
+感觉确实能简化很多东西。
+
+其他的，ARC 虽然没接触过，但是 weak reference 这种东西还是知道的。
+
+再剩下的，其实就不是很感兴趣了。
+swift 的学习，可能到这就告一段落吧。
