@@ -31,3 +31,15 @@
 
 前面提到 Scheme 程序和数据看起来是相同的，说的就是这个了。
 目的其实就是为了简化周边工具的开发。
+
+---
+
+> Assignments are commonly used to implement procedures that must maintain
+> some internal state.
+
+变量在 scheme 中的一个作用是维持内部状态。
+
+> Local state is sometimes useful for caching computed values or allowing a
+> computation to be evaluated lazily, i.e., only once and only on demand.
+
+维持内部状态，可以用来做缓存等。
