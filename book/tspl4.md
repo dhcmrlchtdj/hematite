@@ -21,3 +21,13 @@
 + tail recursion & iteration
 + tail call & jump
 + continuation
+
+---
+
+> You might wonder why applications and variables share notations with lists
+> and symbols. The shared notation allows Scheme programs to be represented as
+> Scheme data, simplifying the writing of interpreters, compilers, editors,
+> and other tools in Scheme.
+
+前面提到 Scheme 程序和数据看起来是相同的，说的就是这个了。
+目的其实就是为了简化周边工具的开发。
