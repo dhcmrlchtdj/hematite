@@ -2,21 +2,23 @@
 
 ---
 
-廉价的用了几个，结果就 bandwagon 的网络最好
+用过的几个廉价 vps，以后不准备再跳廉价 vps 的坑了。
 
 ---
 
-## ping
+bandwagon
 
-| vps        | location                  | round-trip | packet loss |
-| ---------- | ------------------------- | ---------- | ----------- |
-| bandwagon  | California, QuadraNet     | 150        | 2%          |
-| ramhost    | Los Angeles - West        | 400        | 25%         |
-| 123systems | Los Angeles, ColoCrossing | 200        | 25%         |
+除了是 openvz 外，其他都挺好的。
 
 ---
 
-## blacklist
+ramhost
 
-+ 123systems
-    - uptime
+出了 ticket 根本不会外，其他好像也还好。
+
+---
+
+123systems
+
+黑名单。
+丢包吓人，uptime 感人。
