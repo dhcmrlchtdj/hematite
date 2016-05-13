@@ -21,3 +21,13 @@ ELM 的定义
 - Update: a pure function from previous state and an action to new state
 
 让人感觉比较理想的一个，细节再研究。
+
+---
+
+再想想，reduce 确实是很适合做更新的。
+
+Model -> View 这个方向是很确定的。
+View -> Action 没有问题。
+Action + Model -> new Model 也没有问题。
+
+在 Action + Model 这个地方，天然就适合 reduce 应用进去，是个嵌套的 reduce 过程。
