@@ -101,3 +101,15 @@ lua 的遍历太反直觉了，想简单遍历个字符串都不行。
 不过，lambda 的语法，太绕了……
 带不带括号、一个参数的情况、多个参数的情况，再加上 define。
 我到底加不加括号呢……
+
+---
+
+http://www.chriskrycho.com/rust-and-swift.html
+http://typeof.net/2014/c/cn-why-language-x-is-better-than-y.html
+
+人老了之后，就很难接受新事务。
+比如 swift 比如 lua 比如 es6，满眼都是缺点，用起来都是不满。
+然后看到什么东西，都拉来作为自己不满的佐证。
+
+然后，继续看和学吧，直到满意为止。
+这么无聊的世界，还有什么其他好做的呢……
