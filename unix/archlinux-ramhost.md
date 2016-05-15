@@ -41,7 +41,6 @@ $ locale-gen
 $ echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 
 $ echo "hostname" > /etc/hostname
-$ # systemctl enable dhcpcd@interface.service
 
 $ tzselect
 $ ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -54,7 +53,12 @@ $ grub-mkconfig -o /boot/grub/grub.cfg
 
 $ passwd
 
+$ useradd -m -G wheel -s /bin/bash archie
+$ passwd archie
+
 $ exit
 $ umount -R /mnt
 $ reboot
+
+$ # systemctl enable dhcpcd@interface.service
 ```
