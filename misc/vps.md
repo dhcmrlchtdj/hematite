@@ -8,16 +8,18 @@
 
 + bandwagon／可以有
 	- 年付 10 刀的 openvz
-	- 稳定使用了很长时间
+	- 稳定使用一年多时间
 
 + hostigation／可以有
 	- 年付 50 刀的 kvm
 	- 目前看起来还行的样子
+	- 付款后开通很快
 
 + ramhost
 	- 年付 15 刀的 kvm
-	- 手上这台网络比 bandwagon 那台还差一些，不知道能干啥了
+	- 网络比 bandwagon 要差一些，可能是个例
 	- ticket 没人回复
+	- 付款后拖了几天才开通
 
 + 123systems／必须死
 	- 黑名单
