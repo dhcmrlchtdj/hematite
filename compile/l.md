@@ -5,8 +5,8 @@ import foo from "/path/to/module"
 export bar = foo
 ```
 
-模块按版本平铺。
-
+two module in one file
+module like struct
 
 #  binding
 
@@ -57,3 +57,7 @@ boolean(true / false)
 nil
 
 everything are values, no reference
+
+# access
+
+everything is public, no private
