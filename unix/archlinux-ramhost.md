@@ -24,7 +24,7 @@ $ # mkswap /dev/sdxY
 $ # swapon /dev/sdxY
 ```
 
-## config
+## setup
 
 ```
 $ mount /dev/sdxY /mnt
@@ -53,12 +53,23 @@ $ grub-mkconfig -o /boot/grub/grub.cfg
 
 $ passwd
 
-$ useradd -m -G wheel -s /bin/bash archie
-$ passwd archie
-
 $ exit
 $ umount -R /mnt
 $ reboot
 
-$ # systemctl enable dhcpcd@interface.service
+```
+
+## config
+
+```
+$ visudo
+
+$ useradd -m -G wheel -s /bin/bash archie
+$ passwd archie
+
+$ systemctl enable dhcpcd@interface
+$ echo "static domain_name_servers=8.8.4.4 8.8.8.8" >> /etc/dhcpcd.conf
+
+$ sed -E -i.bak '/GRUB_CMDLINE_LINUX_DEFAULT/s/"$/ ipv6.disable_ipv6=1"/' /etc/default/grub
+$ grub-mkconfig -o /boot/grub/grub.cfg
 ```
