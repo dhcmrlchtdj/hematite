@@ -68,3 +68,9 @@ everything are values, no reference
 # access
 
 everything is public, no private
+
+# async
+
+blocked by default
+await for async
+
