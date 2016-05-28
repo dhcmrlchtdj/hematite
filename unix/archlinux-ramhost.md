@@ -20,8 +20,8 @@ $ timedatectl set-ntp true
 $ lsblk
 $ cgdisk /dev/sdx
 $ mkfs.ext4 /dev/sdxY
-$ # mkswap /dev/sdxY
-$ # swapon /dev/sdxY
+$ mkswap /dev/sdxY
+$ swapon /dev/sdxY
 ```
 
 ## setup
