@@ -9,7 +9,7 @@
 + To support lexical scoping, a procedure carries the lexical context (environment) along with its code.
 + A special case of recursion, called tail recursion, is used to express iteration, or looping.
 + Scheme implementations are required to implement tail calls as jumps (gotos)
-+ Whenever it is invoked, the program immediately continues from the point where the continuation was obtained. 
++ Whenever it is invoked, the program immediately continues from the point where the continuation was obtained.
 
 几个点
 
@@ -43,3 +43,30 @@
 > computation to be evaluated lazily, i.e., only once and only on demand.
 
 维持内部状态，可以用来做缓存等。
+
+---
+
+> During the evaluation of a Scheme expression, the implementation must keep
+> track of two things: (1) what to evaluate and (2) what to do with the value.
+
+关于 continuation 的这种描述，我之前绝对见过。
+这里是原始出处吗
+
+---
+
+> CPS allows a procedure to pass more than one result to its continuation,
+> because the procedure that implements the continuation can take any number
+> of arguments
+
+这点，对应过来，就是函数的多返回值吧。
+
+---
+
+> It turns out that any program that uses call/cc can be rewritten in CPS
+> without call/cc, but a total rewrite of the program (sometimes including
+> even system-defined primitives) might be necessary.
+
+这差不多就是 callcc 并不是 core syntax 的理由，可以用 CPS 来模拟。
+但是，难度可能略大？
+
+上知乎搜了一下，瞬间感觉不用看了，完全不懂啊……
