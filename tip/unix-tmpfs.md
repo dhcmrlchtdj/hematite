@@ -2,6 +2,7 @@
 
 ---
 
+https://www.kernel.org/doc/Documentation/filesystems/tmpfs.txt
 https://wiki.archlinux.org/index.php/Tmpfs
 
 ---
@@ -20,3 +21,14 @@ $ mount -o remount,noatime,size=1G /tmp
 ```
 $ findmnt --target /tmp
 ```
+
+---
+
+偶然发现文档
+
+> Tmpfs is a file system which keeps all files in virtual memory.
+
+> Everything in tmpfs is temporary in the sense that no files will be
+> created on your hard drive.
+
+tmpfs 其实是映射在内存里的，这也就是为什么 arch 下面默认大小为内存的一般吧。
