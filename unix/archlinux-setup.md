@@ -67,8 +67,11 @@ $ visudo
 $ useradd -m -G wheel -s /bin/bash archie
 $ passwd archie
 
-$ systemctl enable dhcpcd@interface
-$ echo "static domain_name_servers=8.8.4.4 8.8.8.8" >> /etc/dhcpcd.conf
+$ # systemctl enable dhcpcd@interface
+$ # echo "static domain_name_servers=8.8.4.4 8.8.8.8" >> /etc/dhcpcd.conf
+$ cp /etc/netctl/examples/ethernet-static /etc/netctl/eth0
+$ vim /etc/netctl/eth0
+$ netctl enable eth0
 
 $ sed -E -i.bak '/GRUB_CMDLINE_LINUX_DEFAULT/s/"$/ ipv6.disable_ipv6=1"/' /etc/default/grub
 $ grub-mkconfig -o /boot/grub/grub.cfg
