@@ -44,8 +44,8 @@ python
 python3
 
 aria2
-gifify
 mpv
+ncdu
 
 ansible
 docker
