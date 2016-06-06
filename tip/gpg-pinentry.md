@@ -4,6 +4,7 @@
 
 https://wiki.archlinux.org/index.php/GnuPG
 https://wiki.archlinux.org/index.php/Random_number_generation#Faster_alternatives
+https://www.gnupg.org/documentation/manuals/gnupg/Common-Problems.html
 http://serverfault.com/questions/214605/gpg-not-enough-entropy
 
 ---
@@ -45,9 +46,23 @@ Not enough random bytes available.
 Please do some other work to give the OS a chance to collect more entropy!
 ```
 
-应该是因为 `cat /proc/sys/kernel/random/entropy_avail` 比较小。
-可以试着在机器上做点其他事情，或者，用 rngd 之类的临时处理下。
+是因为 `cat /proc/sys/kernel/random/entropy_avail` 比较小。
+可以试着在机器上做点其他事情，或者，用 rngd 临时处理下。
 
 ```
 $ rngd -r /dev/urandom
+```
+
+---
+
+本地使用 gpg 的时候，会出现这种错误。
+
+```
+gpg: signing failed: Inappropriate ioctl for device
+```
+
+可以靠设置 `GPG_TTY` 解决
+
+```
+$ export GPG_TTY=$(tty)
 ```
