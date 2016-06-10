@@ -40,3 +40,11 @@ $ cat signed.crt intermediate.pem > chained.pem
 ssl_certificate /path/to/chained.pem;
 ssl_certificate_key /path/to/domain.key;
 ```
+
+---
+
+可以用 openssl 检查证书的过期时间
+
+```
+$ openssl x509 -enddate -noout -in chained.pem
+```
