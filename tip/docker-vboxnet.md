@@ -13,6 +13,6 @@ docker-machine 删除后，vboxnet 却还留着，看着很不舒服……
 $ VBoxManage hostonlyif remove vboxnet4
 ```
 
-or 
+or
 
 `Open Virtualbox, click File -> Preferences -> Network -> Host-only Network, remove Vboxnet#`

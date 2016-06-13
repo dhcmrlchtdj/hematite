@@ -31,6 +31,3 @@ io 复用
 io 复用有 reactor 和 proactor 两种模型。
 我的理解是 reactor 除了进行数据处理，还要自己进行 IO 的读写操作。
 而 proactor 只进行数据处理，将 IO 读写操作委托给了系统。
-
-
-
