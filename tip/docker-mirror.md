@@ -3,6 +3,15 @@
 ---
 
 http://blog.daocloud.io/how-to-master-docker-image/
+https://servers.ustclug.org/2015/05/new-docker-hub-registry-mirror/
+
+---
+
+update:
+
+`--registry-mirror=https://docker.mirrors.ustc.edu.cn`
+
+原来 ustc 也有 docker 源呀
 
 ---
 
