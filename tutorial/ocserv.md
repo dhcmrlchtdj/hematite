@@ -16,7 +16,9 @@ $ yaourt -S ocserv
 
 ```
 $ echo "net.ipv4.ip_forward=1" | tee -a /etc/sysctl.d/30-ipforward.conf
+$ # echo "net.ipv6.conf.all.forwarding=1" | tee -a /etc/sysctl.d/30-ipforward.conf
 $ sysctl --system # load conf
+$ # sysctl -p /etc/sysctl.d/30-ipforward.conf # load conf
 ```
 
 ## nat
