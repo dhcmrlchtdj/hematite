@@ -112,7 +112,7 @@ http://taobaofed.org/blog/2016/03/23/the-growth-of-front-end/
 
 心有戚戚
 
-
+******
 
 > 子组件对外部一无所知
 > 唯一的数据入口是 props
@@ -125,3 +125,7 @@ v2ex 上遇到一个神奇的网址 https://cloudflare.com/cdn-cgi/trace
 只要用了 cloudflare 的 CDN，都可以访问这个路径
 网上搜了下，https://www.cloudflarestatus.com/ 可以查到里面具体指哪个数据中心
 从地图上看，https://www.cloudflare.com/network-map/，国内不少啊，是百度提供的吗
+
+******
+
+> Life is complex. It has real and imaginary parts
