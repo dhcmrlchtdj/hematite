@@ -18,7 +18,7 @@ $ # openssl genrsa 4096 > domain.key # 如果要用 RSA 的话
 
 # 生成 CSR (certificate signing request)
 $ openssl req -new -sha384 -key domain.key -subj "/CN=yoursite.com" > domain.csr
-$ # openssl req -new -sha384 -key domain.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:yoursite.com,DNS:www.yoursite.com")) > domain.csr
+$ # openssl req -new -sha384 -key domain.key -subj "/CN=yoursite.com" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:yoursite.com,DNS:www.yoursite.com")) > domain.csr
 
 # 获取证书
 $ curl -O 'https://raw.githubusercontent.com/diafygi/acme-tiny/master/acme_tiny.py'
@@ -43,8 +43,10 @@ ssl_certificate_key /path/to/domain.key;
 
 ---
 
-可以用 openssl 检查证书的过期时间
-
 ```
-$ openssl x509 -enddate -noout -in chained.pem
+$ # 检查证书的过期时间
+$ openssl x509 -noout -enddate -in chained.pem
+
+$ # 检查 CSR 的内容
+$ openssl req -noout -text -in domain.csr
 ```
