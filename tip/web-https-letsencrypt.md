@@ -72,9 +72,7 @@ account:
 
 csr:
 	mkdir -p $(certs)/$(CN)
-	if [[ ! -f $(certs)/$(CN)/domain.key ]]; then \
-		openssl ecparam -genkey -name secp384r1 \
-		-out $(certs)/$(CN)/domain.key; fi
+	openssl ecparam -genkey -name secp384r1 -out $(certs)/$(CN)/domain.key
 	openssl req -new -sha384 -key $(certs)/$(CN)/domain.key \
 		-subj "/CN=$(CN)" -reqexts SAN \
 		-config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=$(SAN)")) \
