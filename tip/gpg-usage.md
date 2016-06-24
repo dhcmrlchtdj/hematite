@@ -3,32 +3,96 @@
 ---
 
 https://wiki.archlinux.org/index.php/GnuPG
-http://irtfweb.ifa.hawaii.edu/~lockhart/gpg/gpg-cs.html
+http://www.dewinter.com/gnupg_howto/english/GPGMiniHowto.html
 https://www.gnupg.org/gph/en/manual.html
 
 ---
 
-基本不会用……
+## key
+
+GPG 版本和支持的算法
 
 ```
-# 列出 key
-$ gpg -k
-$ gpg -K
+$ gpg --version
+```
+
+生成 key
+
+```
+$ gpg --expert --full-gen-key
+```
+
+查看生成的 key
+
+```
+$ gpg --list-keys
+$ gpg --list-secret-keys
 $ gpg --fingerprint
+$ gpg --list-sigs
 ```
 
-```
-# 加密数据
-$ gpg -a -e -u "Sender Key" -r "Receiver Key" <filename>
-$ gpg -a --symmetric <filename>
-
-# 解密数据
-$ gpg -d <filename>.asc
-```
+生成 revocation certificate
 
 ```
-# 签名
-$ gpg -a -s -b -u <key> <filename>
-$ gpg -a -s <filename>
-$ gpg --verify <filename>.asc
+$ gpg --gen-revoke
+```
+
+导出 key
+
+```
+$ gpg --armor --export > public_key.asc
+$ gpg --armor --export-secret-keys > private_key.asc
+```
+
+导入 key
+
+```
+$ gpg --import public_key.asc
+```
+
+修改 key
+
+```
+$ gpg --edit-key <UID>
+```
+
+删除 key
+
+```
+$ gpg --delete-key <UID>
+$ gpg --delete-secret-and-public-keys <UID>
+```
+
+---
+
+## usage
+
+加密
+
+```
+$ gpg --armor --encrypt -u <Sender_UID> -r <Receiver_UID> [DATA]
+```
+
+解密
+
+```
+$ gpg --decrypt [DATA]
+```
+
+签名
+
+```
+$ gpg --armor --sign --detach-sign -u <Sender_UID> [DATA]
+```
+
+验证
+
+```
+$ gpg --verify [DATA]
+```
+
+加密＋签名
+
+```
+$ gpg --armor --sign --detach-sign --encrypt -u <Sender_UID> -r <Receiver_UID> [DATA]
 ```
