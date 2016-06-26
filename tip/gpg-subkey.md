@@ -52,3 +52,7 @@ adduid / deluid
 key 1
 addkey / delkey
 expire
+
+---
+
+每次更新 subkey / uid 之类的后，都要重新导出 pubkey，不过 fingerprint 是不会变的。
