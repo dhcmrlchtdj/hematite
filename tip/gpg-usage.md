@@ -5,6 +5,7 @@
 https://wiki.archlinux.org/index.php/GnuPG
 http://www.dewinter.com/gnupg_howto/english/GPGMiniHowto.html
 https://www.gnupg.org/gph/en/manual.html
+https://alexcabal.com/creating-the-perfect-gpg-keypair/
 
 ---
 
@@ -34,7 +35,7 @@ $ gpg --list-sigs
 生成 revocation certificate
 
 ```
-$ gpg --gen-revoke
+$ gpg --gen-revoke <UID> > <UID>.revoke.asc
 ```
 
 导出 key
