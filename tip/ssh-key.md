@@ -21,3 +21,21 @@ $ # ssh-keygen -t rsa -b 4096 -C "$(whoami)@$(hostname)"
 ```
 $ chmod 400 ~/.ssh/authorized_keys
 ```
+
+---
+
+## 修改密码
+
+```
+$ ssh-keygen -p -f /path/to/private-key
+```
+
+---
+
+## 免输入
+
+```
+$ ssh-add -l
+$ ssh-add -D
+$ ssh-add -c /path/to/private-key
+```
