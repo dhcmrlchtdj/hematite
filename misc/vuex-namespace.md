@@ -12,3 +12,8 @@
 在 component 里使用命名空间，所有数据都经由这个命名空间暴露给 component。
 getter 里有了这个 namespace 就可以支持这个 component 的调用。
 底层的 state 结构，简单的封装起来。
+
+---
+
+继 action 没有 namespace 后，又遇到其他问题。
+store 里只能是纯数据，computed 必须拿到 getter 里，导致了数据逻辑的分离啊。
