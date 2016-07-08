@@ -90,7 +90,7 @@ chrome
 ::
 
     $ open -a Google\ Chrome --args --allow-file-access-from-files
-    $ open -a Google\ Chrome --args --disable-web-security
+    $ open -a Google\ Chrome\ Canary --args --disable-web-security --user-data-dir
 
 
 
