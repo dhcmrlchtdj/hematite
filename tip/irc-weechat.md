@@ -6,6 +6,7 @@ https://weechat.org/files/doc/devel/weechat_quickstart.en.html
 https://latest.glowing-bear.org/
 https://wiki.archlinux.org/index.php/WeeChat
 https://weblog.lkiesow.de/20160226-nginx-weechat-relay/
+https://freenode-feminism.github.io/cloak/
 
 ---
 
@@ -72,4 +73,17 @@ server {
 
 ```
 /set weechat.plugin.autoload "*,!aspell,!tcl,!ruby"
+```
+
+---
+
+irc 上用 `whois` 是可以查到 ip 的。
+在 freenode 上，可以联系工作人员帮忙改一下 `unaffiliated cloak`。
+
+```
+/stats p
+/msg staff_nick ....
+
+/whois niris
+[niris] (~niris@unaffiliated/niris): niris
 ```
