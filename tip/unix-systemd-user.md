@@ -16,6 +16,7 @@ Description=shortener.js
 
 [Service]
 Type=simple
+Restart=on-failure
 User=nobody
 WorkingDirectory=/path/to/shortener.js
 EnvironmentFile=/path/to/shortener.js/deploy/env
