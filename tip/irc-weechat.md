@@ -18,9 +18,14 @@ https://freenode-feminism.github.io/cloak/
 
 ```
 /server add freenode chat.freenode.net/6697 -ssl -autoconnect
-/set irc.server.freenode.sasl_username "username"
-/set irc.server.freenode.sasl_password "password"
 /set irc.server.freenode.autojoin = "#archlinux-cn"
+
+/secure passphrase xxxxxxxxxx
+/secure set freenode_username username
+/secure set freenode_password xxxxxxxx
+/set irc.server.freenode.sasl_username "${sec.data.freenode_username}"
+/set irc.server.freenode.sasl_password "${sec.data.freenode_password}"
+
 /connect freenode
 ```
 
