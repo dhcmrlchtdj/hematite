@@ -53,3 +53,10 @@ http://caniuse.com/#feat=page-transition-events
 
 条件允许，就使用 pageshow/pagehide 代替 load/unload。
 在后退之类的场景，用户体验会有所提升。
+
+---
+
+TODO
+
+BFCache 碰到 pushState 之类的 API 会怎么样
+待测试
