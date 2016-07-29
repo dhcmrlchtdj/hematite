@@ -60,3 +60,12 @@ imperative 和 functional
 但是，还是感觉直接列表处理浪费时间空间。
 这就又想到了之前接触的 transducer。
 要怎么更好地把这些技巧都整合起来。
+
+---
+
++ generic operations with explicit dispatch
+	- 不同实现使用不同的函数名
++ data-directed style
+	- 给不同实现打上标记，根据参数的标记找到对应的实现
++ message-passing-style
+	- 实现封装在参数内部，调用是在参数里查找具体实现
