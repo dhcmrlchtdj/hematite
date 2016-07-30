@@ -69,3 +69,19 @@ imperative 和 functional
 	- 给不同实现打上标记，根据参数的标记找到对应的实现
 + message-passing-style
 	- 实现封装在参数内部，调用是在参数里查找具体实现
+
+---
+
+```
+(define (cons x y) (lambda (z) (if z x y)))
+(define (car z) (z #t))
+(define (cdr z) (z #f))
+```
+
+```
+(define (cons x y) (lambda (m) (m x y)))
+(define (car z) (z (lambda (p q) p)))
+(define (cdr z) (z (lambda (p q) q)))
+```
+
+返回的不是 pair，而是函数。
