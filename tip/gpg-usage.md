@@ -68,32 +68,30 @@ $ gpg --delete-secret-and-public-keys <UID>
 
 ## usage
 
-加密
+加密 / 解密
 
 ```
 $ gpg --armor --encrypt -u <Sender_UID> -r <Receiver_UID> [DATA]
-```
-
-解密
-
-```
 $ gpg --decrypt [DATA]
 ```
 
-签名
+签名 / 验证
 
 ```
 $ gpg --armor --sign --detach-sign -u <Sender_UID> [DATA]
-```
-
-验证
-
-```
 $ gpg --verify [DATA]
 ```
 
-加密＋签名
+加密签名 / 验证解密
 
 ```
-$ gpg --armor --sign --detach-sign --encrypt -u <Sender_UID> -r <Receiver_UID> [DATA]
+$ gpg --armor --sign --encrypt -u <Sender_UID> -r <Receiver_UID> [DATA]
+$ gpg --decrypt [DATA]
+```
+
+签名信息
+
+```
+$ echo "test" | gpg --sign --clearsign
+$ echo "test" | gpg --sign --clearsign | gpg --verify
 ```
