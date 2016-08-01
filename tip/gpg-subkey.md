@@ -2,6 +2,7 @@
 
 ---
 
+https://sks-keyservers.net/overview-of-pools.php
 https://www.void.gr/kargig/blog/2013/12/02/creating-a-new-gpg-key-with-subkeys/
 https://help.riseup.net/en/gpg-best-practices
 
@@ -64,3 +65,7 @@ expire
 然后 `gpg --refresh-keys` 就好了。
 
 觉得没用的签名太多，可以 `gpg --edit-key` 然后 `clean` 一下再导出。
+
+---
+
+更新需要的服务器，可以去 https://sks-keyservers.net/overview-of-pools.php 找。
