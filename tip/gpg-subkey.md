@@ -56,3 +56,11 @@ expire
 ---
 
 每次更新 subkey / uid 之类的后，都要重新导出 pubkey，不过 fingerprint 是不会变的。
+
+---
+
+`gpg --edit-key` 可以修改很多东西，比如 subkey 的过期时间。
+更新之后，会生成新的 sig，可以看 `gpg --list-sigs`。
+然后 `gpg --refresh-keys` 就好了。
+
+觉得没用的签名太多，可以 `gpg --edit-key` 然后 `clean` 一下再导出。
