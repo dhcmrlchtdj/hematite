@@ -27,3 +27,12 @@ https://github.com/css-typed-om/typed-om
 https://github.com/WICG/CSS-Parser-API
 
 ---
+
+## WICG css parser
+
+简单讲，基于 TypedOM，浏览器提供的解析接口。
+目前啥都没有，对研究学习帮助不大。
+
+---
+
+
