@@ -93,3 +93,11 @@ imperative 和 functional
 这个过程下来，越来越接近我脑子里面向对象的相关概念。
 或者说是我对两者的理解都有问题吗。
 
+---
+
+> assignment and mutation are equipotent:
+> Each can be implemented in terms of the other.
+
+想要实现可变数据，引入赋值操作即可。
+而引入赋值操作，环境必须用可变数据来表示。
+
