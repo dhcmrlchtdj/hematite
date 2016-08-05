@@ -27,7 +27,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z
 + `opacity`
 + `transform`
 + `filter`
-+ `-webkit-overflow-scrolling set: touch`
++ `-webkit-overflow-scrolling: touch`
 + `perspective`
 + `mix-blend-mode`
 + `will-change`
