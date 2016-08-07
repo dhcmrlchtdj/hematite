@@ -101,3 +101,8 @@ imperative 和 functional
 想要实现可变数据，引入赋值操作即可。
 而引入赋值操作，环境必须用可变数据来表示。
 
+---
+
+> any notion of time in concurrency control must be intimately tied to communication
+
+数据同步的问题，小到两个函数调用，大到分布式计算？
