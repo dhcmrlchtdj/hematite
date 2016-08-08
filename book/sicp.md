@@ -106,3 +106,25 @@ imperative 和 functional
 > any notion of time in concurrency control must be intimately tied to communication
 
 数据同步的问题，小到两个函数调用，大到分布式计算？
+
+---
+
+> The truth of the matter is that, in a language in which we can deal with
+> procedures as objects, there is no fundamental difference between
+> "procedures" and "data", and we can choose our syntactic sugar to allow us
+> to program in whatever style we choose.
+
++ `(wire 'get-signal)`
+	- `wire` 是 procedure，`'get-signal` 是 message
+
++ `(get-signal wire)`
+	- `get-signal` 是 procedure，`wire` 是 data
+
+可以用语法糖来转换这两种调用方式。
+`wire` 到底是数据还是函数，其实就没太多区别了。
+
+---
+
+3.3.5 这个，在我的现有知识里，就是双向绑定了。
+更准确点，是 computed 的概念。
+（不过，双向绑定本质也就是 computed 就是了，按我理解）
