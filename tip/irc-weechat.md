@@ -92,3 +92,23 @@ irc 上用 `whois` 是可以查到 ip 的。
 /whois niris
 [niris] (~niris@unaffiliated/niris): niris
 ```
+
+---
+
+mac 可能碰到证书问题
+
+```
+gnutls: peer's certificate is NOT trusted
+gnutls: peer's certificate issuer is unknown
+irc: TLS handshake failed
+irc: error: Error in the certificate.
+irc: reconnecting to server in 10 seconds
+```
+
+根据 FAQ 的解释，安装一个 openssl，然后设置 `gnutls_ca_file` 即可。
+`ssl_priorities` 可以设置一下。
+
+```
+/set weechat.network.gnutls_ca_file "/usr/local/etc/openssl/cert.pem"
+/set irc.server_default.ssl_priorities "NORMAL:-VERS-TLS-ALL:+VERS-TLS1.0:+VERS-SSL3.0:%COMPAT"
+```
