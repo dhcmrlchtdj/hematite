@@ -4,6 +4,7 @@
 
 https://gist.github.com/earthgecko/3089509
 http://stackoverflow.com/questions/10497236/generate-random-char-in-bash
+http://unix.stackexchange.com/questions/5780/adding-an-empty-line-at-the-end-of-input
 
 ---
 
@@ -14,5 +15,5 @@ http://stackoverflow.com/questions/10497236/generate-random-char-in-bash
 ```
 $ tr -dc '[:alnum:]' < /dev/urandom | head -c 32
 $ LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | head -c 32 # osx
-$ LC_ALL=C tr -dc '[:alnum:]' < /dev/urandom | head -c 32 # osx
+$ LC_ALL=C tr -dc '[:alnum:]' < /dev/urandom | head -c 32; echo # osx
 ```
