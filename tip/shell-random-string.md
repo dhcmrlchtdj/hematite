@@ -14,4 +14,5 @@ http://stackoverflow.com/questions/10497236/generate-random-char-in-bash
 ```
 $ tr -dc '[:alnum:]' < /dev/urandom | head -c 32
 $ LC_CTYPE=C tr -dc '[:alnum:]' < /dev/urandom | head -c 32 # osx
+$ LC_ALL=C tr -dc '[:alnum:]' < /dev/urandom | head -c 32 # osx
 ```
