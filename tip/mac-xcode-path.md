@@ -25,3 +25,8 @@ $ xcode-select -r
 $ xcode-select -p
 /Applications/Xcode.app/Contents/Developer
 ```
+
+---
+
+好吧，原来是上次安装 gentoo prefix 遗留的……
+重新 `xcode-select --install` 也可以的
