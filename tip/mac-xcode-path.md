@@ -29,4 +29,7 @@ $ xcode-select -p
 ---
 
 好吧，原来是上次安装 gentoo prefix 遗留的……
-重新 `xcode-select --install` 也可以的
+~~重新 `xcode-select --install` 也可以的~~
+
+测试之后，不行呀
+gentoo prefix 之后把 xcode-select 的路径改回来吧
