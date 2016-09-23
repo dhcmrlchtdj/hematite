@@ -55,5 +55,9 @@ Enc，支持就 `CHACHA20-POLY1305` 和 `AES128-GCM`，CHACHA 说是性能更好
 另外目前 AES128 就够了，什么时候不够了可以上 AES256。
 
 更新一下：
-有 AES256-GCM 有硬件加速时是最快的，而 AES128-GCM 是没有硬件加速的。
+有 AES256-GCM 有硬件加速时是最快的，~~而 AES128-GCM 是没有硬件加速的。~~
 纯软件来说，CHACHA20-POLY1305 确实比 AESGCM 快。
+
+再更新一下：
+理解错误，是 libsodium 这个库只实现了硬件加速版本的 AESGCM。
+但是另外一句是对的，有了硬件加速，AESGCM 要比 CHACHA20-POLY1305 快。
