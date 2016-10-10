@@ -2,6 +2,10 @@
 
 ---
 
+http://the-little-schemer.readthedocs.io/zh_CN/latest/index.html
+
+---
+
 ## 8. lambda the ultimate
 
 主要讲了两点
@@ -24,3 +28,14 @@
 没有赋值加上递归调用，所以用这种方式来整合返回值。
 最外层给出的回调接收返回值
 内层的递归调用中，会创建一个新的回调，回调里构造返回值，传递给外层的回调
+
+---
+
+## 9
+
++ partial function
++ total function
+
+partial function 还是递归函数
+但是并不保证在递归时，有逐步接近终止条件
+最糟的情况就是出现无限循环了
