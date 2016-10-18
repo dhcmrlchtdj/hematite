@@ -53,3 +53,16 @@ async 对不保证执行时间，不保证执行顺序。
 写到这里，我都还不知道，到底 DOMContentLoaded / load 受什么影响……
 
 https://www.w3.org/TR/uievents/#event-type-load
+https://html.spec.whatwg.org/multipage/syntax.html#the-end
+
+按 whatwg 文档
+
+-> 完成 html 解析
+-> readyState = interactive
+-> 执行脚本
+-> DOMContentLoaded event
+-> 执行脚本
+-> until there is nothing that delays the load event（？？？
+-> readyState = loaded
+-> load event
+-> pageshow event
