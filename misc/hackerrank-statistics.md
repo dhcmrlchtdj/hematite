@@ -28,9 +28,24 @@ Q1/Q2/Q3
 
 ---
 
-## standard deviation
+## standard deviation / variance / expected values
 标准差，这个能认出来……
 
 python 库里有 population standard deviation 和 sample standard deviation
 又是只有模糊印象的概念
 数学不练真得就都还给老师了……
+
+期望／方差／标准差
+
+u = mean(X)
+o^2 = sum(Xi - u) / len(X)
+o = sqrt(o^2)
+
+---
+
+## probability
+
+事件 A，样本空间 S，概率 P(A)，P(S)
+
++ 独立事件 A 和 B，有 P(A and B) = P(A) * P(B)
++ A B 互斥时，P(A or B) = P(A) + P(B)
