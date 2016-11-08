@@ -49,3 +49,28 @@ o = sqrt(o^2)
 
 + 独立事件 A 和 B，有 P(A and B) = P(A) * P(B)
 + A B 互斥时，P(A or B) = P(A) + P(B)
+
+---
+
+## conditional probability
+条件概率
+AB 没有交集时，P(B|A) = P(B)
+AB 存在交集时，P(B|A) = P(A∩B) / P(A)
+
+## Bayes' Theorem
+贝叶斯定理
+P(A|B) = (P(B|A) * P(A)) / P(B)
+	= (P(B|A)*P(A)) / (P(B|A)*P(A) + P(B|A')*P(A'))
+
+(B 发生的情况下，A 发生的概率)
+	= ((A 发生的情况下，B 发生的概率) * (A 发生的概率)) / (B 发生的概率)
+	= (A B 同时发生的概率) / (B 发生的概率)
+
+---
+
+## permutations && combinations
+排列 && 组合
+排列是有序的，组合是无序的
+
+n 取 r 的排列数 nPr = n! / (n-r)!
+n 取 r 的组合数 nCr = nPr / r! = n! / (r! * (n-r)!)
