@@ -37,9 +37,9 @@ python 库里有 population standard deviation 和 sample standard deviation
 
 期望／方差／标准差
 
-u = mean(X)
-o^2 = sum(Xi - u) / len(X)
-o = sqrt(o^2)
+μ = mean(X)
+σ^2 = sum(Xi - μ) / len(X)
+σ = sqrt(σ^2)
 
 ---
 
@@ -129,6 +129,10 @@ b*(x,n,p) = (n-1)C(x-1) * p^x * q^(n-x)
 再进行第 n 次实验，然后这个第 n 次成功了，即此时成功了 x 次
 这种情况的概率就是 b*
 
+b*(x,n,p) = b(x-1,n-1,p) * p
+	= (n-1)C(x-1) * p^(x-1) * q^(n-1 - (x-1)) * p
+	= (n-1)C(x-1) * p^x * q^(n-x)
+
 
 ## geometric distribution
 几何分布
@@ -136,3 +140,50 @@ b*(x,n,p) = (n-1)C(x-1) * p^x * q^(n-x)
 成功次数为 1 的 negative binomial distribution
 
 g(n,p) = q^(n-1) * p
+
+---
+
+## poisson distribution
+泊松分布
+
+柏松实验的特点
++ 结果只有 成功／失败 两种情况
++ 某个区间内的平均成功概率已知
++ 成功概率与区间成比例
++ 区间极小时，成功概率趋近于 0
+
+
+P(k,λ) = (λ^k * e^-λ) / k!
+e = 2.718
+λ 为平均成功次数
+k 为实际成功次数
+P(k,λ) 为平均成功次数为 λ 时，成功 k 次的概率
+
+和二项分布一样，是可以叠加哒
+
+
+变量 X 满足柏松分布，则
+期望 E(X) = λ
+方差 VAR(X) = λ
+则 VAR(X) = E(X^2) - E(X)^2
+=> E(X^2) = VAR(X) + E(X)^2
+	= λ + λ^2
+
+---
+
+## normal distribution
+正态分布
+
+N(μ,σ^2) = (1 / (σ * sqrt(2 * pi))) * (e ^ (- (x-μ)^2 / 2σ^2))
+μ 平均数，同时也是正态分布的中位数和众数
+σ 方差
+
+当 μ=0,σ=1 时，有 标准正态分布
+ϕ(x) = (e * (- x^2/2)) / sqrt(2 * pi)
+
+正态分布都可以用标准正态分布表示
+N(μ,σ^2) = 1/σ * ϕ((x-μ) / σ)
+
+正态分布的累积分布概率
+O(x) = (1 + erf((x-μ) / (σ * sqrt(2)))) / 2
+erf(z) = ...
