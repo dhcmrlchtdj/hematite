@@ -202,3 +202,44 @@ Sn = sum(Xi) / n
 当 n 极大时，Sn 的分布接近于 N(μ',σ')，其中
 μ' = n * μ
 σ' = sqrt(n) * σ
+
+---
+
+## covariance
+协方差
+
+衡量两组随机变量的相关性
+若 X,Y 的变化趋势一致，则协方差大于 0
+若 X,Y 是统计独立的，则协方差为0（不能反推
+
+cov(X,Y) = E( (X-Xu)*(Y-Yu) )
+	= sum((Xi-Xu)*(Yi-Yu)) / n
+cov(X,Y) = sum( sum( (Xi-Xj)*(Yi-Yj) / 2 ) ) / n^2
+cov(X,Y) = E(X*Y) - Xu*Yu
+
+方差可以视为协方差的特例，即同一组随机变量
+
+
+## pearson correlation coefficient
+皮尔森相关系数
+
+rX,Y = cov(X,Y) / σX*σY
+
+两个变量协方差和标准差的商
+度量两个变量线性相关的程度
+
+---
+
+## spearman's rank correlation coefficient
+斯皮尔曼等级相关系数
+
+两个等级变量之间的皮尔森相关系数
+
+所谓等级变量，就是数据在排序后的位置。
+比如 X={10, 20, 40, 20, 30} 则 RankX={1, 2, 4, 2, 3}，排序下就行
+重复的值在排序后的值也一样
+
+
+有种特殊情况，当 X,Y 都没有重复值的时候
+rs = 1 - (6 * sum(di^2)) / (n * n^2 - 1)
+di 表示等级变量的差值
