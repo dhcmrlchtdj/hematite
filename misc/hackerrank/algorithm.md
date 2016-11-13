@@ -33,3 +33,17 @@ DP
 greedy
 
 ---
+
+## sort
+
+---
+
+## binary search
+
+O(logN)
+
+---
+
+## tree
+
+DFS/BFS/...
