@@ -223,7 +223,7 @@ cov(X,Y) = E(X*Y) - Xu*Yu
 ## pearson correlation coefficient
 皮尔森相关系数
 
-rX,Y = cov(X,Y) / σX*σY
+rX,Y = cov(X,Y) / (σX*σY)
 
 两个变量协方差和标准差的商
 度量两个变量线性相关的程度
@@ -243,3 +243,27 @@ rX,Y = cov(X,Y) / σX*σY
 有种特殊情况，当 X,Y 都没有重复值的时候
 rs = 1 - (6 * sum(di^2)) / (n * n^2 - 1)
 di 表示等级变量的差值
+
+---
+
+## regression line
+回归线
+
+如果两组数据 X,Y 线性相关
+则可以画出一条回归线来描述这种关系，Y' = a + bX
+其中
+a = μX - b*μY
+b = (rX,Y) * (σY / σX) = cov(X,Y) / σX ^2
+b = (n*sum(XiYi) - sum(Xi)*sum(Yi)) / (n*sum(Xi^2) - sum(Xi)^2)
+
+理解起来，大概就是坐标系上分布了很多点(x,y)，然后画条线模拟
+
+Sum of Squares
+Total: SST = sum(Yi - μY)^2
+Rregression: SSR = sum(Y'i - μY)^2
+Error SSE = sum(Y'i - Yi)^2
+如果 SSE 很小，说明回归线拟合较好
+
+## coefficient of determination
+确定性系数？
+R^2 = SSR/SST = 1 - SSE/SST
