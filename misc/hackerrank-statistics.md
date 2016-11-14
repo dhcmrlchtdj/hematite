@@ -267,3 +267,21 @@ Error SSE = sum(Y'i - Yi)^2
 ## coefficient of determination
 确定性系数？
 R^2 = SSR/SST = 1 - SSE/SST
+
+---
+
+## multiple linear regression
+多重线性回归
+
+当 Y 与 X 接近线性相关的时候，可以用前面的 Y' = a + bX 来模拟
+当 Y 与 X1X2X3... 一组数据线性相关的时候，类似可得 Y' = a + b1X1 + b2X2 + ...
+令 X=[1 X1 X2] B=[a b1 b2]，则 Y'=XB（注：X 行B列，点乘
+可以推导出，B=(X'*X)^-1 * X' * Y（其中，X' 表示转置矩阵，^-1 表示逆矩阵，都是点乘
+
+---
+
+# summary
+
+感觉这样不行啊……
+学得好浅，也不知道怎么深入……
+也不好玩……
