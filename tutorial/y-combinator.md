@@ -5,6 +5,8 @@
 http://matt.might.net/articles/implementation-of-recursive-fixed-point-y-combinator-in-javascript-for-memoization/
 https://yinwang0.wordpress.com/2012/04/09/reinvent-y/
 http://okmij.org/ftp/Computation/fixed-point-combinators.html
+http://sighingnow.github.io/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/y_combinator.html
+http://stackoverflow.com/questions/13591970/does-python-optimize-tail-recursion
 
 ---
 
