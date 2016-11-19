@@ -1,96 +1,46 @@
-# data structure
+## link list
 
----
+https://www.hackerrank.com/challenges/detect-whether-a-linked-list-contains-a-cycle
+单个链表出现循环的地方
+快慢指针
 
-## array && arraylist
 
-https://en.wikipedia.org/wiki/Dynamic_array
+https://www.hackerrank.com/challenges/get-the-value-of-the-node-at-a-specific-position-from-the-tail
+一个单向链表
+要求 O(N) 复杂度
+倒数第 x 个元素
+快慢指针
 
-array 是定长的不说了
-arraylist 还是数组不是链表，不过加上了扩容的机制
 
-当长度为 N 的数组存储了 M 个元素时，会自动伸缩数组长度。
-M 接近 N，可以增大 N
-M 接近 0，可以减少 N
-伸缩实际上把整个数组复制到了一个新数组里，所以是有性能损失的
+https://www.hackerrank.com/challenges/find-the-merge-point-of-two-joined-linked-lists
+两个链表的交点
+http://stackoverflow.com/questions/1594061/check-if-two-linked-lists-merge-if-so-where/14956113#14956113
+自己和自己头尾相连，慢慢遍历，迟早也会相交，但是效率太差
+A 尾接 B 头，B 尾接 A 头，遍历效率会提升很多，因为连接后总长度一致啊
+想了想，不要求空间复杂度，直接上字典呀
 
-关于 arraylist 的性能
-保证插入 n 个元素的时间是 O(n)
-所以平摊后每次插入仍可算是 O(1) 的（平摊分析，amortized analysis
+SO 上还有种方法
+先遍历 A B 长度，然后较长的那个先减去差值
+这样 A B 的两个指针距离交点的长度就相同了
 
-关于何时对 N 进行伸缩，伸缩多少，看怎么取舍了
-growth factor 为 a 时，浪费的空间是 (a-1)/n，每次插入的耗时为 a/(a-1)
-比如常见的 a=2, a=1.5，还有 py 奇葩的 (n + n >> 3)，大约是 a=1.125
+## stack
 
-https://github.com/facebook/folly/blob/master/folly/docs/FBVector.md#memory-handling
+https://www.hackerrank.com/challenges/waiter
+这题的问题不是 stack，而是 Nth prime
 
-facebook 说 a=2 对内存分配不友好
-a=2:	10,		20,		40,			80
-a=1.3:	0,		13,		17(16.9),	23(22.1)
-上面是简化的 a=2 和 a=1.3 时的情况
-a=1.3 在分配 23 时，可以重用前面 10/13 释放的内存
-而 a=2 永远不可能进行这种重用，总是必须申请更多内存
+需要估计第 N 个质数是什么，有一个素数定理
+p(n) ~ n*ln(n)，第 n 个素数接近于 n*ln(n)
 
----
+测试了一下，n 越小偏差越大
+比如 n 为一百时，需要 n*ln(n)*1.2 才能保证个数
+比如 n 为千万时，需要 n*ln(n)*1.15 才能保证个数
+比如 n 为万亿时，需要 n*ln(n)*1.11 才能保证个数
 
-## hash
+数据量不大直接算也不慢，直接慢慢算算了
 
-hash table 相关的太多了
-不过接触更多的好像都是 hash function 实现，tree 实现的接触的少
 
-首先会有 hash function 选择的问题
-然后就是如何处理冲突，链表算比较简单的，还有 open addressing
-open addressing 可以各种线性、非线性地增加下标，还有二次 hash 啥的
-
-hash 里有个 load factor = n/k 的概念，即 k 个桶装了 n 个实体
-越大则取值越慢，过小则说明浪费空间
-
-为了保持 load factor 处在合适的值（比如 py 是 2/3，java 是 3/4）
-实现时会对桶的数量进行动态调整（比如用 arraylist 来作为底层实现）
-调整时可能会直接创建新列表后全量复制，也可以创建列表并在各种操作时慢慢复制，等等等等
-
----
-
-## linked list && stack && queue
-
-Singly-Linked List
-Doubly-Linked List
-
-FILO, peek/push/pop
-FIFO, enqueue/dequeue
-
----
-
-## heap
-
-max heap / min heap
-插入时，在最后一位插入，然后调整到合适位置
-取出时，取出后把最后一位拿到开头，再调整到合适位置
-
-可用数组表示
-parent = (index - 2) / 2
-left child = index * 2 + 1
-right child = index * 2 + 2
-
----
-
-## tree
-
-binary tree
-binary search tree
-balanced binary search tree
-
----
-
-## trie
-
----
-
-# summary
-
-一轮题目做下来
-最明显的问题，时间摊派
-把耗时操作分散到其他地方，比如输出结果耗时，就在输入时摊派计算量
-
-另外就是 python 内存爆炸……靠 `__slots__` 救了回来……跪了
-还是需要一个提示更强，编写方便的语言，rust ？
+https://www.hackerrank.com/challenges/largest-rectangle
+https://www.hackerrank.com/challenges/and-xor-or
+两道题目应该属于一样的问题，我都不会，这才是 stack 该出现的问题吧
+大意都是要找到一个区间，然后需要两个端点参与计算，问题就是如何确认端点在哪里
+感觉像是规划类的题目
