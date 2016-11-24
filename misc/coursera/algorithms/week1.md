@@ -5,3 +5,15 @@
 quick find
 quick union
 weighted quick union
+
+---
+
+## analysis of algorithm
+
++ constant		1
++ logarithmic	logN
++ linear		N
++ linearithmic	NlogN
++ quadratic		N^2
++ cubic			N^3
++ exponential	2^N
