@@ -2,17 +2,35 @@
 
 ---
 
-落后时代很久了
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
+http://exploringjs.com/es6/index.html
+
+---
+
+从 JS 高级程序设计入门后，再也没仔细翻看 JS 的基础教程。
+结果就是很多 ES6 的细节掌握并不好……
+这次算是补课了
 
 ---
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
-## Symbol
-
 ## Proxy
 
 ## Reflect
+- 感觉没啥用处，只是一些写法……
+	- `Reflect.apply(Math.floor, undefined, [1.75])`
+	- `Math.floor.apply(undefined, [1.75])`
+
+## Symbol
+- 用于对象的属性（好像也没其他卵用了……
+- Symbol.for 和 Symbol.keyFor 是全局的
+	- Symbol.for() 在全局搜索对象并返回，没找到就创建一个再返回
+	- 而 Symbal() 总是创建新的
+	- Symbol.keyFor() 在全局查找对象的 key 并返回，没找到就 undefined
+	- well-known symbols 是没有 key 的 `Symbol.keyFor(Symbol.iterator) === undefined`
+- for...in 遍历时，不会遍历到 Symbol
+	- JSON.stringify 时也会忽略掉
 
 ---
 
@@ -24,7 +42,6 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators
 - 和 rest parameter 是不一样的
 
 ## destructuring assignment
-- http://exploringjs.com/es6/ch_destructuring.html
 - 以 Array 或 Object 的形式进行解构
 - 不声明变量，默认是 let？ TODO
 - 默认值是按需计算的
@@ -99,27 +116,77 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 - `arguments` 是 Array-like，而 `...c` 是 Array 实例
 - 可以和解构赋值一起用 `function(...[a, b, c]) {}`
 
+## arrow function
+- this, arguments, super, new.target 都不是自己的，而是外层的
+- 无视 call / apply / bind 的 context 参数
+- 不能和 new / yield 一起使用 
+
+## default parameter
+- 在没有参数或者参数为 undefined 时，都会使用函数定义的默认参数 `((a, b=1) => (a + b))(1)`
+- 每次调用的时候会重新执行，所以数组、对象之类的每次都会是新的（和 python 不一样
+	- 和 destructuring 的默认值应该都是相同的逻辑
+- 后声明的变量能看到先声明的变量 `((a=1, b=a) => (a + b))(2)`
+	- 理解为执行有序就好
+
+## shorthand syntax / getter / setter
+
+## block-level functions
+- es6 + strict 的情况下，函数语句的作用域被限制在 block 里了，和 ES5 不一样!
+	- 不要用函数语句基本也就安全了
+	- 个人习惯一致是函数语句做 class，函数定义都用函数表达式
+	- 有了 class 之后，只用函数表达式就好了……
+
 ---
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
-http://exploringjs.com/es6/ch_classes.html
 
-## class
+## static
+- static 语句定义的是类的类方法
+- super 可以访问到父类的 static 方法
+
+## extends
+- 甚至可以 extends null
+
+## boxing
+- class 内定义的所有方法，当 this 没有明确指向一个对象的时候，都是 undefined
+	`class Animal{static speak(){return this;}};let s=Animal.speak;console.log(s());`
+
+## mixin
+- 可以借助类似高阶函数的方式实现
+	`class Bar extends AMixin(BMinin(Foo)) {}`
 
 ---
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
 
-## iterator
+## iterable protocol
+- 自定义 for...of 时如何进行遍历
+- 实现 `Symbol.iterator`(`@@iterator`) 方法
+	- `Array.prototype[Symbol.iterator]`
+	- `Array.prototype[@@iterator]`
+- 自定义的 `@@iterator` 方法调用是无参数，需要返回一个 iterator
 
+## iterator protocol
+- 实现了 `next()` 语义的对象，都算是 iterator
+- next 没有参数，返回对象 `{done,value}`
+	- 返回值不对的时会抛出异常
+	- done=true 时表示循环结束，此时 value 的值会作为 next 函数的返回值
+	- done=false 即后面还有未读取的值
+	- 读取的值都在 value 里
+- 可以实现无限的序列
+
+## generator
+- generator object 同时满足 iterable 和 iterator 的定义
 
 ---
 
 ## summary
 
+- expression / statement / object
+	- class, function, function*, async function 都分为表达式、语句、对象
 - spread / rest / destructuring
 	- 默认值的处理方式
 - new.target / super / class
 	- super 的处理方式
-- expression / statement / object
-	- class, function, function*, async function 都是这样的，分为表达式、语句、对象
+- yield / yield*
+	- yield 返回的 IteratorResult
