@@ -3,8 +3,28 @@
 ---
 
 https://github.com/diafygi/acme-tiny
+https://github.com/Neilpang/acme.sh
 http://security.stackexchange.com/questions/78621/which-elliptic-curve-should-i-use
 https://imququ.com/post/letsencrypt-certificate.html
+
+---
+
+改用 acme.sh 的 dns 验证了
+
+```
+$ CF_Key="1bce7c4dbfdf65aca770c2fdeccfba2fa76c5" CF_Email="nirisix@gmail.com" \
+	./acme.sh --issue \
+	--dns dns_cf \
+	--keylength ec-384 \
+	-d example.org \
+	-d www.example.org
+$ ./acme.sh --list
+$ ./acme.sh --renewAll
+
+# nginx
+ssl_certificate /path/to/fullchain.cer;
+ssl_certificate_key /path/to/domain.key;
+```
 
 ---
 
