@@ -61,7 +61,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators
 - 调用父级方法 `super.method()`
 	- 可以是实例上的，也可以是是类的静态方法
 - 动态绑定的
-- 可以修改父级的属性
+- 在写入的时候，不会写入原型，而是写入自己
 
 ## new.target
 - 普通调用时为 `undefined`
