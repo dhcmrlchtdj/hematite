@@ -9,14 +9,12 @@
 ```js
 class A {}
 const a = new A();
-
-class B extends A {}
-const b = new B();
-
 a.__proto__ === A.prototype;
 
+class B extends A {}
 B.__proto__ === A;
 B.prototype.__proto__ === A.prototype;
+const b = new B();
 b.__proto__ === B.prototype;
 ```
 
@@ -64,9 +62,33 @@ B.x();
 浏览器在赋值时，实际上 `this.x = ...` 的效果，并且 `super.x` 始终引用不到 `this.x`。
 看 es6 规范也没看明白是谁错了……
 
-Bob 菊苣提供了 typescript 的规范，规定是比较明确的
+---
+
 https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#4.9.2
-问题是 es6 到底是怎么定义的啊啊啊
+Bob 菊苣提供了 typescript 的规范，规定是比较明确的
+但果然还是很奇怪啊……
+默认的 es3 模式下，由于把父类的方法 copy 到子类了，导致 super.x 修改了父类，子类却没变
+在开启 es6 模式下，由于直接使用 es6 class，导致运行结果和 es3 下不一致，坑啊
+
+babel 的 loose 模式下
+继承上是没错的，super.x 赋值时直接修改了父类，然后继承到了子类。
+区别也就在这里了，浏览器是修改了子类，父类没变。
+
+babel 的普通模式下
+大部分逻辑其实和 loose 一样的，不过用了 `Object.getOwnPropertyDescriptor` 来获取父类的方法
+逻辑上也是在修改父类，所以肯定和浏览器直接执行的结果不同。
+不过有个其他问题，Object.getOwnPropertyDescriptor 每次返回的都是新对象，而且不影响原对象
+所以修改这个对象，原对象根本不发生修改啊
+
+试了下 g 家的 traceur
+居然需要自己的 runtime 才能跑起来……
+赋值时进入了 https://github.com/google/traceur-compiler/blob/master/src/runtime/modules/superSet.js
+看了下代码，也是用 getOwnPropertyDescriptor 获取父类的方法
+然后因为父类的方法没有定义 `set`，抛出了异常
+所以，还是和浏览器的行为有些许不一致。
+
+所以，es6 到底是怎么定义的呢
+浏览器是怎么实现的呢？
 
 ---
 
