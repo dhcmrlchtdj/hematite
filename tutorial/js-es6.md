@@ -190,3 +190,14 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_prot
 	- super 的处理方式
 - yield / yield*
 	- yield 返回的 IteratorResult
+
+---
+
+## hoist
+
+- VariableStatement => var
+	- http://www.ecma-international.org/ecma-262/6.0/#sec-variable-statement
+- HoistableDeclaration => function/function*
+- ClassDeclaration => class
+- LexicalDeclaration => let/const
+	- http://www.ecma-international.org/ecma-262/6.0/#sec-let-and-const-declarations
