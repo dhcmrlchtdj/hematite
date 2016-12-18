@@ -37,5 +37,18 @@
 - 自定义的函数，其实就是在执行一系列语句，绑定好作用域就好
 - 到最后内容都会转换到原生的调用，比如数字、字符、函数调用
 
----
+- 关于 definition 和 assignment
+	- 声明提前，然后未赋值前使用报错的做法，现在的 JS/PY 里都有吧
+	- 没有太明白后面为何要这么做，避免引用到外层的变量吗
+		- mutual recursion requires the simultaneous scope rule for internal procedure definitions
+		- it is unreasonable to treat procedure names differently from other names
+		- the definitions should be regarded as simultaneous
+		- internal definitions look sequential but are actually simultaneous
 
+- 效率
+	- eval 效率比较低，因为需要重复解析文本
+	- 把 (eval expression environment) 拆成 analyze 和 execution
+		- ((analyze expression) environment)
+		- (analyze expression) 返回 execution
+		- 每次切换 environment 即可
+	- 需要根据 env 确定的部分，都返回一个 (lambda (env) ...)，具体逻辑放到了 lambda 里面
