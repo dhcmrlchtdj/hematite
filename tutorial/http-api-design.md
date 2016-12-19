@@ -2,6 +2,55 @@
 
 ---
 
+https://github.com/interagent/http-api-design/tree/master
+https://github.com/paypal/api-standards/blob/master/api-style-guide.md
+https://pages.apigee.com/web-api-design-ebook.html
+
+---
+
+## URI component
+
+```
+/{version}/
+/{version}/{namespace}
+/{version}/{namespace}/{resource}/{resource-id}/{sub-resource}/{sub-resource-id}
+```
+
+- 直接使用 `/v1` 比在 header 中增加版本号来得更方便
+
+---
+
+## Filtering
+
+- 分页，`page / page_size`，返回 `items / total_items / total_pages`
+- 时间，`start_time / end_time / {property_name}_after / {property_name}_before`
+- 排序，`sort_by / sort_order=asc / sort_order=desc`
+
+---
+
+## read
+
+- 请求的单个资源不存在时，可以返回 404（请求的列表的话，应该返回空列表
+- query 中包含无效的参数时，可以返回 400
+- 其他情况返回 200
+
+## updte
+
+- 使用 PUT 替换完整资源，成功时返回 204
+- 使用 PATCH 更新部分资源，成功时返回 204
+
+# delete
+
+- DELETE 总是返回 204
+
+# create
+
+- 使用 PUT 创建完整资源，成功返回 201
+- 使用 POST 创建资源，成功返回 201
+- 区别的话，你有 ID 吗，有 ID 就 PUT，没有就 POST
+
+---
+
 + 每个实体对应一个 url，url 中使用名词，不要包含动作。
 + 使用 http method 来表示对实体进行某种操作。
     - `PUT` 增
@@ -62,10 +111,3 @@
 ---
 
 + 使用 OAuth2.0 进行身份认证
-
----
-
-## reference
-
-+ https://pages.apigee.com/web-api-design-ebook.html
-+ https://github.com/interagent/http-api-design/tree/master
