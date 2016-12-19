@@ -52,3 +52,31 @@
 		- (analyze expression) 返回 execution
 		- 每次切换 environment 即可
 	- 需要根据 env 确定的部分，都返回一个 (lambda (env) ...)，具体逻辑放到了 lambda 里面
+
+本章的习题里，出现了停机问题，不动点组合子等
+
+---
+
+## 4.2
+
+- applicative-order，参数先被求值，然后传递给函数
+- normal-order，函数先执行，直到使用时才对参数进行求值
+
+- lazy，直到使用参数时才对参数进行求值
+	- normal-order 是语义层面的描述
+	- lazy 是解释器层面的描述
+
+- strict in argument，参数先求值，再调用函数
+- non-strict in argument，先执行函数，必要时才对参数求值
+	- strict / non-strict 是对某个函数的描述
+	- applicative-order / normal-order 是对语言的描述
+	- 通常 applicative-order 的语言，所有调用都是 strict 的
+		而 normal-order 语言的复合语句都是 non-strict 的，基础语句则 strict / non-strict 都有可能
+
+- thunk，需要计算的过程包裹成函数
+- forcing，对 thunk 求值
+- memoize，记录 thunk 求值的结果
+- call-by-need，即 lazy 加上 memoize
+
+- 需要注意 lazy evaluation 和 side effect 之间的相互影响
+
