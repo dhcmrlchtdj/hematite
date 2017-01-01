@@ -72,7 +72,7 @@ concrete method 实现 abstract method 被作者称为义务（
 
 ---
 
-## what's new
+## what's new?
 
 ---
 
@@ -129,3 +129,142 @@ concrete method 实现 abstract method 被作者称为义务（
 同时把行为和数据分离开了
 
 ---
+
+对比一下前后的代码
+
+```java
+abstract class ShishD {
+	abstract boolean onlyOnions();
+}
+
+class Skewer extends ShishD {
+	boolean onlyOnions() { return true; }
+}
+class Onion extends ShishD {
+	ShishD s;
+	Onion(ShishD _s) { s = _s; }
+	boolean onlyOnions() { return s.onlyOnions() }
+}
+class Lamb extends ShishD {
+	ShishD s;
+	Lamb(ShishD _s) { s = _s; }
+	boolean onlyOnions() { return false; }
+}
+class Tomato extends ShishD {
+	ShishD s;
+	Tomato(ShishD _s) { s = _s; }
+	boolean onlyOnions() { return false; }
+}
+```
+
+```java
+class OnlyOnionsV {
+	boolean forSkewer() { return true; }
+	boolean forOnion(ShishD s) { return s.onlyOnions(); }
+	boolean forLamb(ShishD s) { return false; }
+	boolean forTomato(ShishD s) { return true; }
+}
+
+abstract class ShishD {
+	OnlyOnionsV ooFn = new OnlyOnionsV();
+	abstract boolean onlyOnions();
+}
+
+class Skewer extends ShishD {
+	boolean onlyOnions() { return ooFn.forSkewer(); }
+}
+class Onion extends ShishD {
+	ShishD s;
+	Onion(ShishD _s) { s = _s; }
+	boolean onlyOnions() { return ooFn.forOnion(s); }
+}
+class Lamb extends ShishD {
+	ShishD s;
+	Lamb(ShishD _s) { s = _s; }
+	boolean onlyOnions() { return ooFn.forLamb(s); }
+}
+class Tomato extends ShishD {
+	ShishD s;
+	Tomato(ShishD _s) { s = _s; }
+	boolean onlyOnions() { return ooFn.forTomato(s); }
+}
+```
+
+作者将 abstract class 里面的 visitor 称为 protocol
+
+怎么感觉更繁琐了呢……
+之前不好扩展的问题，感觉没有变化啊
+作者自己都说这是一个无聊的过程啊（boring
+而且感觉各个部分耦合好严重
+
+
+---
+
+> the fourth bit of advice
+> when writing severval functions for the save self-referential datatype,
+> use visitor protocols so that all methods for a function can be found in
+> a single class.
+
+---
+
+## objects ara people, too
+
+---
+
+还是在讲 java 的面向对象
+overriding / downward casting
+
+---
+
+## boring protocols
+
+---
+
+```java
+class OnlyOnionsV {
+	boolean forSkewer() { return true; }
+	boolean forOnion(ShishD s) { return s.onlyOnions(); }
+	boolean forLamb(ShishD s) { return false; }
+	boolean forTomato(ShishD s) { return true; }
+}
+
+abstract class ShishD {
+	abstract boolean onlyOnions(OnlyOnionsV ooFn);
+}
+
+class Skewer extends ShishD {
+	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forSkewer(); }
+}
+class Onion extends ShishD {
+	ShishD s;
+	Onion(ShishD _s) { s = _s; }
+	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forOnion(s); }
+}
+class Lamb extends ShishD {
+	ShishD s;
+	Lamb(ShishD _s) { s = _s; }
+	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forLamb(s); }
+}
+class Tomato extends ShishD {
+	ShishD s;
+	Tomato(ShishD _s) { s = _s; }
+	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forTomato(s); }
+}
+```
+
+相比前面，改成成外部传入 OnlyOnionsV
+这算是依赖注入吗？
+这样子，可以自己扩展 OnlyOnionsV，传入需要的 OnlyOnionsV 实例
+对 ShishD 的扩展，就不需要去改动其他模块了
+不过感觉只适合单线的扩展啊
+
+---
+
+> in functional programming, a visitor with fields is called a closure (or a
+> higher-order function)
+
+到底什么算闭包，什么算高阶函数，之前的理解还是太片面啊
+
+---
+
+
