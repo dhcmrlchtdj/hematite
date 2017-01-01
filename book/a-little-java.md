@@ -197,7 +197,6 @@ class Tomato extends ShishD {
 作者自己都说这是一个无聊的过程啊（boring
 而且感觉各个部分耦合好严重
 
-
 ---
 
 > the fourth bit of advice
@@ -252,11 +251,13 @@ class Tomato extends ShishD {
 }
 ```
 
-相比前面，改成成外部传入 OnlyOnionsV
-这算是依赖注入吗？
-这样子，可以自己扩展 OnlyOnionsV，传入需要的 OnlyOnionsV 实例
-对 ShishD 的扩展，就不需要去改动其他模块了
-不过感觉只适合单线的扩展啊
+相比前面，改成外部传入 OnlyOnionsV
+
+visitor 提供的方法被称为 service
+这就是依赖注入吗？
+
+用参数的方式传递 OnlyOnionsV，使得扩展 OnlyOnionsV 变得容易了
+但是扩展 abstract class 还是要每个 class 实现一遍
 
 ---
 
@@ -267,4 +268,65 @@ class Tomato extends ShishD {
 
 ---
 
+> use interface for specifying visitors
 
+```java
+interface PieVisitorI {
+	PieD forBot();
+	PieD forTop(Object t, PieD r);
+}
+class RemV implements PieVisitorI {
+	Object o;
+	RemV(Object _o) { o = _o; }
+
+	public PieD forBot() { return new Bot(); }
+	public PieD forTop(Object t, PieD r) {
+		if (o.equals(t)) {
+			return r.accept(this);
+		} else {
+			return new Top(t, r.accept(this));
+		}
+	}
+}
+class SubstV implements PieVisitorI {
+	Object n;
+	Object o;
+	SubstV(Object _n, Object _o) { n = _n; o = _o; }
+	public PieD forBot() { return new Bot(); }
+	public PieD forTop(Object t, PieD r) {
+		if (o.equals(t)) {
+			return new Top(n, r.accept(this));
+		} else {
+			return new Top(t, r.accept(this));
+		}
+	}
+}
+
+abstract class PieD {
+	abstract PieD accept(PieVisitorI ask);
+}
+class Bot extends PieD {
+	PieD accept(PieVisitorI ask) { return ask.forBot(); }
+}
+class Top extends PieD {
+	Object t;
+	PieD r;
+	Top(Object _t, PieD _r) { t = _t; r = _r; }
+	PieD accept(PieVisitorI ask) { return ask.forTop(t, r); }
+}
+```
+
+定义好的 datatype 带有 accept 方法，接受一个 visitor
+不同的逻辑，放到不同的 visitor 中去实现
+
+---
+
+> the sixth bit of advice
+> when the additional consumed values change for a self-referential use of a
+> visitor, don't forget to create a new visitor.
+
+---
+
+## oh my!
+
+---
