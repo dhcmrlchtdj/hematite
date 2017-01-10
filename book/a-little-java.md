@@ -27,7 +27,7 @@ M - manage a data structure
 
 ---
 
-## modern toys
+## 1. modern toys
 
 ---
 
@@ -51,7 +51,7 @@ M - manage a data structure
 
 ---
 
-## methods to our madness
+## 2. methods to our madness
 
 ---
 
@@ -72,7 +72,7 @@ concrete method 实现 abstract method 被作者称为义务（
 
 ---
 
-## what's new?
+## 3. what's new?
 
 ---
 
@@ -96,7 +96,7 @@ concrete method 实现 abstract method 被作者称为义务（
 
 ---
 
-## come to our carousel
+## 4. come to our carousel
 
 ---
 
@@ -206,7 +206,7 @@ class Tomato extends ShishD {
 
 ---
 
-## objects ara people, too
+## 5. objects ara people, too
 
 ---
 
@@ -215,7 +215,7 @@ overriding / downward casting
 
 ---
 
-## boring protocols
+## 6. boring protocols
 
 ---
 
@@ -292,6 +292,7 @@ class SubstV implements PieVisitorI {
 	Object n;
 	Object o;
 	SubstV(Object _n, Object _o) { n = _n; o = _o; }
+
 	public PieD forBot() { return new Bot(); }
 	public PieD forTop(Object t, PieD r) {
 		if (o.equals(t)) {
@@ -327,7 +328,7 @@ class Top extends PieD {
 
 ---
 
-## oh my!
+## 7. oh my!
 
 ---
 
@@ -356,11 +357,206 @@ class Top extends PieD {
 
 ---
 
-## like father, like son
+## 8. like father, like son
 
 ---
 
 作者对 s-exp 爱得深沉……
+
+---
+
+讲 visitor 之间的继承关系
+
+---
+
+先定义数据，加减乘的表达式
+
+```java
+abstract class ExprD {
+	abstract Object accept(ExprVisitorI ask);
+}
+class Plus extends ExprD {
+	ExprD l;
+	ExprD r;
+	Plus(ExprD _l, ExprD _r) { l = _l; r = _r; }
+	Object accept(ExprVisitorI ask) { return ask.forPlus(l, r); }
+}
+class Diff extends ExprD {
+	ExprD l;
+	ExprD r;
+	Diff(ExprD _l, ExprD _r) { l = _l; r = _r; }
+	Object accept(ExprVisitorI ask) { return ask.forDiff(l, r); }
+}
+class Prod extends ExprD {
+	ExprD l;
+	ExprD r;
+	Prod(ExprD _l, ExprD _r) { l = _l; r = _r; }
+	Object accept(ExprVisitorI ask) { return ask.forProd(l, r); }
+}
+class Const extends ExprD {
+	Object c;
+	Const(Object _c) { c = _c; }
+	Object accept(ExprVisitorI ask) { return ask.forConst(c); }
+}
+```
+
+再定义 visitor protocol
+
+```java
+interface ExprVisitorI {
+	Object forPlus(ExprD l, ExprD r);
+	Object forDiff(ExprD l, ExprD r);
+	Object forProd(ExprD l, ExprD r);
+	Object forConst(ExprD l, ExprD r);
+}
+```
+
+实现两种 visitor，先是 int visitor
+
+```java
+class IntEvalV implements ExprVisitorI {
+	public Object forPlus(ExprD l, ExprD r) {
+		return plus(l.accept(this), r.accept(this));
+	}
+	public Object forDiff(ExprD l, ExprD r) {
+		return diff(l.accept(this), r.accept(this));
+	}
+	public Object forProd(ExprD l, ExprD r) {
+		return prod(l.accept(this), r.accept(this));
+	}
+	public Object forConst(Object c) {
+		return c;
+	}
+
+	Object plus(Object l, Object r) {
+		return new Integer(((Integer)l).intValue() + ((Integer)r).intValue());
+	}
+	Object diff(Object l, Object r) {
+		return new Integer(((Integer)l).intValue() - ((Integer)r).intValue());
+	}
+	Object prod(Object l, Object r) {
+		return new Integer(((Integer)l).intValue() * ((Integer)r).intValue());
+	}
+}
+```
+
+前面也说过，使用 Object 带来了灵活性，但是也让代码更繁琐。
+这里进行了大量的基础类型和对象类型的转换
+
+此外，继续实现 set visitor 的时候，前面的 forXXX 都要重复一次
+所以作者选择了使用继承
+
+前面的 Integer 是自带的，下面先实现一个 SetD
+（这里其实也有个继承在
+
+```java
+abstract class SetD {
+	SetD add(Integer i) { return (mem(i) ? this : new Add(i, this)); }
+
+	abstract boolean mem(Integer i);
+	abstract SetD plus(SetD s);
+	abstract SetD diff(SetD s);
+	abstract SetD prod(SetD s);
+}
+class Empty extends SetD {
+	boolean mem(Integer i) { return false; }
+	SetD plus(SetD s) { return s; }
+	SetD diff(SetD s) { return new Empty(); }
+	SetD prod(SetD s) { return new Empty(); }
+
+}
+class Add extends SetD {
+	Integer i;
+	SetD s;
+	Add(Integer _i, SetD _s) { i = _i; s = _s; }
+
+	boolean mem(Integer n) { return (i.equals(n) ? true : s.mem(n)); }
+	SetD plus(SetD t) { return s.plus(t.add(i)); }
+	SetD diff(SetD t) { return (t.mem(i) ? s.diff(t) : s.diff(t).add(i)); }
+	SetD prod(SetD t) { return (t.mem(i) ? s.prod(t).add(i) : s.prod(t)); }
+}
+```
+
+然后就是 set visitor
+
+```java
+class SetEvalV extends IntEvalV {
+	Object plus(Object l, Object r) { return ((SetD)l).plus((SetD)r); }
+	Object diff(Object l, Object r) { return ((SetD)l).diff((SetD)r); }
+	Object prod(Object l, Object r) { return ((SetD)l).prod((SetD)r); }
+}
+```
+
+对比一下 SetEvalV 和 IntEvalV，省去了重复 forXXX
+再和前面的 PieVisitorI 的实现对比一下，其实是把实现从 forXXX 里提取了出来
+着眼点应该还是将逻辑从形式中分开，可以看到 forXXX 里面是可以不处理类型转换的
+
+最后上个使用的例子
+
+```java
+new Prod(
+	new Const(new Empty().add(new Integer(7))),
+	new Const(new Empty().add(new Integer(3)))
+).accept(new SetEvalV());
+```
+
+---
+
+继续对上面的继承关系做优化
+
+```java
+abstract class EvalD implements ExprVisitorI {
+	public Object forPlus(ExprD l, ExprD r) {
+		return plus(l.accept(this), r.accept(this));
+	}
+	public Object forDiff(ExprD l, ExprD r) {
+		return diff(l.accept(this), r.accept(this));
+	}
+	public Object forProd(ExprD l, ExprD r) {
+		return prod(l.accept(this), r.accept(this));
+	}
+	public Object forConst(Object c) {
+		return c;
+	}
+
+	Object plus(Object l, Object r);
+	Object diff(Object l, Object r);
+	Object prod(Object l, Object r);
+}
+
+class IntEvalV extends EvalD {
+	Object plus(Object l, Object r) {
+		return new Integer(((Integer)l).intValue() + ((Integer)r).intValue());
+	}
+	Object diff(Object l, Object r) {
+		return new Integer(((Integer)l).intValue() - ((Integer)r).intValue());
+	}
+	Object prod(Object l, Object r) {
+		return new Integer(((Integer)l).intValue() * ((Integer)r).intValue());
+	}
+}
+
+class SetEvalV extends EvalD {
+	Object plus(Object l, Object r) { return ((SetD)l).plus((SetD)r); }
+	Object diff(Object l, Object r) { return ((SetD)l).diff((SetD)r); }
+	Object prod(Object l, Object r) { return ((SetD)l).prod((SetD)r); }
+}
+```
+
+把对 IntEvalV 的继承修改为对 EvalD 的继承，将需要复用的部分抽离
+看代码确实更清爽了些（不过好像也确实越来越复杂了
+
+---
+
+> the eighth bit of advice
+> when extending a class, use overriding to enrich its functionality.
+
+这章主要是在介绍面向对象的继承技术，其实并没有解决之前说的问题
+使用 Object 失去了静态检查的优势
+
+---
+
+## 9. be a good visitor
 
 ---
 
