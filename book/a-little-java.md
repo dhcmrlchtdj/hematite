@@ -551,8 +551,8 @@ class SetEvalV extends EvalD {
 > the eighth bit of advice
 > when extending a class, use overriding to enrich its functionality.
 
-这章主要是在介绍面向对象的继承技术，其实并没有解决之前说的问题
-使用 Object 失去了静态检查的优势
+这章主要是在介绍面向对象的继承技术
+不过之前说的，使用多态带来的问题，仍然是问题。
 
 ---
 
@@ -560,4 +560,10 @@ class SetEvalV extends EvalD {
 
 ---
 
+介绍了一下 super 关键字
 
+---
+
+> the ninth bit of advice
+> if a datatype may have to be extended, be forward looking and use a
+> consturctor-like (overridable) method so that visitors can be extended, too.
