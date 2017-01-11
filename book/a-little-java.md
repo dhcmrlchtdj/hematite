@@ -560,10 +560,95 @@ class SetEvalV extends EvalD {
 
 ---
 
-介绍了一下 super 关键字
+介绍了
+super 关键字
+对 interface 的继承
+
+---
+
+```java
+class Union extends ShapeD {
+	ShapeD s;
+	ShapeD t;
+	Union(ShapeD _s, ShapeD _t) { s = _s; t = _t; }
+	boolean accept(ShapeVisitorI ask) {
+		return ((UnionVisitorI)ask).forUnion(s, t);
+	}
+}
+```
+
+此处将 ShapeVisitorI 转换为 UnionVisitorI，感觉不合适啊
+子类变成父类，肯定可以
+父类变成子类，可能失败呀
+
+不过很巧妙的一点
+虽然 Union 里面都是 Shape
+但调用 ShapeVisitorI 里的方法时，都是 Shape 主动调用 visitor
+所以即使类型是父类 Shape，还是可以调用到正确的 visitor
 
 ---
 
 > the ninth bit of advice
 > if a datatype may have to be extended, be forward looking and use a
 > consturctor-like (overridable) method so that visitors can be extended, too.
+
+不太好理解
+作者说这其实是 factory method pattern
+
+---
+
+```java
+class HasPtV implements ShapeVisitorI {
+	PointD p;
+	HasPtV(PointD _p) { p = _p; }
+
+	public boolean forCicle(int r) {...}
+	public boolean forSquare(int s) {...}
+	public boolean forTrans(PointD q, ShapeD s) {
+		return s.accept(new HasPtV(p.minus(q)));
+	}
+}
+```
+
+```java
+class HasPtV implements ShapeVisitorI {
+	PointD p;
+	HasPtV(PointD _p) { p = _p; }
+	ShapeVisitorI newHasPt(PointD p) { return new HasPtV(p); }
+
+	public boolean forCicle(int r) {...}
+	public boolean forSquare(int s) {...}
+	public boolean forTrans(PointD q, ShapeD s) {
+		return s.accept(newHasPt(p.minus(q)));
+	}
+}
+
+class UnionHasPtV extends HasPtV implements UnionVisitorI {
+	UnionHasPtV(PointD _p) { super(_p); }
+	ShapeVisitorI newHasPt(PointD p) { return new UnionHasPtV(p); }
+
+	public boolean forUnion(ShapeD s, ShapeD t) {
+		return (s.accept(this) || t.accept(this));
+	}
+}
+```
+
+这里定义的 `newHasPt`，只是封装了一下构造函数
+也就是前文说的 consturctor-like method
+
+关键在 `forTrans` 里面的调用
+上面的代码直接进行 `new HasPtV`，使得 `UnionHasPtV` 的信息丢失
+下面的代码，使用了 `newHasPt`，使得代码的可扩展性变得更强了
+
+---
+
+在需要保留扩展性的地方，不要硬编码，而是使用更加可扩展的方式编写
+
+---
+
+## 10. the state of things to come
+
+---
+
+
+
