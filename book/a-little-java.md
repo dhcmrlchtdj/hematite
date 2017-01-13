@@ -650,5 +650,125 @@ class UnionHasPtV extends HasPtV implements UnionVisitorI {
 
 ---
 
+```java
+interface PiemanI {
+	public int addTop(Object t);
+	public int remTop(Object t);
+	public int substTop(Object n, Object o);
+	public int occTop(Object o);
+}
 
+class PiemanM implements PiemanI {
+	PieD p = new Bot();
 
+	public int addTop(Object t) {
+		p = new Top(t, p); return occTop(t); }
+	public int remTop(Object t) {
+		p = (PieD)p.accept(new RemV(t)); return occTop(t); }
+	public int substTop(Object n, Object o) {
+		p = (PieD)p.accept(new SubstV(n, o)); return occTop(n); }
+	public int occTop(Object o) {
+		return ((Integer)p.accept(new OccursV(o))).intValue(); }
+}
+```
+
+PiemanM 里定义了字段 `p`，通过某些方法来更新 `p`
+由于是内部变量，所以不会遭到外部篡改
+
+```java
+interface PieVisitorI {
+	Object forBot();
+	Object forTop(Object t, PieD r);
+}
+
+abstract class PieD {
+	abstract Object accept(PieVisitorI ask);
+}
+
+class Bot extends PieD {
+	Object accept(PieVisitorI ask) { return ask.forBot(); }
+}
+
+class Top extends PieD {
+	Object t;
+	PieD r;
+	Top(Object _t, PieD _r) { t = _t; r = _r; }
+	Object accept(PieVisitorI ask) { return ask.forTop(t, r); }
+}
+
+class SubstV implements PieVisitorI {
+	Object n;
+	Object o;
+	SubstV(Object _n, Object _o) { n = _n; o = _o; }
+	public Object forBot() { return new Bot(); }
+	public Object forTop(Object t, PieD r) {
+		if (o.equals(t)) {
+			return new Top(n, (PieD)r.accept(this));
+		} else {
+			return new Top(t, (PieD)r.accept(this));
+		}
+	}
+}
+```
+
+这是对应的 datatype 和 visitor
+
+---
+
+```java
+interface PieVisitorI {
+	Object forBot(Bot that);
+	Object forTop(Top that);
+}
+
+abstract class PieD {
+	abstract Object accept(PieVisitorI ask);
+}
+
+class Bot extends PieD {
+	Object accept(PieVisitorI ask) { return ask.forBot(this); }
+}
+
+class Top extends PieD {
+	Object t;
+	PieD r;
+	Top(Object _t, PieD _r) { t = _t; r = _r; }
+	Object accept(PieVisitorI ask) { return ask.forTop(this); }
+}
+
+class SubstV implements PieVisitorI {
+	Object n;
+	Object o;
+	SubstV(Object _n, Object _o) { n = _n; o = _o; }
+	public Object forBot(Bot that) { return that; }
+	public Object forTop(Top that) {
+		if (o.equals(that.t)) {
+			that.t = n;
+			that.r.accept(this);
+			return that;
+		} else {
+			that.r.accept(this);
+			return that;
+		}
+	}
+}
+```
+
+这是另外一个版本的 datatype 和 visitor
+
+感觉解决了我之前的一个问题，visitor 参数的多态
+可以将数据包装在对象里
+
+另外下面的 SubstV 这个 visitor，对比前面的实现
+不再生成新的对象，而是在原有的对象上进行更新
+
+---
+
+> the tenth bit of advice
+> when modifications to object are needed, use a class to insulate the
+> operations that modify objects. Otherwise, beware the consequences of
+> your actions.
+
+最前面的例子，我们需要修改 (PieD)p，所以定义了一个 PiemanM
+所有对 p 的修改，都在 PiemanM 内部
+又通过修改 datatype 和 visitor，实现了对 p 的修改而不是返回新对象
