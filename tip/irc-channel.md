@@ -15,9 +15,11 @@
 
 哪些人有频道的相关权限
 ```
+/cs flags #ch
+/cs help flags
+
 /cs access #ch list
 /cs help access
-/cs help flags
 ```
 
 flags（info 可以看到
@@ -41,4 +43,19 @@ https://freenode.net/kb/answer/channelmodes
 /cs set #ch mlock [modes]
 
 /cs set #ch mlock +nps-itclk
+```
+
+---
+
+## private channel
+
+https://botbot.me/how-to-setup-irc-channel/
+https://freenode.net/kb/answer/extbans
+
+```
+/cs set #ch mlock +inpsr-tclk
+
+/mode #ch +I
+/mode #ch +I $a:<account-name>
+/mode #ch +I $r:<nick-name>
 ```
