@@ -133,3 +133,33 @@ when using `car`, test termination with `null?`.
 ## numbers games
 
 ---
+
+作者喜欢玩 0/+1/-1
+
+---
+
+### the first commandment (first revision)
+when recurring on a list of atoms, lat, ask two questions about it:
+(null? lat) and else.
+when recurring on a number, n, ask two questions about it:
+(zero? n) and else.
+
+### the fourth commandment (first revision)
+always change at least one argument while recurring.
+it must changed to be closer to termination.
+the changing argument must be tested in the termination condition:
+when using car, test termination with null? and
+when using sub1, test termination with zero?.
+
+### the fifth commandment
+when building a value with `+`, always use 0 for the value of the terminating
+line, for adding 0 does not change the value of an addition.
+when building a value with `*`, always use 1 for the value of the terminating
+line, for multiplying by 1 does not change the value of a multiplication.
+
+---
+
+## oh my cawd: it's full of stars
+
+---
+
