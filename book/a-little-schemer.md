@@ -56,31 +56,32 @@
 基础概念
 
 - atom
-- list / null (empty list)
+- list
+- null, empty list
 - car / cdr / cons
 - null?
-- atom? (and (not pair?) (not null?))
+- atom?, (and (not pair?) (not null?))
 - eq?
 
 ---
 
 ### the law of car
-the primitive car is defined only for non-empty lists.
+the primitive `car` is defined only for non-empty lists.
 
 ### the law of cdr
-the primitive cdr is defined only for non-empty lists.
+the primitive `cdr` is defined only for non-empty lists.
 the cdr of any non-empty list is always another list.
 
 ### the law of cons
-the primitive cons takes two arguments.
+the primitive `cons` takes two arguments.
 the second argument to cons must be a list.
 the result is a list.
 
 ### the law of null?
-the primitive null? is defined only for lists.
+the primitive `null?` is defined only for lists.
 
 ### the law of eq?
-the primitive eq? takes two arguments.
+the primitive `eq?` takes two arguments.
 each must be a non-numric atom.
 
 ---
@@ -89,4 +90,46 @@ each must be a non-numric atom.
 
 ---
 
+开始讲递归
 
+- lat?, list of atom
+- member?
+
+---
+
+### the first commandment (preliminary)
+always ask `null?` as the first question in expressing any function.
+
+---
+
+## cons the magnificent
+
+---
+
+还是比较基础的内容
+
+- rember, remove a member
+- firsts
+- insertR / insertL / subst / subst2
+- multirember / multiintertR / multiintertL
+
+---
+
+### the second commandment
+use `cons` to build lists.
+
+### the third commandment
+when building a list, describe the first typical element,
+and then `cons` it onto the natural recursion.
+
+### the fourth commandment (preliminary)
+always change at least one argument while recurring.
+it must be changed to be closer to termination.
+the changing argument must be tested in the termination condition:
+when using `car`, test termination with `null?`.
+
+---
+
+## numbers games
+
+---
