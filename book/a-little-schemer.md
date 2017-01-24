@@ -53,4 +53,40 @@
 
 ---
 
+基础概念
+
+- atom
+- list / null (empty list)
+- car / cdr / cons
+- null?
+- atom? (and (not pair?) (not null?))
+- eq?
+
+---
+
+### the law of car
+the primitive car is defined only for non-empty lists.
+
+### the law of cdr
+the primitive cdr is defined only for non-empty lists.
+the cdr of any non-empty list is always another list.
+
+### the law of cons
+the primitive cons takes two arguments.
+the second argument to cons must be a list.
+the result is a list.
+
+### the law of null?
+the primitive null? is defined only for lists.
+
+### the law of eq?
+the primitive eq? takes two arguments.
+each must be a non-numric atom.
+
+---
+
+## do it, do it again, and again, and again...
+
+---
+
 
