@@ -86,7 +86,7 @@ each must be a non-numric atom.
 
 ---
 
-## do it, do it again, and again, and again...
+## 2. do it, do it again, and again, and again...
 
 ---
 
@@ -102,7 +102,7 @@ always ask `null?` as the first question in expressing any function.
 
 ---
 
-## cons the magnificent
+## 3. cons the magnificent
 
 ---
 
@@ -130,7 +130,7 @@ when using `car`, test termination with `null?`.
 
 ---
 
-## numbers games
+## 4. numbers games
 
 ---
 
@@ -159,7 +159,48 @@ line, for multiplying by 1 does not change the value of a multiplication.
 
 ---
 
-## oh my cawd: it's full of stars
+## 5. oh my gawd: it's full of stars
 
 ---
+
+- 还是递归，不过判断的条件越来越复杂了。
+- 关键还是条件的梳理，把问题拆分
+- 后面继续扩展到多个函数互相调用
+
+---
+
+- `(and a b) = (cond [a b] [else #f])`
+- `(or a b) = (cond [a #t] [else b])`
+
+---
+
+### the first commandment (final version)
+when recurring on a list of atoms, lat, ask two questions about it:
+(null? lat) and else.
+when recurring on a number, n, ask two questions about it:
+(zero? n) and else.
+when recurring on a list of S-expressions, l, ask three questions about it:
+(null? l), (atom? (car l)), and else.
+
+### the fourth commandment (final version)
+always change at least one argument while recurring.
+when recurring on a list of atoms, lat, use (cdr lat).
+when recurring on a number, n, use (sub1 n).
+and when recurring on a list of S-expressions, use (car l) and (cdr l) if
+neither (null? l) nor (atom? (car l)) are true.
+
+it must changed to be closer to termination.
+the changing argument must be tested in the termination condition:
+when using car, test termination with null? and
+when using sub1, test termination with zero?.
+
+### the sixth commandment
+simplify only after the function is correct.
+
+---
+
+## 6. shadows
+
+---
+
 
