@@ -223,4 +223,11 @@ use help functions to abstract from representations.
 
 ---
 
+- 集合操作
+- pair, build/first/second
 
+---
+
+## 8. lambda the ultimate
+
+---
