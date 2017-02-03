@@ -203,4 +203,24 @@ simplify only after the function is correct.
 
 ---
 
+- 居然是中缀而不是前缀表达式
+- 表达式求值
+- operand/operator 的抽象，封装操作细节
+
+---
+
+### the seventh commandment
+recur on the subparts that are of the same nature:
+- on the sublist of a list.
+- on the subexpressions of an arithmetic expression.
+
+### the eighth commandment
+use help functions to abstract from representations.
+
+---
+
+## 7. friends and relations
+
+---
+
 
