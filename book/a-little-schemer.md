@@ -231,3 +231,28 @@ use help functions to abstract from representations.
 ## 8. lambda the ultimate
 
 ---
+
+- 高阶函数
+- 将操作和数据一起作为参数
+- 科里化，闭包
+- CSP，回调
+
+---
+
+### the ninth commandment
+abstract common patterns with a new function.
+
+### the tenth commandment
+build functions to collect more than one value at a time.
+
+---
+
+- `(multirember&co a lat col)` 这种递归调用里，每次都会生成一个新的函数用于递归
+- 这里的 col 是 collector，其实也就是 continuation
+- 调用者提供的 col，只是最后一步使用，其实内部递归时都是在调用临时生成的 col
+
+---
+
+## 9. ...and again, and again, and again, ...
+
+---
