@@ -256,3 +256,8 @@ build functions to collect more than one value at a time.
 ## 9. ...and again, and again, and again, ...
 
 ---
+
+- 前面的递归，都是从整体慢慢到局部。比如数组大小逐渐缩小。
+- 本章开始出现更一般的情况
+- `partial functions`，没控制好会出现死循环等
+
