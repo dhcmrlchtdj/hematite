@@ -268,3 +268,6 @@ build functions to collect more than one value at a time.
 ## 10. what is the value of all of this?
 
 ---
+
+- table，查找，环境变量
+- interpreter
