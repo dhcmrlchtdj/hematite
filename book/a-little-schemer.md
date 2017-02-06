@@ -260,4 +260,11 @@ build functions to collect more than one value at a time.
 - 前面的递归，都是从整体慢慢到局部。比如数组大小逐渐缩小。
 - 本章开始出现更一般的情况
 - `partial functions`，没控制好会出现死循环等
+- 停机问题。假设存在检测函数，然后构造悖论来证明其不存在。
+- Y-combinator。递归函数本身作为参数。
 
+---
+
+## 10. what is the value of all of this?
+
+---
