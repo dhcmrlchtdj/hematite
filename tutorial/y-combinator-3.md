@@ -203,17 +203,72 @@ isEven 和 isOdd 互相调用
 ```javascript
 var ff = function(x) {
 	return (function(isEven, isOdd) {
-		return isEven(isEven, isOdd, x);
+		return isEven(isEven, isOdd);
 	})(
-		function _even(isEven, isOdd, n) {
-			return (n === 0 ? true : (isOdd(isEven, isOdd, n - 1)));
-		},
-		function _odd(isEven, isOdd, n) {
-			return (n === 0 ? false : (isEven(isEven, isOdd, n - 1)));
+        function(isEven, isOdd) {
+            return (n) => (n === 0 ? true : (isOdd(isEven, isOdd)(n - 1)));
+        },
+		function(isEven, isOdd) {
+            return (n) => (n === 0 ? false : (isEven(isEven, isOdd)(n - 1)));
 		}
-	);
+	)(x);
 };
 ```
 
-这里加上 `_even/_odd` 只是为了方便看
-参与递归的都是函数作为参数
+套一层 `function(isEven, isOdd)` 就可以啦
+
+---
+
+像之前一样提取一个 thunk 就可以转化成
+
+```javascript
+var fff = function(x) {
+	return (function(isEven, isOdd) {
+		return isEven(isEven, isOdd);
+	})(
+		function(isEven, isOdd) {
+			return ((f) => {
+				return (n) => (n === 0 ? true : f(n - 1));
+			})((x) => (isOdd(isEven, isOdd)(x)));
+		},
+		function(isEven, isOdd) {
+			return ((f) => {
+				return (n) => (n === 0 ? false : f(n - 1));
+			})((x) => (isEven(isEven, isOdd)(x)));
+		}
+	)(x);
+};
+```
+
+---
+
+再提取一下，就有下面的了
+
+```javascript
+
+var Y = function(h1, h2) {
+	return (function(f1, f2) {
+		return f1(f1, f2);
+	})(function(f1, f2) {
+		return h1(x => f2(f1, f2)(x));
+	}, function(f1, f2) {
+		return h2(x => f1(f1, f2)(x));
+	});
+};
+
+var ffff = Y(
+	function(isOdd) {
+		return (n) => (n === 0 ? true : isOdd(n - 1));
+	},
+	function(isEven) {
+		return (n) => (n === 0 ? false : isEven(n - 1));
+	}
+);
+```
+
+---
+
+最后加两链接
+
+https://rosettacode.org/wiki/Y_combinator
+https://gist.github.com/wardenlym/61f98b6e6e95be3f0e5ff8966da1439b
