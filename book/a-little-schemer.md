@@ -271,3 +271,41 @@ build functions to collect more than one value at a time.
 
 - table，查找，环境变量
 - interpreter
+
+---
+
+# the seasoned schemer
+
+---
+
+## perface
+
+---
+
+> to think about the nature of computation
+
+这前言和前一本，基本一个模子啊……
+不过这本的重点不是递归而是计算。
+
+---
+
+## 11. welcome back to show
+
+---
+
+- 之前都是遍历列表之类的操作，只是遍历一个参数
+- 本章开始出现两个参数一起变化的情况（主要是为了状态
+
+---
+
+### the eleventh commandment
+use additional arguments when a function needs to know what other arguments
+to the function have been like so far.
+
+---
+
+## 12. take cover
+
+---
+
+
