@@ -59,3 +59,11 @@ https://freenode.net/kb/answer/extbans
 /mode #ch +I $a:<account-name>
 /mode #ch +I $r:<nick-name>
 ```
+
+---
+
+## automatic voice
+
+```
+/cs flags #ch *!*@* +V
+```
