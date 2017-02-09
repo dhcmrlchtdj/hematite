@@ -308,4 +308,56 @@ to the function have been like so far.
 
 ---
 
+- 使用了一下 y-combinator，引出 letrec
+	书上说 it is better than Y
+- 把不变的参数隔离，让递归的部分更加纯粹
+	其实就是作用域的问题吧
+
+---
+
+```scheme
+(define multirember0
+  (lambda (a lat)
+    (cond
+      [(null? lat) '()]
+      [(eq? a (car lat)) (multirember a (cdr lat))]
+      [else (cons (car lat) (multirember a (cdr lat)))])))
+
+
+(define multirember1
+  (lambda (a lat)
+    ((Y (lambda (mr)
+          (lambda (lat)
+            (cond
+              [(null? lat) '()]
+              [(eq? a (car lat)) (mr (cdr lat))]
+              [else (cons (car lat) (mr (cdr lat)))]))))
+     lat)))
+
+
+(define multirember2
+  (lambda (a lat)
+    (letrec ([mr (lambda(lat)
+                   (cond
+                     [(null? lat) '()]
+                     [(eq? a (car lat)) (mr (cdr lat))]
+                     [else (cons (car lat) (mr (cdr lat)))]))])
+      (mr lat))))
+```
+
+---
+
+### the twelfth commandment
+use `(letrec ...)` to remove arguments that do not change for
+recursive applications.
+
+### the thirteenth commandment
+use `(letrec ...)` to hide and to protect functions.
+
+---
+
+## 13. hop, skip, and jump
+
+---
+
 
