@@ -1,4 +1,4 @@
-# a little schemer
+# the little schemer
 
 ---
 
@@ -359,5 +359,60 @@ use `(letrec ...)` to hide and to protect functions.
 ## 13. hop, skip, and jump
 
 ---
+
+- 引入 `letcc`，感觉主要是为了减少循环的次数
+
+---
+
+```scheme
+(define intersectAll
+  (lambda (lset)
+    (letrec
+      ([A (lambda (lset)
+            (cond [(null? (cdr lset)) (car lset)]
+                  [else (interset (car lset) (A (cdr lset)))]))])
+      (cond [(null? lset) '()]
+            [else (A lset)]))))
+
+(define intersectAll
+  (lambda (lset)
+    (letcc
+      hop
+      (letrec
+        ([A (lambda (lset)
+              (cond [(null? (car lset)) (hop '())]
+                    [(null? (cdr lset)) (car lset)]
+                    [else (interset (car lset) (A (cdr lset)))]))])
+        (cond [(null? lset) '()]
+              [else (A lset)])))))
+```
+
+---
+
+### the fourteenth commandment
+use `(letcc ...)` to return values abruptly and promptly.
+
+---
+
+```scheme
+(define-syntax letcc
+  (syntax-rules
+    ()
+    ((letcc k body ...)
+     (call/cc (lambda (k) body ...))))) 
+
+(define-syntax try
+  (syntax-rules
+    ()
+    ((try k a . b)
+     (letcc success (letcc k (success a)) . b))))
+```
+
+---
+
+## 14. let there be names
+
+---
+
 
 
