@@ -414,5 +414,73 @@ use `(letcc ...)` to return values abruptly and promptly.
 
 ---
 
+- 递归中的环境控制，通过 let 绑定变量来减少不必要的计算
+- 然后再次配合 letcc 来及早返回
+- （确实可以说是循序渐进，每个例子都是从最傻的写法出发，一步步用前面的原则优化
+- （终于开始在代码里用 `if` 了…… `(if a b c) = (cond [a b] [else c])`
+- 最后插入了 `(try ...)`
+
+---
+
+```scheme
+(define leftmost
+  (lambda (l)
+    (cond [(atom? (car l)) (car l)]
+          [else (leftmost (car l))])))
+
+(define leftmost
+  (lambda (l)
+    (cond [(null? l) '()]
+          [(atom? (car l)) (car l)]
+          [else (cond [(atom? (leftmost (car l))) (leftmost (car l))]
+                      [else (leftmost (cdr l))])])))
+
+(define leftmost
+  (lambda (l)
+    (cond [(null? l) '()]
+          [(atom? (car l)) (car l)]
+          [else (let ([a (leftmost (car l))])
+                  (cond [(atom? a) a]
+                        [else (leftmost (cdr l))]))])))
+
+(define leftmost
+  (lambda (l)
+    (letcc skip
+           (lm l skip))))
+(define lm
+  (lambda (l out)
+    (cond [(null? l) '()]
+          [(atom? (car l)) (out (car l))]
+          [else (begin
+                  (lm (car l) out)
+                  (lm (cdr l) out))])))
+
+(define leftmost
+  (lambda (l)
+    (letcc skip
+           (letrec
+             ([lm (lambda (l)
+                    (cond [(null? l) '()]
+                          [(atom? (car l)) (skip (car l))]
+                          [else (begin
+                                  (lm (car l))
+                                  (lm (cdr l)))]))])
+             (lm l)))))
+```
+
+---
+
+### the fifteenth commandment (preliminary version)
+use `(let ...)` to name the values of repeated expressions.
+
+### the fifteenth commandment (revised version)
+use `(let ...)` to name the values of repeated expressions in a function
+definition if they may be evaluated twice for one and the same use of function.
+
+---
+
+## 15. the difference between men and boys...
+
+---
 
 
