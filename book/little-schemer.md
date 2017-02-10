@@ -400,12 +400,6 @@ use `(letcc ...)` to return values abruptly and promptly.
     ()
     ((letcc k body ...)
      (call/cc (lambda (k) body ...))))) 
-
-(define-syntax try
-  (syntax-rules
-    ()
-    ((try k a . b)
-     (letcc success (letcc k (success a)) . b))))
 ```
 
 ---
@@ -476,6 +470,16 @@ use `(let ...)` to name the values of repeated expressions.
 ### the fifteenth commandment (revised version)
 use `(let ...)` to name the values of repeated expressions in a function
 definition if they may be evaluated twice for one and the same use of function.
+
+---
+
+```scheme
+(define-syntax try
+  (syntax-rules
+    ()
+    ((try k a . b)
+     (letcc success (letcc k (success a)) . b))))
+```
 
 ---
 
