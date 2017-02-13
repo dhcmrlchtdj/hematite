@@ -509,6 +509,7 @@ use `(set! x ...)` only when the value that `x` refers to is no longer needed.
 ---
 
 - 继续讲绑定
+- 用 let/set! 实现 letrec 的语义
 
 ---
 
@@ -520,6 +521,61 @@ a function.
 use `(set! x ...)` for `(let ([x ...]) ...)` only of there is at least one
 `(lambda ...)` between it and the `(let ...)`, or if the new value for `x`
 is a function that refers to `x`.
+
+---
+
+```scheme
+(define length
+  (let ([h (lambda (l) 0)])
+    (set! h
+      (lambda (l)
+        (cond [(null? l) 0]
+              [else (add1 (h (cdr l)))])))
+    h))
+```
+
+对上面做拆分，提取
+
+```scheme
+(define length
+  (let ([h (lambda (l) 0)])
+    (set! h ...)
+    h))
+
+(define L
+  (lambda (length)
+    (lambda (l)
+      (cond [(null? l) 0]
+            [else (add1 (length (cdr l)))]))))
+
+(define length
+  (let ([h (lambda (l) 0)])
+    (set! h
+      (L (lambda (arg) (h arg))))
+    h))
+```
+
+可以把模式提取出来
+
+```scheme
+(define Y!
+  (lambda (L)
+    (let ([h (lambda (l) '())])
+      (set! h
+        (L (lambda (arg) (h arg))))
+      h)))
+
+(define Y!
+  (lambda (f)
+    (letrec ([h (f (lambda (arg) (h arg)))])
+      h)))
+
+(define length (Y! L))
+```
+
+---
+
+## 17. we change, therefore we are!
 
 ---
 
