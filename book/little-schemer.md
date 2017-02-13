@@ -487,4 +487,40 @@ definition if they may be evaluated twice for one and the same use of function.
 
 ---
 
+- 开始讲绑定 define/set!
+- 控制好作用域，只用于修改闭局部变量
+
+---
+
+### the sixteenth commandment
+use `(set! ...)` only with names defined in `(let ...)`s.
+
+### the seventeenth commandment (preliminary version)
+use `(set! x ...)` for `(let ([x ...]) ...)` only if there is at least one
+`(lambda ...)` between it and the `(let ([x ...]) ...)`.
+
+### the eighteenth commandment
+use `(set! x ...)` only when the value that `x` refers to is no longer needed.
+
+---
+
+## 16. ready, set, bang!
+
+---
+
+- 继续讲绑定
+
+---
+
+### the nineteenth commandment
+use `(set! ...)` to remember valuable things between two distinct uses of
+a function.
+
+### the seventeenth commandment (final version)
+use `(set! x ...)` for `(let ([x ...]) ...)` only of there is at least one
+`(lambda ...)` between it and the `(let ...)`, or if the new value for `x`
+is a function that refers to `x`.
+
+---
+
 
