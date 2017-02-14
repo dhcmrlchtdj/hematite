@@ -534,7 +534,8 @@ is a function that refers to `x`.
     h))
 ```
 
-对上面做拆分，提取
+对上面做拆分
+把 `h` 真正的定义从外层剥离
 
 ```scheme
 (define length
@@ -555,7 +556,9 @@ is a function that refers to `x`.
     h))
 ```
 
-可以把模式提取出来
+针对上面的结果，把这种形式总结表示出来
+就效果来说，等效于 `letrec`
+（这点也可以看 SICP 第四章
 
 ```scheme
 (define Y!
