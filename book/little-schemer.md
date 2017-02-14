@@ -616,4 +616,51 @@ is a function that refers to `x`.
 
 ---
 
+- 讲 `letcc`
+- 之前的例子大都是作为函数返回值，提前返回来减少计算
+- 这里则是流程中途捕获
+- 讲 CPS
+- 用 CPS 改写 letcc
+- difference between shadow and the real thing
+
+---
+
+### the twentieth commandment
+when thinking about a value created with `(letcc ...)`, write down the
+function that is equivalent but does not forget. then, when you use it,
+remember to forget.
+
+---
+
+```scheme
+(define deep
+  (lambda (m)
+    (cond [(zero? m) 'pizza]
+          [else (cons (deep (sub1 m)) '())])))
+
+(define toppings)
+(define deepB
+  (lambda (m)
+    (cond [(zero? m) (letcc jump
+                            (set! toppings jump)
+                            'pizza)]
+          [else (cons (deepB (sub1 m) '()))])))
+
+(define deep&co
+  (lambda (m k)
+    (cond [(zero? m) (k 'pizza)]
+          [else (deep&co (sub1 m)
+                         (lambda (x) (k (cons x '()))))])))
+
+(define deep&coB
+  (lambda (m k)
+    (cond [(zero? m) (let ()
+                       (set! toppings k)
+                       (k 'pizza))]
+          [else (deep&coB (sub1 m)
+                          (lambda (x) (k (cons x '()))))])))
+```
+
+---
+
 
