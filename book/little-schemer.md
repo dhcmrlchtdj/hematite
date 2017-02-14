@@ -582,4 +582,38 @@ is a function that refers to `x`.
 
 ---
 
+- 继续讲解形式变换，其实都是语法糖咯
+- `(let ...)` 和 `((lambda ...) ...)`
+
+---
+
+## 18. we change, therefore we are the same!
+
+---
+
+- 实现 `cons/car/cdr`
+- 实现 `set-car!/set-cdr!`
+- 重提第六章
+
+---
+
+```scheme
+(define kons
+  (lambda (kar kdr)
+    (lambda (selector)
+      (selector kar kdr))))
+(define kar
+  (lambda (s)
+    (s (lambda (x y)  x))))
+(define kdr
+  (lambda (s)
+    (s (lambda (x y) y))))
+```
+
+---
+
+## 19. absconding with the jewels
+
+---
+
 
