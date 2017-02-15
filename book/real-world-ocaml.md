@@ -2,30 +2,35 @@
 
 ---
 
-```
-1 + 2;;
-3.14 +. 2.73;;
-let x = 10;;
-```
+## prologue
 
-- `;;` 表示语句结束
-	`1 + 2;;`
-- 函数调用和参数，都用空格分割
-	`sqrt 9.;;`
-- `let` 绑定变量
-	`let x = 10;;`
-- 标识符限制 `[_a-z][_'a-zA-Z0-9]*`
-- 函数声明也用 `let`，模式匹配的感觉
-	`let square x = x * x;;`
-- 函数调用会自动 curry
+---
+
+列举了一些 ocaml 的特点
+
+- garbage collection
+- first-class functions
+- static type-checking
+- parametric polymorphism
+- immutable programming
+- automatic type inference
+- algebraic data types & pattern matching
+
+如果只看到这些，感觉确实很棒啦
+
+---
+
+安装指南
+https://github.com/realworldocaml/book/wiki/Installation-Instructions
+
+---
 
 
 
 
 
 
-
-
+---
 
 1. 基本数据结构，基本语法，主要语言结构。达到能写数学计算的程度
 2. 内置数据结构的使用，数组啦、字典啦，等等
