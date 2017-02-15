@@ -622,7 +622,7 @@ is a function that refers to `x`.
 - 讲 CPS，用用 CPS 改写前面 letcc 的例子
 - difference between shadow and the real thing
 - CPS 和 letcc 效果是不同的
-	callcc 会忽略外层调用
+	letcc 会忽略外层调用
 	it forgets everythings around it
 	用下面例子来说就是 `(cons (toppings 'why) '())` 和 `(toppings 'why)` 结果相同
 - callcc 确实是很复杂的流程控制……
@@ -671,4 +671,14 @@ remember to forget.
 
 ---
 
+- table，查找，环境变量……
+- 又在写解释器……
+- 实现 letcc（不过直接用了原生的 letcc 😂
 
+---
+
+### the fifteenth commandment (final version)
+use `(let ...)` to name the values of repeated expressions in a function
+definition if they may be evaluated twice for one and the same use of function.
+and use `(let ...)` to name the values of expressions (without set!) that are
+re-evaluated every time a function is used.
