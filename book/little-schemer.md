@@ -619,9 +619,13 @@ is a function that refers to `x`.
 - 讲 `letcc`
 - 之前的例子大都是作为函数返回值，提前返回来减少计算
 - 这里则是流程中途捕获
-- 讲 CPS
-- 用 CPS 改写 letcc
+- 讲 CPS，用用 CPS 改写前面 letcc 的例子
 - difference between shadow and the real thing
+- CPS 和 letcc 效果是不同的
+	callcc 会忽略外层调用
+	it forgets everythings around it
+	用下面例子来说就是 `(cons (toppings 'why) '())` 和 `(toppings 'why)` 结果相同
+- callcc 确实是很复杂的流程控制……
 
 ---
 
@@ -644,7 +648,7 @@ remember to forget.
     (cond [(zero? m) (letcc jump
                             (set! toppings jump)
                             'pizza)]
-          [else (cons (deepB (sub1 m) '()))])))
+          [else (cons (deepB (sub1 m)) '())])))
 
 (define deep&co
   (lambda (m k)
@@ -660,6 +664,10 @@ remember to forget.
           [else (deep&coB (sub1 m)
                           (lambda (x) (k (cons x '()))))])))
 ```
+
+---
+
+## 20. what's in store?
 
 ---
 
