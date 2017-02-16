@@ -62,8 +62,24 @@ https://freenode.net/kb/answer/extbans
 
 ---
 
+## forward channel
+
+
+https://freenode.net/kb/answer/channelmodes
+
+- 首先要无法进入（比如 `+i`，也可以是其他限制
+- 然后有个转发 `+f #new-ch`
+
+```
+/cs set #old-ch mlock +inpsf #new-ch
+
+/cs info #old-ch
+```
+
+---
+
 ## automatic voice
 
 ```
-/cs flags #ch *!*@* +V
+/cs flags #ch *!*@* +Vv
 ```
