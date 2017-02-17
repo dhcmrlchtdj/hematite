@@ -69,7 +69,7 @@ monad 通过对 accumulators 的抽象，保证了求值顺序。
 （SICP 是用这个例子来展示，如何用赋值来维护局部状态，好像是
 
 
-```
+```scheme
 ;; rand : number -> (number x number)
 (define rand
   (lambda (seed)
@@ -77,7 +77,7 @@ monad 通过对 accumulators 的抽象，保证了求值顺序。
       (cons ans ans))))
 ```
 
-```
+```scheme
 ;; rand : -> (number -> (number x number))
 (define rand
   (lambda ()
@@ -93,7 +93,7 @@ monad 通过对 accumulators 的抽象，保证了求值顺序。
 
 然后，可以把前面用 CSP 写的 begin 换个实现
 
-```
+```scheme
 ;; begin : T(alpha) T(beta) -> T(beta)
 (define (begin comp1 comp2)
   (lambda (seed0)
@@ -105,7 +105,7 @@ monad 通过对 accumulators 的抽象，保证了求值顺序。
 
 这个情况下，丢掉了 comp1 的结果，只使用了 seed1。
 
-```
+```scheme
 ;; pipe : T(alpha) (alpha -> T(beta)) -> T(beta)
 (define (pipe comp1 build-comp2)
   (lambda (seed0)
@@ -121,7 +121,7 @@ monad 通过对 accumulators 的抽象，保证了求值顺序。
 然后，还能定义出一个 lift 操作。
 （看到这里已经开始看不懂了……
 
-```
+```scheme
 ;; lift : alpha -> T(alpha)
 (define (lift v)
   (lambda (seed)
