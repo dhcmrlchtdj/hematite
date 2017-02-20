@@ -251,4 +251,110 @@ sequelM = a -> mb
 
 ---
 
+### maybe monad
 
+```scheme
+(define unit-maybe
+  (lambda (a)
+    (cons 'Just a)))
+
+(define bind-maybe
+  (lambda (ma sequel)
+    (cond [(eq? (car ma) 'Just)
+           (let ([a (cadr ma)]) (sequel a))]
+          [else ma])))
+```
+
+---
+
+### continuation monad
+
+```scheme
+(define unit-cont
+  (lambda (a)
+    (lambda (k)
+      (k a))))
+
+(define bind-cont
+  (lambda (ma sequel)
+    (lambda (k)
+      (let ([kk (lambda (a)
+                  (let ([mb (sequel a)])
+                    (mb k)))])
+        (ma kk)))))
+```
+
+```scheme
+(define remberevensXcountevens
+  (lambda (l)
+    (cond [(null? l) (unit-cont (cons '() 0))]
+          [(pair? (car l))
+           (bind-cont
+             (remberevensXcountevens (car l))
+             (lambda (pa)
+               (bind-cont
+                 (remberevensXcountevens (cdr l))
+                 (lambda (pd)
+                   (unit-cont (cons (cons (car pa) (car pd)) (+ (cdr pa) (cdr pd))))))))]
+          [(or (null? (car l)) (odd? (car l)))
+           (bind-cont
+             (remberevensXcountevens (cdr l))
+             (lambda (p)
+               (unit-cont (cons (cons (car l) (car p)) (cdr p)))))]
+          [else (bind-cont
+                  (remberevensXcountevens (cdr l))
+                  (lambda (p)
+                    (unit-cont (cons (car p) (+ 1 (cdr p))))))])))
+
+((remberevensXcountevens '(2 3 (7 4 5 6) 8 (9) 2)) (lambda (p) p))
+```
+
+---
+
+### exception monad
+
+```scheme
+(define unit-exception
+  (lambda (a)
+    (cons 'Success a)))
+
+(define bind-exception
+  (lambda (ma sequel)
+    (cond [(eq? (car ma) 'Success)
+           (let ([a (cadr ma)]) (sequel a))]
+          [else ma])))
+```
+
+---
+
+### writer monad
+
+```scheme
+(define unit-writer
+  (lambda (a)
+    (cons a '())))
+
+(define bind-writer
+  (lambda (ma sequel)
+    (let ([a (car ma)])
+      (let ([mb (sequel a)])
+        (let ([b (car mb)])
+          (cons b (append (cdr ma) (cdr mb))))))))
+```
+
+---
+
+### reader monad
+
+```scheme
+(define unit-reader
+  (lambda (a)
+    (lambda (v)
+      a)))
+(define bind-reader
+  (lambda (ma sequel)
+    (lambda (v)
+      (let ([a (ma v)])
+        (let ([mb (sequel a)])
+          (mb v))))))
+```
