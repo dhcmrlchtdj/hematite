@@ -55,4 +55,58 @@ String.split ~on:':' path
 
 ---
 
+## Files, Modules, and Programs
+
+---
+
+```
+$ ls
+freq.ml
+
+$ ocamlfind ocamlc -linkpkg -thread -package core freq.ml -o freq.byte
+$ ocamlfind ocamlc -custom -linkpkg -thread -package core freq.ml -o freq.native
+
+$ ocamlfind ocamlopt -linkpkg -thread -package core freq.ml -o freq.native
+
+$ corebuild freq.byte
+$ corebuild freq.native
+```
+
+- ocamlc 是 bytecode compiler
+	- 代码跑在虚拟机上
+	- 像 OCaml debugger 之类的工具，只能用于 bytecode
+	- 也可以把 runtime 一起打包
+- ocamlopt 是 native-code compiler
+	- 可以用 gdb 调试
+
+---
+
+```
+$ corebuild counter.inferred.mli
+$ cat cat _build/counter.inferred.mli
+```
+
+- `.mli` 是接口定义
+- 通常会有接口定义、类型定义、文档等
+- 虽然可以用工具生成，不过通常会选择手写来保证可读性
+
+---
+
+- 文件名即模块名
+- 模块名总是大写首字母
+
+比如 `counter.ml` 对应的模块就是 `Counter`
+
+- 可以在文件内嵌套模块
+- `module <name> : <signature> = <implementation>`
+
+- `open <name>` 后可以直接使用模块内的函数、变量
+	- 不这么做也可以通过引用模块名来使用模块内的函数、变量
+	- 直接 `open` 等于是污染当前环境
+	- 尽可能少进行 `open` 操作
+	- 即使要做也尽可能把作用域限制在局部
+
+- 模块里可以 `include <name>` 来扩展生产新模块
+
+---
 
