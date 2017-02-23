@@ -55,6 +55,12 @@ String.split ~on:':' path
 
 ---
 
+- ocaml 还是能拿到函数的引用的
+	- 比如 `let now = Time.now ;;`
+	- 调用的话，需要 `let n = Time.now ();;` 或者 `let n = now ();;`
+
+---
+
 ## Files, Modules, and Programs
 
 ---
@@ -109,4 +115,27 @@ $ cat cat _build/counter.inferred.mli
 - 模块里可以 `include <name>` 来扩展生产新模块
 
 ---
+
+## Records
+
+---
+
+- record 的 field 名必须小写开头
+- record 的 field 可以申明为可变的，`mutable`
+	- 使用 `<-` 来赋值
+- `var.field` 和 `var.RecordName.field` 两种写法都可能出现
+	- field 名肯定是小写的，所以看到大写肯定是后一种写法
+	- 明确表明是哪个  record
+
+---
+
+- ocaml 有很多不同的编译警告
+	- 可以用这样的方式在文件里打开警告 `#warnings "+A";;`
+	- 查看可选的警告，可以执行 `ocaml -warn-help`
+	- 执行时设置 `ocaml -w @A-4-33-41-42-43-34-44 ...`
+
+- 在自动推断 record 的类型时，会使用最近的那个
+
+---
+
 
