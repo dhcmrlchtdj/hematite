@@ -267,4 +267,3 @@ HTTP2 lastest draft (2014.08.12)
 ``````````````````````
 + server push 就是服务器发出的 request，放在 PUSH_PROMISE 中
 + 使用的是 PUSH_PROMISE frame
-+ 

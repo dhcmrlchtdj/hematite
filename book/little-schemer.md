@@ -399,7 +399,7 @@ use `(letcc ...)` to return values abruptly and promptly.
   (syntax-rules
     ()
     ((letcc k body ...)
-     (call/cc (lambda (k) body ...))))) 
+     (call/cc (lambda (k) body ...)))))
 ```
 
 ---

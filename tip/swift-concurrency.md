@@ -19,7 +19,7 @@ https://github.com/apple/swift/blob/master/docs/proposals/Concurrency.rst
 > Mutable data can be shared between threads as long as the access to the data
 > is synchronized and some program properties are verified by the compiler.
 
-这句到底在说什么…… 
+这句到底在说什么……
 如果数据读写可以同步，并发就已经被抽象掉了吧，和写同步程序没有区别了。
 那数据是否可变，和并发其实就无关了。
 

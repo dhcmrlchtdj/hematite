@@ -16,7 +16,6 @@ c api
     #include "sample.h"
 
     int gcd(int x, int y) {
-   
     }
 
 

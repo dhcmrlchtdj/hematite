@@ -45,7 +45,7 @@ insertion sort, swap with each larger entry to left
 - 随便进来一个，然后重新整理顺序
 - 最好的情况是，输入为有序数组，对比和移动次数都会很少
 
-shell sort, 
+shell sort
 - 改进 insertion sort，每次不是移动一格
 - 如何选取距离
 	- 2^n - 1

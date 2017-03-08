@@ -23,7 +23,7 @@ call/cc 会跳转捕获处，并忽略调用处的上下文
   (syntax-rules
     ()
     ((letcc k body ...)
-     (call/cc (lambda (k) body ...))))) 
+     (call/cc (lambda (k) body ...)))))
 ```
 
 ---

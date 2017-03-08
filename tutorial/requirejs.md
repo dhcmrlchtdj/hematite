@@ -94,13 +94,13 @@ var request = {
 
 下面时具体配置选项
 
-* baseUrl  
-* paths  
+* baseUrl
+* paths
     这个默认是相对 baseUrl 的路径。
     但是，如果 paths 以 `/` 或协议开头，会被是为绝对路径，不再涉及 baseUrl。
-* waitSeconds  
+* waitSeconds
     等待文件载入，默认等待 7 秒，超过会抛出超时错误。设为 0 可以禁用该功能。
-* shim  
+* shim
     用来处理非 AMD 模块的依赖。
 
     ```
@@ -119,6 +119,6 @@ var request = {
     }
     ```
 
-    可以设置依赖和暴露的变量。  
+    可以设置依赖和暴露的变量。
     需要注意一点，shim 的模块不能依赖于 amd 的模块，
     只能依赖于 shim 的模块或无依赖。

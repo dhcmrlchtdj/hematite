@@ -119,7 +119,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions
 ## arrow function
 - this, arguments, super, new.target 都不是自己的，而是外层的
 - 无视 call / apply / bind 的 context 参数
-- 不能和 new / yield 一起使用 
+- 不能和 new / yield 一起使用
 
 ## default parameter
 - 在没有参数或者参数为 undefined 时，都会使用函数定义的默认参数 `((a, b=1) => (a + b))(1)`
