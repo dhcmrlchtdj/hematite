@@ -45,3 +45,18 @@ Flat UI
 | SILVER        | #BDC3C7 | 204,   5, 78 |
 | CONCRETE      | #95A5A6 | 184,  10, 65 |
 | ASBESTOS      | #7F8C8D | 184,  10, 55 |
+
+---
+
+http://primercss.io/colors/
+
+| name       | HEX     | HSB          |
+| ---        | ---     | ---          |
+| blue       | #4078c0 | 214,  67, 75 |
+| green      | #6cc644 | 102,  66, 78 |
+| red        | #bd2c00 |  14, 100, 74 |
+| orange     | #c9510c |  22,  94, 79 |
+| purple     | #6e5494 | 264,  43, 58 |
+| light gray | #fafafa |   0,   0, 98 |
+| gray       | #f5f5f5 |   0,   0, 96 |
+| dark gray  | #333333 |   0,   0, 20 |
