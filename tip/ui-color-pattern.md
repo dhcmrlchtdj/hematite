@@ -52,11 +52,27 @@ http://primercss.io/colors/
 
 | name       | HEX     | HSB          |
 | ---        | ---     | ---          |
-| blue       | #4078c0 | 214,  67, 75 |
-| green      | #6cc644 | 102,  66, 78 |
-| red        | #bd2c00 |  14, 100, 74 |
-| orange     | #c9510c |  22,  94, 79 |
-| purple     | #6e5494 | 264,  43, 58 |
-| light gray | #fafafa |   0,   0, 98 |
-| gray       | #f5f5f5 |   0,   0, 96 |
+| blue       | #4078C0 | 214,  67, 75 |
+| green      | #6CC644 | 102,  66, 78 |
+| red        | #BD2C00 |  14, 100, 74 |
+| orange     | #C9510C |  22,  94, 79 |
+| purple     | #6E5494 | 264,  43, 58 |
+| gray       | #F5F5F5 |   0,   0, 96 |
+| light gray | #FAFAFA |   0,   0, 98 |
 | dark gray  | #333333 |   0,   0, 20 |
+
+---
+
+https://github.com/primer/primer-support/blob/master/lib/variables/color-system.scss
+
+| name       | HEX     | HSB          |
+| ---        | ---     | ---          |
+| blue       | #0366D6 | 212, 99,  84 |
+| green      | #28A745 | 134, 76,  65 |
+| yello      | #FFD33D |  46, 76, 100 |
+| red        | #D73A49 | 354, 73,  84 |
+| orange     | #F66A0A |  24, 96,  96 |
+| purple     | #6F42C1 | 261, 66,  76 |
+| gray       | #6A737D | 212, 15,  49 |
+| light gray | #959DA5 | 210, 10,  65 |
+| dark gray  | #24292E | 210, 22,  18 |
