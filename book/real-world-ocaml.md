@@ -186,3 +186,46 @@ $ cat cat _build/counter.inferred.mli
     - 四色标记
 - 析构？
     - 堆上的可变数据，可以在被 gc 的时候执行一些回调，finalization
+
+---
+
+## Compiler Frontend
+
+---
+
+```
+    Source code
+        |
+        | parsing and preprocessing
+        |
+        | camlp4 syntax extensions
+        |
+        v
+    Parsetree (untyped AST)
+        |
+        | type inference and checking
+        v
+    Typedtree (type-annotated AST)
+        |
+        | pattern-matching compilation
+        | elimination of modules and classes
+        |
+        v
+     Lambda
+      /   \
+     /     \ closure conversion, inlining, uncurrying,
+    v       \  data representation strategy
+ Bytecode    \
+    |         +-----+
+    |               |
+    |              Cmm
+    |ocamlrun       |
+    |               | code generation
+    |               | assembly & linking
+    v               v
+ Interpreted    Compiled
+```
+
+---
+
+
