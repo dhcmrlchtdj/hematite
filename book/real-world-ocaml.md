@@ -189,7 +189,7 @@ $ cat cat _build/counter.inferred.mli
 
 ---
 
-## Compiler Frontend
+## Compiler Frontend / Backend
 
 ---
 
@@ -228,4 +228,23 @@ $ cat cat _build/counter.inferred.mli
 
 ---
 
-
+- type check 的时候，同时进行了三个工作
+    - automatic type inference
+    - module system
+    - explicit subtyping
+- 类型推断基于 Hindley-Milner 算法
+    - 自己手写类型能让错误信息更明确，让类型推断更准确
+- 生成各种中间表示
+    - `$ ocamlc -dparsetree <input>`
+    - `$ ocamlc -dtypedtree <input>`
+        - 像 merlin 之类的工具使用的就是 typed AST
+    - `$ ocamlc -dlambda <input>`
+        - `lambda form`，长得像 `s-expression`
+    - `$ ocamlc -dinstr <input>`
+        - 编译成 C/JS 好像都是对 bytecode 进行编译
+    - `$ ocamlopt -S <input>`
+        - 会在编译成 native code 时额外输出汇编代码
+- bytecode 跑在一个 stack-based virtual machine 上
+    - 只用到了 7 个寄存器
+    - bytecode 使用的是一种 `ZINC model`，编译的原生代码不是
+- runtime 由字节码解释器、GC、实现基本语意的 C 函数三个部分组成
