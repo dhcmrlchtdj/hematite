@@ -22,14 +22,7 @@ https://en.wikipedia.org/wiki/Communicating_sequential_processes
 
 ---
 
-## CSP vs FRP
-
----
-
 http://stackoverflow.com/questions/20632512/comparing-core-async-and-functional-reactive-programming-rx
-http://clojure.com/blog/2013/06/28/clojure-core-async-channels.html
-
----
 
 - FRP 关注的是传递变化情况。源头发现变化，传递到其他地方。
 - CSP 关注的是系统解耦。进程之间用 channel 传递信息。
@@ -37,6 +30,8 @@ http://clojure.com/blog/2013/06/28/clojure-core-async-channels.html
 两者关注的是不同层次的抽象
 
 ---
+
+http://clojure.com/blog/2013/06/28/clojure-core-async-channels.html
 
 > Events complect communication and flow of control.
 
@@ -47,3 +42,83 @@ http://clojure.com/blog/2013/06/28/clojure-core-async-channels.html
 - 使用 FRP 等许多机制，让 events 更加清晰
 - 一个事件触发未知个数的代码块开始运行，这样不好
     - don't do too much work in your handler
+
+---
+
+http://ambassadortothecomputers.blogspot.com/2010/05/how-froc-works.html
+
+- `behaviors`
+    - 会随时间变化的值
+    - 始终存在
+- `events`
+    - 只存在一瞬间
+    - 前后的值可能相同，可能不同
+- `signals`
+    - events or behaviors
+
+---
+
+http://cs.stackexchange.com/questions/9038/how-do-functional-reactive-programming-and-the-actor-model-relate-to-each-other
+
+- actors
+    - message passing is described explicitly and imperatively
+    - tend to be async
+
+- FRP
+    - data flow is described declaratively
+    - tends to be synchronous
+
+---
+
+http://cs.stackexchange.com/questions/9038/how-do-functional-reactive-programming-and-the-actor-model-relate-to-each-other
+
+- FRP
+    - model signals and events on a linear timeline
+    - composable，多个操作可以组合
+    - supports local state through integrals or accumulators
+
+- actors
+    - process messages in non-deterministic order
+    - not composable，不能将两个 actor 组合成一个大的 actor
+    - supports state by allowing each actor to specify its behavior for the next message in response to the current one
+
+---
+
+http://stackoverflow.com/questions/1028250/what-is-functional-reactive-programming
+http://apfelmus.nfshost.com/blog/2011/03/28-essence-frp.html
+
+> The essence of functional reactive programming is to
+> specify the dynamic behavior of a value
+> completely at the time of declaration.
+
+---
+
+http://jelv.is/frp/
+
+- FRP is a novel, more declarative way of writing reactive systems like user interfaces and games.
+- FRP can be used wherever you would normally use an event/observer callback-based style.
+
+- make time explicit
+- program with values over time
+- handle both continuous and discrete time
+
+- behavior, value continuous over time
+- event, value at a particular time
+- stream, infinite list of events ordered by time
+
+---
+
+https://begriffs.com/posts/2016-07-27-tikhon-on-frp.html
+
+- motivation without definitions makes you feel like you understand something
+    but what you understand is not the abstraction itself
+
+- functional means simple, composable, and declarative
+
+- Behaviors change continuously
+- Events happen at points in time
+- Behavior is a function from time to values
+- Event is pair of time and value
+
+---
+
