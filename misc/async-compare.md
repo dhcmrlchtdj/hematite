@@ -122,3 +122,14 @@ https://begriffs.com/posts/2016-07-27-tikhon-on-frp.html
 
 ---
 
+http://reactivex.io/rxjs/manual/overview.html
+
+- Think of RxJS as Lodash for events.
+- Observables are like functions with zero arguments, but generalize those to allow multiple values.
+- Observables are able to deliver values either synchronously or asynchronously.
+- Subscribing to an Observable is like calling a function, providing callbacks where the data will be delivered to.
+- Observers are just objects with three callbacks, one for each type of notification that an Observable may deliver.
+- A Subscription essentially just has an unsubscribe() function to release resources or cancel Observable executions.
+- A Subject is like an Observable, but can multicast to many Observers. Subjects are like EventEmitters: they maintain a registry of many listeners.
+- An Operator is a function which creates a new Observable based on the current Observable. This is a pure operation: the previous Observable stays unmodified.
+- A Scheduler lets you define in what execution context will an Observable deliver notifications to its Observer.
