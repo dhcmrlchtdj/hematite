@@ -33,9 +33,20 @@ http://caml.inria.fr/pub/docs/manual-ocaml/
 ---
 
 - structure
+    - `module Mod = struct ... end`
+    - `Mod.property`
 - signature
+    - `module type Sig = sig ... end`
+    - `module Mod : Sig = struct ... end`
+    - `module Mod = (struct ... end : Sig)`
+    - `module ModB = (Mod : Sig)`
 - functor
-- module
+    - structureB = functor(structureA)
+    - `module Functor = functor (Mod:Sig) -> struct ... end`
+    - `module ModB = Functor(ModA)`
+- funtor type
+    - `module type FSig = funtor (Mod:Sig) -> sig ... end`
+    - `module FunctorB = (Functor : FSig)`
 
 ---
 
