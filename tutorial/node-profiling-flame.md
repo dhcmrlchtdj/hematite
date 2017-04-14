@@ -37,8 +37,9 @@ $ stackvis perf flamegraph-d3 < nodestacks > flamegraph.htm
 
 ```javascript
 const profiler = require('v8-profiler');
-const prof = profiler.startProfiling('profile-name');
-prof.stopProfiling('profile-name');
+profiler.startProfiling('profile-name');
+
+const prof = prof.stopProfiling('profile-name');
 prof.export((error, result) => {
     fs.writeFile('prof.json', result, () => {
         prof.delete();
