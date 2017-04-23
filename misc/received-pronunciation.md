@@ -58,6 +58,17 @@ https://en.wikipedia.org/wiki/Received_Pronunciation
 
 ---
 
+apple 的默认字典，用的牛津的标注
+
+- `/æ/` -> `/a/`
+- `/e/` -> `/ɛ/`
+- `/ɜː/` -> `/əː/`
+- `/aɪ/` -> `/ʌɪ/`
+- `/aʊ/` -> `/ɑʊ/`
+- `/eə/` -> `/ɛə/` `/ɛː/`
+
+---
+
 ## consonants
 
 ---
