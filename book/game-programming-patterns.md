@@ -49,4 +49,74 @@ http://gameprogrammingpatterns.com/
 
 ---
 
+### command
+
+---
+
+> Commands are an object-oriented replacement for callbacks.
+
+---
+
+现在有这样的代码。
+读取用户输入，然后调用相应的处理。
+
+```javascript
+const handleInput() {
+    if (isPressed(BUTTON_X)) jump();
+    else if (isPressed(BUTTON_Y)) fireGun();
+    else if (isPressed(BUTTON_A)) swapWeapon();
+    else if (isPressed(BUTTON_B)) lurchIneffectively();
+}
+```
+
+可以看出，新增操作要改代码，更换按键对应的操作也要改代码。
+
+---
+
+可以将按键对应的操作抽离。
+这样每个用户输入都有一个对应的可执行函数。
+
+```javascript
+class Command { execute() {} }
+class X extends Command { execute() { jump(); } }
+const handleInput() {
+    if (isPressed(BUTTON_X)) return buttonX_;
+    if (isPressed(BUTTON_Y)) return buttonY_;
+    if (isPressed(BUTTON_A)) return buttonA_;
+    if (isPressed(BUTTON_B)) return buttonB_;
+    return null;
+}
+comm = handleInput();
+if (comm) comm.execute();
+```
+
+需要新增按键操作，在这个分发出增加即可。
+要修改按键对应的操作，在按键自己的实现里去修改。
+
+同时，上面的代码里，用户输入只判断输入了什么，对应哪个操作。
+具体什么时候执行操作，控制权交了出来。
+这时候可以继续增加是否执行操作的判断、增加一些额外参数等。
+
+---
+
+在一些可以撤销、回退的场景中，也可以用到这个模式。
+
+```javascript
+class Command {
+    execute() {}
+    undo() {}
+}
+```
+
+不过，undo 涉及到更多的状态处理，可能还需要在操作时记录当前的变化量。
+
+通过维护多个操作队列，就可以实现 undo/redo 等行为。
+
+另外一种实现 undo/redo 的方式是使用持久化的数据结构（persistent data structure）。
+
+---
+
+### flyweight
+
+---
 
