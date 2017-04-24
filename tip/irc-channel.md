@@ -2,6 +2,19 @@
 
 ---
 
+## add alias
+
+```
+/alias list
+cs => msg ChanServ
+ns => msg NickServ
+as => msg alis
+
+/alias add as msg alis
+```
+
+---
+
 修改权限
 ```
 /cs op|deop #ch [nickname]
@@ -82,4 +95,13 @@ https://freenode.net/kb/answer/channelmodes
 
 ```
 /cs flags #ch *!*@* +Vv
+```
+
+---
+
+### search channel
+
+```
+/as list *css*
+/as list * -topic *js*
 ```
