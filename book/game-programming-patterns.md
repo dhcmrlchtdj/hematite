@@ -175,4 +175,77 @@ const getCost = function(world, x, y) {
 
 ---
 
+> But in architecture, we’re most often trying to make systems better, not perfect.
+
+先摘这么一句，说的是发布消息的时候。
+代码还是要知道自己要发送什么格式的消息，代码还是要知道向哪里发送消息。
+耦合还是存在的。
+但是，架构要做的，是让代码比之前更好，即使最后方案还不够完美。
+
+---
+
+脑袋里会冒出许多问题
+- 广播的通道谁来提供？
+- 发送消息时是否会阻塞？
+- 发送的消息是否有序？
+- 还没被接收的消息是否会被缓存？
+
+---
+
+```javascript
+class Subject {
+    constructor() {
+        this.obs = [];
+    }
+    notify(msg) {
+        this.obs.forEach(i => i.onNotify(msg));
+    }
+    addObserver(ob) {
+        this.obs.push(ob);
+    }
+    removeObserver(ob) {}
+}
+class Observer {
+    onNotify(msg) {}
+}
+```
+
+这个框架实现的比较简单。
+要注意一点是，这里的 notify 是同步操作，所以 onNotify 执行时间过长的话，对整个系统影响都很大。
+确实需要执行长时间任务时，可能需要多线程、加锁等操作。也许异步的消息机制会更适合。
+
+---
+
+> It’s a tenet of good observer discipline that two observers observing the
+> same subject should have no ordering dependencies relative to each other.
+
+还是前面的问题，两个接受者不该对顺序有依赖，两个消息呢？
+在前面的代码里，都是同步执行，所以发出去的两个消息肯定是有序的。
+
+---
+
+> It’s an observer’s job to unregister itself from any subjects when it gets
+> deleted.
+
+subject 里是持有 observer 引用的，所以如何删除对象就成了问题。
+最简单的就是 observer 要销毁时把自己从 subject 里删除。
+
+---
+
+observer 模式是个单向的消息传递。
+如果两个模块间的通信是单向的，可以考虑 observer；
+如果通信是双向的，其他模式可能更适合。
+
+---
+
+> ..., but it’s dead simple and it works.
+> To me, those are often the two most important criteria for a solution.
+
+本章的结束语，简单、可行，这才是最重要的。
+
+---
+
+### prototype
+
+---
 
