@@ -296,3 +296,43 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Details_of_the_Obj
 
 - class-based 严格区分 class/instance；prototype-based 里全部都是 object
 - class-based 在定义 class 时就确定了继承关系；prototype-based 可以动态设置原型链
+
+---
+
+### singleton
+
+---
+
+> Ensure a class has one instance, and provide a global point of access to it.
+
+GoF 里的定义。从 and 分开，总共说了两点。
+使用单例的场景，有时候是因为要某些共享变量，有时候是因为无法创建实例。
+
+---
+
+单例带来的问题有
+
+- 全局变量
+    - 不易排查问题
+    - 造成代码耦合
+    - 不易并发
+- 即使只遇到一个问题，这模式本身解决的是两个问题
+- 执行时才初始化，意味着额外的开销
+
+---
+
+单例的使用场景之一，是为了能更容易地接触到实例。
+替代的方案有
+
+- 将实例作为参数传递
+- 实例放在基类中实现共享
+- 实例放在现有的全局变量下
+- 从 ServiceKicator 获取实例
+
+---
+
+### state
+
+---
+
+
