@@ -249,3 +249,45 @@ observer 模式是个单向的消息传递。
 
 ---
 
+prototype 作为设计模式来说，并没有什么非他不可的使用场景。
+在类型可以作为参数的传递的语言中，实现起来也可以非常灵活。
+它的另一个意义在于作为一种语言的范式（language paradigm）。
+
+---
+
+> OOP lets you define “objects” which bundle data and code together.
+> OOP marry state and behavior
+
+- class 的语言，instance 持有 field，然后去 class 里寻找 method
+- prototype 的语言，object 同时持有 field 和 method，然后去 parent 找缺失的 method/field
+
+---
+
+> missing the structure that classes give
+
+作者认为 prototype 更适合作为库存在，不适合作为语言层面的机制。
+将 class 用于数据划分，更符合思维（至少是作者自己的）。
+
+---
+
+> JavaScript in practice has more in common with class-based languages than
+> with prototypal ones.
+> JavaScript has taken steps away from Self is that the core operation in a
+> prototype-based language, cloning, is nowhere to be seen.
+
+作者认为 JS 在使用上，其实是很接近 class 的。
+prototype 最核心的是 clone 操作，而 JS 并没有这种操作。
+prototype 实现继承，是直接 clone 一个 object 来生成新的 object。
+而 JS 的继承是有构造函数的。
+
+---
+
+> The reason we use programming languages is because they have tools for
+> managing complexity.
+
+SICP 里也有类似的描述。
+不同编程语言针对不同场景，做一些特殊封装，能够减少问题的复杂度。
+
+---
+
+
