@@ -335,4 +335,65 @@ GoF 里的定义。从 and 分开，总共说了两点。
 
 ---
 
+场景：
+用户输入按键后，角色起跳。
+为了避免出现在空中起跳的情况，需要在起跳前检查角色当前的状态。
+然后要支持躲避的功能。
+为了避免空中躲避等情况，起跳前要检查是否在躲避，躲避前要检查是否已起跳。
+然后要支持攻击功能。
+攻击与起跳、躲避是相斥的，也需要做判断。
+要判断的状态越来越多，if 语句各种嵌套。
+代码难读难改……
+
+---
+
+可以用状态机来解决这种问题。
+用户在某些状态下，可以执行某些操作，随后进入另一种状态。
+
+---
+
+```javascript
+const STATE = {
+    STARTING: 1,
+    JUMPING: 2,
+    DUCKING: 3,
+    DIVING: 4,
+};
+
+let state = STATE.STARTING;
+let chargeTime = 0;
+const handleInput = (input) => {
+    switch (state) {
+        case STATE.STARTING:
+            if (input === 'PRESS_B') {
+                state = STATE.JUMPING;
+            } else if (input === 'PRESS_DOWN') {
+                state = STATE.DUCKING;
+                chargeTime = 0;
+            }
+            break;
+        case STATE.JUMPING:
+            if (input === 'PRESS_DOWN') {
+                state = STATE.DUCKING;
+            }
+            break;
+        case STATE.DUCKING:
+            if (input === 'PRESS_DOWN') {
+                state = STATE.STARTING;
+            }
+            break;
+    }
+};
+```
+
+简单的例子，能够看些基本信息。
+主要状态都交给了状态机来维护。
+可能还是要手工维护一些状态，比如上面的 chargeTime。
+
+---
+
+上面只是 FSM，如果把状态变化放到一个栈里，就有了一个下推自动机。
+
+---
+
 
