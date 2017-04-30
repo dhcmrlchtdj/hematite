@@ -396,4 +396,158 @@ const handleInput = (input) => {
 
 ---
 
+## Sequencing Patterns
+
+---
+
+### Double Buffer
+
+---
+
+- read from *current* buffer
+- write to *next* buffer
+- *swap* current and next
+
+模式本身不复杂，读写分离，也算是预处理？
+
+---
+
+> This pattern is one of those ones where you’ll know when you need it.
+
+主要还是用在状态需要频繁变化的场景。
+
+---
+
+buffer 意味着需要额外的内存，swap 意味着需要额外的时间。
+要注意使用场景是否允许这些额外负担。
+
+---
+
+- swap 可以靠交换指针来实现，这就要求外部不能直接保存指针的值。
+    - 写入数据时，注意是否依赖当前展示中的 buffer 的状态
+    - 当前写入的 buffer 不是当前展示中的 buffer
+- 如果不用指针实现，每次都要完整复制整个 buffer
+    - 写入可以不考虑影响
+    - 交换的时间更长，毕竟比修改指针引用要复杂
+
+---
+
+### Game Loop
+
+---
+
+```javascript
+while (true) {
+    processInput();
+    update();
+    render();
+}
+```
+
+这样一个主循环里，循环速度是运行环境决定的。
+我们需要一个自己的时序控制。
+
+---
+
+> it runs the game at a consistent speed despite differences in the underlying
+> hardware.
+
+本章的模式要做的就是这么一件事情，控制循环的速率。
+
+---
+
+插入一个作者对 engine 和 library 的理解
+
+- you own the main game loop and call into the library
+- engine owns the loop and calls into your code
+
+看循环控制在谁的手里。
+
+---
+
+在比较快的机器上，可以通过等待让游戏进程减速
+
+```javascript
+const FPS = 60;
+const MS_PER_FRAME = 1000 / FPS;
+while (true) {
+    const start = Date.now();
+
+    processInput();
+    update();
+    render();
+
+    sleep(start + MS_PER_FRAME - Date.now());
+}
+```
+
+但是这对较慢的机器就没有效果了。
+
+---
+
+可以将速度的控制下放给程序。
+
+```javascript
+let lastTime = Date.now();
+while (true) {
+    const current = Date.now();
+    const elapsed = current - lastTime;
+
+    processInput();
+    update(elapsed);
+    render();
+
+    lastTime = current;
+}
+```
+
+在上面的例子里，能够知道距离上一帧过了多长时间。
+可以根据这个时间来更新状态。
+比如游戏里人物移动了多长的距离，机器快则更新频率高但移动距离短，机器慢则更新频率低但移动距离长。
+
+看似完美，但是还是有不足。
+比如机器速度相差较大的两人联机，用户输入频率的差异就会凸显出来。
+
+---
+
+另一个思路是将状态更新和渲染分开。
+
+```javascript
+let previous = Date.now();
+let lag = 0;
+while (true) {
+    const current = Date.now();
+    const elapsed = current - lastTime;
+    previous = current;
+    lag += elapsed;
+
+    processInput();
+
+    while (lag >= MS_PER_UPDATE) {
+        update();
+        lag -= MS_PER_UPDATE;
+    }
+
+    render();
+}
+```
+
+上面这个修改版里，不立刻渲染，而是只更新状态。
+注意 `lag` 在循环中是不会被重置，而是累计的。
+在比较快的机器上，lag 没达到 `MS_PER_UPDATE`，所以不会更新状态。
+在比较慢的机器上，lag 在没追回之前，每次都会更新状态。
+这个 `MS_PER_UPDATE` 的取值要小心一些，至少不能比 `update()` 需要的时间短吧……
+
+- `update` 的执行间隔，是代码控制的。
+- `render` 的执行间隔，是机器速度决定的。
+
+也不是没有问题，肯定会有渲染和更新不同步的时候。
+不过不部分情况下，这种差异都能忽略。
+
+---
+
+### Update Method
+
+---
+
 
