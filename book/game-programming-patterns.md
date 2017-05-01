@@ -49,7 +49,7 @@ http://gameprogrammingpatterns.com/
 
 ---
 
-### command
+### Command
 
 ---
 
@@ -116,7 +116,7 @@ class Command {
 
 ---
 
-### flyweight
+### Flyweight
 
 ---
 
@@ -171,7 +171,7 @@ const getCost = function(world, x, y) {
 
 ---
 
-### observer
+### Observer
 
 ---
 
@@ -245,7 +245,7 @@ observer 模式是个单向的消息传递。
 
 ---
 
-### prototype
+### Prototype
 
 ---
 
@@ -299,7 +299,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Details_of_the_Obj
 
 ---
 
-### singleton
+### Singleton
 
 ---
 
@@ -331,7 +331,7 @@ GoF 里的定义。从 and 分开，总共说了两点。
 
 ---
 
-### state
+### State
 
 ---
 
@@ -579,4 +579,160 @@ while (true) {
 
 ---
 
+如果逻辑都是硬编码的，意味着修改一部分逻辑也需要将程序全部重新打包。
+对于一些需要更大灵活性的场景，使用一个沙箱来动态执行一些操作会更适合。
+
+适合需要动态定义大量操作，但是底层的实现语言又不具备这种的能力的时候。
+要考虑到动态解释的开销，执行起来会比原生代码要慢。
+
+---
+
+- an instruction set
+- a series of instructions -> a sequence of bytes
+- a virtual machine
+- a stack for intermediate values
+
+---
+
+```javascript
+class VM {
+    push(value) { this.stack.push(value); }
+    pop() { this.stack.pop();
+
+    interpret(bytecodeList) {
+        this.stack = [];
+
+        let literal = false;
+        for (const instruction of bytecodeList) {
+            if (literal) {
+                literal = false;
+                this.push(instruction);
+                continue;
+            }
+
+            switch (instruction) {
+                case INST_A: do(); break;
+                case INST_B: do(); break;
+                case INST_C: do(); break;
+                case INST_D: do(); break;
+                case INST_ADD:
+                    const x = this.pop();
+                    const y = this.pop();
+                    const sum = x + y;
+                    do(sum);
+                    break;
+                case INST_LITERAL:
+                    literal = true;
+                    break;
+            }
+        }
+    }
+}
+```
+
+demo 里面，基础的指令匹配和栈的使用也都有了。
+
+---
+
+VM 大致有 stack-based 和 register-based 两种
+
+stack-based 的
+
+- 指令更简单（通常就 1byte）
+- 代码生成器更简单
+- 指令集更大
+
+总是操作栈顶的数据，所以指令本身不复杂，转换成代码逻辑也更简单。
+但是为了完成复杂的操作，需要的指令类型就更多了。
+
+register-based 的
+
+- 指令更复杂（比如 lua 的有 32bit）
+- 指令集更小
+
+不只是操作栈顶，而是同时操作多个寄存器，所以指令更复杂。
+但相对的，完成不同工作需要的指令集就小了。
+
+---
+
+如何在 VM 中表示数据
+
+- single datatype。只提供一直类型的数据。很简单，不会出错。相对的连数字、字符串都分不开。
+- tagged variant。每种类型都带上标记。花费一点额外的空间。
+- untagged union。只是一堆字节，靠生成数据前约定好数据类型。
+- interface。更面向对象的方式，每个数据对象字节提供各种方法来判断、转换。复杂低效。
+
+---
+
+### Subclass Sandbox
+
+---
+
+- baseclass 拥有所有行为
+- subclass 选取其中某些行为
+
+---
+
+```javascript
+class SuperPower {
+    powerA() { ... }
+    powerB() { ... }
+    powerC() { ... }
+}
+class HeroA extends SuperPower {
+    activate() {
+        this.powerA();
+        this.powerB();
+    }
+}
+class HeroB extends SuperPower {
+    activate() {
+        this.powerB();
+        this.powerC();
+    }
+}
+```
+
+---
+
+如果把操作都这样封装起来，subclass 和外界的耦合就减少了很多。
+和外界交互的都是 baseclass。
+
+关键是如何判断把方法放在 baseclass 还是 subclass。
+
+---
+
+### Type Object
+
+---
+
+- 实例之间有相同的属性名，但每个创建一个子类又比较浪费。
+- 将这些变化的属性拿出来，单独包装成一个类。
+- 不同类型的实例，用不同的参数去初始化这个属性对象。
+- 不同实例是实例化同一个类，区别只在于其中的属性对象的值不同。
+
+---
+
+如何实例化这样的实例？
+- 可以先创建实例，再赋一个 type object。
+- 可以由不同的 type object 来实创建新实例。
+
+---
+
+创建之后，外部是否知道 type object 的存在，type object 能否动态修改，都要考虑。
+
+---
+
+感觉类似与 mixin 之类的吧。
+作者也反对使用多继承。
+
+---
+
+## Decoupling Patterns
+
+---
+
+### Component
+
+---
 
