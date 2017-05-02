@@ -9,15 +9,53 @@ https://imququ.com/post/letsencrypt-certificate.html
 
 ---
 
+改用官方的 certbot 了
+
+注册
+```
+$ certbot register -m nirisix@gmail.com --no-eff-email
+```
+
+生成 CSR
+```
+$ openssl ecparam -genkey -name secp384r1 -out domain.key
+$ openssl req -new -sha384 -key domain.key \
+    -subj "/CN=yoursite.com" -reqexts SAN \
+    -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:yoursite.com,DNS:www.yoursite.com")) \
+    -out domain.csr
+```
+
+获取证书
+```
+$ certbot certonly \
+    -d yoursite.com -d www.yoursite.com \
+    --csr /path/to/csr \
+    --preferred-challenges dns \
+    --manual \
+    --manual-public-ip-logging-ok \
+    --manual-auth-hook /path/to/dns/authenticator.sh
+```
+
+成功后会拿到 `0001_chain.pem`
+
+然后配置证书就可以了
+
+```
+ssl_certificate /path/to/0001_chain.pem;
+ssl_certificate_key /path/to/domain.key;
+```
+
+---
+
 改用 acme.sh 的 dns 验证了
 
 ```
 $ CF_Key="1bce7c4dbfdf65aca770c2fdeccfba2fa76c5" CF_Email="nirisix@gmail.com" \
-	./acme.sh --issue \
-	--dns dns_cf \
-	--keylength ec-384 \
-	-d example.org \
-	-d www.example.org
+    ./acme.sh --issue \
+    --dns dns_cf \
+    --keylength ec-384 \
+    -d example.org \
+    -d www.example.org
 $ ./acme.sh --list
 $ ./acme.sh --renewAll
 
