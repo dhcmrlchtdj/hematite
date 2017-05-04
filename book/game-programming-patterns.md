@@ -744,4 +744,38 @@ class HeroB extends SuperPower {
 
 ---
 
+- FIFO
+- 对发送者和接收者进行解耦
+- 如果只是为了实现两者的解耦，可能 Observer 或 Command 就可以满足要求
+- event queue 在于 statically 和 in time
+
+---
+
+- 中心化的 event queue 意味着有全局变量
+- 发送和接收之间可能有延迟，所以前后的其他状态可能已经发生了变化
+- 不小心可能写出互为发生者、接受者的循环
+
+---
+
+- 数据，queue 里是 event 还是 message
+    - 如果是 event，通知已经发生过的事情，感觉上比较接近异步的 Observer
+    - 如果是 message，要求接下去要做什么，感觉上比较接近 Command 或者说异步的 API 调用
+- 输出，queue 向哪里传播
+    - 如果是 single-cast queue，可能直接把实现封装在接收者内部
+    - 如果是 broadcast queue，可能需要有过滤的机制
+    - 如果是 worker queue，可能需要有分发的机制
+- 输入，谁写入 queue
+    - 如果只有一个写入者，非常像 Observer
+    - 如果有多个写入者，要避免触发循环写入，可能会希望数据里携带写入者的信息
+- 所携带数据的生命周期
+    - 所有权交给接受者，接受者来清理回收
+    - 所有权交给 queue，队列来清理回收
+    - 所有权共享，可以靠智能指针之类的自动回收手段来清理
+
+---
+
+### Service Locator
+
+---
+
 
