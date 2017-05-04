@@ -736,3 +736,12 @@ class HeroB extends SuperPower {
 
 ---
 
+在说什么……
+
+---
+
+### Event Queue
+
+---
+
+
