@@ -778,4 +778,44 @@ class HeroB extends SuperPower {
 
 ---
 
+> a service that need to be available to the entire system.
+
+> a convenient single place where we control how we’re found.
+
+- service，抽象接口
+- service provider，具体实现
+- service locator，外界通过 locator 来获取 service
+
+---
+
+和 Singleton 有一样的问题，都是全局变量。
+所以尽可能少用。
+
+实现了一部分解耦，但也还是有耦合存在。
+所以比较简单的场景下，直接传递需要的 service 可能也是种选择。
+
+---
+
+locator 具体如何实现，有很多值得考量的地方
+
+- 动态注册
+    - 实现简单
+    - 可以动态更改
+- 编译时确定
+    - 不能修改
+    - 可预测
+- 运行时配置
+    - 实现相对复杂，初始化也需要更多时间
+    - 不需要重新编译、一套代码支持多套数据
+
+---
+
+## Optimization Patterns
+
+---
+
+### Data Locality
+
+---
+
 
