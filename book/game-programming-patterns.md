@@ -818,4 +818,108 @@ locator 具体如何实现，有很多值得考量的地方
 
 ---
 
+> we can **process** data faster than ever, but we can’t **get** that data
+> faster.
 
+对比 CPU 处理速度的快速增长，内存读取速度的增长很有限。
+两者的差距还在继续加大……
+
+---
+
+- register, thousand bytes
+- cache
+    - L0, 6KiB
+    - L1, 128KiB, 700GiB/s
+    - L2, 1MiB, 200GiB/s
+    - L3, 6MiB, 100GB/s
+    - L4, 128MiB, 40GB/s
+- main memory, gigabytes, 10GB/s
+- disk storage, terabytes, 2000MB/s
+- nearline storage, exabytes, 160MB/s
+- offline storage
+
+---
+
+> because of caching, the way you organize data directly impacts performance.
+
+后面说的是针对 `cache misses` 的优化。
+
+> In order to please this pattern, you will have to sacrifice some of your
+> precious abstractions.
+> There’s no silver bullet here, only challenging trade-offs.
+
+抽象很多时候意味着性能损耗。
+所以有时极端的性能优化和代码解耦是冲突的。
+都是在权衡得失。
+
+---
+
+- contiguous arrays
+- packed data
+- hot/cold splitting
+
+作者给了些例子，包括后面的一些细节考量。
+暂时用不上就不记录了。
+感觉这个和使用的语言有很大关系，不是在用底层语言，很少会去在意这个。
+
+---
+
+### Dirty Flag
+
+---
+
+需要做一些操作的时候，先打个标记但不做。
+实际要用到结果的时候，才进行操作。
+延迟求值的意味。
+
+---
+
+> Dirty flags are applied to two kinds of work: **calculation** and
+> **synchronization**.
+
+其实这个在前端框架里用得不少。
+像作者最后也提到了 angular。
+
+---
+
+- 什么时候计算并清除 flag
+    - 在需要结果的时候
+        - 可以避免无用的计算
+        - 如果计算比较耗时，返回会比较慢
+    - 定时检查有没有待处理的 flag
+        - 一般选择在 CPU 空闲的时候，所以整体性能可能更好
+        - 一旦开始计算，就失去对整个进程的控制了
+    - 在其他背景进程中计算
+        - 比如交给其他进程来处理
+        - 但程序本身要能够支持异步处理
+
+---
+
+### Object Pool
+
+---
+
+避免每次使用对象都要生成、回收。
+
+---
+
+- pool 太小可能不够用，太大可能浪费内存
+- pool 大小固定，需要考虑不够用时的情况
+    - 是创建失败
+    - 还是替换现有对象
+    - 还是扩大 pool
+- 对象的大小固定，要避免发生溢出之类的情况
+- 对象回收到 pool 后，要找机会清理对象内部的状态
+- 对象回收到 pool 时，要注意外部引用的情况
+
+---
+
+### Spatial Partition
+
+---
+
+> trades memory for speed
+
+用空间换时间。
+用于查找元素的位置。
+不记录了……
