@@ -36,45 +36,19 @@ https://facebook.github.io/react/docs/reconciliation.html
 
 ---
 
-https://facebook.github.io/react/contributing/implementation-notes.html
-https://github.com/facebook/react/tree/v15.5.4/src/renderers/shared/stack/reconciler
-
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
 https://facebook.github.io/react/docs/optimizing-performance.html#avoid-reconciliation
 
 ---
 
-
-
-
-
-
-
-
-
+- 使用 `shouldComponentUpdate` 减少对比，优化性能
+- 被认为不需要更新的，子节点也都不参与判断
+- `React.PureComponent` 提供了对 props/state 的比对，但是不支持数组之类的对象
+- 可以使用不可变数据来简化比较
 
 ---
 
+https://facebook.github.io/react/contributing/implementation-notes.html
+https://github.com/facebook/react/tree/v15.5.4/src/renderers/shared/stack/reconciler
 
 ---
-
 
