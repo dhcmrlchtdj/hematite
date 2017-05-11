@@ -74,3 +74,10 @@
     - margin border padding width，全部加起来为容器的宽度
     - width 为 auto 时，其他的 auto 都为 0
     - margin 为 auto 时，margin-left 和 margin-right 相等
+
+---
+
+## outline
+
++ outline 在 border edge 外面，和 margin 重合
++ outline 不影响盒模型，不触发 reflow，不影响旁边元素的布局

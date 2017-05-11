@@ -108,7 +108,9 @@
 
 ### float
 
-+ clear 的实质是让元素的 top border edge 在浮动元素的 bottom margin edge 之下
++ clear 的实质
+    + 对于非浮动的元素，让元素的 top border edge 在浮动元素的 bottom margin edge 之下
+    + 对于浮动的元素，让元素的 top margin edge 在前面元素的 bottom margin edge 之下
 
 ---
 
