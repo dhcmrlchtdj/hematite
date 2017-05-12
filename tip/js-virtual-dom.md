@@ -49,6 +49,7 @@ https://facebook.github.io/react/docs/optimizing-performance.html#avoid-reconcil
 
 https://facebook.github.io/react/contributing/implementation-notes.html
 https://github.com/facebook/react/tree/v15.5.4/src/renderers/shared/stack/reconciler
+https://github.com/infernojs/inferno/blob/v3.1.2/packages/inferno/src/index.ts
 
 ---
 
