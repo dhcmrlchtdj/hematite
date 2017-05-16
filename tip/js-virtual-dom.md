@@ -47,9 +47,28 @@ https://facebook.github.io/react/docs/optimizing-performance.html#avoid-reconcil
 
 ---
 
-https://facebook.github.io/react/contributing/implementation-notes.html
-https://github.com/facebook/react/tree/v15.5.4/src/renderers/shared/stack/reconciler
-https://github.com/infernojs/inferno/blob/v3.1.2/packages/inferno/src/index.ts
+https://github.com/facebook/react/issues/5024#issuecomment-144725734
 
----
+> The reason why Inferno is so fast is because it leverages on the concept of
+> virtual fragments (chunks of virtual elements) and value diffing, rather
+> than vdom diffing.
 
+> recycled DOM and cloning nodes
+
+https://github.com/infernojs/inferno/issues/21
+
+> Inferno uses templates to represent fragments of virtual DOM.
+> The virtual DOM gets pre-compiled once into a DOM static nodes and gets given
+> instructions and a shape.
+> It then uses these to make highly optimal passes to the DOM to
+> create/update/remove the dynamic parts.
+> It never needs to "diff" virtual DOM, it simply diffs the values that get
+> passed into the fragment and mutates the DOM structure it already knows
+> about.
+
+> This should be a very fast operation, still much faster than typical virtual
+> DOM implementations as they still have to carry out a render to work out what
+> has changed.
+
+> Inferno already knows what can change so simply does a === check on values
+> and updates as necessary.
