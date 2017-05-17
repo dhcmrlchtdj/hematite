@@ -290,15 +290,6 @@ SICP 里也有类似的描述。
 
 ---
 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Details_of_the_Object_Model
-
-补充一下，MDN 里关于 class-based vs. prototype-based 的描述
-
-- class-based 严格区分 class/instance；prototype-based 里全部都是 object
-- class-based 在定义 class 时就确定了继承关系；prototype-based 可以动态设置原型链
-
----
-
 ### Singleton
 
 ---
