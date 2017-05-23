@@ -94,5 +94,24 @@ interface VNode {
 
 ---
 
-`patchKeyedChildren` 和 `patchNonKeyedChildren`
+https://github.com/infernojs/inferno/issues/273
+https://github.com/snabbdom/snabbdom/blob/v0.6.9/src/snabbdom.ts#L179-L249
+
+- 提到的 snabbdom 的算法，应该是这个了，说是 dom 操作比较多，有优化空间
+
+---
+
+## ivi
+
+---
+
+https://github.com/ivijs/ivi/blob/dd4f3f3c92e1c758f5e3df2e803604bc071ce9cd/src/vdom/implementation.ts#L1416-L1966
+
+---
+
+如何使用 key，直接看 ivi 这个带注释的版本了。
+和 inferno 是相同的思路。
+
+---
+
 
