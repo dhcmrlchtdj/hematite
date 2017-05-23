@@ -58,6 +58,41 @@ https://github.com/infernojs/inferno/tree/v3.1.2
 
 ---
 
+还是从数据结构开始看
 
+```typescript
+interface VNode {
+    parentVNode?: VNode;
+    children: InfernoChildren;
+    type: Type;
+    flags: VNodeFlags;
+    key: any;
+    ref: Ref;
+    dom: Element | null;
+    className: string;
+    props: Props | null;
+}
+```
 
+创建用 `createVNode`，一样是生成树形的结构。
+
+实际使用，应该都是使用 `Component` 来创建吧。
+然后就是 `render` 渲染到页面上。
+
+---
+
+`render` 的时候
+
+- `mount` 分成 `mountElement` 和 `mountComponent` 和别的一些……
+- `unmount` 分成 `unmountComponent` 和 `unmountElement` 和别的……
+- `mount` 和 `unmount` 比较正常，慢慢读就可以了
+- `patch` 直接对比 `VNode` 是否是同一个
+    - 也分 `patchComponent` 和 `patchElement` 和其他
+    - 有个 `replaceVNode`，直接 `unmount` 再 `replaceChild`
+    - `patchElement` 下面有个 `patchChildren`
+    - `patchKeyedChildren` 一个函数几百行，里面还调了 LIS 又是五十行……
+
+---
+
+`patchKeyedChildren` 和 `patchNonKeyedChildren`
 
