@@ -15,6 +15,12 @@ js 里的 `job`， 到 html 里会是 `microtask`。
 
 ---
 
+又有人问，再更新一下
+
+executor 的执行是同步的，`resolve` 后继续调用是 `microtask`。
+
+---
+
 现在文档都在 github 上更新了呀。
 
 ---
