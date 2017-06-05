@@ -61,7 +61,7 @@ http://www.cs.cornell.edu/courses/cs3110/2011sp/lecturenotes.asp
 
 ---
 
-## tuples, records, datatypes, pattern matching
+## Tuples, records and datatypes
 
 ---
 
@@ -135,5 +135,120 @@ if 语句算是 match 语句的语法糖
 
 ---
 
+## Scope, Currying, Lists
+
+---
+
+### scope
+
+- `let x = e1 in e2`
+- `let x = e1 and y = e2 in e3`
+- `let rec even x = ... and odd x = ... in odd 10`
+
+---
+
+- `Pervasives.abs 10`
+- `abs 10`
+- `String.length "hello"`
+- `open String;; length "hello";;`
+
+可以用 `open` 来引入模块。
+没用 open 则在使用时要带上模块名，用了 open 变量就被引入到当前环境中。
+默认 open 了 `Pervasives` 模块。
+
+---
+
+### curry
+
+- `let plus (x, y) = x + y`
+- `let plus = function (x, y) -> x + y`
+- `let plus = fun z -> match z with (x, y) -> x + y`
+
+- `let plus x y = x + y`
+- `let plus = function x -> function y -> x + y`
+- `let plus = fun x -> fun y -> x + y`
+
+---
+
+在 ocaml 里，可以认为 function 是 fun 的语法糖。
+function 只能接一个参数，后面必须是 `pattern-matching` 语句。
+fun 可以任意多个参数，后面可以是任意语句。
+
+---
+
+- ocaml 里可以认为函数都只有一个参数，不过会自动 currying。
+- binary operator 也是函数，比如`(+)` 的签名为 `int -> int -> int = <fun>`
+
+---
+
+### list
+
+- `[]` => `'a list`
+- `[1;2;3]` => `int list`
+- `[1;2;3] @ [4;5]`
+- `1::[]`
+- `1::[2;3]`
+
+ocaml 里列表是不可变的（immutable），列表里数据的类型相同（homogeneous）。
+是个单向链表。
+
+---
+
+- `match lst with [] -> 0 | [x] -> 1 | _ -> 2`
+- `match lst with [] -> 0 | h::t -> ...`
+
+---
+
+## Higher-order Functions, Anonymous Functions, Currying, Side effects, Printing and Exceptions
+
+---
+
+- Higher-order Functions
+- Anonymous Functions
+- Currying
+- Side effects
+- Printing
+
+---
+
+```ocaml
+let y = let x = 3 in
+let () = print_string (string_of_int x) in
+x + 1;;
+
+let y = let x = 3 in
+print_string (string_of_int x);
+x + 1;;
+```
+
+---
+
+### Exceptions
+
+- `exception Error`
+- `raise Error`
+- `exception Failure of string`
+- `raise (Failure "Some error message")`
+
+---
+
+> Excessive use of exceptions can lead to unreadable spaghetti code.
+
+> Exceptions should only be raised in truly exceptional cases, that is, when
+> some unrecoverable damage has been done.
+
+> avoid an exception by checking bounds or using options
+
+- 异常过多会导致逻辑散乱。
+- 只有无法处理的情况，才抛出异常。
+- 检查边缘情况、使用 `option` 等手段来减少异常。
+
+---
+
+## Variant Types and Polymorphism
+
+---
+
+### variant
 
 
