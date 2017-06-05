@@ -227,6 +227,7 @@ x + 1;;
 
 - `exception Error`
 - `raise Error`
+
 - `exception Failure of string`
 - `raise (Failure "Some error message")`
 
@@ -250,5 +251,69 @@ x + 1;;
 ---
 
 ### variant
+
+> variant types, sometimes known as algebraic datatypes or just datatypes.
+
+> the ability to have a variable that contains more than one kind of value.
+
+---
+
+- `type answer = Yes | No | Maybe`
+- `let x = Yes`
+
+普通的 variant 就像是 enum。
+每个类型其实都是 `constructor`，要求首字母大写。
+
+- `type eitherPoint = TwoD of float * float | ThreeD of float * float * float`
+- `let x = TwoD (10.0, 20.0)`
+
+作为构造函数，也是可以携带数据的。
+之后可以用 pattern match 来获取数据。
+
+- `type T = X1 [of t1] | ... | Xn [of tn]`
+
+总结一下就是这样的了
+
+---
+
+- `type intlist = Nil | Cons of (int * intlist)`
+- `type inttree = Empty | Node of node and node = {value:int; left:inttree; right:inttree}`
+- `type nat = Zero | Next of nat`
+
+递归数据的定义
+（函数式编程的教程里总是能看到 0 1
+
+---
+
+### pattern matching
+
+---
+
+### Polymorphism
+
+> avoid writing the same algorithm for different types
+
+> a function may not use parameter in any way that would identify its type.
+> It must treat x as a black box.
+
+---
+
+- `let swap (x, y) = (y, x)` => `val swap : 'a * 'b -> 'b * 'a = <fun>`
+- type variables, `'a, 'key, 'any`，引号开头即可
+
+---
+
+### Parameterized Types
+
+polymorphic datatypes
+
+- `type 'a alist = Nil | Cons of ('a * 'a alist)`, parameterized variant type
+- `'a`, type parameter
+- `alist`, parameterized type constructor
+    - `il: int alist` / `fl: float alist` / `sl: string alist`
+- 为不同的类型构造 variant（感觉就像是个函数一样，输入类型，返回 variant
+- `polymorphic functions`
+
+---
 
 
