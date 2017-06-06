@@ -384,4 +384,52 @@ let rec fold_right f lst acc =
 
 ---
 
+> two kinds of abstraction
+> Abstraction by parameterization.
+> Abstraction by specification.
+
+---
+
+- `module ModuleName = struct module_implementation end`
+    - type
+    - exception
+    - let
+    - open
+    - include
+    - signature
+- `module type SIGNAME = sig signature_definitions end`
+    - type
+    - val
+    - exception
+- `module ModuleName : SIGNAME = struct module_implementation end`
+
+---
+
+## Abstraction Functions and Representation Invariants
+
+---
+
+### Abstraction Functions
+
+- `user_view = abstraction_function (implementer_view)`
+- abstraction function is a mapping from the space of concrete values to the abstract space
+
+用 SET 来举例的话。
+对用户来说，只是一个 set；
+但是对实现 SET 模块的开发者来说，会有一些额外的信息，比如 set 在内部是怎么表示的。
+
+---
+
+> Whenever you write code to implement what amounts to an abstract data type,
+> you should write down the abstraction function explicitly, and certainly
+> keep it in mind.
+
+将抽象的方式描述清楚，有助于维护代码
+
+---
+
+##  Functors, Parameterized Modules
+
+---
+
 
