@@ -316,4 +316,72 @@ polymorphic datatypes
 
 ---
 
+## Datatype pitfalls, polymorphism, lists
+
+---
+
+- `type 'a option = Some of 'a | None`
+
+> use of option is type-safe.
+> the type system forces you to account for the possibility of None.
+
+---
+
+## Mapping, Folding, and the Map-Reduce Paradigm
+
+---
+
+## Folding and tail recursion
+
+---
+
+```ocaml
+let rec fold_left f acc lst =
+    match lst with
+          [] -> acc
+        | x :: xs -> fold_left f (f acc x) xs;;
+
+let rec fold_right f lst acc =
+    match lst with
+          [] -> acc
+        | x :: xs -> f x (fold_right f xs acc);;
+```
+
+在上面的实现里，fold_left 是尾递归，理论上性能更好。
+
+---
+
+## The Substitution Model of Evaluation
+
+---
+
+> We build a more formal and precise description of the evaluation process.
+> This is a model of evaluation based on the basic notion of substitution, in
+> which variable names are replaced by values that they are bound to.
+> This corresponds to the mathematical notion that two equal things are interchangeable.
+
+> substitution model is accurate for describing purely functional execution
+> (when there are no side effects or mutable objects)
+
+---
+
+替换模型中，会碰到递归函数的问题。可以靠 YC 解决。
+
+---
+
+### Lexical (static) vs. dynamic scoping
+
+> Dynamic scoping can be confusing because the meaning of a function depends
+> on the context where it is used, not where it was defined.
+
+---
+
+`let x = v in e  =>  e{v/x}`，奇怪的表示方式
+
+---
+
+## Modular Programming: Modules and Signatures
+
+---
+
 
