@@ -432,4 +432,35 @@ let rec fold_right f lst acc =
 
 ---
 
+> A functor is a mapping from modules to modules.
+
+---
+
+> Another good reason for not specifying the signature is that modules can
+> implement lots of different signatures and can be used in different ways.
+
+不明确指定，只要实现方法就行。
+这个不是被碰的一个点吗？
+
+上网搜了下，应该用 include 来将多个签名合成一个签名
+
+```ocaml
+module type SIG_X = sig
+    include SIG_Y
+end
+```
+
+---
+
+`Contravariance`
+
+学单词，给没有签名的模块加上签名，使得模块受到限制。
+这种加限制的操作，叫做 upcast。
+
+- covariant
+- contravariant
+- invariant
+
+---
+
 
