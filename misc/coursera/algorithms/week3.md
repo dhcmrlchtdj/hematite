@@ -23,7 +23,7 @@ first goal of algorithm design: optimal algorithm
 
 stable
 - 一组联系人，先按电话排序，再按姓名排序。
-	如果此时一个人的多个电话还是有序的，那么这个排序就是稳定的。
+    如果此时一个人的多个电话还是有序的，那么这个排序就是稳定的。
 - preserve the relative order of items with equal keys
 - insertion/mergesort 都是稳定的，selection/shellsort 都是不稳定
 
@@ -32,8 +32,8 @@ stable
 quicksort
 - shuffle array
 - partition for j, a[j] in place
-	- no larger entry at left
-	- no smaller entry at right
+    - no larger entry at left
+    - no smaller entry at right
 - sort each piece recursively
 
 quicksort
@@ -51,8 +51,8 @@ quicksort
 
 duplicate keys
 - 很多数据里，是有重复值的
-	- 很影响 quicksort 的性能，除非取的中点正好是重复的这个值
-	- mergesort 不受影响
+    - 很影响 quicksort 的性能，除非取的中点正好是重复的这个值
+    - mergesort 不受影响
 - 使用 3-way partitioning 来处理这个问题
 
 ---
@@ -66,14 +66,14 @@ find Kth smallest item
 
 which one to choose
 - internal sort
-	- insertion sort, selection sort, bubble sort, shaker sort
-	- quicksort, mergesort, heapsort, samplesort, shellsort
-	- solitaire sort, red-black sort, splaysort, yaroslavskiy sort, psort
+    - insertion sort, selection sort, bubble sort, shaker sort
+    - quicksort, mergesort, heapsort, samplesort, shellsort
+    - solitaire sort, red-black sort, splaysort, yaroslavskiy sort, psort
 - external sort
-	- poly-phase mergesort, cascade-merge, osillating sort
+    - poly-phase mergesort, cascade-merge, osillating sort
 - string/radix sort
-	- distribution, msd, lsd, 3-way string quicksort
+    - distribution, msd, lsd, 3-way string quicksort
 - parallel sort
-	- bitonic sort, batcher even-odd sort
-	- smooth sort, cube sort, column sort
-	- gpusort
+    - bitonic sort, batcher even-odd sort
+    - smooth sort, cube sort, column sort
+    - gpusort

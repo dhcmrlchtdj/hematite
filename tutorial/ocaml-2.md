@@ -434,6 +434,10 @@ let rec fold_right f lst acc =
 
 > A functor is a mapping from modules to modules.
 
+> A functor is a module that is parameterized by other modules.
+
+泛型定义其实也可以理解成函数吧，输入类型，返回类型。
+
 ---
 
 > Another good reason for not specifying the signature is that modules can

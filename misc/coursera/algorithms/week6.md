@@ -6,15 +6,15 @@ hash
 
 collision
 - separate chainning
-	- keep M ~ N/5
+    - keep M ~ N/5
 - open addressing
-	- keep M ~ N/2
+    - keep M ~ N/2
 
 hash vs BST
 - hash
-	- simpler to code
-	- faster for simple keys
+    - simpler to code
+    - faster for simple keys
 - BST
-	- stronger performance guarantee
-	- support for ordered ST operations
-	- easier to implement `compare` correctly than `hash_code`
+    - stronger performance guarantee
+    - support for ordered ST operations
+    - easier to implement `compare` correctly than `hash_code`
