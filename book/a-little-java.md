@@ -133,59 +133,59 @@ concrete method 实现 abstract method 被作者称为义务（
 
 ```java
 abstract class ShishD {
-	abstract boolean onlyOnions();
+    abstract boolean onlyOnions();
 }
 
 class Skewer extends ShishD {
-	boolean onlyOnions() { return true; }
+    boolean onlyOnions() { return true; }
 }
 class Onion extends ShishD {
-	ShishD s;
-	Onion(ShishD _s) { s = _s; }
-	boolean onlyOnions() { return s.onlyOnions() }
+    ShishD s;
+    Onion(ShishD _s) { s = _s; }
+    boolean onlyOnions() { return s.onlyOnions() }
 }
 class Lamb extends ShishD {
-	ShishD s;
-	Lamb(ShishD _s) { s = _s; }
-	boolean onlyOnions() { return false; }
+    ShishD s;
+    Lamb(ShishD _s) { s = _s; }
+    boolean onlyOnions() { return false; }
 }
 class Tomato extends ShishD {
-	ShishD s;
-	Tomato(ShishD _s) { s = _s; }
-	boolean onlyOnions() { return false; }
+    ShishD s;
+    Tomato(ShishD _s) { s = _s; }
+    boolean onlyOnions() { return false; }
 }
 ```
 
 ```java
 class OnlyOnionsV {
-	boolean forSkewer() { return true; }
-	boolean forOnion(ShishD s) { return s.onlyOnions(); }
-	boolean forLamb(ShishD s) { return false; }
-	boolean forTomato(ShishD s) { return true; }
+    boolean forSkewer() { return true; }
+    boolean forOnion(ShishD s) { return s.onlyOnions(); }
+    boolean forLamb(ShishD s) { return false; }
+    boolean forTomato(ShishD s) { return true; }
 }
 
 abstract class ShishD {
-	OnlyOnionsV ooFn = new OnlyOnionsV();
-	abstract boolean onlyOnions();
+    OnlyOnionsV ooFn = new OnlyOnionsV();
+    abstract boolean onlyOnions();
 }
 
 class Skewer extends ShishD {
-	boolean onlyOnions() { return ooFn.forSkewer(); }
+    boolean onlyOnions() { return ooFn.forSkewer(); }
 }
 class Onion extends ShishD {
-	ShishD s;
-	Onion(ShishD _s) { s = _s; }
-	boolean onlyOnions() { return ooFn.forOnion(s); }
+    ShishD s;
+    Onion(ShishD _s) { s = _s; }
+    boolean onlyOnions() { return ooFn.forOnion(s); }
 }
 class Lamb extends ShishD {
-	ShishD s;
-	Lamb(ShishD _s) { s = _s; }
-	boolean onlyOnions() { return ooFn.forLamb(s); }
+    ShishD s;
+    Lamb(ShishD _s) { s = _s; }
+    boolean onlyOnions() { return ooFn.forLamb(s); }
 }
 class Tomato extends ShishD {
-	ShishD s;
-	Tomato(ShishD _s) { s = _s; }
-	boolean onlyOnions() { return ooFn.forTomato(s); }
+    ShishD s;
+    Tomato(ShishD _s) { s = _s; }
+    boolean onlyOnions() { return ooFn.forTomato(s); }
 }
 ```
 
@@ -220,33 +220,33 @@ overriding / downward casting
 
 ```java
 class OnlyOnionsV {
-	boolean forSkewer() { return true; }
-	boolean forOnion(ShishD s) { return s.onlyOnions(); }
-	boolean forLamb(ShishD s) { return false; }
-	boolean forTomato(ShishD s) { return true; }
+    boolean forSkewer() { return true; }
+    boolean forOnion(ShishD s) { return s.onlyOnions(); }
+    boolean forLamb(ShishD s) { return false; }
+    boolean forTomato(ShishD s) { return true; }
 }
 
 abstract class ShishD {
-	abstract boolean onlyOnions(OnlyOnionsV ooFn);
+    abstract boolean onlyOnions(OnlyOnionsV ooFn);
 }
 
 class Skewer extends ShishD {
-	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forSkewer(); }
+    boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forSkewer(); }
 }
 class Onion extends ShishD {
-	ShishD s;
-	Onion(ShishD _s) { s = _s; }
-	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forOnion(s); }
+    ShishD s;
+    Onion(ShishD _s) { s = _s; }
+    boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forOnion(s); }
 }
 class Lamb extends ShishD {
-	ShishD s;
-	Lamb(ShishD _s) { s = _s; }
-	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forLamb(s); }
+    ShishD s;
+    Lamb(ShishD _s) { s = _s; }
+    boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forLamb(s); }
 }
 class Tomato extends ShishD {
-	ShishD s;
-	Tomato(ShishD _s) { s = _s; }
-	boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forTomato(s); }
+    ShishD s;
+    Tomato(ShishD _s) { s = _s; }
+    boolean onlyOnions(OnlyOnionsV ooFn) { return ooFn.forTomato(s); }
 }
 ```
 
@@ -271,48 +271,48 @@ visitor 提供的方法被称为 service
 
 ```java
 interface PieVisitorI {
-	PieD forBot();
-	PieD forTop(Object t, PieD r);
+    PieD forBot();
+    PieD forTop(Object t, PieD r);
 }
 class RemV implements PieVisitorI {
-	Object o;
-	RemV(Object _o) { o = _o; }
+    Object o;
+    RemV(Object _o) { o = _o; }
 
-	public PieD forBot() { return new Bot(); }
-	public PieD forTop(Object t, PieD r) {
-		if (o.equals(t)) {
-			return r.accept(this);
-		} else {
-			return new Top(t, r.accept(this));
-		}
-	}
+    public PieD forBot() { return new Bot(); }
+    public PieD forTop(Object t, PieD r) {
+        if (o.equals(t)) {
+            return r.accept(this);
+        } else {
+            return new Top(t, r.accept(this));
+        }
+    }
 }
 class SubstV implements PieVisitorI {
-	Object n;
-	Object o;
-	SubstV(Object _n, Object _o) { n = _n; o = _o; }
+    Object n;
+    Object o;
+    SubstV(Object _n, Object _o) { n = _n; o = _o; }
 
-	public PieD forBot() { return new Bot(); }
-	public PieD forTop(Object t, PieD r) {
-		if (o.equals(t)) {
-			return new Top(n, r.accept(this));
-		} else {
-			return new Top(t, r.accept(this));
-		}
-	}
+    public PieD forBot() { return new Bot(); }
+    public PieD forTop(Object t, PieD r) {
+        if (o.equals(t)) {
+            return new Top(n, r.accept(this));
+        } else {
+            return new Top(t, r.accept(this));
+        }
+    }
 }
 
 abstract class PieD {
-	abstract PieD accept(PieVisitorI ask);
+    abstract PieD accept(PieVisitorI ask);
 }
 class Bot extends PieD {
-	PieD accept(PieVisitorI ask) { return ask.forBot(); }
+    PieD accept(PieVisitorI ask) { return ask.forBot(); }
 }
 class Top extends PieD {
-	Object t;
-	PieD r;
-	Top(Object _t, PieD _r) { t = _t; r = _r; }
-	PieD accept(PieVisitorI ask) { return ask.forTop(t, r); }
+    Object t;
+    PieD r;
+    Top(Object _t, PieD _r) { t = _t; r = _r; }
+    PieD accept(PieVisitorI ask) { return ask.forTop(t, r); }
 }
 ```
 
@@ -372,30 +372,30 @@ class Top extends PieD {
 
 ```java
 abstract class ExprD {
-	abstract Object accept(ExprVisitorI ask);
+    abstract Object accept(ExprVisitorI ask);
 }
 class Plus extends ExprD {
-	ExprD l;
-	ExprD r;
-	Plus(ExprD _l, ExprD _r) { l = _l; r = _r; }
-	Object accept(ExprVisitorI ask) { return ask.forPlus(l, r); }
+    ExprD l;
+    ExprD r;
+    Plus(ExprD _l, ExprD _r) { l = _l; r = _r; }
+    Object accept(ExprVisitorI ask) { return ask.forPlus(l, r); }
 }
 class Diff extends ExprD {
-	ExprD l;
-	ExprD r;
-	Diff(ExprD _l, ExprD _r) { l = _l; r = _r; }
-	Object accept(ExprVisitorI ask) { return ask.forDiff(l, r); }
+    ExprD l;
+    ExprD r;
+    Diff(ExprD _l, ExprD _r) { l = _l; r = _r; }
+    Object accept(ExprVisitorI ask) { return ask.forDiff(l, r); }
 }
 class Prod extends ExprD {
-	ExprD l;
-	ExprD r;
-	Prod(ExprD _l, ExprD _r) { l = _l; r = _r; }
-	Object accept(ExprVisitorI ask) { return ask.forProd(l, r); }
+    ExprD l;
+    ExprD r;
+    Prod(ExprD _l, ExprD _r) { l = _l; r = _r; }
+    Object accept(ExprVisitorI ask) { return ask.forProd(l, r); }
 }
 class Const extends ExprD {
-	Object c;
-	Const(Object _c) { c = _c; }
-	Object accept(ExprVisitorI ask) { return ask.forConst(c); }
+    Object c;
+    Const(Object _c) { c = _c; }
+    Object accept(ExprVisitorI ask) { return ask.forConst(c); }
 }
 ```
 
@@ -403,10 +403,10 @@ class Const extends ExprD {
 
 ```java
 interface ExprVisitorI {
-	Object forPlus(ExprD l, ExprD r);
-	Object forDiff(ExprD l, ExprD r);
-	Object forProd(ExprD l, ExprD r);
-	Object forConst(ExprD l, ExprD r);
+    Object forPlus(ExprD l, ExprD r);
+    Object forDiff(ExprD l, ExprD r);
+    Object forProd(ExprD l, ExprD r);
+    Object forConst(ExprD l, ExprD r);
 }
 ```
 
@@ -414,28 +414,28 @@ interface ExprVisitorI {
 
 ```java
 class IntEvalV implements ExprVisitorI {
-	public Object forPlus(ExprD l, ExprD r) {
-		return plus(l.accept(this), r.accept(this));
-	}
-	public Object forDiff(ExprD l, ExprD r) {
-		return diff(l.accept(this), r.accept(this));
-	}
-	public Object forProd(ExprD l, ExprD r) {
-		return prod(l.accept(this), r.accept(this));
-	}
-	public Object forConst(Object c) {
-		return c;
-	}
+    public Object forPlus(ExprD l, ExprD r) {
+        return plus(l.accept(this), r.accept(this));
+    }
+    public Object forDiff(ExprD l, ExprD r) {
+        return diff(l.accept(this), r.accept(this));
+    }
+    public Object forProd(ExprD l, ExprD r) {
+        return prod(l.accept(this), r.accept(this));
+    }
+    public Object forConst(Object c) {
+        return c;
+    }
 
-	Object plus(Object l, Object r) {
-		return new Integer(((Integer)l).intValue() + ((Integer)r).intValue());
-	}
-	Object diff(Object l, Object r) {
-		return new Integer(((Integer)l).intValue() - ((Integer)r).intValue());
-	}
-	Object prod(Object l, Object r) {
-		return new Integer(((Integer)l).intValue() * ((Integer)r).intValue());
-	}
+    Object plus(Object l, Object r) {
+        return new Integer(((Integer)l).intValue() + ((Integer)r).intValue());
+    }
+    Object diff(Object l, Object r) {
+        return new Integer(((Integer)l).intValue() - ((Integer)r).intValue());
+    }
+    Object prod(Object l, Object r) {
+        return new Integer(((Integer)l).intValue() * ((Integer)r).intValue());
+    }
 }
 ```
 
@@ -450,29 +450,29 @@ class IntEvalV implements ExprVisitorI {
 
 ```java
 abstract class SetD {
-	SetD add(Integer i) { return (mem(i) ? this : new Add(i, this)); }
+    SetD add(Integer i) { return (mem(i) ? this : new Add(i, this)); }
 
-	abstract boolean mem(Integer i);
-	abstract SetD plus(SetD s);
-	abstract SetD diff(SetD s);
-	abstract SetD prod(SetD s);
+    abstract boolean mem(Integer i);
+    abstract SetD plus(SetD s);
+    abstract SetD diff(SetD s);
+    abstract SetD prod(SetD s);
 }
 class Empty extends SetD {
-	boolean mem(Integer i) { return false; }
-	SetD plus(SetD s) { return s; }
-	SetD diff(SetD s) { return new Empty(); }
-	SetD prod(SetD s) { return new Empty(); }
+    boolean mem(Integer i) { return false; }
+    SetD plus(SetD s) { return s; }
+    SetD diff(SetD s) { return new Empty(); }
+    SetD prod(SetD s) { return new Empty(); }
 
 }
 class Add extends SetD {
-	Integer i;
-	SetD s;
-	Add(Integer _i, SetD _s) { i = _i; s = _s; }
+    Integer i;
+    SetD s;
+    Add(Integer _i, SetD _s) { i = _i; s = _s; }
 
-	boolean mem(Integer n) { return (i.equals(n) ? true : s.mem(n)); }
-	SetD plus(SetD t) { return s.plus(t.add(i)); }
-	SetD diff(SetD t) { return (t.mem(i) ? s.diff(t) : s.diff(t).add(i)); }
-	SetD prod(SetD t) { return (t.mem(i) ? s.prod(t).add(i) : s.prod(t)); }
+    boolean mem(Integer n) { return (i.equals(n) ? true : s.mem(n)); }
+    SetD plus(SetD t) { return s.plus(t.add(i)); }
+    SetD diff(SetD t) { return (t.mem(i) ? s.diff(t) : s.diff(t).add(i)); }
+    SetD prod(SetD t) { return (t.mem(i) ? s.prod(t).add(i) : s.prod(t)); }
 }
 ```
 
@@ -480,9 +480,9 @@ class Add extends SetD {
 
 ```java
 class SetEvalV extends IntEvalV {
-	Object plus(Object l, Object r) { return ((SetD)l).plus((SetD)r); }
-	Object diff(Object l, Object r) { return ((SetD)l).diff((SetD)r); }
-	Object prod(Object l, Object r) { return ((SetD)l).prod((SetD)r); }
+    Object plus(Object l, Object r) { return ((SetD)l).plus((SetD)r); }
+    Object diff(Object l, Object r) { return ((SetD)l).diff((SetD)r); }
+    Object prod(Object l, Object r) { return ((SetD)l).prod((SetD)r); }
 }
 ```
 
@@ -494,8 +494,8 @@ class SetEvalV extends IntEvalV {
 
 ```java
 new Prod(
-	new Const(new Empty().add(new Integer(7))),
-	new Const(new Empty().add(new Integer(3)))
+    new Const(new Empty().add(new Integer(7))),
+    new Const(new Empty().add(new Integer(3)))
 ).accept(new SetEvalV());
 ```
 
@@ -505,40 +505,40 @@ new Prod(
 
 ```java
 abstract class EvalD implements ExprVisitorI {
-	public Object forPlus(ExprD l, ExprD r) {
-		return plus(l.accept(this), r.accept(this));
-	}
-	public Object forDiff(ExprD l, ExprD r) {
-		return diff(l.accept(this), r.accept(this));
-	}
-	public Object forProd(ExprD l, ExprD r) {
-		return prod(l.accept(this), r.accept(this));
-	}
-	public Object forConst(Object c) {
-		return c;
-	}
+    public Object forPlus(ExprD l, ExprD r) {
+        return plus(l.accept(this), r.accept(this));
+    }
+    public Object forDiff(ExprD l, ExprD r) {
+        return diff(l.accept(this), r.accept(this));
+    }
+    public Object forProd(ExprD l, ExprD r) {
+        return prod(l.accept(this), r.accept(this));
+    }
+    public Object forConst(Object c) {
+        return c;
+    }
 
-	Object plus(Object l, Object r);
-	Object diff(Object l, Object r);
-	Object prod(Object l, Object r);
+    Object plus(Object l, Object r);
+    Object diff(Object l, Object r);
+    Object prod(Object l, Object r);
 }
 
 class IntEvalV extends EvalD {
-	Object plus(Object l, Object r) {
-		return new Integer(((Integer)l).intValue() + ((Integer)r).intValue());
-	}
-	Object diff(Object l, Object r) {
-		return new Integer(((Integer)l).intValue() - ((Integer)r).intValue());
-	}
-	Object prod(Object l, Object r) {
-		return new Integer(((Integer)l).intValue() * ((Integer)r).intValue());
-	}
+    Object plus(Object l, Object r) {
+        return new Integer(((Integer)l).intValue() + ((Integer)r).intValue());
+    }
+    Object diff(Object l, Object r) {
+        return new Integer(((Integer)l).intValue() - ((Integer)r).intValue());
+    }
+    Object prod(Object l, Object r) {
+        return new Integer(((Integer)l).intValue() * ((Integer)r).intValue());
+    }
 }
 
 class SetEvalV extends EvalD {
-	Object plus(Object l, Object r) { return ((SetD)l).plus((SetD)r); }
-	Object diff(Object l, Object r) { return ((SetD)l).diff((SetD)r); }
-	Object prod(Object l, Object r) { return ((SetD)l).prod((SetD)r); }
+    Object plus(Object l, Object r) { return ((SetD)l).plus((SetD)r); }
+    Object diff(Object l, Object r) { return ((SetD)l).diff((SetD)r); }
+    Object prod(Object l, Object r) { return ((SetD)l).prod((SetD)r); }
 }
 ```
 
@@ -567,12 +567,12 @@ super 关键字
 
 ```java
 class Union extends ShapeD {
-	ShapeD s;
-	ShapeD t;
-	Union(ShapeD _s, ShapeD _t) { s = _s; t = _t; }
-	boolean accept(ShapeVisitorI ask) {
-		return ((UnionVisitorI)ask).forUnion(s, t);
-	}
+    ShapeD s;
+    ShapeD t;
+    Union(ShapeD _s, ShapeD _t) { s = _s; t = _t; }
+    boolean accept(ShapeVisitorI ask) {
+        return ((UnionVisitorI)ask).forUnion(s, t);
+    }
 }
 ```
 
@@ -598,37 +598,37 @@ class Union extends ShapeD {
 
 ```java
 class HasPtV implements ShapeVisitorI {
-	PointD p;
-	HasPtV(PointD _p) { p = _p; }
+    PointD p;
+    HasPtV(PointD _p) { p = _p; }
 
-	public boolean forCicle(int r) {...}
-	public boolean forSquare(int s) {...}
-	public boolean forTrans(PointD q, ShapeD s) {
-		return s.accept(new HasPtV(p.minus(q)));
-	}
+    public boolean forCicle(int r) {...}
+    public boolean forSquare(int s) {...}
+    public boolean forTrans(PointD q, ShapeD s) {
+        return s.accept(new HasPtV(p.minus(q)));
+    }
 }
 ```
 
 ```java
 class HasPtV implements ShapeVisitorI {
-	PointD p;
-	HasPtV(PointD _p) { p = _p; }
-	ShapeVisitorI newHasPt(PointD p) { return new HasPtV(p); }
+    PointD p;
+    HasPtV(PointD _p) { p = _p; }
+    ShapeVisitorI newHasPt(PointD p) { return new HasPtV(p); }
 
-	public boolean forCicle(int r) {...}
-	public boolean forSquare(int s) {...}
-	public boolean forTrans(PointD q, ShapeD s) {
-		return s.accept(newHasPt(p.minus(q)));
-	}
+    public boolean forCicle(int r) {...}
+    public boolean forSquare(int s) {...}
+    public boolean forTrans(PointD q, ShapeD s) {
+        return s.accept(newHasPt(p.minus(q)));
+    }
 }
 
 class UnionHasPtV extends HasPtV implements UnionVisitorI {
-	UnionHasPtV(PointD _p) { super(_p); }
-	ShapeVisitorI newHasPt(PointD p) { return new UnionHasPtV(p); }
+    UnionHasPtV(PointD _p) { super(_p); }
+    ShapeVisitorI newHasPt(PointD p) { return new UnionHasPtV(p); }
 
-	public boolean forUnion(ShapeD s, ShapeD t) {
-		return (s.accept(this) || t.accept(this));
-	}
+    public boolean forUnion(ShapeD s, ShapeD t) {
+        return (s.accept(this) || t.accept(this));
+    }
 }
 ```
 
@@ -651,23 +651,23 @@ class UnionHasPtV extends HasPtV implements UnionVisitorI {
 
 ```java
 interface PiemanI {
-	public int addTop(Object t);
-	public int remTop(Object t);
-	public int substTop(Object n, Object o);
-	public int occTop(Object o);
+    public int addTop(Object t);
+    public int remTop(Object t);
+    public int substTop(Object n, Object o);
+    public int occTop(Object o);
 }
 
 class PiemanM implements PiemanI {
-	PieD p = new Bot();
+    PieD p = new Bot();
 
-	public int addTop(Object t) {
-		p = new Top(t, p); return occTop(t); }
-	public int remTop(Object t) {
-		p = (PieD)p.accept(new RemV(t)); return occTop(t); }
-	public int substTop(Object n, Object o) {
-		p = (PieD)p.accept(new SubstV(n, o)); return occTop(n); }
-	public int occTop(Object o) {
-		return ((Integer)p.accept(new OccursV(o))).intValue(); }
+    public int addTop(Object t) {
+        p = new Top(t, p); return occTop(t); }
+    public int remTop(Object t) {
+        p = (PieD)p.accept(new RemV(t)); return occTop(t); }
+    public int substTop(Object n, Object o) {
+        p = (PieD)p.accept(new SubstV(n, o)); return occTop(n); }
+    public int occTop(Object o) {
+        return ((Integer)p.accept(new OccursV(o))).intValue(); }
 }
 ```
 
@@ -676,37 +676,37 @@ PiemanM 里定义了字段 `p`，通过某些方法来更新 `p`
 
 ```java
 interface PieVisitorI {
-	Object forBot();
-	Object forTop(Object t, PieD r);
+    Object forBot();
+    Object forTop(Object t, PieD r);
 }
 
 abstract class PieD {
-	abstract Object accept(PieVisitorI ask);
+    abstract Object accept(PieVisitorI ask);
 }
 
 class Bot extends PieD {
-	Object accept(PieVisitorI ask) { return ask.forBot(); }
+    Object accept(PieVisitorI ask) { return ask.forBot(); }
 }
 
 class Top extends PieD {
-	Object t;
-	PieD r;
-	Top(Object _t, PieD _r) { t = _t; r = _r; }
-	Object accept(PieVisitorI ask) { return ask.forTop(t, r); }
+    Object t;
+    PieD r;
+    Top(Object _t, PieD _r) { t = _t; r = _r; }
+    Object accept(PieVisitorI ask) { return ask.forTop(t, r); }
 }
 
 class SubstV implements PieVisitorI {
-	Object n;
-	Object o;
-	SubstV(Object _n, Object _o) { n = _n; o = _o; }
-	public Object forBot() { return new Bot(); }
-	public Object forTop(Object t, PieD r) {
-		if (o.equals(t)) {
-			return new Top(n, (PieD)r.accept(this));
-		} else {
-			return new Top(t, (PieD)r.accept(this));
-		}
-	}
+    Object n;
+    Object o;
+    SubstV(Object _n, Object _o) { n = _n; o = _o; }
+    public Object forBot() { return new Bot(); }
+    public Object forTop(Object t, PieD r) {
+        if (o.equals(t)) {
+            return new Top(n, (PieD)r.accept(this));
+        } else {
+            return new Top(t, (PieD)r.accept(this));
+        }
+    }
 }
 ```
 
@@ -716,40 +716,40 @@ class SubstV implements PieVisitorI {
 
 ```java
 interface PieVisitorI {
-	Object forBot(Bot that);
-	Object forTop(Top that);
+    Object forBot(Bot that);
+    Object forTop(Top that);
 }
 
 abstract class PieD {
-	abstract Object accept(PieVisitorI ask);
+    abstract Object accept(PieVisitorI ask);
 }
 
 class Bot extends PieD {
-	Object accept(PieVisitorI ask) { return ask.forBot(this); }
+    Object accept(PieVisitorI ask) { return ask.forBot(this); }
 }
 
 class Top extends PieD {
-	Object t;
-	PieD r;
-	Top(Object _t, PieD _r) { t = _t; r = _r; }
-	Object accept(PieVisitorI ask) { return ask.forTop(this); }
+    Object t;
+    PieD r;
+    Top(Object _t, PieD _r) { t = _t; r = _r; }
+    Object accept(PieVisitorI ask) { return ask.forTop(this); }
 }
 
 class SubstV implements PieVisitorI {
-	Object n;
-	Object o;
-	SubstV(Object _n, Object _o) { n = _n; o = _o; }
-	public Object forBot(Bot that) { return that; }
-	public Object forTop(Top that) {
-		if (o.equals(that.t)) {
-			that.t = n;
-			that.r.accept(this);
-			return that;
-		} else {
-			that.r.accept(this);
-			return that;
-		}
-	}
+    Object n;
+    Object o;
+    SubstV(Object _n, Object _o) { n = _n; o = _o; }
+    public Object forBot(Bot that) { return that; }
+    public Object forTop(Top that) {
+        if (o.equals(that.t)) {
+            that.t = n;
+            that.r.accept(this);
+            return that;
+        } else {
+            that.r.accept(this);
+            return that;
+        }
+    }
 }
 ```
 

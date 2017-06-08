@@ -64,11 +64,11 @@ imperative 和 functional
 ---
 
 + generic operations with explicit dispatch
-	- 不同实现使用不同的函数名
+    - 不同实现使用不同的函数名
 + data-directed style
-	- 给不同实现打上标记，根据参数的标记找到对应的实现
+    - 给不同实现打上标记，根据参数的标记找到对应的实现
 + message-passing-style
-	- 实现封装在参数内部，调用是在参数里查找具体实现
+    - 实现封装在参数内部，调用是在参数里查找具体实现
 
 ---
 
@@ -115,10 +115,10 @@ imperative 和 functional
 > to program in whatever style we choose.
 
 + `(wire 'get-signal)`
-	- `wire` 是 procedure，`'get-signal` 是 message
+    - `wire` 是 procedure，`'get-signal` 是 message
 
 + `(get-signal wire)`
-	- `get-signal` 是 procedure，`wire` 是 data
+    - `get-signal` 是 procedure，`wire` 是 data
 
 可以用语法糖来转换这两种调用方式。
 `wire` 到底是数据还是函数，其实就没太多区别了。

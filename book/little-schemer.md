@@ -309,9 +309,9 @@ to the function have been like so far.
 ---
 
 - 使用了一下 y-combinator，引出 letrec
-	书上说 it is better than Y
+    书上说 it is better than Y
 - 把不变的参数隔离，让递归的部分更加纯粹
-	其实就是作用域的问题吧
+    其实就是作用域的问题吧
 
 ---
 
@@ -622,9 +622,9 @@ is a function that refers to `x`.
 - 讲 CPS，用用 CPS 改写前面 letcc 的例子
 - difference between shadow and the real thing
 - CPS 和 letcc 效果是不同的
-	letcc 会忽略外层调用
-	it forgets everythings around it
-	用下面例子来说就是 `(cons (toppings 'why) '())` 和 `(toppings 'why)` 结果相同
+    letcc 会忽略外层调用
+    it forgets everythings around it
+    用下面例子来说就是 `(cons (toppings 'why) '())` 和 `(toppings 'why)` 结果相同
 - callcc 确实是很复杂的流程控制……
 
 ---
