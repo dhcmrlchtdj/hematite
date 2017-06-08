@@ -516,3 +516,25 @@ substitution model 的问题
 
 ---
 
+## Soundness and Completeness
+
+---
+
+> A deductive system is said to be complete if all true statements are
+> theorems (have proofs in the system).
+
+> A deductive system is called sound if all theorems are true
+
+---
+
+## Concurrency
+
+---
+
+- coordination
+    - synchronization, where multiple processes wait for certain conditions.
+    - communiction, where messages are passed between processes.
+
+---
+
+
