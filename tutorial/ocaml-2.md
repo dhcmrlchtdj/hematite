@@ -467,4 +467,52 @@ end
 
 ---
 
+## Refs and Arrays
+
+---
+
+> whenever we coded a function, we never changed variables or data.
+> Rather, we always computed new data.
+
+> in some situations, it is more efficient or clearer to destructively modify
+> a data structure than to build a new version.
+
+---
+
+```ocaml
+sig
+    type 'a ref
+    val ref : 'a -> 'a ref
+    val (!) : 'a ref -> 'a
+    val (:=) : 'a ref -> 'a -> unit
+end
+```
+
+ref 就是个容器，`ref` 和 `!` 分别是装进容器和取出内容。
+通过 `:=` 修改容器内容。
+
+---
+
+## The Environment Model
+
+---
+
+> 1. it's not straightforward to extend the model with support for side effects
+> 2. it's not a very efficient or realistic model of how we really evaluate OCaml programs
+
+substitution model 的问题
+
+---
+
+> the basic idea of the environment model is to combine the process of
+> substitution with the process of evaluation into a single pass over the code.
+
+---
+
+> A closure is just a pair of the function and its environment, and represents
+> a promise to substitute the values in the environment whenever we go to
+> evaluate the function.
+> So, a closure is nothing more than a lazy substitution.
+
+---
 
