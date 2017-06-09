@@ -1,524 +1,287 @@
 .. contents::
 
 
-new vs bind
-============
-
-+ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
-
-.. code:: javascript
-
-    var fn = function(val) {
-        this.value = val;
-    };
-    var context = {};
-    var Constructor = fn.bind(context, 5);
-    var o = new Constructor();
-
-    // context -> {}
-    // o -> { value: 5}
-
-即使 bind 过，当作构造函数时，this 还是指向生成的新对象。
-不过参数绑定还是生效的。
-
-
-timestamp
-==========
-
-.. code:: javascript
-
-    // get milliseconds since the epoch
-    console.log( Date.now() ); // fastest
-    console.log( + new Date() );
-    console.log( (new Date()).getTime() );
-
-    // convert to timestamp
-    console.log( Math.round(Date.now()/1000) )
-
-
-
-
-
-滚动条
-=======
-元素的滚动条可以用 :code:`el.scrollTop` 来操作，
-比如滚动到底部用 :code:`el.scrollTop = el.scrollHeight` 。
-
-还可以用 :code:`el.scrollByPages` 和 :code:`el.scrollByLines` 。
-不过 opera 不支持啊。
-
-还是用 :code:`el.scrollTo` 来滚动吧。
-
-
-
-
-
-
-
-HTMLElement
-============
-所有的 DOM 节点都继承了 HTMLElement。
-不过我们不能自己调用这个构造函数来构造新节点就是了。
-通过修改 HTMLElement 的原型（prototype），可以给节点添加方法。
-
-
-
-
-
-节点文字
-=========
-可以使用 :code:`textContent` 来获取和修改节点包含的文本。
-
-
-
-
-
-
-鼠标移动事件
-=============
-
-``mouseenter`` 和 ``mouseleave`` 分别在进入和离开
-**注册事件的节点** 时被触发。
-类似于 css 中的 ``:hover`` 。
-
-``mouseover`` 和 ``mouseout`` 分别在进入和离开节点时触发，
-但是不仅仅是注册了事件的节点，在进入或离开其子节点时，同样会触发事件。
-
-专业点的说法是 ``mouseenter`` 和 ``mouseleave`` 不会冒泡（bubble），
-而 ``mouseover`` 和 ``mouseout`` 会冒泡。
-
-在节点上移动鼠标时，会触发 ``mousemove`` 事件，同样会冒泡。
-
-
-
-
-
-动态插入 js
-============
-动态加载 js 能够达成异步加载的效果。
-
-.. code:: javascript
-
-    var script = document.createElement('script');
-    node.src = '/path/to/js';
-    document.body.appendChild(node);
-
-上面是段动态加载脚本的代码，简单得很。
-
-在看 `seajs` 的加载代码时，看到一个以前没注意过的地方。
-
-.. code:: javascript
-
-    var head = document.head;
-    var baseElement = document.querySelector('base');
-    var node = document.createElement('script');
-    baseElement ?
-        head.insertBefore(node, baseElement) :
-        head.appendChild(node)
-
-其他东西都省略了，一个是插入在 ``head`` 里面，一个是插入在 ``base`` 之前。
-
-关于插入在 ``head`` 里，我找了半天就找到了
-http://stackoverflow.com/questions/12113412/dynamically-inject-javascript-file-why-do-most-examples-append-to-head/12113657#12113657
-和 http://www.jspatterns.com/the-ridiculous-case-of-adding-a-script-element/ 。
-
-没什么决定性的理由，
-不插入在 ``body`` 里面最合理的解释大概是 IE7 的 ``Operation aborted`` 吧。
-对于 `seajs` ，需要支持 css 的动态加载，所以选择了 ``head`` 吧。
-
-至于插入在 ``base`` 之前，是因为 IE，这个不讲了。
-
-下面讲下 ``base`` 元素。
-
-平常写路径的时候，经常使用相对路径，通过设置 ``base`` 的 ``href`` 属性，
-可以让相对路径不再相对于当前目录，而是相对于 ``base.href`` 的路径，
-就叫基本路径算了。
-
-如果指定了多个 ``base`` 或是里面有多个 ``href`` ，
-起作用的只有第一个 ``base`` 的第一个 ``href`` 。
-
-在 js 中，可以通过 ``node.baseURI`` 获取元素的基本路径。
-而 ``document.baseURI`` 是整个页面的基本路径，但要注意这个值是只读的。
-虽然不能修改 ``document.baseURI`` ，但是 ``base.href`` 是可以修改的。
-
-更新： ``base`` 只会影响之后的元素，把 css 和 js 放在 ``base`` 前面，
-是不受 ``base`` 的值影响的。
-所以 manifest 不受这个影响， http://developers.whatwg.org/semantics.html#the-base-element 。
-
-
-
-
-
-引入 js
-========
-http://calendar.perfplanet.com/2010/the-truth-about-non-blocking-javascript/
-https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
-
-+ defer
-
-  延迟执行。下载但不执行，不会阻塞其他内容的下载和渲染，
-  内容加载完（DOMContentLoaded）之后， **按顺序** 执行脚本。
-
-  mdn 不推荐对内联脚本设置 defer。
-
-
-+ async
-
-  异步执行。下载并执行，不会阻塞其他内容的下载和渲染， **不保证** 执行顺序。
-
-  对内联脚本无效。
-
-
-+ 动态载入
-
-  动态创建并插入。效果与 async 相同，适合不支持 async 的情况。
-
-
-+ defer async 动态插入，虽然不阻塞内容加载，但是阻塞 window.onload 事件。
-  直到脚本执行完，才会触发 onload 事件。
-
-
-+ DOMContentLoaded 在文档解析后触发。
-  onload 要等待一切资源下载完成才会触发，包括样式、图片、frame 等等等。
-
-
-+ 使用 ``setTimeout(dynamicLoadScript, 0)`` 的方式动态载入脚本，
-  不会阻塞 onload 事件。不过这个 **不保证** 脚本执行和 onload 的先后顺序。
-
-
-+ 靠 iframe 动态插入脚本。由于创建的 iframe 没有 src，无需下载，所以不会阻塞 onload。
-
-  创建一个 iframe，在 iframe 里面动态插入 script，
-  在脚本里使用 ``parent.window`` 获取外部环境。
-
-
-
-
-
-性能测试
-=========
-以前测试某种方法的性能，都是用 ``Date.now()`` ，偶然发现一个更简单的。
-
-https://gist.github.com/xionglun/6205140
-
-.. code::
-
-    console.time('id');
-    // code here
-    console.timeEnd('id');
-
-一直以来都只使用 ``console.log`` ，看来好好研究一下。
-
-
-
-
-
-获取脚本自己的链接地址
-=======================
-``seajs`` 的这段代码看了好久才明白过来，果然水平还不够啊。
-
-.. code:: javascript
-
-    var scripts = document.scripts;
-    var src = scripts[scripts.length - 1].src;
-
-关键在于，这段代码执行的时候， ``seajs`` 自己是已载入的最后一个脚本，
-所以可以使用 ``scripts[scripts.length - 1]`` 获取自己的标签。
-这样就不用关心之前已经引入了多少脚本，之后会引入多少脚本也完全不用担心。
-
-平常习惯等到页面完全载入了才执行脚本，
-所以看到 ``scripts`` 的第一反映是页面的所有脚本，
-就被自己绕进去了。
-
-
-
-
-
-inline 与 src
-==============
-如果两者并存，那么优先下载脚本文件，而内联的代码不会执行。
-
-
-
-
-
-动态修改资源地址
+解析 html 字符串
 =================
-下面都是 chrome 30.0.1599.14 dev 下的测试结果。
++ https://developer.mozilla.org/en-US/docs/Web/API/DOMParser
 
 .. code:: javascript
 
-    var img = document.createElement('img'); // new Image() 也是一样的
-    img.src = './invalid.png'; // 马上发起请求了，然后失败了
-    img.onerror = function(e) {console.log(e);}; // 这次不会执行，失败时触发的是 null
-    document.body.appendChild(img);
-    img.src = '../invalid.png'; // 马上发起请求，继续失败，这次调用 error 了
-
-    var script = document.createElement('script');
-    script.src = './invalid.js'; // 没发起请求
-    document.body.appendChild(script); // 插入才发起请求
-    script.src = '../invalid.js'; // 不会发起请求
-
-    var link = document.createElement('link');
-    link.href = './invalid.css'; // 不会发起请求
-    document.head.appendChild(link); // 还是没发起请求
-    link.rel = 'stylesheet'; // 发起请求了
-    link.href = '../invalid.css'; // 再次发起请求
-
-    link.rel = 'alternate'; // 修改类型
-    link.src = './invalid.html'; // 不会发起请求了
-    link.rel = 'stylesheet'; // 马上发起请求
-
-css 的特别之处在于， ``link`` 有其他用途，所以不会主动发起请求。
-一旦指定为 ``stylesheet`` （不管是在插入文档之前还是之后），
-行为方式和 ``img`` 一样。
-
-修正一下：网上说，修改 ``script`` 的 ``src`` 后，
-ie9 会载入脚本，但不会执行，ie6/7/8 会载入并执行脚本。
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(htmlString, "text/html");
 
 
-.. code:: javascript
-
-    var iframe = document.createElement('iframe');
-    iframe.src = './invalid.html'; // 不发起请求
-    document.body.appendChild(iframe); // 发起请求
-    iframe.src = '../invalid.html'; // 修改后，马上发起请求
-
-``iframe`` 和 ``frame`` 都是一样的，插入文档后才会发起请求，
-更改地址，马上发起新请求。
 
 
-.. code:: javascript
-
-    var audio = document.createElement('audio');
-    audio.src = './invalid.mp3'; // 马上发起请求
-    audio.src = '../invalid.mp3'; // 更改后马上发起请求
-    audio.load(); // 会再次发起请求
-
-    var source = document.createElement('source');
-    var audio2 = document.createElement('audio'); // 插入之前的 audio 是无效的
-    source.src = './invalid.mp3'; // 没发起请求
-    audio2.appendChild(source); // 插入到 audio 或者 video 里面，马上发起请求
-    source.src = '../invalid.mp3'; // 没有发起请求
-    audio2.load(); // 要重新载入，才会发起请求
-    audio2.src = './invalid.mp3'; // source 无效了
-
-    var video = document.createElement('video');
-    video.appendChild(source); // 注意下，source 会从 audio2 移动到 video ，
-                                // 并且重新发起请求（虽然没有修改过 source）
-    video.poster = './invalid.png'; // 马上发起请求
-    video.onerror = function(e) {console.log(e);};
-    video.poster = '../invalid.png'; // 马上发起请求，虽然失败了，但是不会触发 onerror
-    video.src = './invalid.mp4'; // source 被抛弃了，马上发起请求，触发了 onerror
 
 
-``audio`` 和 ``video`` 都跟 ``img`` 是一路的，
-就算没插入文档，只要设置或修改了 ``src`` ，马上发起请求。
-另外，虽然有 ``new Audio()`` ，但是没有 ``new Video()`` 。
-还有，如果指定了 ``src`` ，就不会管内部有没有 ``source`` 了，
-这点又和 ``script`` 有点类似。即使开始使用的是 ``source`` ，
-一旦设置了 ``src`` ，马上就会把 ``source`` 抛弃掉。
+提交表单
+=========
+如果表单中带有提交按钮，在点击 ``Enter`` 时就会提交表单。
+如果没有提交按钮， ``Enter`` 不会提交表单。
+一个例外是 ``textarea`` ，在框里回车是换行。
 
-``source`` 在首次插入 ``audio`` 或 ``video`` 时，会尝试下载。
-（前面说了，如果 ``audio`` 或 ``video`` 有 ``src`` ，插入是无效的。）
-如果插入时没有 ``src`` ，没东西可下，也就没有请求了。
-插入之后再修改 ``src`` ，不会自动发起请求，要手动载入。
-注意下，不用插入到文档中，只要插入 ``audio`` 或 ``video`` 下面就可以了。
+所谓提交按钮，也就是
+``input[type=submit]`` 和 ``input[type=image]`` 和 ``button[type=submit]`` 。
 
-``track`` 有点类似样式表，有个额外的控制因素，是否开启了字幕。
-如果开启了字幕，那么插入和修改都会马上发起请求，
-如果没有开启字幕，不管插入还是修改，都不会发起请求。
+``form.submit()`` 不会触发 ``submit`` 事件。
 
-那么要怎么开启字幕呢？首先，作为一个字幕（ ``kind="subtitles`` ），
-必须标注语言（ ``srclang="en"`` ），具体什么语言看实际情况了。
-如果这个和用户设置的浏览器语言匹配，那么就会启用这个字幕。
-如果所有字幕都不匹配，会寻找设置了 ``default`` 的默认字幕。
+另外一点，如果使用 ``display:none`` 来隐藏元素，chrome 会无视这个元素。
+如果把提交按钮隐藏了， ``Enter`` 就无效了。
+应该使用 ``visibility:hidden`` 来隐藏元素。
 
-这里这个情况，可以就简单理解成 ``default`` 属性就算开启字幕。
-注意下，必须是在插入 ``video`` 之前设置好 ``default`` ，
-插入后再设置，是不会开启字幕的。
-（可以通过插入设置了 ``default`` 但没有 ``src`` 的 ``track`` 来开启字幕。）
-只要开启了字幕，所有 ``track`` 的插入/修改都会发起请求。
-（大概是这个样子，还有一些无法理解的细节……）
+更新：
+``button`` 有个容易忽略的地方，如果没有指定 ``type`` ，默认是 ``submit`` 。
 
+
+
+
+
+
+
+定时器
+=======
+js 里有 ``setTimeout`` 和 ``setInterval`` 两种定时器，
+前者是超时调用，后者是间歇调用，这个不用多说。
+
+那么，下面的代码，两者的区别在哪里？
 
 .. code:: javascript
 
-    var embed = document.createElement('embed');
-    embed.src = './invalid.mov'; // 不会发起请求
-    document.body.appendChild(embed); // 发起请求
-    embed.src = '../invalid.mov'; // 不会发起请求
+    var doSomething = function() {};
 
-``embed`` 和 ``script`` 比较像，都是插入时才会发起请求，
-而且之后再修改 ``src`` 都不起作用。
+    setTimeout(function repeat() {
+        doSomething();
+        setTimeout(repeat, delay);
+    }, 10);
 
+    setInterval(function repeat() {
+        doSomething();
+    }, 10);
 
+两者看起来都是每 10 毫秒调用函数一次，但在具体执行的时候，还是存在细微的差异。
 
-
-
-
-
-chrome cors
-============
-用 chrome 调试本地页面的时候，
-可以加上 ``--allow-file-access-from-files`` 选项，
-这样就可以请求其他本地文件了。
+首先，我们知道 js 在是单线程的。
+这里我们忽略调度的细节，把要执行的函数想象成一个任务队列。
 
 
+``setTimeout`` 在 10 毫秒后调用函数，也就是把函数加入了任务队列。
+如果队列中没有其他代码在执行或等待，结果就和预期的一样。
+如果队列中有很多其他函数正在等待，那么这个超时调用就要慢慢排队，
+等待的时间就有可能超过 10 毫秒。
+执行后，会再次尝试在 10 毫秒后调用函数，也就是重复前面的过程。
+
+
+``setInterval`` 则是每隔 10 毫秒，就尝试调用函数一次。
+也就是，10 毫秒时试一次，20 毫秒时试一次，30 毫秒时试一次……
+如果没碰上排队，就这样了。
+如果碰上要排队的情况，也就是没能调用函数，函数就加入任务队列，等待执行。
+特别的是，可能出现超过时间间隔，函数还在排队的情况。
+如果 10 毫秒加入队列的函数在 20 毫秒时还没执行，
+20 毫秒时的函数是不会加入队列的，也就是说，
+``setInterval`` 要调用的函数，不会在队列中出现两次。
+
+
+**总结** 就是，两者的区别在于对这个间隔的处理。
+其实就像函数名暗示的那样，
+一个是结束之后多少毫秒加入队列，一个是每多少毫秒加入队列。
 
 
 
 
 
-undefined 与 +
-===============
-没声明的 ``undefined`` 和声明为 ``undefined`` 是不一样的。
+new
+====
+我们使用一个函数作为构造函数（constructor），来 ``new`` 一个实例。
+下面解释下 ``new`` 的时候，都干了什么。
+
+.. code:: javascript
+
+    function Example(args) {
+        this.blahblah = args;
+    }
+
+    example = new Example('wtf');
+
+在上面这个例子里，构造函数 ``Example`` 没有 ``return`` 语句，
+而且里面引用了 ``this`` ，那么 ``example`` 到底是什么呢。
+
+实际上， ``new`` 会先构造一个空对象（ ``{}`` ），
+在这个空对象上执行构造函数（就是把这个对象绑定到构造函数的 ``this`` 上），
+最后返回这个对象。
+
+.. code:: javascript
+
+    example = {};
+    Example.call(example, 'wtf');
+
+就是上面这种感觉吧。
+不过还是有区别的，手动生成的对象不会被视为构造函数的实例，
+因为无法在 ``example`` 的原型链上找到 ``Example.prototype`` 。
+
+如果构造函数带有 ``return`` 语句会怎么样？
+
+.. code:: javascript
+
+    function Ex1() {
+        return 'wtf';
+    }
+
+    function Ex2() {
+        return ['wtf'];
+    }
+
+    function Ex3() {
+        return {'ex3': 'wtf'};
+    }
+
+    console.log(new Ex1());
+    console.log(new Ex2());
+    console.log(new Ex3());
+
+看了上面的代码，估计也能猜出来了一点。
+使用 ``new`` 的时候，返回值必须是对象类型的值，
+如果返回基本类型的值， ``return`` 会被无视掉，返回 ``this`` 。
+
+最后， ``new A`` 和 ``new A()`` 的效果是一样。
+只能说， ``new`` 和构造函数以及括号，三者是个整体，
+如果插入括号改变运算优先级，会改变整个语句的语义。
+
+
+
+
+
+new 续
+=======
 
 .. code:: javascript
 
     (function() {
-        console.log(undefined + 0); // NaN
-        console.log(undefined + false); // NaN
-        console.log(undefined + undefined); // NaN
-        console.log(undefined + null); // NaN
-        console.log(undefined + ""); // "undefined"
-        console.log(undefined + {}); // "undefined[object Obejct]"
-        console.log(undefined + []); // "undefined"
-        console.log(undefined + /pattern/); // "undefined/pattern/"
-        console.log(undefined + function(){}); // "undefinedfunction (){}"
+        var ex2 = function() {
+            return this.name;
+        };
+
+        function Person(name) {
+            this.name = name;
+            this.ex1 = function() {
+                return this.name;
+            };
+            this.ex2 = ex2;
+        }
+
+        Person.prototype.ex3 = function() {
+            return this.name;
+        };
+
+        var a = Person('a');
+        var b = Person('b');
+        console.log(a.ex1 === b.ex1); // false
+        console.log(a.ex2 === b.ex2); // true
+        console.log(a.ex3 === b.ex3); // true
     })();
 
-上面是直接和 ``undefined`` 相加的情况，和变量声明为 ``undefined`` 是一样的。
-包括显式赋值为 ``undefined`` 和声明后没赋值的情况。
+构造函数内部定义的属性，都是重新创建再赋给新对象的，所以都是不同的个体。
+在内部定义的函数，虽然功能相同，但却是不同的函数。
+想要重用函数，就不能放在构造函数内声明。
+可以在外部声明，在构造函数中获取引用。
+也可以赋值给构造函数的原型。
 
-但事实上，如果没有声明过，结果是抛出错误。
-
-.. code:: javascript
-
-    typeof(un) == "undefined"; // true
-
-    console.log(un + 0);
-    console.log(un + false);
-    console.log(un + undefined);
-    console.log(un + null);
-    console.log(un + "");
-    console.log(un + {});
-    console.log(un + []);
-    console.log(un + /pattern/);
-    console.log(un + function(){});
-
-虽然 ``un`` 的类型确实是 ``undefined`` ，但是尝试执行上面的语句，
-都只会得到 ``ReferenceError: un is not defined`` 。
-
-http://stackoverflow.com/questions/833661/what-is-the-difference-in-javascript-between-undefined-and-not-defined
-上的解释是：因为没有声明过，所以 ``un`` 是没有类型的，换句话说，类型没有定义，
-所以返回了 ``undefined`` 。
-（很巧的是， ``undefined`` 这个值的类型，也叫 ``undefined`` 。）
-
-因为 ``un`` 没有声明过，所以对其引用造成了运行时的错误。
+实例和构造函数没有直接联系，而是共享了 *构造函数的原型* 。
+原型里的的 ``constructor`` 属性又指向了构造函数。
 
 
 
 
 
 
-
-
-arguments
-==========
-``use strict`` 模式下， ``arguments`` 和形式参数没有关联，不会互相影响。
+DOM 节点属性
+=============
+节点属性算是一个坑。
 
 .. code:: javascript
 
-    (function(a1, a2, a3) {
-        "use strict";
-        console.log(a1, a2, a3); // 1 2 3
-        a1 = 100;
-        arguments[1] = 200;
-        console.log(a1, a2, a3); // 1 2 3
-        console.log(arguments); // [2, 3]
-    })(1, 2, 3);
+    var body = document.body;
 
-但是在非严格模式下， ``arguments`` 有一点点坑。
-建议使用 ``Array.prototype.slice`` 复制一个 ``arguments`` ，
-避免对 ``arguments`` 的直接操作。
+    body.id = 'property';
+    console.log( body.id );
 
-下面讲下坑在哪里。
+    body.setAttribute('id', 'attribute');
+    console.log( body.getAttribute('id') );
 
-首先，参数和 ``arguments`` 相互关联，对其中一个进行修改会影响另一个。
+    body.getAttributeNode('id').nodeValue = 'attributeNode';
+    console.log( body.getAttributeNode('id').nodeValue );
 
-.. code:: javascript
+上面三种方法都可以获取和修改节点的属性。
 
-    (function(a1, a2, a3) {
-        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,3]
-        a1 = 100;
-        arguments[1] = 200;
-        console.log(a1, a2, a3, arguments); // 100 200 3 [100, 200, 3]
-    })(1, 2, 3);
+``getAttributeNode`` 没啥亮点，这里不展开了。
 
-但是，这个关联又不是十分紧密。
+使用 ``getAttribute`` 和 ``setAttribute``
+来操作节点的属性（attribute）在大部分情况下是个好选择，
+没有非常突出的问题。
 
-.. code:: javascript
+直接操作节点的属性（property）需要注意几点：
 
-    (function(a1, a2, a3) {
-        console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2]
-        a3 = 3;
-        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2]
-    })(1, 2);
++ 属性名的限制
 
-    (function(a1, a2, a3) {
-        console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2]
-        arguments[2] = 300;
-        console.log(a1, a2, a3, arguments); // 1 2 undefined [1,2,300]
-    })(1, 2);
+  属性名在 js 和 html 中不是一一对应的。典型代表就是 ``className`` 。
+  在 js 中，属性名称受 js 的命名限制，不能与保留字冲突，通常采用小骆驼命名法。
 
-我的理解是 ``arguments`` 作为实际参数，
-在 **初始化** 时，与 **对应** 的形式参数建立了联系，
-记录了配对的数量。（ **注意** ：这个配对数会减少，但不会增加。）
-之后，在 ``arguments`` 中添加新值、给没有配对的形式参数赋值，
-由于两者没有关联，结果没有互相影响。
++ 自定义属性
 
-在进行一些数组操作时，配对数的影响很明显。
+  可以直接用属性操作的只有 html 规定的标准属性，自定义的属性是取不到的。
+  不过 ``data-`` 开头的自定义属性可以通过 ``dataset`` 属性获取。
 
-.. code:: javascript
++ 表单
 
-    (function(a1, a2, a3) {
-        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,3]
-        Array.prototype.pop.call(arguments);
-        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2]
-        Array.prototype.push.call(arguments, 300);
-        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,300]
-        a3 = 30;
-        console.log(a1, a2, a3, arguments); // 1 2 30 [1,2,300]
-    })(1, 2, 3);
+  在表单中，使用属性（property）可以直接获取相应的表单项，
+  这里的相应指的是项的 ``id`` 或者 ``name`` 属性。
+  换句话说，这些属性被项覆盖了，也就无法通过属性（property）来获取和修改了，
+  这种时候就需要使用 ``getAttribute`` 。
 
-在 ``pop`` 之后， ``a3`` 和 ``arguments`` 的联系就切断了，
-``shift`` 的情况要更加复杂。
++ 链接
 
-.. code:: javascript
-
-    (function(a1, a2, a3) {
-        console.log(a1, a2, a3, arguments); // 1 2 3 [1,2,3]
-        Array.prototype.shift.call(arguments);
-        console.log(a1, a2, a3, arguments); // 2 3 3 [2,3]
-        Array.prototype.unshift.call(arguments, 100);
-        console.log(a1, a2, a3, arguments); // 100 2 3 [100,2,3]
-        a3 = 30;
-        console.log(a1, a2, a3, arguments); // 100 2 30 [100,2,3]
-    })(1, 2, 3);
-
-虽然是第一个元素被移出 ``arguments`` ，但是断开联系的却是 ``a3`` 。
-也就是说，配对数量减少时，受影响的是后面的元素。
-
-另外，配对数只在 ``arguments`` 的元素个数（和 ``arguments.length`` 有点区别）
-小于配对数时，才会减小。
-
-如果修改了 ``arguments.length`` ， ``arguments`` 的表现会显得更加诡异。
-因为 ``pop`` ``shift`` 这些数组方法依赖于 ``length`` 属性，
-但是 ``arguments`` 的元素个数又不受 ``length`` 的影响。
+  使用属性（property）来获取节点的 url ，
+  比如 ``src`` ， ``href`` ， ``action`` ，
+  其结果都是被浏览器补全了的，
+  要获取 html 原始值，要使用 ``getAttribute`` 。
 
 
-更准确的描述，需要去翻文档了。
+早期的 IE 版本从来都是地狱，这里不细说。
+css 样式是个比一般属性更大的坑，这里也不展开了。
+
+
+
+
+
+CommonJS Modules/1.1.1
+=======================
+
+通用 JS 模块规范（？）
+
+规范定义了 ``require`` 函数。
+
+1. 接受一个模块标识作为参数。
+2. 返回值是模块提供的 API。
+3. 如果出现循环依赖，会返回已执行的部分结果。
+4. 如果没能获取模块，抛出错误。
+5. `main` 属性。只读。值为 ``undefined`` 或模块标识。
+6. `paths` 属性。队列。在全局都是唯一的。会被用于解析模块的地址。
+
+在模块中
+
+1. 可以调用 ``require`` 函数。
+2. 使用 ``exports`` 向外提供 API。
+3. 对象 ``module`` 。有 ``id`` 属性，只读，标识该模块。
+   有 ``uri`` 属性，指向模块的链接。
+
+模块标识要满足
+
+1. 是由斜干分割的项组成的字符串。
+2. 项是使用小骆驼写法的字符串、 `.` 或 `..` 。
+3. 可以不以 `.js` 结尾。
+4. `.` 和 `..` 开头的标识是相对标识，否则为顶级标识。
+5. 顶级标识指向根目录。
+6. 相对标识是相对于调用 ``require`` 的模块的路径。
 
 
 
@@ -526,352 +289,956 @@ arguments
 
 
 
-渲染模式
+
+变量声明
 =========
-``document.compatMode`` 可以用来检查浏览器使用的是标准模式还是怪异模式。
-在怪异模式下，返回 ``BackCompat`` 。
-在其他模式下，返回 ``CSS1Compat`` ，
-也就是说标准模式和进标准模式的返回值没有区别。
-
-
-
-
-
-获取文本
-=========
-+ https://developer.mozilla.org/en-US/docs/Web/API/Node.textContent
-
-获取文本的时候， ``innerText`` 和 ``textContent`` 都是可以的。
-今天发现一点区别，查了下 MDN，
-说是 ``innerText`` 会保留样式，并且会触发重排（reflow）。
-但 ``textContent`` 不会。
-
-
-
-
-
-
-contains
-=========
-+ http://ejohn.org/blog/comparing-document-position/
-
-简单讲，就是判断节点 A 是不是节点 B 的子节点。
-
-暴力一点就是查找 A 的父节点，看是否是 B，或者遍历 B 的子节点。
-聪明点的可以用 John Resing 上面提到的办法，
-使用 ``contains`` 或 ``compareDocumentPosition`` 来判断。
-
-之前想到过，能否使用 ``insertBefore`` 来判断。
-可惜 ``insertBefore`` 只能处理直接后代的情况，在嵌套了多层的情况下，无法使用。
-
-
-
-Object.keys
-============
-在 python 里，可以使用 ``dir`` 来获取对象的属性，相当方便。
-在 js 里面，可以用 ``Object.keys`` 达到类似的效果。
-
-
-
-
-
-arguments.length
-==================
+我居然一直不知道这个特性：
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#var_hoisting
 
 .. code:: javascript
 
-    function example(x, y, z) {
-        console.log(arguments.length, x, y, z);
+    function ex1() {
+        a = 10;
+        var a;
     }
-    example(); // 0, undefined, undefined, undefined
-    example(undefined); // 1, undefined, undefined, undefined
-
-这么一个例子就可以啦。
-
-直接判断是否为 ``undefined`` 是不靠谱的，
-应该借助 ``arguments.length`` 来判断参数个数。
-
-
-
-
-
-
-constructor && this
-======================
-
-这里讲的是构造函数，不是 ``prototype.constroctor`` 。
-
-在构造函数里面，
-可以使用 ``(this instanceof CONSTRUCTOR)`` 来判断是否使用了 ``new`` 。
-
-如果没有使用 ``new`` ，
-在 ``use strict`` 的情况下 ``this === undefined`` ，
-非严格模式下 ``this === window`` 。
-
-更新一点关于 ``constructor`` 的看法。
-测试了一下 ``prototype.constroctor`` ，发现对 ``instanceof`` 操作没有半点影响。
-
-不过在
-http://stackoverflow.com/questions/8453887/why-is-it-necessary-to-set-the-prototype-constructor
-，还是有人给 ``prototype.constroctor`` 找到了个实际应用中的例子。
-
-
-
-
-
-Error && setTimeout
-======================
-举两个例子：
-
-.. code:: javascript
-
-    setTimeout(function A() {
-        setTimeout(function B() {
-            setTimeout(function C() {
-                throw new Error("error in C");
-            }, 1);
-        }, 1);
-    }, 1);
-
-可以看到，错误信息的堆栈信息里只有 ``C`` ，没有 ``A`` ``B`` 。
-因为超时调用的作用域是全局作用域。
-
-.. code:: javascript
-
-    try {
-        setTimeout(function() {
-            throw new Error("error message");
-        }, 1);
-    } catch (e) {
-        console.log(e);
+    // equal to
+    function ex2() {
+        var a;
+        a = 10;
     }
 
-可以看到，错误没有被捕获。原因和之前提到的一样，
-回调函数执行的时候，作用域已经脱离了 ``setTimeout`` 的作用域。
-
-
-要处理回调中的异常，除了直接在回调函数里处理，
-还可以使用 ``window.onerror`` 。
-
-
-
-
-
-
-
-
-map
-========
-
-+ http://www.2ality.com/2013/10/dict-pattern.html
-+ http://www.nczonline.net/blog/2012/10/09/ecmascript-6-collections-part-2-maps/
-+ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
-
-js 里面的对象经常被用作关联数组，第一个链接指出了一个小问题。
+太恐怖了，一下子让 js 变得难以理解……
 
 .. code:: javascript
 
-    var map = {};
-    var key = "toString";
-    console.log(key in map); // true
+    var g = 10;
 
-来自 ``Object.prototype`` 的属性和方法，会影响 ``in`` 的判断。
+    (function test1() {
+        // 这个很好理解
+        console.log(g); // 10
+    })();
 
-一种做法是使用 ``Object.create`` 。
+    (function test2() {
+        // 这个也很好理解
+        var g = 100;
+        console.log(g); // 100
+    })();
+
+    (function test3() {
+        // 这个一开始看不懂
+        console.log(g); // undefined
+        var g = 100; // 这里是否赋值，其实没有影响，关键是声明了。
+    })();
+
+    (function test4() {
+        // 看到这里应该开始能理解了
+        g = 100;
+        console.log(g); // 100
+        var g = 1000; // 把声明和赋值分开看待。
+    })();
+
+    (function test5() {
+        // 更清晰点
+        console.log(g); // undefined
+        g = 100;
+        console.log(g); // 100
+        var g = 1000;
+        console.log(g); // 1000
+    })();
+
+到这里总结一下。在作用域的任何位置对变量进行声明，声明都对整个作用域有效。
+可以理解成声明提升到了作用域的顶端，但是，赋值操作并不会和声明一起提升，
+也就是说，变量声明但未赋值，所以就成了 ``undefined`` 了。
+
+然后继续看个例子：
 
 .. code:: javascript
 
-    var map = Object.create(null);
-    var key = "toString";
-    console.log(key in map); // false
-    console.log(map instanceof Object); // false
+    (function test6() {
+        g = 100; // 到底是 window.g 还是函数作用域内的 g 呢？
+        console.log(g, window.g); // 100, 10
+        return;
+        var g; // 没错，连 return 都阻止不了 var 了。
+        console.log(g); // 不会执行的。
+    })()
 
-这样生成的对象不会继承 ``Object`` 。
-
-在 es6 里面会有内置的 ``Map`` 类型，不知道什么时候能用上。
-
-
-
-
-
-
-
-
-
-requestAnimationFrame
-=========================
-+ https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame
-+ http://www.nczonline.net/blog/2011/05/03/better-javascript-animations-with-requestanimationframe/
-+ http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
-
-文章都是 2011 年的了，但没怎么使用啊。
+最后还有个疑问， ``function`` 和 ``var`` ，都会使变量作用于整个作用域，
+如果两个对上，会怎么样？
 
 .. code:: javascript
 
-    var i = 0;
-    requestAnimationFrame(function example(ts) {
-        if (++i < 100) {
-            console.log("requestAnimationFrame", new Date(), ts);
-            requestAnimationFrame(example);
+    (function test8() {
+        // 已经知道 var 和 function 都是作用于整个作用域的，
+        // 作用时，哪个更靠前，和写的位置有没关系呢？
+        var x;
+        function x() {};
+
+        function y() {};
+        var y;
+
+        console.log(x, typeof x); // function x() {} "function"
+        console.log(y, typeof y); // function y() {} "function"
+        console.log(z, typeof z); // function z() {} "function"
+
+        return;
+
+        function z() {}; // 这个是顺便验证下 return 和 function 的优先顺序。
+    })();
+
+结果表明，和写的位置没关系， ``var`` 是最优先的，然后轮到 ``function`` ，
+而 ``return`` 虽然能干掉其他代码，但是管不了这俩。
+
+但是事情还没有结束，最后再提一点， ``var`` 和分支语句的较量。
+
+.. code:: javascript
+
+    (function test9() {
+        // 虽然会疑惑下，但也不是不能接受吧。
+        g = 100;
+        console.log(g, window.g); // 100, 10
+        if (false) {
+            var g;
+        }
+    })();
+
+其实 ``return`` 都跪了， ``if`` 的结局也是可以预料的。
+
+总结起来就是，不管在哪个位置，不管这里的代码会不会执行，
+只要 ``var`` 出现了，这个变量就在作用域中完成了声明。
+（一下子没了难以理解的感觉，只剩下理所当然了……）
+
+
+更新：
+
+.. code:: javascript
+
+    (function test10() {
+        var x = 100;
+        function x() {}
+
+        function y() {}
+        var y = 100;
+        console.log(x, y); // 100 100
+    })();
+
+这个也好解释， ``var`` 提升了， ``function`` 提升了，所以赋值就成了最后的操作。
+
+
+
+
+
+Object.create 继承
+===================
+http://docs.webplatform.org/wiki/concepts/programming/javascript/inheritance
+
+.. code:: javascript
+
+    function Super(name) {
+        this.name = name;
+    }
+    Super.prototype.getName = function() { return this.name; };
+
+    function newInherit(name, age) {
+        Super.call(this, name);
+        this.age = age;
+    }
+    newInherit.prototype = new Super();
+    newInherit.prototype.getAge = function() { return this.age; };
+
+    function createInherit(name, age) {
+        Super.call(this, name);
+        this.age = age;
+    }
+    createInherit.prototype = Object.create(Super.prototype, {
+        getAge: {
+            value: function() { return this.age; }
         }
     });
+    // createInherit.prototype.getAge = function() { return this.age; };
 
-    var j = 0;
-    setTimeout(function example() {
-        if (++j < 100) {
-            console.log("setTimeout", new Date());
-            setTimeout(example, 16);
-        }
-    }, 0);
+能达到相同的效果，做法也很相似，只是用 ``Object.create`` 替换 ``new`` 。
+给子类的原型添加方法的时候，可以使用 ``Object.create`` 的语法，
+也可以直接在原型上修改。
 
-感觉就像是省略了时间的 ``setTimeout`` ，同样是等主线程空闲之后执行回调函数。
-上面的代码基本上是在交替输出。
+``new`` 实现继承，靠的是原型指向了父类的一个实例，靠这个实例访问父类的原型。
+``Object.create`` 实现继承也是一样的原理。
 
-当然还是有个特别点的地方， ``requestAnimationFrame`` 会给回调函数传递一个参数，
-表示回调函数被调用的时间（？）。
+.. code:: javascript
 
-和 ``setTimeout`` 一样有个返回值，用于终止回调。
-终止函数为 ``cancelAnimationFrame`` ，用法和 ``clearTimeout`` 一样，
-就不给例子了。
+    var p1 = new Super();
+    console.log(p1 instanceof Super); // true
+
+    var p2 = Object.create(Super.prototype);
+    console.log(p2 instanceof Super); // true
+
+先扯下 ``instanceof`` 关键字，
+MDN 上的解释说 ``instanceof`` 会在对象的原型链上查找构造函数的原型，
+找到就返回 ``true`` ，否则返回 ``false`` 。
+
+也就是说，沿着 ``p1.__proto__`` 找到了 ``Super.prototype`` ，
+沿着 ``p2.__proto__`` 也找到了 ``Super.prototype`` 。
+（ ``Object.getPrototypeof(obj)`` 比 ``obj.__proto__`` 标准些。）
+
+那么 ``p1`` 和 ``p2`` 区别在哪里呢？
+其实相比 ``new`` ，
+``Object.create`` 就是去掉了绑定 ``this`` 后执行构造函数的过程，
+只是把把参数放到了新对象的原型上。
+注意下这里的原型是 ``__proto__`` 不是 ``prototype`` 。
+
+可以这么理解
+
+.. code:: javascript
+
+    function A() {}
+
+    var ex1 = Object.create(A.prototype);
+    console.log(ex1.__proto__ === A.prototype); // true
+
+    var ex2 = { __proto__: A.prototype };
+    console.log(ex2.__proto__ === A.prototype); // true
+
+
+
+
+最后两个例子
+
+.. code:: javascript
+
+    var ex1 = Object.create(null);
+    console.log(ex1 instanceof Object); // false
+    console.log(Object.getPrototypeof(ex1) === null); // true
+    console.log(ex1.__proto__ === undefined) // true
+    // 只能说 null 是个异类
+
+
+    function Super() {}
+    function Sub() {}
+    Sub.prototype = Object.create(Super.prototype);
+    Sub.prototype.constructor = Sub;
+    var instance = new Sub();
+
+    console.log(instance instanceof Sub); // true
+    // instance.__proto__ === Sub.prototype
+    console.log(instance instanceof Super); // true
+    // instance.__proto__.__proto__ === Super.prototype
+
+    console.log(Sub.prototype instanceof Super); // true
+    // Sub.prototype.__proto__ === Super.prototype
+    console.log(Sub instanceof Super); // false
+    // Sub.__proto__ !== Super.prototype
 
 
 
 
 
 
+原型
+=====
+自己看上面的文字都有点看乱了。
 
-获取 global
-=============
+``__proto__`` 和 ``prototype`` 都可以叫原型，但确实是不同的东西。
+
++ ``obj.__proto__`` 或者说 ``Object.getPrototypeOf(obj)`` ，
+  是对象的内部属性 ``[[Prototype]]`` 。
+
++ ``prototype`` 是函数属性，里面的 ``constructor`` 属性指向构造函数。
+
+继承时，查找的是实例的 ``__proto__`` ，也就是类的 ``prototype`` ，
+继续向上时，找的是类的 ``prototype.__proto__`` ，也就是父类的 ``prototype`` 。
+
+再重复一次，实例和构造函数没有直接联系，而是共享了 *构造函数的原型* 。
+``class.prototype === instance.__proto__`` 。
+
+
+
+类型转换
+=========
++ http://ecma-international.org/ecma-262/5.1/#sec-9
++ http://es5.github.io/x9.html
++ http://es5.github.io/x8.html#x8.12.8
++ http://people.mozilla.org/~jorendorff/es6-draft.html#sec-9.1
+
+下面挑着说。
+
++ ``Object`` 在转换为基本类型时，又分为转换为字符串和转换为数值。
+
+
++ 假值只有 ``Undefined`` ``Null`` ``false`` ``+0`` ``-0`` ``NaN`` 。
+  前两个是类型，但值都只有一种，两个 0 和起来，一共是 5 个假值。
+
+
++ 在转换为数字时， ``Undefined`` 是 ``NaN`` ，而 ``Null`` 是 ``+0`` ，
+  顺便一提 ``false`` 也是 ``+0`` 。
+
+  ``Object`` 要先转为数值基本类型，再转换为数值。
+
+
++ 在转换为整数时， ``NaN`` 被视为 ``+0`` 。
+
+  取整时是向 0 取整，公式为 ``sign(number) * floor(abs(number))`` 。
+
+
++ 在转换为字符串时， ``+0`` ``-0`` 都被转换为 ``0`` 。
+
+  ``Object`` 要先转换为字符串基本类型，再转换为字符串。
+
+
++ ``Undefined`` 和 ``Null`` 是不能转换为对象类型的。
+
+
++ ``Object`` 在转换为字符串型基本类型时，
+  1. 首先获取对象的 ``toString`` 方法。
+  2. 如果调用 ``toString`` 能返回基本类型的值，那么返回该值。
+  3. 获取对象的 ``valueOf`` 方法。
+  4. 如果调用 ``valueOf`` 能返回基本类型的值，那么返回该值。
+  5. 都不行了就抛出错误。
+
+
++ ``Object`` 在转换为数值型基本类型时，
+  只是把调用 ``valueOf`` 和 ``toString`` 的顺序对掉一下，
+  其他处理是一样的。
+
++ ``Object`` 在转换成基本类型时，如果没有规定要转换成什么类型，
+  默认是转换成数值型。
+
+  当然也有例外， ``Date`` 在没有规定转换类型的情况下，默认是转成字符串型的。
+
+
+最后给个演示代码：
+
+.. code:: javascript
+
+    var obj = {};
+    obj.valueOf = function() { return 100; };
+    obj.toString = function() { return "blah"; };
+
+    console.log(Number(obj)); // 100
+    console.log(String(obj)); // "blah"
+
+
+
+加法
+=====
++ http://es5.github.io/x11.html#x11.6.1
++ http://www.2ality.com/2012/01/object-plus-object.html
+
+前面谈类型其实是为了讲讲加法运算。
+具体看规范定义，下面简单描述下。
+
+首先是计算左值右值，获取基本类型。
+然后看左右是否有字符串出现，出现了字符串，就把两者都转换为字符串再拼接起来。
+没有字符串，就把两者都转换成数值再相加。
+
+数值加法按如下方式处理
+
+1. 出现了 ``NaN`` ，返回 ``NaN`` 。
+2. ``Infinity`` 和 ``-Infinity`` ，返回 ``NaN`` 。
+3. 符号相同的无穷大相加，无穷大。
+4. 有限值与无穷大相加，无穷大。
+5. 两个 ``-0`` 结果是 ``-0`` ，
+   而 ``-0`` ``+0`` 还有 ``+0`` ``+0`` 的结果都是 ``+0`` 。
+6. 零值和非零值相加，结果是非零值。
+7. 绝对值相等但符号相反的两个值相加，结果是 ``+0`` 。
+8. 其他和正常加法定义一样了。
+
+
+尝试理解下：
+
+.. code:: javascript
+
+    console.log( {} + {} ); // "[object Object][object Object]"
+    // valueOf 返回的是对象，所以采用了 toString 的结果，
+    // 最后成了两个字符串相加
+
+    console.log( new Date() + [] ); // "XXXXXXXXXXXXXXX"
+    // Date 默认是转换成字符型，[] 的情况和 {} 相同，
+    // 所以也是字符串相加。
+
+    console.log( null + "blah" ); // "nullblah"
+    // null 就是 null，右边出现了字符串，所以成了 "null"。
+
+    console.log( null + false ); // 0
+    // null 和 false，没有字符串，所以两个都转换成数值，都是 +0 。
+
+    console.log( false + undefined ); // NaN
+    // 同样没有字符串，但是 undefined 转换后成了 NaN。
+
+    console.log( [] + NaN ); // "NaN"
+    // [] 返回的是字符串，那么就是字符串了。
+
+    var obj = {}; obj.valueOf = function() {return 9527;};
+    console.log( obj + true ); // 9528
+    // 自己定义了 valueOf，返回了基本类型的值，所以不会继续调用 toString 了。
+    // 最后变成两个数字相加。
+
+
+
+
+
+void
+=====
+毫无意义（？）的关键字。
+计算表达式并返回 ``undefined`` 。
+能够在 ``undefined`` 被覆盖的时候获取 ``undefined`` 。
+
+
+
+
+
+eval
+=====
+eval 只操作字符串，不是字符串直接返回参数。
+
++ http://perfectionkills.com/global-eval-what-are-the-options/
++ http://www.2ality.com/2014/01/eval.html
+
+在直接执行的情况下， ``eval`` 能够获取执行时的作用域，
+执行的最后一条表达式会作为 ``eval`` 的返回值。
+
+在 ``use strict`` 的的约束下，
+``eval`` 无法在执行的作用域中声明新的变量或函数，
+可以理解成，代码是在一个新的函数作用域中执行的。
+
+还是可以通过返回值以及修改外部变量的方式来交流就是了。
+
+
+如果是间接执行， ``eval`` 会是在全局作用域中执行代码。
+就相当与是没有 ``use strict`` 的约束。
 
 .. code:: javascript
 
     (function() {
         "use strict";
-        var global = this || (0, eval)("this");
-    })();
-
-来自 knockoutjs，稍加修改。
-
-首先，这是外层，假如没有 `"use strict"` ，那么 `this` 应该指向 `window` 。
-
-由于 `"use strict"` 的关系， `this` 是 `undefined` ，所以执行的是后面的语句。
-就算直接执行 `eval("this")` ，同样是 `undefined` 。
-
-所以说，关键大概在 `(0, eval)` ，但实际上，返回的就是 `eval` 。
-真正的关键是直接调用还是间接调用。
-
-
-
-
-
-
-
-如何包装类库
-==============
-
-https://github.com/jrburke/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic
-http://nodejs.org/api/modules.html#modules_module_exports
-
-来自 knockoutjs，原版看代码，下面是梳理版。
-
-.. code:: javascript
-
-    (function(undefined) {
-        "use strict";
-
         var win = (0, eval)("this");
-        function factory(koExports) {
-            // code here
-        }
+    })()
 
-        if (typeof(define) == "function" && define.amd) {
-            define(["exports"], factory);
-        } else if (typeof(define) == "function" && define.cmd) {
-            define(function(require, exports, module) {
-                factory(exports);
-            });
-        } else if (typeof(module) != "undefined" && module.exports) {
-            factory(module.exports);
-        } else {
-            factory(win["ko"] = {});
-        }
+上面的代码中， ``(0, eval)`` 就是间接执行，通过全局作用域的中执行 ``this`` ，
+获取对 ``window`` 的引用。
+
+关于什么时直接执行，间接执行。
+简单理解，间接执行肯定不是直接调用，而是经过一点计算。
+如果一个表达式的结果不一定是 eval，最后得到 eval，那么这就是间接执行了 eval。
+
+
+new Function
+=============
++ http://www.2ality.com/2014/01/eval.html
++ http://es5.github.io/x15.3.html#x15.3.2.1
+
+1. ``new Function`` 构造出的函数使用全局作用域。
+   所以不能引用本地变量，无法构造闭包等等。
+2. 默认不开启严格模式。即使在全局作用域 ``use strict`` ，照样使用非严格模式。
+   要开启严格模式，要在构造字符串内申明 ``use strict`` 。
+
+
+
+delete
+=======
++ http://perfectionkills.com/understanding-delete/
+
+简单讲，就是用来删除一个对象的属性（也包括数组的元素）。
+不能删除普通变量、函数、函数参数
+
+但事情往往没那么简单：
+
+.. code:: javascript
+
+    var x = 10;
+    console.log(x, delete x); // 10 false
+    y = 10;
+    console.log(y, delete y); // 10 true
+
+    try {
+        console.log(x); // 10
+        console.log(y); // ERROR
+    } catch (e) {
+        console.log(e.message); // y is not defined
+    }
+
+``x`` 没被删除， ``y`` 被删除了。
+按理说都是在全局作用域 ``window`` 下声明的变量。
+
+具体还是看给的链接吧。总结起来大概是说：
+
++ 在全局作用域或函数作用域中声明的变量和函数，不能删除。
++ 函数参数以及各种对象内置属性，不能删除。
++ eval 内声明的变量和函数，可以删除。
+
+再看看上面的代码，简单来说， ``x`` 是在全局作用域下声明的变量，所以不能删除。
+而 ``y`` 不是全局作用域下声明的变量，到处都找不到声明，所以丢到了全局作用域，
+成了 ``window`` 的一个属性，所以可以删除。
+
+
+
+
+
+form
+=====
+
+.. code:: javascript
+
+    var form = document.querySelector("form");
+
+    form.name; // 表单名
+    // form 的 name 属性，可以用 document[name] 直接获取表单
+
+    form.elements; // 表单中的控制元素
+    form.length; // 表单元素的个数
+
+    form.enctype; // 编码方式
+    form.method; // 提交方式
+
+    form.submit(); // 提交表单，不会触发 submit 事件！
+    form.reset(); // 重置表单，这个会触发 reset 事件
+
+可以在提交事件中进行必要的检测，避免重复提交。
+
+
+.. code:: javascript
+
+    var input = document.querySelector("form input");
+
+    input.form; // 指向 form
+
+    input.type; // 类型
+    input.name; // 控件名
+    input.value; // 控件当前值
+
+
++ ``input`` 和 ``button`` 的类型是可以动态修改的， ``select`` 不行。
++ ``button`` 没有 ``readOnly`` 属性。
++ ``input.value`` 是修改后的值，要获得初始值，
+  可以使用 ``input.getAttribute("value")`` 。
+  ``textarea`` 可以使用 ``textContent`` 或者 ``innerHTML`` 。
++ chrome 的 ``focus`` 和 ``select`` 有 bug 。
++ 可以用 ``input.selectionStart`` 和 ``input.selectionEnd`` 来获取选中的部分。
+  ie9 以下可以使用 ``document.selection`` 。
++ 要选中部分元素可以用 ``input.setSelectionRange()`` 。
+  ie9 以下可以使用 ``input.createTextRange()`` 。
++ 可以通过 ``clipboardData.getData("text/plain")`` 获取剪贴板的内容。
+
+
+
+
+
+XMLHttpRequest
+===============
++ 使用 ajax 的方式提交表单的时候，
+  应该调用 ``xhr.setRequestHeader`` 将 ``Content-Type`` 设置为
+  ``application/x-www-form-urlencoded; charset=UTF-8`` 。
+  表单内容必须进行序列化。
+
+  如果觉得太麻烦，也可以使用 ``FormData`` 来生成表单数据，
+  那么设置 http 请求头和序列化都可以省了。
+
++ 使用 ``xhr.overrideMimeType`` 可以设置返回数据的 MIME 类型。
+  要在 ``xhr.send`` 之前调用。
+
++ 要确保避开缓存，去服务器请求数据，可以在链接后面加上 ``？blah`` ，
+  也就是查询字符串。如果本来带有查询字符串了，
+  可以用 ``&blah`` 附上一个无意义的键名。
+
++ 异步的请求可以设置一个超时时间， ``xhr.timeout`` 。
+  超时了就会触发 ``xhr.ontimeout`` 。
+
+  只有异步请求才可以设置超时。
+
++ ``xhr.onprogress`` 可以用于监视请求的进度。
+
+
+
+
+
+
+valueOf
+========
++ http://es5.github.io/x15.2.html#x15.2.4
++ http://es5.github.io/x8.html#x8.6.2
++ http://es5.github.io/x15.4.html#x15.4.3.2
++ http://es5.github.io/x11.html#x11.4.3
++ http://es5.github.io/#x4.3.6
++ http://es5.github.io/#x4.3.8
+
+平常可以用 ``Object.prototype.toString`` 来判断对象类型，
+前面知道了， ``valueOf`` 和 ``toString`` 挺相近的，
+能不能用 ``valueOf`` 判断类型呢？翻下文档：
+
+``valueOf``
+    1. 进行 ``ToObject`` 转换。
+    2. 如果是宿主对象，那么结果由实现自己决定。
+    3. 返回第一步的转换结果。
+
+    感觉效果和 ``new Object`` 差不多啊，对类型判断完全没帮助。
+
+
+``toString``
+    1. ``undefined`` 返回 ``[object Undefined]`` 。
+    2. ``null`` 返回 ``[object Null]`` 。
+    3. 进行 ``ToObject`` 转换。
+    4. 获取对象的 ``[[Class]]`` 属性。
+    5. 返回 ``[object [[Class]]]`` 。
+
+    这个内部属性 ``[[Class]]`` 是个字符串，
+    内置对象的取值只有几种： ``Arguments`` ``Array`` ``Boolean``
+    ``Date`` ``Error`` ``Function`` ``JSON`` ``Math``
+    ``Number`` ``Object`` ``RegExp`` ``String`` 。
+
+    没错，没有 ``Null`` 和 ``Undefined`` ，所以在前面做了预判，实在是简单粗暴。
+
+
+``Array.isArray``
+    顺便看看这个。
+
+    1. 不是引用类型，返回 ``false`` 。
+    2. 如果 ``[[Class]]`` 是 ``Array`` ，返回 ``true`` 。
+    3. 返回 ``false`` 。
+
+    其实和 ``Object.prototype.toString`` 一样是检查了 ``[[Class]]`` 。
+
+``typeof``
+    回到最基本的判断类型的方法。
+
+    1. 如果找不到，返回 ``undefined`` 。
+    2. 照表返回类型。表自己去链接看，下面简述。
+
+       + ``Null`` 型返回 ``object`` 。
+       + 其他基本类型就是基本类型
+         ``string`` ``number`` ``boolean`` ``undefined`` 。
+       + 实现了 ``[[Call]]`` 的对象，返回 ``function`` 。
+       + 没实现 ``[[Call]]`` 的原生（native）对象，返回 ``object`` 。
+       + 没实现 ``[[Call]]`` 的宿主（host）对象，
+         由具体实现自己定义，但不能是基本类型。
+
+    所谓原生对象，就是 ES 规范里面定义了的对象。
+    所谓宿主对象，执行环境提供的对象。
+
+    ``typeof`` 判断和 ``[[Class]]`` 完全没有关系。
+    ``undefined`` 和 ``null`` 确实有点特殊。
+
+
+
+
+
+事件监听
+=========
+照例放链接：
+
++ http://www.w3.org/TR/DOM-Level-3-Events/#dom-event-architecture
++ http://dom.spec.whatwg.org/#eventlistener
++ http://stackoverflow.com/questions/16273635/how-do-multiple-addeventlistener-work-in-javascript
+
+简单总结几点：
+
++ ``target.addEventListener`` 把回调函数添加到元素的监听队列上。
+  每个回调函数只会被绑定一次（同一事件，同一传播阶段）。
++ DOM2 中没有规定回调函数的执行顺序。
+  DOM3 中规定，调用要按照注册的顺序。
++ ``event.stopImmediatePropagation`` 会阻止 **之后** 的回调函数。
+  之前的回调函数先执行，不受影响。
++ 回调函数中的 ``this`` 指向了 ``event.currentTarget`` 。
+  ``event.target`` 是引起事件的元素。
++ DOM0 注册的事件，在冒泡阶段调用。
++ 在事件处理函数最后 ``return false`` 相当于 ``event.preventDefault()`` 。
+  （这个特别拿来讲，是因为 jQuery 里面不一样。）
+
+
+
+
+触发事件
+=========
++ https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent
+
+.. code:: javascript
+
+    var link = document.querySelector("#link");
+    var e = new CustomEvent("click", {
+        bubbles: false,
+        cancelable: false,
+        detail: { example: "value" }
+    });
+    link.dispatchEvent(e);
+
+可以用于触发事件。
+
+``CustomEvent`` 的第二个参数用于设置事件，是否冒泡，能否阻止。
+``detail`` 可以通过 ``event.detail`` 获取。
+
+目前还可以使用 ``document.createEvent`` 来模拟事件，
+而且选项比 ``CustomEvent`` 更齐全。
+虽然会逐步废弃，不过，可以预见的未来（DOM4），还是可用的。
+
+
+
+
+
+unicode
+========
++ http://www.2ality.com/2013/09/javascript-unicode.html
++ http://es5.github.io/x6.html
++ http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html#determining-the-character-encoding
+
+在解释器处理 js 时，代码使用 utf-16 进行编码。
+
+任何符号都可以使用 ``\uHHHH`` 的方式进行 unicode 转义。
+另外，在字符串里面，
+``0x00-0xFF`` 范围内的符号，还可以用 ``\xHH`` 的方式转义。
+
+.. code:: javascript
+
+    console.log("\u00F6" === "\xF6");
+    console.log("\xF6" === "ö");
+    console.log("ö" === "\u00F6");
+
+浏览器在载入 js 的时候：
+首先尝试能否通过 ``BOM`` 来确定编码；
+不能的话，检查有没有在 ``http`` 头部的 ``Content-Type`` 里指定了编码；
+没有的话，再尝试获取 ``script`` 标签的 ``charset`` 属性；
+最后尝试使用 ``<meta charset="utf-8">`` 指定的编码。
+
+上面的方式都不能获取编码，浏览器就只能自己猜了。
+
+
+
+
+
+web worker
+===========
++ https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers
++ http://docs.webplatform.org/wiki/apis/workers/Worker
++ http://docs.webplatform.org/wiki/apis/workers/WorkerGlobalScope
++ http://www.whatwg.org/specs/web-apps/current-work/multipage/workers.html
++ http://www.html5rocks.com/en/tutorials/workers/basics/
++ https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm
+
+浏览器的支持，实在很有限……
+下面的内容估计很快会过时，用来简单了解一下 ``web worker`` ，还是可以的吧。
+
+首先上例子：
+
+.. code:: javascript
+
+    // main.js
+    (function() {
+        "use strict";
+        var list = [1, 2, 3];
+        var worker = new Worker("worker.js");
+        worker.onmessage = function(e) {
+            console.log(e.data);
+            console.log(e.data === list);
+
+            worker.terminate();
+        };
+        worker.postMesage(list);
     })();
 
-原版嵌套自执行函数，看着高大上一些，实际功能差不多啦。
-最外面一个自执行函数，获取个全局变量，之后类库的接口都暴露给 ``koExports`` 。
-如果是直接引入，其实就是在给 ``window["ko"]`` 赋值，
-如果是 amd 引入，就是 ``define(["exports"], function(koExports) {})`` ，
-如果时 node 引入，就是 ``(function(koExports) {})(module["exports"])`` ，
-cmd 那个自己随手加的。
+    // worker.js
+    (function() {
+        "use strict";
+        console.log("called immediately");
 
-总结就是通过一个中间层（factory），使得类库能够适应各种环境。
-
-
-另外，外层的参数 undefined 其实没有任何特殊意义，只是为了压缩体积。
-后面代码出现 undefined 的时候，会被压缩工具替换掉。
-
-
-在使用别人的库的时候，可以像 fastclick 那样，简单粗暴。
-
-.. code:: javascript
-
-    if (typeof define !== "undefined" && define.amd) {
-        define(function() {
-            return FastClick;
-        });
-    } else {
-        window.FastClick = FaskClick;
-    }
-
-
-
-
-
-nodelist
-=========
-https://developer.mozilla.org/en-US/docs/Web/API/NodeList#A_.22live.22_collection
-
-`getElementsByTagName` 返回的 nodelist 会随 DOM 变化，
-而 `querySelectorAll` 返回的 nodelist 不会变。
-
-
-
-
-tilde ~
-========
-`~` 是取补码，所以 `~(-1)` 会得到 `0` 。这个技巧可以和数组巧妙结合。
-
-.. code:: javascript
-
-    if ( ~ (arr.indexOf("sth"))) {
-        console.log("sth in arr");
-    }
-
-
-Operator Precedence
-====================
-
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
-
-.. code:: javascript
-
-    var obj = new (function() {
-        // blahblah
-        return {
-            // blahblah
+        onmessage = function(e) {
+            postMessage(e.data);
+            console.log("will not be displayed");
         };
     })();
 
-自执行函数用多了，一下子没反应过来。
-后来才意识到， ``new`` 的优先级比函数调用高。
+在主线程里，通过 ``new Worker(url)`` ，来实例化一个 ``worker`` 。
+被载入的脚本会直接执行。
+
+主线程和 ``worker`` 线程通过 ``onmessage`` 事件和 ``postMessage`` 方法来通信。
+
+``postMessage`` 对数据没太多限制，可以直接传送大部分 js 对象。
+传送的值会被复制一份，就像例子里的数组，在内存中是不同的。
+具体限制可以看上面的链接，总之表达能力要比 JSON 强一些。
+
+从例子里还可以看到，可以在主线程中使用 ``terminate`` 关闭 ``worker`` 线程，
+后续代码不会继续执行。被关闭后，主线程里的 ``worker`` 对象也变得不可用。
+如果是在 ``worker`` 线程里，可以使用 ``close`` 来关闭线程自身。
+
+其实，在 ``worker`` 线程里，除了可以直接调用 ``close`` ，
+我们在例子里还直接对 ``onmessage`` 进行赋值，直接调用 ``postMessage`` 。
+这是因为 ``worker`` 线程是在一个特殊的作用域中执行的，
+叫做 ``WorkerGlobalScope`` 。
 
 
 
-form reset
-==============
+WorkerGlobalScope
+------------------
+在 ``worker`` 线程里，
+可以使用 ``this`` 或者 ``self`` 来获取 ``WorkerGlobalScope`` 。
+像 ``postMessage`` ， ``onmessage`` ， ``close``
+都是在 ``WorkerGlobalScope`` 中定义的。
 
-+ https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement.reset
+除了和主线程通信， ``worker`` 线程还可以使用 ``XMLHttpRequest`` 方法，
+可以通过 ``importScripts`` 来引入其他脚本，甚至可以创建新的 ``worker`` 线程。
+但是不能在 ``worker`` 线程中修改 ``DOM`` ，也不能修改全局的 ``window`` 。
 
-MDN 说 disabled 的元素不会被重置，实际编码发现，hidden 的元素也不会被重置。
+``location`` 是用于创建该 ``worker`` 线程的脚本路径。
+调用 ``importScripts`` 方法的时候，脚本路径就是相对于 ``location`` 来解析的。
+``importScripts`` 是个同步的方法，从载入到执行。一步出错，就全部停止。
 
-可以考虑不用 hidden，依靠 css 来隐藏元素。
+``worker`` 线程里的计时器（ ``setTimeout`` 和 ``setInterval`` ）
+和主线程的计时器是分开的。
+
+
+
+shared worker
+--------------
+除了 ``Worker`` ，还有个 ``SharedWorker`` 。
+
+.. code:: javascript
+
+    // main.js
+    var sw = new SharedWorker("sharedworker.js");
+    sw.port.onmessage = function(e) {
+        console.log(e.data);
+    };
+    sw.port.postMessage(Date.now());
+
+    // sharedworker.js
+    var list = [];
+    var cnt = 0;
+    onconnect = function(e) {
+        var id = cnt++;
+        var port = e.source;
+        list.push(port);
+        port.onmessage = function(e) {
+            // 向每个页面发送消息
+            list.forEach(function(elem) {
+                elem.postMessage("from " + id + " " + e.data);
+            });
+        };
+    };
+
+叫做 share 了，肯定可以共享啦。
+打开多个标签，可以看到这些标签共享一个了 ``SharedWorker`` 线程。
+
+只要 ``new SharedWorker(url)`` 的 ``url`` 相同，就会共享相同的线程。
+
+只有打开多个标签的情况下， ``SharedWorker`` 线程才会保留。
+
+能想到的一个用途，测试用户是否打开了多个标签。
+
+
+inline worker
+--------------
+如果不想发起新的请求，也可以直接构造一个 ``worker`` 。
+需要用到 ``Blob`` 和 ``URL.createObjectURL`` 。
+
+.. code:: javascript
+
+    var workerSource = new Blob(
+        ["onmessage = function() { console.log('from worker'); };"],
+        { type: "application/javascript" }
+    );
+    var workerURL = URL.createObjectURL(workerSource); // 创建虚拟链接
+    var worker = new Worker(workerURL)
+    worker.postMesage();
+
+    URL.revokeObjectURL(workerSource); // 释放链接资源
+
+
+
+
+
+
+
+抛出异常
+==========
+``throw`` 不仅可以抛出 ``Error`` ，还可以抛出各种变量。
+
+比如
+
+.. code:: javascript
+
+    throw "Error: oops";
+
+    throw new Error("oops");
+
+    throw {
+        name: "Error",
+        message: "oops",
+        toString: function() { return this.name + this.message; }
+    };
+
+如果没有捕获的话，会报错。要报错，所以会尝试把抛出的对象转换成字符串，
+对象会调用 ``toString`` 和 ``valueOf`` ，这个转换过程以前讲过，这里不提了。
+值得一提的是，即使没有打开控制台，一样会进行这种转换，
+所以 ``toString`` 还是会被调用。当然， ``try...catch``` 了就不会了。
+
+对于一个 ``Error`` ，最主要的可能是 ``message`` 和 ``name`` 了吧。
+所以可以自己抛出一个对象来模拟，然后对象里面可以添加更多的属性，
+传递更多信息。
+
+更新一下，opera 没有调用 ``toString`` ，
+而是浏览器自己组合 ``name`` 和 ``message`` 。
+
+
+
+
+RegExp
+=========
+
+调用正则相关函数后，可以用 `RegExp.$_` 来获取刚才的结果。
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#grouping-back-references
+
+
+
+
+string to number
+===================
+
++ http://speakingjs.com/es5/ch11.html
+
+字符串到数字
+
++ Number(blah)
+
+    - 调用 ``ToNumber``
+      + 必须是合法数字，可以是 0x 开头的十六进制，前后空格会被忽略。
+      + "-Infinity" 也是合法的，注意大小写。
+
+    - 无参数返回 0
+
++ ``+blah``
+
+    - 调用 ``ToNumber``
+
++ ``parseFloat(blah)``
+
+    - 参数会先被转换成字符串
+    - 最左最长合法数字表达
+
+数字到整数
+
++ Number.isInteger()
+
+    - 检查是否是数字
+
++ Math.round, Math.ceil, Math,floor, Math.trunc
+
+    - 各种取整
+
++ ``blah | 0`` ``blah << 0`` ``blah >> 0``
+
+    - signed 32-bit
+
++ ``blah >>> 0``
+
+    - unsigned 32-bit
+
+数字表示
+
++ js 有个 safe integer（Number.MAX_SAFE_INTEGER）的概念，
+  范围是 ``-(2^53) < i < 2^53`` 。
+
++ Array 只支持 [0, 2^32 - 1)
+
++ ``>>>`` 支持 [0, 2^32) ， ``<<`` ``>>`` 支持 [2^31, 2^31)
+
+也就是说，整数保证在 32-bit 能表达的范围内，才比较安全。
+
+
+
+

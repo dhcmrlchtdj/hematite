@@ -1,322 +1,622 @@
 .. contents::
 
 
-EAFP & LBYL
-==============
+__new__
+========
 
-+ https://docs.python.org/3/glossary.html#term-eafp
-+ https://docs.python.org/3/glossary.html#term-lbyl
-+ https://docs.python.org/3/c-api/intro.html#exceptions
-+ http://stackoverflow.com/questions/598157/cheap-exception-handling-in-python
++ https://docs.python.org/3/reference/datamodel.html#object.__new__
 
-Easier to Ask for Forgiveness than Permission
+``__new__`` 是类方法，返回该类的实例。
+实现 ``__new__`` 的时候，通常用父类的 ``__new__`` 方法创建实例，
+再对实例进行修改，最后返回实例。
+然后解释器会去执行实例的 ``__init__`` 方法。
 
-.. code:: python
+如果 ``__new__`` 返回的不是类的实例， ``__init__`` 就不会被调用。
 
-    try:
-        return mapping[key]
-    except KeyError:
-        pass
+``__new__`` 虽然是类方法，但是不需要 ``@classmethod`` 修饰。
+调用 ``super().__init__`` 的时候，必须把类传进去。
 
-Look Before You Leap
+``__new__`` 收到的参数和 ``__init__`` 相同。
 
 .. code:: python
 
-    if key in mapping:
-        return mapping[key]
-    else:
-        pass
-
-python 更推荐 EAFP 的写法。
-
-+ python 处理 try-except 结构的开销不大。
-+ LBYL 的写法不是原子操作。
-
-感觉好像不是很有说服力。用 dict 做了下测试。
-
-+ try-except 出现错误时的开销是没错误时的两倍。
-+ EAFP 在没错误时性能比 LBYL 好，不过优势很小。
-
-感觉 EAFP 在性能上没有什么问题，更多的是编码习惯上的事情。
+    class Singleton:
+        _instance = None
+        def __new__(cls, *args, **kwds):
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+            return cls._instance
 
 
 
 
-argparse
-=============
+
+metaclass
+============
+
++ https://docs.python.org/3/reference/datamodel.html#customizing-class-creation
++ http://eli.thegreenplace.net/2011/08/14/python-metaclasses-by-example/
+
+普通的类由 ``type(class_name, base_classes, namespace)`` 生成，
+可以通过指定 metaclass 修改该过程。
+
+在定义一个类的时候，解释器会：
+
+1. 决定元类（metaclass）
+
+    - 如果没有父类，也没定义元类，那么使用 type。
+    - 如果指定了元类，并且这个元类不是 type 的实例，使用指定的元类。
+    - 如果指定的元类是 type 的实例，或者存在父类，
+      使用元类（most derived metaclass）。
+
+        首先找出所有元类，包括使用 metaclass 定义的元类以及父类的元类。
+        然后找出这些元类的公共子类。
+
+        如果找不到公共子类，会抛出 ``TypeError`` 。
+
+        这里提一点，所有的元类都是 type 的子类。
+
+2. 创建命名空间（namespace）
+
+    如果元类定义了 ``__prepare__`` ，
+    会使用 ``namespace = metaclass.__prepare__(class_name, base_classes, **kwds)``
+    来生成命名空间。
+    否则 ``namespace = dict()`` 。
+
+    ``metaclass.__prepare__`` 是类方法，可以对命名空间进行修改，
+    比如使用 ``OrderedDict`` 代替普通 ``dict`` 。
+
+3. 执行类代码
+
+    可以理解成 ``exec(class_body, globals(), namespace)`` 。
+
+    这步主要是修改命名空间（？）。
+
+4. 生成类对象
+
+    ``metaclass(class_name, base_classes, namespace, **kwds)``
+    生成真正的类对象，然后把类传递给修饰器（decorator），
+    最后类被绑定在了本地命名空间里。
+
+    在这里，可以通过修改 ``metaclass.__init__`` 达到修改类的目的。
+
+元类不仅可以影响创建类的过程，还可以影响创建实例的过程。
+每次创建实例的时候，会调用 ``metaclass.__call__`` 。
+
+很简单的概念被上面的解释弄乱了。
+**class 是 metaclass 的 instance。**
+这样就容易理解了吧。
 
 .. code:: python
 
-    ARGS = argparse.ArgumentParser(description="Web crawler")
-    ARGS.add_argument(
-        '--max_redirect', type=int, metavar='N', dest="redirect",
-        default=10, help='Limit redirection chains (for 301, 302 etc.)')
-    args = ARGS.parse_args()
-    print(args) # Namespace(redirect=10)
+    new_class = metaclass(...)
+    # 生成实例会调用 __init__ 是理所当然的嘛
 
-上面的代码会输出如下信息：
+    new_instance = new_class(...)
+    # 实例（new_class）可以调用，肯定在类（metaclass）里定义了 __call__ 啊
+
+到了最后，其实只有 ``metaclass.__prepare__`` 需要通过学习，
+不能从以往经验中推导出来。
+
+最后给一个不实用的例子：
+
+.. code:: python
+
+    class Meta(type): # metaclass 是 type 的子类
+        @classmethod # 这是类方法
+        def __prepare__(cls, name, bases, **kwds):
+            print("======", "meta.__prepare__", "======")
+            ns = super().__prepare__(name, bases, **kwds)
+            print("class name", name)
+            print("base classes", bases)
+            print("kwds", kwds)
+            print("namespace", ns)
+            return ns # 返回一个 dict
+
+        def __init__(self, name, bases, namespace, **kwds):
+            print("======", "meta.__init__", "======")
+            super().__init__(name, bases, namespace, **kwds)
+            print("class name", name)
+            print("base classes", bases)
+            print("namespace", namespace)
+            print("kwds", kwds)
+            print("create class", self)
+
+        def __call__(self, *args, **kwds):
+            print("======", "meta.__call__", "======")
+            instance = super().__call__(*args, **kwds) # 会去调用类（下面的A）的 __init__ 方法
+            print("args", args)
+            print("kwds", kwds)
+            print("instance", instance)
+            return instance # 要返回生成的实例（下面的a）
+
+    class A(metaclass=Meta):
+        def __init__(self, x):
+            print("------", "__init__", "------")
+    a = A()
+
+
+
+
+tail recursion elimination
+============================
+
++ http://neopythonic.blogspot.com/2009/04/tail-recursion-elimination.html
++ http://neopythonic.blogspot.com/2009/04/final-words-on-tail-calls.html
++ http://en.wikipedia.org/wiki/Tail_call
+
+python 没有尾递归消除，蟒爹说了几点原因：
+
+1. 尾递归消除意味着干掉中间无用的栈信息。出错的时候就无法得到完整的调用栈。
+2. 尾递归消除不是优化，而是一种特性。
+   用户依赖该特性会导致代码只能在实现了尾递归消除的解释器运行。
+3. 递归对 scheme 之类的语言来说，是基础功能。
+   但是在 python 世界中，递归没有那么重要的地位。
+4. 尾递归可以轻易改写成循环，至少比实现尾递归消除来得容易。
+
+题外话，前段时间看王垠 blog 才知道，递归是 Dijkstra 提出来的。
+
+除了尾递归，还有个东西叫做尾调用（tail call），
+类似的优化技术叫尾调用优化（tail call optimization）。
+顾名思义，递归是调用自己，调用是调用其他函数，好像也没其他区别了吧。
+
+排除掉尾递归的情况，尾调用会出现栈溢出，完全是逻辑有问题吧？
+
+在需要尾调用又不好改写的时候，可以考虑 ``return func, (args,)`` ，
+变成 cps 的代码。这种做法被称为 trampoline，具体可以查 wiki。
+
+
+
+
+execution class body
+======================
+
+`https://docs.python.org/3/reference/executionmodel.html`_
+
+即使使用 ``from A import B`` 的形式导入，还是会执行整个 ``A`` 。
+
+类中的代码是在定义后执行的，而不是创建实例的时候。
+
+.. code:: python
+
+    class A:
+        print("execute")
+
+
+
+
+yield from
+===========
+
++ https://docs.python.org/3/reference/expressions.html#yieldexpr
++ http://legacy.python.org/dev/peps/pep-0380/
++ https://groups.google.com/forum/#!topic/python-tulip/bmphRrryuFk
+
+要理解这东西，一个办法是先写点演示代码，去 pythontutor.com 看执行过程，
+然后再好好研究文档，弄清楚怎么回事。
+
+基本语法
+---------
+
+``result = yield from <expr>``
+
+yield-from 后面必须是个可以遍历（iterable）的对象，
+比如一个数组，比如一个生成器。
+
+``yield from range(10)`` 这种简单语句，
+可以等价于 ``for i in range(10): yield i`` 。
+
+这里主要是讲 ``<expr>`` 是个生成器的情况（不包括 ``<genexpr>`` ）。
+
+.. code:: python
+
+    def gen1():
+        yield from range(10)
+        print("gen1 stop")
+
+    def gen2():
+        yield from gen1()
+        print("gen2 stop")
+
+    def gen3():
+        yield from gen2()
+        print("gen3 stop")
+
+    def main():
+        for i in gen3():
+            print(i)
+
+    if __name__ == "__main__":
+        main()
+
+yield-from 相当于一个中间层，
+让调用者（ ``main`` ）和子生成器（ ``gen1()`` ）直接进行交互。
+在子生成器结束的时候，yield-from 才返回，继续执行下面的语句。
+
+
+返回值
+-------
+
+yield-from 和 yield 的返回值有很大区别。
+
+yield 的返回值是 ``.send(value)`` 接收的参数：
+
+.. code:: python
+
+    def gen1():
+        while 1:
+            ret = yield 1
+            print("yield return", ret)
+
+    g = gen1()
+    next(g)
+    g.send("test")
+
+yield-from 的返回值是子生成器的返回的值。
+更准确地说，是 ``StopIteration`` 的第一个参数。
+
+.. code:: python
+
+    def gen1():
+        yield from range(10)
+        return "end"
+        # raise StopIteration("end")
+
+    def gen2():
+        ret = yield from gen1()
+        print("yield from return", ret)
+
+    for i in gen2():
+        print(i)
+
+gen1 使用了 ``return value`` ，
+这在子生成器中等价于 ``raise StopIteration(value)`` 。
+两者在语义上是相同的，不过 return 要更直观些吧。
+
+之前曾经提到过，子生成器结束的时候，yield-from 才返回。
+所谓的结束，就是指这里的 StopIteration 了。
+
+
+异常
+------
+
+.. code:: python
+
+    def gen1():
+        yield from range(5)
+
+    def gen2():
+        yield from gen1()
+        print("gen2 continue")
+        yield from range(5)
+
+    def gen3():
+        yield from gen2()
+        print("gen3 continue")
+        yield from range(5)
+
+
+    g = gen3()
+    for i in g:
+        print(i)
+        if i == 3:
+            g.throw(StopIteration)
+
+之前提到， ``StopIteration`` 之后，yield-from 返回。
+上面的代码里， ``g`` 主动抛出 ``StopIteration`` ，结果就是最里层的 gen1 结束，
+gen2 继续执行。继续抛异常，gen2 结束，gen3 继续执行。
+
+
+把上面的 ``StopIteration`` 那句改成 ``g.throw(GeneratorExit)``
+或者 ``g.close()`` ，那么所有生成器都会停止。
+
+其他
+-----
+
+``inspect.getgeneratorstate`` 可以获取一个生成器的状态。
+
+
+
+
+Method Resolution Order
+========================
+https://www.python.org/download/releases/2.3/mro
+
+使用 python 这么久，现在才弄清楚 mro 是怎么弄的。
+
+首先，在父类没有交叉的时候，可以简单理解成 **深度优先遍历** 。
+不过 ``object`` 作为最基本的基类，是放在在最后的。
+
+.. code:: python
+
+    class A: pass
+    class B: pass
+    class C: pass
+    class D: pass
+    class E: pass
+    class F: pass
+
+    class X(A, B): pass
+    class Y(C): pass
+    class Z(D): pass
+
+    class M(X, Y): pass
+    class N(Z, E): pass
+
+    class WTF(M, N, F): pass
+    # DFS => WTF MXABYCNZDEF object
+    print(WTF.__mro__)
+
+不过深度优先遍历在父类出现交叉的时候，就不管用了。
+虽然正常人不会写那么扭曲的代码，还是有必要了解一下。
+毕竟菱形交叉的情况还是可能出现的。
+
+.. code:: python
+
+    class A: pass
+    class B: pass
+    class C: pass
+    class D: pass
+    class E: pass
+    class F: pass
+
+    class X(A, B, C): pass
+    class Y(B, D, E): pass
+    class Z(E, F): pass
+
+    class M(X, Y, Z): pass
+
+比较容易的方法是从父类往下看，从子类开始看，比较麻烦。
+
+直接从 ``object`` 继承下来 ``ABCDEF`` 比较简单。
+``mro(A) = A + merge(O) = AO`` ， ``O`` 是 ``object`` 。
+
+然后，其他情况就不太好说明了，虽然原理其实很简单：
 
 ::
 
-    optional arguments:
-        --max_redirect N  Limit redirection chains (for 301, 302 etc.)
-
-``dest`` 是读取参数时的变量名（没有的话使用 ``max_redirect`` ），
-``metavar`` 是输出帮助时显示的参数名（没有的话显示 ``dest`` ），
-``type`` 可以用于类型转换，检查输入之类的事情。
-
-在读取 args 的时候，直接使用 ``args.redirect`` 读取，这个不是 ``dict`` ，
-不过可以用 ``vars(args)`` 转换成一个 ``dict`` 。
-
-
-
-
-has_ipv6
-=========
-
-关于 :code:`socket.has_ipv6` ，可以直接看这个链接
-http://stackoverflow.com/questions/2075383/python-2-and-ipv6
-
-
-
-
-unicode normalize
-==================
-
-.. code:: python
-
-    from unicodedata import normalize
-
-    s1 = '\u00f1'
-    s2 = 'n\u0303'
-
-    s1.encode() # b'\xc3\xb1'
-    s2.encode() # b'n\xcc\x83'
-
-    normalize("NFC", s1).encode() # b'\xc3\xb1'
-    normalize("NFC", s2).encode() # b'\xc3\xb1'
-
-    normalize("NFD", s1).encode() # b'n\xcc\x83'
-    normalize("NFD", s2).encode() # b'n\xcc\x83'
-
-
-
-
-从命令行读取输入
-=================
-
-通过管道和 py 交互
-
-.. code:: python
-
-    import fileinput
-    with fileinput.input() as f_input:
-        for line in f_input:
-            print(line, end='')
-
-
-
-
-iter in loop
-=============
-
-.. code:: python
-
-    # while loop version
-    while True:
-        data = sock.recv(8192)
-        if data == b'':
-            break
-        do(data)
-
-    # for loop version, use lambda
-    for data in iter(lambda: sock.recv(8192), b''):
-        do(data)
-
-    # for looop version, use partial
-    from functools import partial
-    for data in iter(partial(sock.recv, 8192), b''):
-        do(data)
-
-    # example
-    q = (i for i in range(10))
-    [i for i in q] # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-    q = (i for i in range(10))
-    [i for i in iter(lambda: next(q), 5)] # [0, 1, 2, 3, 4]
-    # stop while `lambda: next(q)` return 5
-
-
-
-
-keyword-only arguments
-=======================
-
-.. code:: python
-
-    def t(a, *, b, c=3):
-        print(a, b, c)
-
-    t(1, b=2) # 1 2 3
-    t(1, b=2, c=3) # 1 2 3
-    t(1, 2, b=2, c=3)
-    # TypeError: t() takes 1 positional argument but 2 positional arguments
-
-    tt = lambda *a, b, **c: print(a, b, c)
-    tt(1, b=2) # (1,) 2 {}
-    tt(1, b=2, c=3) # (1,) 2 {'c': 3}
-
-
-
-
-import
-=======
-
-.. code:: python
-
-    # load by name
-    import importlib
-    namespace = importlib.import_module("pkgname")
-    # reload
-    import importlib
-    importlib.reload("pkgname") # py3.4
-    import imp
-    imp.reload("pkgname") # py3.3
-
-
-
-
-raise
-======
-
-.. code:: python
-
-    raise Exception
-    # equal to
-    raise Exception()
-
-
-
-
-create instances without init
-==============================
-
-.. code:: python
-
-    class Example:
-        def __init__(self):
-            print("initial")
-
-    e1 = Example() # call __init__
-    e2 = Example.__new__(Example) # not call __init__
-
-
-
-
-dynamic create class
-=========================
-
-.. code:: python
-
-    import types
-    cls_body = {
-        "__init__": lambda self: print(self),
-    }
-    CLS = types.new_class(
-        "class name",
-        (base_class,),
-        {"metaclass": type}, # namespace
-        lambda ns: ns.update(cls_body)
-    )
-
-
-
-
-wraps
-======
-
-使用 ``functools.wraps`` 来包裹函数，可以在需要时使用未包裹的函数。
-
-.. code:: python
-
-    from functools import wraps
-
-    def blah(f):
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            print("blahblah")
-        return wrapper
-
-    @blah
-    def example():
-        print("example")
-
-
-    example() # blahblah
-    example.__wrapped__() # example
-
-
-
-
-获取对象的内存大小
+    mro(X) = X + merge(mro(A), mro(B), mro(C), ABC)
+           = X + merge(AO, BO, CO, ABC)
+           # merge 里面第一个出现的是 A。
+           # 并且 A 在后面的 ABC 中也出现了，还是第一个（这很重要）。
+           # 所以我们就把 A 提取出来。
+           = XA + merge(O, BO, CO, BC)
+           # 接下来 merge 里第一个是 O。
+           # 但是在后面的 BO 中，O 不是第一个，
+           # 所以我们考虑 BO 的第一个，也就是 B
+           # B 还出现在了 BC 中，是 BC 的第一个，可以提取。
+           = XAB + merge(O, O, CO, C)
+           # 同样的道理提取出 C
+           = XABC + merge(O, O, O)
+           = XABCO
+
+可以发现，虽然过程好像挺复杂（好像也不复杂啊），
+但就结果来说，还是可以理解成深度优先遍历。
+用这样的逻辑可以算出 ``mro(Y) = YBDEO`` ``mro(Z) = ZEFO`` 。
+计算 ``mro(M)`` 还是一样的逻辑，再演示一下：
+
+::
+
+    mro(M) = M + merge(mro(X), mro(Y), mro(Z), XYZ)
+           = M + merge(XABCO, YBDEO, ZEFO, XYZ)
+           = MX + merge(ABCO, YBDEO, ZEFO, YZ)
+           = MXA + merge(BCO, YBDEO, ZEFO, YZ)
+           # 这里考察 B 时，发现 Y 在 B 前面，所以转为考察 Y
+           = MXAY + merge(BCO, BDEO, ZEFO, Z)
+           = MXAYB + merge(CO, DEO, ZEFO, Z)
+           = MXAYBC + merge(O, DEO, ZEFO, Z)
+           # 可以看到，在其他父类都提取出来前，object 一直处于待机状态……
+           = MXAYBCD + merge(O, EO, ZEFO, Z)
+           = MXAYBCDZ + merge(O, EO, EFO)
+           = MXAYBCDZE + merge(O, O, FO)
+           = MXAYBCDZEF + merge(O, O, O)
+           = MXAYBCDZEFO
+
+输出 ``M.__mro__`` 可以看到一样的结果。
+简单的菱形交叉就不再示范了。
+
+会计算 mro 之后，就会明白为什么下面的代码会抛出错误：
+
+.. code:: pytho
+
+    class A: pass
+    class B(A): pass
+    class C(A, B): pass
+    # TypeError: Cannot create a consistent method resolution order (MRO) for bases A, B
+
+简单算一下就会得到 ``mro(C) = C + merge(AO, BAO, AB)`` ，
+``BAO`` 里， ``B`` 在 ``A`` 前面， ``AB`` 里面， ``A`` 在 ``B`` 前。
+结果就是无限循环，所以出错了。
+
+这应该就没了，mro 好像也就这么点内容，以前居然没好好学习下。
+
+
+
+
+instance attribute
 ===================
 
+http://docs.python.org/3/reference/datamodel.html#customizing-attribute-access
+
+这几个方法都是作用于实例的。
+通过定义元类（metaclass），也可以控制类的查找等操作。
+
+不管是实例的属性还是实例的方法，下面都叫实例属性了。
+
+
+__getattribute__
+-----------------
+
+每次查找实例属性时都会调用这个方法。
+
+甚至是 ``instance.__getattribute__`` 都要调用 ``__getattribute__``
+来查找来寻找 ``__getattribute__`` 。
+
+查找失败时应该抛出 ``AttributeError`` 这个异常。
+
+为了避免在 ``__getattribute__`` 中引起无限递归，
+在 ``__getattribute__`` 的实现中应该使用
+``object.__getattribute__(self, name)`` 或者是
+``super().__getattribute__(name)`` 来查找实例属性。
+
+
+__getattr__
+------------
+
+在 ``__getattribute__`` 抛出 ``AttributeError`` 时，会调用 ``__getattr__`` 。
+
+通常都是通过 ``__getattr__`` 方法来实现特殊属性的查找，
+而不是修改 ``__getattribute__`` 。
+
+查找失败时同样应该抛出 ``AttributeError`` 。
+
+
+__setattr__
+------------
+
+和 ``__getattribute__`` 对应，每次设置实例属性都会调用 ``__setattr__`` 方法。
+在调用 ``__init__`` 设置实例属性时，一样会调用这个方法。
+
+可以借助 ``object.__setattr__(self, name, value)`` 或者
+``super().__setattr__(name, value)``  来设置实例属性。
+也可以直接通过修改 ``instance.__dict__`` 来修改属性。
+
+同样，想要跳过 ``__setattr__`` 设置属性时，
+也可以通过修改 ``__dict__`` 来实现。
+不过 ``__getattribute__`` 是跳不过去的。
+
+
+
+
+descriptor
+===========
+
++ https://docs.python.org/3/reference/datamodel.html#implementing-descriptors
++ https://docs.python.org/3/howto/descriptor.html
+
+这东西的作用类似于 ``@property`` 修饰器，
+事实上， ``@property`` 、 ``@classmethod`` 、 ``@staticmethod``
+都可以用 descriptor 实现。
+
+
+descriptor 是什么
+------------------
+
+实现了 ``__get__`` 或 ``__set__`` 或 ``__delete__`` 的类，
+被称为 descriptor。
+
+只实现了 ``__get__`` 的被叫做 non-data descriptor（比如 staticmethod/classmethod）。
+实现了 ``__set__`` 或 ``__delete__`` 的叫做 data descriptor（比如 property）。
+
+**注意** ，解释器只处理类属性（class.__dict__）中的 descriptor 实例。
+
+
+descriptor 的调用过程
+-----------------------
+
+大体上，可以分为实例调用和类调用两种情况。
+
+``instance.attribute`` 会被转换成
+``type(instance).__dict__["attribute"].__get__(instance, type(instance))`` 。
+注意是在 ``type(instance)`` 中去寻找 ``attribute`` 的。
+
+这里还要注意实例属性中定义了同名变量的情况。
+处理的优先级是这样的
+``data descriptor > instance variable > non-data descriptor`` 。
+再直白点就是实例属性能覆盖 non-data descriptor，不能覆盖 data descriptor。
+
 .. code:: python
 
-    import sys
-    print(sys.getsizeof(lambda x: x))
+    class DataDescriptor:
+        def __get__(self, instance, klass): return "DATA"
+        def __set__(self, instance, value): pass
+        def __delete__(self, instance): pass
+    class NonDataDescriptor:
+        def __get__(self, instance, klass): return "NON_DATA"
+
+    class example:
+        data = DataDescriptor()
+        non_data = NonDataDescriptor()
+        def __init__(self):
+            self.data = "data"
+            self.non_data = "non_data"
+    ex = example()
+    print(ex.data, ex.non_data) # "DATA", "non_data"
 
 
+``klass.attribute`` 会被转换成
+``klass.__dict__["attribute"].__get__(None, klass)`` 。
+这里就没什么要特别注意的地方了。
+
+最后，要注意一下 ``__getattribute__`` ，
+上面讲的查找转换都是由 ``__getattribute__`` 完成的，
+如果代码中覆盖了原生的 ``__getattribute__`` ，
+就不会自动调用 descriptor 方法了。
 
 
-timestamp
-==========
+实例
+------
 
-.. code:: python
-
-    import time
-    int(time.time()) # integer
-
-    import datetime
-    datetime.datetime.now().strftime("%s") # string
-    str(int(time.time())) # faster way
-
-
-
-
-替换
-=====
-最简单的替换用 ``str.replace`` 就可以搞定了。
-
-以前看 tornado 的代码，看到一个能对付更复杂情况的方法：
-
-.. code:: python
-
-    import re
-    re_escape = re.compile("""[<>"'&]""")
-    map_escape = {
-        "<": "&#x3C;",
-        ">": "&#x3E;",
-        '"': "&#x22;",
-        "'": "&#x27;",
-        "&": "&#x26;",
-    }
-    re_escape.sub(lambda m: map_escape[m.group(0)], DATA_HERE)
-
-使用正则来替换，关键是这里这个匿名函数。
-
-今天翻标准库，看到 http://hg.python.org/cpython/file/3.3/Lib/html/__init__.py
-里是这么替换的：
+howto 里面举了不少例子，下面再提供一个：用来缓存计算结果的修饰器。
 
 .. code:: python
 
-    map_escape = str.maketrans({
-        "<": "&#x3C;",
-        ">": "&#x3E;",
-        '"': "&#x22;",
-        "'": "&#x27;",
-        "&": "&#x26;",
-    })
-    DATA_HERE.translate(map_escape)
+    class CacheProperty:
+        def __init__(self, func):
+            self.func = func
+        def __get__(self, inst, klass):
+            val = self.func(inst)
+            setattr(inst, self.func.__name__, val)
+            return val
 
-虽然没有正则灵活，但也基本够用了。
+    class Example:
+        @CacheProperty
+        def slow_at_first_time(self):
+            import time
+            time.sleep(5)
+            return 42
+
+    e = Example()
+    print(vars(e)) # {}
+    print(e.slow_at_first_time) # return 42, after a long sleep
+    print(vars(e)) # {'slow_at_first_time': 42}
+    print(e.slow_at_first_time) # return 42, immediately
+
+
+
+
+__call__
+=========
+
+``__call__`` 是让实例变成可调用。
+
+
+
+
+context manager
+================
+
+http://docs.python.org/3/library/stdtypes.html#context-manager-types
+
+一般写 ``contextmanager`` 就是定义一个类，
+然后实现 ``__enter__`` 和 ``__exit__`` 。
+
+也可以用生成器来实现 ``contextmanager`` 。
+
+
+.. code:: python
+
+    from contextlib import contextmanager
+
+    @contextmanager
+    def gen_example():
+        print("enter")
+        yield
+        print("exit")
+
+
+    class cls_example:
+        def __enter__(self):
+            print("enter")
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            print("exit")
