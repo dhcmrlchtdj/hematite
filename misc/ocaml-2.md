@@ -537,4 +537,274 @@ substitution model 的问题
 
 ---
 
+## Memoization
+
+---
+
+> Even when programming in a functional style, O(1) mutable map abstractions
+> like arrays and hash tables can be extremely useful.
+
+所以说，该用就用
+
+---
+
+> overlapping subproblems property
+
+> optimal substructure property, the optimal answer to a problem is computed
+> from optimal answers to subproblems
+
+> The key to using memoization effectively for optimization problems is to
+> figure out how to write a recursive function that implements the algorithm
+> and has the two properties.
+
+到底什么情况算 greedy 什么情况算 DP 呢……
+
+---
+
+对于非递归函数，可以靠高阶函数来做记忆化（就是写个新函数替换掉啦……）
+但是对于递归函数，就没有那么直接了，需要该递归的结构（YC 就能用在这种地方了）
+
+---
+
+## Streams and Lazy Evaluation
+
+---
+
+### stream
+
+> It is possible to simulate lazy evaluation by using thunks.
+> A thunk is a function of the form `fun () -> ....`
+> the body of a function is not evaluated when the function is defined, but
+> only when it is applied.
+
+这里值得一题的是，有可能被优化掉。
+比如 `fun () -> 1 + 1` 变成 `fun () -> 2`。
+
+---
+
+- call-by-value
+- call-by-name
+
+---
+
+### stream
+
+- `type 'a list = Nil | Cons of 'a * 'a list`
+- `type 'a stream = Nil | Cons of 'a * (unit -> 'a stream)`
+
+> get infinite streams by deferring the creation of the tail using thunks
+
+---
+
+## Memory and Locality
+
+---
+
+> boxed type: its values are too large to fit inside the memory location of a
+> variable, and so need their own memory locations, or boxes.
+
+---
+
+## Garbage Collection
+
+---
+
+- generational
+- copying
+- mark-sweep
+- reference counting
+
+---
+
+## λ-Calculus
+
+---
+
+> notion of computation
+
+> formal mathematical definition for algorithm
+
+- `Turing machines`
+- `μ-recursive functions`
+- `rewrite systems`
+- `the λ-calculus`
+- `combinatory logic`
+
+这些表示方式都是等价的
+
+---
+
+### λ-calculus
+
+- everything is a function. encode everything using functions.
+- no notions of state or side effects. purely functional.
+- not specify an evaluation order.
+- all functions are unary.
+
+---
+
+> Computation in the λ-calculus is effected by substitution.
+> 1. α-conversion (renaming bound variables)
+> 2. β-reduction (substitution rule)
+
+- `α-conversion`
+    - `λx.λy.xy => λz.λy.zy`,x=z
+- `β-reduction`
+    - `(λx.λy.xy) (λz.z) => λy.(λz.z)y`, MN=M(N)
+
+---
+
+- `normal form`, 不能再进行 `β-reduction` 的表达式
+    - 这样的表达式，可以视为一个值（value）
+    - 即使进行 `α-conversion`，也只是表示上的区别了
+- `normalizable`, 可以进行 `β-reduction` 的表达式
+    - 可计算的感觉？
+
+---
+
+```
+true  = λx.λy.x
+false = λx.λy.y
+
+and = λx.λy.xyx
+or  = λx.λy.xxy
+not = λx.(x false true)
+
+pair = λx.λy.λc.cxy
+fst  = λd.(d true)
+snd  = λd.(d false)
+
+
+list   = pair
+hd     = fst
+tl     = snd
+[]     = λx.true
+isNull = λd.(d λx.λy.false)
+
+0 = λf.λx.x
+1 = λf.λx.fx
+2 = λf.λx.f(fx)
+...
+
+add1   = λn.λf.λx.f(nfx)
+isZero = λn.(n λz.false true)
+```
+
+---
+
+## Fixpoints and Recursion
+
+---
+
+> Recursive definitions require self-reference.
+> We cannot do this in the λ-calculus directly, because there are no names -
+> all functions are anonymous.
+
+---
+
+- `λx.W(xx) λx.W(xx)`
+- β-reduction, `λx.W(xx) λx.W(xx)  =>  W (λx.W(xx) λx.W(xx))`
+- fixpoint combinator, `Y  =  λw.(λx.w(xx) λx.w(xx))`
+
+---
+
+> 1. OCaml is typed, and the lambda calculus is not.
+> 2. OCaml is eager, but the encoding of recursion using the traditional
+> fixpoint combinator Y yields looping behavior if evaluated using an eager
+> reduction strategy.
+
+问题二靠 thunk 可以解决。
+问题一不是很懂……
+
+---
+
+```ocaml
+type 'a fix = Fix of ('a fix -> 'a)
+let y t = let p (Fix f) x = t (f (Fix f)) x in p (Fix p)
+
+type church = Ch of ((church -> church) -> church -> church)
+let add1 (Ch n) = Ch (fun f -> fun x -> f (n f x))
+let zero = Ch (fun f -> fun x -> x)
+```
+
+---
+
+```ocaml
+let rec fix f x = f (fix f) x;;
+let fix f = (fun (`X x) -> f(x (`X x))) (`X(fun (`X x) y -> f(x (`X x)) y));;
+```
+
+---
+
+## Type Inference and Unification
+
+---
+
+## Continuations and CPS Conversion
+
+---
+
+```ocaml
+let rec sum s =
+    match s with
+        | [] -> 0
+        | x::xs -> x + sum xs
+```
+
+普通递归。
+这个 sum 展开来就是 `(x1 + (x2 + (... + (xn-1 + (xn + 0))...)))`。
+加法要等右边计算完成才进行，被叫做 `deferred operation`。
+
+---
+
+```ocaml
+let sum s =
+    let rec sum' s a =
+        match s with
+            | [] -> a
+            | x::xs -> sum' xs (a + x)
+    in
+    sum' s 0
+```
+
+尾递归。
+展开来变成 `(((...((0 + x1) + x2) + ...) + xn-1) + xn)`。
+这里加法不需要等待，马上就进行了，所以没有 `deferred operation`。
+
+- `tail recursive`: no deferred operations on any recursive call.
+
+---
+
+```ocaml
+let sum s =
+    let rec sum' s k =
+        match s with
+            | [] -> k 0
+            | x::xs -> sum' xs (fun a -> k (x + a))
+    in
+    sum' s (fun x -> x)
+```
+
+continuation 版本的递归。
+little schemer 就喜欢这种……这门课的教授也挺喜欢的样子……
+
+最后的会变成类似直接递归的 `(x1 + (x2 + (... + (xn-1 + (xn + 0))...)))`，
+不过中间过程是 `(fn x -> x) o (fn a -> x1 + a) o (fn a -> x2 + a) o ... o (fn a -> xn-1 + a) o (fn a -> xn + a)`。
+
+和直接递归一样，都要记录 `deferred operation`，不过实现方式不太一样。
+直接递归靠的是 `runtime stack`，continuation 靠的是 `closures of continuations`。
+所以不是尾递归都能节省空间，至少 continuation 版本和直接递归在空间开销上是接近的。
+
+---
+
+```ocaml
+let rec inf = 0::inf in
+sum inf
+```
+
+直接递归，爆栈。
+尾递归，死循环，常数大小的内存。
+continuation 尾递归，死循环，耗尽内存。
+
+---
 
