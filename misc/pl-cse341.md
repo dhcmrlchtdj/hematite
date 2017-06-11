@@ -268,4 +268,176 @@ rely on something we wish to prevent never happening.
 
 ---
 
+- Class-Based OOP
+- Duck Typing
+- Subclassing and Inheritance
+- Overriding and Dynamic Dispatch
+    - dynamic dispatch / late binding / virtual method calls
 
+---
+
+overriding and dynamic dispatch is the biggest thing that distinguishes
+object-oriented programming from functional programming.
+
+objects and dynamic dispatch, nothing more than pairs and functions
+
+---
+
+### unit8
+
+---
+
+- In FP, break programs down into functions that perform some operation.
+- In OOP, break programs down into classes that give behavior to some kind of data.
+
+划分代码的方式不同，FP 根据操作分，OOP 根据数据分。
+
+---
+
+FP
+
+- define datatype for expressions, with constructor for each variant
+- define function for each operation
+- in each function, have a branch for each variant of data
+
+breaking the problem down into procedures corresponding to each operation.
+
+---
+
+OOP
+
+- define class for expressions, with abstract method for each operation
+- define subclass for each variant of data
+- in each subclass, have a method definition for each operation
+
+breaking the problem down into classes corresponding to each data variant.
+
+---
+
+FP 是函数处理不同数据，OOP 是类有不同方法。
+
+---
+
+which is better?
+- depend on which one is “more natural” to lay out the concepts by row or by column.
+- depend on what the software is about.
+- depend on what programming language are using, how useful libraries are organized, etc.
+
+和后续如何扩展其实也有关系。
+
+---
+
+FP
+- adding a new operation is easy
+- adding a new data variant is less pleasant
+
+OOP
+- adding a new variant is easy
+- adding a new operation is less pleasant
+
+这里判断的基准是是否需要修改原有代码
+
+the programming styles “just work that way.”
+
+---
+
+- OOP, visitor pattern (implement by double dispatch)
+- FP, define datatypes to have an “other” possibility and operations to take in a function that can process the “other data”.
+    - 提前定义一个其他类型，未来用高阶函数的方式进行扩展
+
+---
+
+- multimethods / multiple dispatch / static overloading
+
+---
+
+- multiple inheritance
+- mixins / traits
+- interfaces
+
+---
+
+abstract methods and higher-order functions
+
+---
+
+- static types for functional programs
+    - parametric polymorphism / generics
+- static types for object-oriented programs
+    - subtype polymorphism / subtyping
+
+---
+
+substitutability: If we allow t1 is subtype of t2, then any value of type t1
+must be able to be used in every way a t2 can be.
+
+---
+
+- Good Subtyping Rules
+    - “Width” subtyping, a subtype can have “extra” fields
+    - “Permutation” subtyping, fields order of supertype is trivial
+    - Transitivity, t1 is subtype of t2, t2 is subtype of t3, then t1 is subtype of t3
+    - Reflexivity, t is subtype of t
+- Bad
+    - “Depth” subtyping, t1 is subtype of t2, then {f:t1} is subtype of {f:t2}
+
+---
+
+depth subtyping is unsound if record fields are mutable.
+
+if a field is not settable, then the depth subtyping rule is sound and useful.
+
+depth 讲的是嵌套的情况。
+如果容器里属性是不可变的，那么 subtyping 是没问题的；
+但如果属性可以变化，那么就无法保证变化后是否还能满足 subtyping 的要求。
+
+---
+
+function subtyping
+
+- if t1 is subtype of t2, then t->t1 is subtype of t->t2. (covariant)
+    - the subtyping for the return types works “the same way” (co) as for the types overall
+- if t1 is subtype of t2, then t2->t is subtype of t1->t. (contravariance)
+    - the subtyping for argument types is the reverse (contra) of the subtyping for the types overall
+- if tX is subtype of tY,  tM is subtype of tN, then tY->tM is subtype of tX->tN
+
+---
+
+classes and types are different things.
+
+- A class defines an object’s behavior.
+- Subclassing inherits behavior, modifying behavior via extension and override.
+
+- A type describes what fields an object has and what messages it can respond to.
+- Subtyping is a question of substitutability and what we want to flag as a type error.
+
+---
+
+subtyping
+
+- A subtype can have extra fields.
+- fields are mutable, a subtype cannot have a different type for a field.
+- A subtype can have extra methods.
+- methods are immutable, a subtype can have a subtype for a method, which means the method in the subtype can have contravariant argument types and a covariant result type.
+
+---
+
+subclass
+
+- A subclass can add fields but not remove them
+- A subclass can add methods but not remove them
+- A subclass can override a method with a covariant return type
+- A class can implement more methods than an interface requires or implement a required method with a covariant return type
+
+---
+
+- Subtyping is a Bad Substitute for Generics
+- Generics are a Bad Substitute for Subtyping
+
+When you use Object and downcasts, you are essentially taking a dynamic typing approach.
+
+But subtyping is great for allowing code to be reused with data that has “extra information”.
+
+---
+
+bounded generic types
