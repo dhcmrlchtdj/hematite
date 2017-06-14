@@ -45,4 +45,19 @@ datatype (because you probably won’t use that name again)
 
 ---
 
+Parsing is the act of turning an input character stream into a more structured, internal representation.
+
+from our perspective parsing is mostly a distraction.
+
+parse 就是为了个 AST，没别的了。
+PLAI 这书重点并不在 parse。
+
+在这方面，s-exp 确实很棒，天然的 AST 结构。
+
+---
+
+## 3 A First Look at Interpretation
+
+---
+
 
