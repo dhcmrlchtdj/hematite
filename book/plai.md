@@ -60,4 +60,53 @@ PLAI 这书重点并不在 parse。
 
 ---
 
+直接解析 AST，这种计算器直接模式匹配就好了。
 
+---
+
+## 4 A First Taste of Desugaring
+
+---
+
+讲 syntactic sugar。
+
+原来的 `interp : (arithI -> int)` 只支持加法和乘法。
+增加新方法 `desugar : (arithD -> arithI)` 用加法和乘法来表示减法。
+
+不修改原解释器，而是通过改写 AST 的方式来增加新功能。
+
+macro
+
+---
+
+- `a - b = a + (-1) * b)`
+- `-b = 0 - b = 0 + (-1) * b = (-1) * b`
+
+关于 `-b` 的改写，作者提出了两个关于改写成 `0 - b` 的问题。
+
+- `generative recursion`
+- 这种改写依赖于 `0-b` 的实现，而 `0-b` 的支持不是底层提供的。
+    非底层原生的问题在于，实现可能变化。
+    虽然语义可能不变，但也许会加入 log 之类的副作用。
+
+而改写成 `(-1)*b` 直接依赖于底层提供的乘法，不会有其他副作用。
+同时逻辑上是个 `structural recursion`。
+
+---
+
+http://www.ccs.neu.edu/home/matthias/HtDP2e/part_five.html#%28part._sec~3astruct-gen-rec%29
+https://en.wikipedia.org/wiki/Recursion_%28computer_science%29#Structural_versus_generative_recursion
+
+> generative recursion is strictly more powerful than structural recursion.
+> all functions using structural recursion are just special cases of generative recursion.
+
+总体来说，structural 是 generative 的特例。
+
+区分两者看参数，参数范围逐渐缩小的是 structural，参数范围没有明显变换的是 generative。
+输入没有明显变化，所以递归时的终止条件会相对复杂。
+
+---
+
+## 5 Adding Functions to the Language
+
+---
