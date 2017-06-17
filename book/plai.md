@@ -18,6 +18,12 @@ $ raco pkg install plai-typed
 
 ---
 
+直接用 ocaml 来实现其实挺好的。
+自带类型系统，pattern match 更强力。
+看完书上代码需要稍微进行一点点翻译，又不会差别太大。
+
+---
+
 ## 1 Introduction
 
 ---
@@ -110,3 +116,29 @@ https://en.wikipedia.org/wiki/Recursion_%28computer_science%29#Structural_versus
 ## 5 Adding Functions to the Language
 
 ---
+
+- function definition: what's the function
+- function application: use a function
+- substitution model: search-and-replace
+- eager / lazy
+    - eager: evaluate arguments before substitute them in functions
+
+---
+
+本章没讨论 scope，环境是一个提前定义好的 funcDef 列表。
+主要是为了演示 substitution 的过程。
+
+---
+
+substitution 的过程中，遍历函数定义的 AST，将所有 paramater 替换为 argument。
+处理后的 AST 交给原来的解释器来执行。
+
+argument 在什么时候进行计算，是替换前还是替换后，决定了是 eager 还是 lazy。
+
+---
+
+## 6 From Substitution to Environments
+
+---
+
+
