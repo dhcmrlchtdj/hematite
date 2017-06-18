@@ -125,11 +125,6 @@ https://en.wikipedia.org/wiki/Recursion_%28computer_science%29#Structural_versus
 
 ---
 
-本章没讨论 scope，环境是一个提前定义好的 funcDef 列表。
-主要是为了演示 substitution 的过程。
-
----
-
 substitution 的过程中，遍历函数定义的 AST，将所有 paramater 替换为 argument。
 处理后的 AST 交给原来的解释器来执行。
 
@@ -138,6 +133,64 @@ argument 在什么时候进行计算，是替换前还是替换后，决定了�
 ---
 
 ## 6 From Substitution to Environments
+
+---
+
+> substitution traverses everything.
+> substitution forces the program to be traversed once for substitution and
+> once again for interpretation.
+> substitution is defined in terms of representations of the program source.
+
+substitution 的不足。
+而 environment 可以处理上面这三种问题。
+
+---
+
+```ocaml
+(* substitution *)
+| App (n, a) ->
+    let Func (_, param, body) = (get_fundef n fds) in
+    let arg = interp a fds in
+    let expr_new = subst arg param body in
+    interp expr_new fds
+
+(* environment *)
+| App (n, a) ->
+    let Func (_, param, body) = (get_fundef n fds) in
+    let arg = interp a env fds in
+    let env_new = extend (Bind (param, arg)) env in
+    interp body env_new fds
+```
+
+上代码会更直观些。
+前面都一样，找到要执行的函数，计算出参数的值。
+substitution 先对函数的 body 进行替换，然后继续 interp 替换的结果。
+environment 先对 env 进行扩展，然后在新的 env 下 interp 函数的 body。
+
+---
+
+终于讨论到了 scope 的问题。
+
+```ocaml
+let rec
+f1 x = f2 4
+and
+f2 y = x + y
+in
+f1 3
+```
+
+这样的代码在 ocaml 里会提示 f2 中的 x 是个 `Unbound value`。
+但是用上面那种环境模型，执行结果会是 7。
+因为使用了执行（f1）时的 env，而不是定义（f2）时的 env。
+
+---
+
+- dynamic scope: the environment accumulates bindings as the program executes
+- lexical scope / static scope: the environment is determined from the source without running
+
+substitution 和 lexical scope 的执行结果是相同的。
+作者直接把 dynamic scope 视为错误。
 
 ---
 
