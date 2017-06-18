@@ -189,8 +189,65 @@ f1 3
 - dynamic scope: the environment accumulates bindings as the program executes
 - lexical scope / static scope: the environment is determined from the source without running
 
-substitution 和 lexical scope 的执行结果是相同的。
+正确的 substitution 和 lexical scope， 执行结果是相同的。
 作者直接把 dynamic scope 视为错误。
+
+---
+
+## 7 Functions Anywhere
+
+---
+
+> What value does a function definition represent?
+
+函数到底是什么，明确这点才能够把函数作为 first-class 的值到处传递呀。
+
+---
+
+- immediate function: function definitions are written at the point of application
+
+---
+
+> A function value needs to remember the substitutions that have already been applied to it.
+> A function value therefore needs to be bundled with an environment.
+> This resulting data structure is called a closure.
+
+为了正确实现 lexical scope，closure 是必须的。
+其实也就是函数定义及定义时的环境。
+
+---
+
+> A function no more needs a name than any other immediate constant.
+> A function is inherently anonymous.
+
+lambda 才是函数的本质属性。
+
+---
+
+> capture-free substitution
+
+substitution 也不是完全没有问题，比如 `(((lambda (f) (lambda (x) (f 10))) (lambda (y) (+ x y))) 2)`。
+呃，确实不容易看……
+总之直接把 f 替换为后面的函数的话，会得到 `((lambda (x) ((lambda (y) (+ x y)) 10)) 2)`。
+显然这里 `x` 出问题了，本来应该是 unbound value 才对，这里却会被影响。
+这种情况下就需要 capture-free substitution 了。
+类似于这样 `((lambda (x1) ((lambda (y) (+ x y)) 10)) 2)`，重命名 x 使得内外不影响。
+（想到了 hygienic macro）
+
+> Environments automatically implement capture-free substitution!
+
+environment 模型下，不需要再处理这种问题，替换时只会处理参数 `y`，所以没有影响。
+
+---
+
+变量绑定也可以视为匿名函数的语法糖。
+形参实参就是绑定变量。
+
+但是简单的匿名函数无法处理递归调用（虽然我们知道 YC，也先假装不知道好了）。
+
+---
+
+## 8 Mutation: Structures and Variables
 
 ---
 
