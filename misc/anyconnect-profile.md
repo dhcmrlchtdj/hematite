@@ -15,15 +15,15 @@ http://www.cisco.com/c/en/us/td/docs/security/vpn_client/anyconnect/anyconnect40
 ```
 $ cat /opt/cisco/anyconnect/profile/Profile.xml
 <AnyConnectProfile xmlns="http://schemas.xmlsoap.org/encoding/">
-	<ServerList>
-		<HostEntry>
-			<HostName>cisco A</HostName>
-			<HostAddress>https://www.cisco.com</HostAddress>
-		</HostEntry>
-		<HostEntry>
-			<HostName>cisco B</HostName>
-			<HostAddress>https://www.cisco.com</HostAddress>
-		</HostEntry>
-	</ServerList>
+    <ServerList>
+        <HostEntry>
+            <HostName>cisco A</HostName>
+            <HostAddress>https://www.cisco.com</HostAddress>
+        </HostEntry>
+        <HostEntry>
+            <HostName>cisco B</HostName>
+            <HostAddress>https://www.cisco.com</HostAddress>
+        </HostEntry>
+    </ServerList>
 </AnyConnectProfile>
 ```
