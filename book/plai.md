@@ -407,5 +407,49 @@ parameter-passing strategy
 
 ---
 
+recursive data: a reference of the same kind data
+
+> 1. name an vacant placeholder
+> 2. mutate the placeholder so its content is itself
+
+---
+
+recursive function: a reference of the same function itself
+
+> 1. create a placeholder
+> 2. refer to the placeholder where we want the cyclic reference
+> 3. mutate the placeholder before use
+
+---
+
+> At the top-level, every binding is implicitly a variable or a box.
+
+---
+
+需要注意一点，创建容器和修改容器的值，两个操作要合成原子操作。
+在这过程中使用容器并不是预期的使用方式。
+
+---
+
+前面的 create, update, use 看着不错，问题是 ref 的类型要怎么办？
+（作者说后面的章节说……）
+
+---
+
+> there is another way to define recursive functions (and hence recursive data)
+> that does not leverage explicit mutation operations.
+
+最后推荐了 The Little Schemer。
+这几本入门书，感觉可以都读一遍。
+概念想通，可以作为复习。
+熟悉之后，其实过一遍是很快的。
+
+递归函数可以靠 Y combinator，递归数据也行？
+
+---
+
+## 10 Objects
+
+---
 
 
