@@ -251,4 +251,161 @@ environment 模型下，不需要再处理这种问题，替换时只会处理�
 
 ---
 
+> The introduction of time has profound effects on reasoning about programs.
+
+变量和时间。
+
+---
+
+> the box must be lexically the same, but dynamically different.
+
+变量的容器，在使用过程中要满足这样的特性。
+
+---
+
+`val interp : (expr * env) -> value`
+
+执行相同的 expr，想要得到不同的 value，那么只有修改 env 了。
+
+`val interp : (expr * env) -> (value * env)`
+
+每次执行 expr 后，env 都一起更新。
+
+---
+
+> The environment already serves an important purpose:
+> it holds deferred substitutions.
+
+> The environment already has a precise semantics (given by substitution)
+> and we must be careful to not alter that.
+
+> The environment is the repository of lexical scope information.
+
+环境模型，被用来实现 lexical scope。
+想要修改环境，前提是保证环境本身的语义不能出错。
+
+而在每次执行 expr 后更新 env 会导致 lexical scope 出错。
+
+---
+
+书中举的例子是 `(let b = ref 0 in 1) + b`。
+正确的情况下，右边的 b 应该是 unbound 的。
+但如果用前面说的方式来更新 env 的话，左边的语句执行后，环境里会有个 `b=ref 0`。
+这个 env 应用于右边，右边的 scope 就出错了。
+
+另一个例子 `let a = ref 1 in let f = fun x -> x + (!a) in (a := 2; f 10)`
+`a:=2` 要修改的是最外层的环境，只修改 `f 10` 的环境是不够的。
+
+可见前面那种更新环境的方式不能满足需求。
+
+---
+
+> we need two repositories to accompany the expression, not one.
+> the environment to be responsible for maintaining lexical scope.
+> the store to be responsible for maintaining the dynamic state of mutated boxes.
+
+直接修改 env 会破坏之前的语义，那我们不直接修改 env 了。
+我们增加另一个全局变量 store。
+env 不再是 `identifier -> value` 的绑定，而是变成 `identifier -> store` 的绑定。
+在 store 里存储数据，同时提供修改数据的能力。
+
+> The whole point was to evaluate the second term in the store returned by the first one.
+
+函数签名变成了 `val interp : (expr * environ * store) -> (value * store)`
+过程中新增了 store。
+顺序执行语句的时候，前一句的返回的 store 用作后一句的输入。
+
+---
+
+> The environment is passing in recursive-descent pattern.
+> The store is passing in store-passing style.
+
+> store-passing style: take store from one branch and pass it on to the next,
+> and take the result and send it back out.
+
+---
+
+有了 store 之后，绑定操作起来变得更加复杂了。
+原来是 `name -> value`，现在是 `name -> addr -> value`。
+查找创建都增加了额外的操作。
+（其实原来也只有函数调用有新建的动作啦，现在多了一个创建 box 的时候也要创建 addr）
+
+---
+
+> this decision is now a semantic one.
+
+使用 store-passing style 来写解释器，语句的执行顺序会对整个程序的语义产生影响。
+
+> The store reflects the history of the computation, not its lexical shape.
+> Store is persistent.
+
+store 的 dynamic 和 environment 的 static 要仔细区分开。
+这是程序中容易犯错的地方。
+
+当 environment 不再引用某个 addr 之后，store 中对应的值就没有用了。
+这时就轮到 garbage collection 出厂了。
+
+> Software transactional memory offers one of the most sensible approaches to
+> tackling the difficulties of multi-threaded programming, if we insist on
+> programming with shared mutable state.
+
+在每次执行某个 expr 之后，都要更新下一个 store，否则之前的操作就丢失了。
+store 这种特点，被用于实现 software transactional memory。
+不行就回到上个 store 去重新来过。
+STM 可以用于处理共享可变数据的多线程编程。
+
+---
+
+> An alternate implementation strategy is to have the environment map names to
+> boxed Values.
+> You may find it a useful strategy to adopt when implementing your own language.
+
+直接使用可变数据结构来实现 environment，确实就不需要 store-passing 了。
+实现新语言的时候这么搞其实没问题，作者用 store-passing 主要是为了演示。
+
+---
+
+前面讲的都是 `structure mutation`，也就是 `ref` 这样包装过的，内容可变的容器。
+下面要说的是 `variable mutation`，也就是可以直接修改的变量。
+
+- variable: whose value can change within its scope
+- identifier: whose value cannot change within its scope
+
+要引入变量赋值，就需要引入 l-value 的概念。
+
+l-value = left-hand-side (of an assignment) value = memory address
+
+l-value: looking up an identifier in the environment without subsequently
+fetching its value from the store.
+
+---
+
+> State provides a form of modularity.
+> state is an implicit parameter already passed to and returned from all
+> procedures, without imposing that burden on the programmer.
+
+> State makes it possible to construct dynamic, cyclic data structures.
+
+但是引入 state 就失去了 aliasing / referential transparency 等特性。
+
+不支持 variable mutation，强制使用 ref/box 来限制可变性，可以带来一些好处。
+
+> every data structure is considered immutable unless it contains a ref, and
+> the presence of a ref is a warning to both developers and programs that the
+> underlying value may keep changing.
+
+---
+
+parameter-passing strategy
+
+- call-by-reference
+- call-by-value
+
+---
+
+## 9 Recursion and Cycles: Procedures and Data
+
+---
+
+
 
