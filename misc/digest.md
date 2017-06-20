@@ -102,3 +102,27 @@ https://gist.github.com/hueniverse/a3109f716bf25718ba0e
 
 比如一个服务器框架，它的路由使用了什么样的数据结构，如何做匹配。
 这些选择带来的优势和劣势，在编码时应该注意哪些细节。
+
+---
+
+https://www.techatbloomberg.com/blog/release-1-7-story-behind-bucklescript/
+
+> It is trivial to convert code written in a sound language to an unsound
+> language, but going the other direction is much more difficult.
+
+> The type unsoundness means ahead-of-time optimizations are quite challenging.
+
+关于 sound
+
+---
+
+https://zhuanlan.zhihu.com/p/20165394
+
+> 然而 pointfree 风格对工程化的程序设计是灾难性的：
+> 省略了参数表意味着函数的可读性大幅度下降。
+
+深有体会
+
+> 在实际工程中，参数名是函数的可读性的重要组成部分。
+
+---
