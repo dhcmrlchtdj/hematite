@@ -80,3 +80,33 @@ packrat 可以同时进行词法分析和语法分析，不需要把两个流程
 ---
 
 实在没啥好记的，直接开搞吧。
+
+---
+
+- EOF ()
+- epsilon ()
+- literal (String)
+- range (Regex)
+- dot ()
+- sequence (A, B, ...) = and (A, B, ...)
+- choice (A, B, ...) = or (A, B, ...)
+- is (A)
+- not (A)
+- option (A) = question (A)
+- plus (A) = repeat1 (A)
+- star (A) = repeat0 (A)
+
+- repeat (n, A)
+- dotNot (A) = sequence(not(A), dot())
+- optionChoice (A, B, ...) = option(choice(A, B, ...))
+
+- u.digit = range([0-9])
+- u.letter = range([a-zA-Z])
+- u.letterUpper = range([A-Z])
+- u.letterLowera = range([a-z])
+- u.hex = range([0-9a-fA-F])
+- u.newline = range(\r\n|[\r\n])
+- u.space = range([ \t\r\n]|\r\n)
+
+---
+
