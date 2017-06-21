@@ -452,4 +452,41 @@ recursive function: a reference of the same function itself
 
 ---
 
+> lexically-scoped functions are central to the design of many secure
+> programming techniques.
+
+闭包的重要性
+
+---
+
+> object is a value that maps names to stuff: either values or methods.
+
+对象其实就是个映射啦，包含 value 或者 method。
+
+> methods and functions differ in how they’re called and/or what’s bound in them.
+
+method 和 function 的区别在于调用方式及绑定的作用域。
+
+---
+
+（PLAI 推荐了 OOPLAI，😂
+
+---
+
+> an object is a lambda with multiple entry-points.
+> a lambda is an object with just one entry-point.
+
+一个函数里定义好多个函数，根据输入去判断调用哪个。
+这种做法在 SICP 里也有提到。
+
+---
+
+> the target language may allow expressions that have no counterpart in the
+> source, and hence cannot be mapped back to it.
+
+在 desugar 到目标语言的时候，可能出现前后两种语言表现能力不一致的情况。
+只要不要求进行互相转换，倒也不是大问题。
+
+---
+
 
