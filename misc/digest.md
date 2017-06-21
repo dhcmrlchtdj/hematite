@@ -126,3 +126,13 @@ https://zhuanlan.zhihu.com/p/20165394
 > 在实际工程中，参数名是函数的可读性的重要组成部分。
 
 ---
+
+https://research.swtch.com/yaccalive
+
+> These are basically the only two approaches to ambiguity in context free
+> grammars: either handle it (possible in polynomial time) or restrict the
+> possible input grammars to ensure linear time parsing and as a consequence
+> eliminate ambiguity.
+
+文法的二义性，要么花时间，要么限制输入。
+暂时没有其他方法。
