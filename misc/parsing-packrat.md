@@ -84,17 +84,17 @@ packrat 可以同时进行词法分析和语法分析，不需要把两个流程
 ---
 
 - EOF ()
-- epsilon ()
+- epsilon () = empty () = null ()
 - literal (String)
 - range (Regex)
 - dot ()
-- sequence (A, B, ...) = and (A, B, ...)
-- choice (A, B, ...) = or (A, B, ...)
+- sequence (A, B, ...) = and (A, B, ...) = concat (A, B, ...)
+- choice (A, B, ...) = or (A, B, ...) = union(A, B, ...)
 - is (A)
 - not (A)
-- option (A) = question (A)
-- plus (A) = repeat1 (A)
-- star (A) = repeat0 (A)
+- option (A) = question (A) = zeroOrOne (A)
+- plus (A) = repeat1 (A) = oneOrMore (A)
+- star (A) = repeat0 (A) = zeroOrMore (A)
 
 - repeat (n, A)
 - dotNot (A) = sequence(not(A), dot())
