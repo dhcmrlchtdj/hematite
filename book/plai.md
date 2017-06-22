@@ -473,6 +473,30 @@ method 和 function 的区别在于调用方式及绑定的作用域。
 
 ---
 
+> the target language may allow expressions that have no counterpart in the
+> source, and hence cannot be mapped back to it.
+
+在 desugar 到目标语言的时候，可能出现前后两种语言表现能力不一致的情况。
+只要不要求进行互相转换，倒也不是大问题。
+
+---
+
+汇总一下作者列举的 object 特性
+
+- object
+- constructor
+- state
+- private member
+- static member
+- self-reference
+- dynamic dispatch
+
+> many object features are simple patterns over functions and scope.
+
+总体来说，大部分特性都可以通过高阶函数和闭包组合出来。
+
+---
+
 > an object is a lambda with multiple entry-points.
 > a lambda is an object with just one entry-point.
 
@@ -481,11 +505,51 @@ method 和 function 的区别在于调用方式及绑定的作用域。
 
 ---
 
-> the target language may allow expressions that have no counterpart in the
-> source, and hence cannot be mapped back to it.
+> a constructor is simply a function that is invoked at object construction time.
 
-在 desugar 到目标语言的时候，可能出现前后两种语言表现能力不一致的情况。
-只要不要求进行互相转换，倒也不是大问题。
+用前面这种函数的方式来实现对象，那么 constructor 其实就是个高阶函数。
+
+---
+
+> many people believe that objects primarily exist to encapsulate state.
+
+对象的状态，可以用 mutable 实现。
+
+---
+
+private member 其实不是问题，前面的实现里不主动暴露出去外界都拿不到。
+static member，这里作者指的是多个 object 实例间共享的属性，都可以修改。实现时放到构造函数外层就好即可。
+
+---
+
+用 mutable 的方式实现 self-reference，方法和实现递归一样。
+创建一个 ref 然后修改指向的内容就可以了。
+
+不使用 mutable 的话，可以显式传递 self 引用。
+但是让用户自己显式传递是个很麻烦的事情，所以实现时可以在调用处做个 desugar。
+（不过又碰到类型问题了，这里的 self 类型要怎么定义呢
+（`let msg obj name arg = ((obj name) obj arg)`
+
+---
+
+> black-box extensible: one part of the system can grow without the other part
+> needing to be modified to accommodate those changes.
+
+dynamic dispatch 体现了 OOP 和 FP 在处理数据时的维度区别。
+不同维度的可扩展性。
+
+> visitor pattern make object code look more like a function-based organization.
+visitor 值得学习。
+
+关于 OOP 和 FP 各自的代码复用方式，作者丢了论文，可以看下。
+
+---
+
+object member 可以按两个维度划分成四种情况。
+- member name 是静态的还是动态的。
+- member name set 是固定的还是可变的。
+
+后面只分析一下 a fixed set of names and static member name 的情况。
 
 ---
 
