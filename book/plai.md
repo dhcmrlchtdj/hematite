@@ -553,4 +553,55 @@ object member 可以按两个维度划分成四种情况。
 
 ---
 
+- class / prototype
+- multiple inheritance
+- super
+- mixin and trait
+
+---
+
+- open recursion
+- extensible recursion
+
+---
+
+> prototypes are more primitive than classes.
+> one can recover classes from prototypes but not the other way around.
+
+用 prototype 可以模拟出 class 的行为
+
+---
+
+> diamond inheritance
+
+> Multiple inheritance is only attractive until you’ve thought it through.
+
+作者不喜欢多继承，主要原因还是继承的顺序。
+
+---
+
+> constructors and methods are expected to enforce invariants
+
+> Going up the chain means we view the extension as replacing the parent.
+> Going down the chain means we view the extension as refining the parent.
+
+从不同视角解读继承，child->parent 继承是替换，parent->child 继承是提炼。
+
+---
+
+> A mixin is primarily a "function over classes"
+`classB = minix(classA)`
+
+前面说 class 的大部分特性都可以看作 lambda 和 lexical scope 的语法糖。
+这个角度，这里的 mixin 其实仍是高阶函数的应用。
+
+> Mixins do have one limitation: they enforce a linearity of composition.
+> A generalization of mixins called traits says that instead of extending a
+> single mixin, we can extend a set of them.
+
+---
+
+## 11 Memory Management
+
+---
 
