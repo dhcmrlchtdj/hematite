@@ -605,3 +605,69 @@ object member 可以按两个维度划分成四种情况。
 
 ---
 
+> Garbage recovery should neither recover space too early (soundness) nor too
+> late (completeness).
+> recovering too early is much worse
+
+> in practice, we want a GC that is not only sound but as complete as possible,
+> while also being efficient.
+
+又是 sound 和 complete。
+一个正确的实现，至少要满足 sound。
+
+---
+
+> automation, soundness, and completeness.
+> we face a classic “pick two” tradeoff.
+
+要么手动处理，同时满足 soundness 和 completeness（难度可想而知）。
+要么自动处理，只满足 soundness。（计算理论证明无法同时做到？那么就只有 soundness 这个选择了。）
+
+---
+
+- 手动管理的问题有内存的碎片化和可能出现的多次释放等。
+- reference counting 要处理的场景非常多，而且不能处理循环引用的问题。
+    - 场景多的问题可以靠 ARC 来处理，循环也能靠循环检测算法来判断。
+    - 但还是有其他增加了数据体积、额外的计算时间、递归的大量遍历等问题
+
+（作者直接把 RC 踢出了自动内存管理的范围，说这不是一个 fully-automated technique
+
+---
+
+- garbage collection
+- key idea of GC: traverse memory by following references between values
+
+> Typically the root set consists of every bound variable in the environment,
+> and any global variables.
+
+最早看标记清楚的时候，一直疑惑 root set 怎么判断出来的。
+学习了前面的 environment 和 store 之后才明白。
+
+> Depth-first search is generally preferred because it works well with
+> stack-based implementations.
+
+遍历的时候，DFS 用得多些。
+
+---
+
+GC 算法的 soundness 依赖于两个假设（分别与实现、语义有关）
+
+- GC 要知道对象是什么类型的值，以及它在内存中的布局
+- 代码在下列情况下，不允许生成引用
+    - Object references cannot reside outside the implementation’s pre-defined root set.
+    - Object references can only refer to well-defined points in objects.
+
+没看懂……
+
+---
+
+- conservative GC
+- precise GC
+
+---
+
+## 12 Representation Decisions
+
+---
+
+
