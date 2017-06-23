@@ -670,4 +670,51 @@ GC 算法的 soundness 依赖于两个假设（分别与实现、语义有关）
 
 ---
 
+> focus on the underlying data representations.
+> non-uniformity
+
+前面的解释器用了不同的方式来表示数字和函数。
+数字直接使用了实现语言的数字，
+函数却用了自己的表示方式，没用实现语言的函数。
+
+---
+
+> that doesn’t mean they are what we want: they could be too little or too much.
+
+直接使用系统的数据类型，可表示的范围可能会不符合我们的需求。
+
+> stop and ask what we wanted.
+> As language designers, however, you should be sure to ask these hard
+> questions up front.
+
+自己设计语言的时候，在设计之前就应该明确“需求”包含哪些不包含哪些。
+
+> understanding
+
+前面的章节不使用系统自带的结构，目的是学习 closure、 mutable 这些特性的原理。
+
+---
+
+> host language “leak through”.
+> Using host language features runs the risk that users will see host language
+> errors, which they will not understand.
+
+使用语言的功能的时候，要小心错误处理。
+内部错误不应该直接暴露给用户，应该经过一层翻译。
+
+> permit only the intended surface language to be mapped to the host language.
+
+总而言之，还是要想清楚需求和边界情况。
+避免代码实现与设置的语义出现矛盾。
+
+---
+
+直接转换到底层语言的实现，带来的另一个问题是语义不好修改。
+比如 dynamic scope 和 static scope 的语义切换。
+
+---
+
+## 13 Desugaring as a Language Feature
+
+---
 
