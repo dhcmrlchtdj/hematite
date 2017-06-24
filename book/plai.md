@@ -718,3 +718,51 @@ GC 算法的 soundness 依赖于两个假设（分别与实现、语义有关）
 
 ---
 
+> used desugaring in two different ways.
+> shrink the language: to take a large language and distill it down to its core.
+> grow the language: to take an existing language and add new features to it.
+
+将复杂的特性翻译到核心实现，可以达成两种相反的效果。
+
+那么，
+在应用层面支持 desugar 的的语言长什么样？
+为什么一些通用语言不提供 desugar 的功能？
+
+---
+
+后面先讲了下 `syntax-rules` 和 `syntax-case`。
+都属于 scheme/racket 的语法了。
+
+（syntax-case is a generalized version of syntax-rules.
+（syntax-rules can be expressed as a macro over syntax-case.
+
+syntax-case 比 syntax-rules 多了 guard，能在展开前做一些检查。
+
+> guard: a predicate that must evaluate to true for expansion to proceed rather
+> than signal a syntax error.
+
+---
+
+> macro: simple form of expression-rewriting. (rewrites while substituting)
+> a macro is actually a function from syntax to syntax.
+> syntax is actually a distinct datatype.
+
+---
+
+在进行 macro expansion 的时候，可能需要对表示式的部分进行求值。
+这带来两个问题：
+可能不小心在不需要求值的地方进行了求值，导致副作用；
+执行表达式的作用域可能出错。
+
+第一个问题需要写 macro 时小心处理，第二个问题涉及到 hygiene。
+
+> hygiene effectively automatically renames all bound identifiers.
+
+---
+
+## 14 Control Operations
+
+---
+
+
+
