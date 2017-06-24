@@ -764,5 +764,78 @@ syntax-case 比 syntax-rules 多了 guard，能在展开前做一些检查。
 
 ---
 
+> control: any programming language instruction that causes evaluation to proceed.
+> control: operations that cause non-local transfer of control.
 
+> control operators change and improve the way we express our intent, and
+> therefore enhance the structure of programs.
+
+有没有这些 operator，语言都是 Turing-complete 的。
+但这些 operator 能改善语言的语法结构、表达方式上等。
+
+---
+
+利用 macro 将程序中的 operator 都改写成 CPS 的形式
+
+> turn every expression into a procedure of one argument, the continuation.
+> all output from CPS will look like `(lambda (k) ...)`.
+
+> administrative lambda: `((lambda (var) ...) val)`
+
+将 interpreter 改写成 CPS 的形式
+
+---
+
+> a generator resumes from where it last left off.
+> yielding will namely returning control to whatever called it.
+
+> how to enter and exit a generator
+不同 generator 之间的的差异主要体现在 enter/exit 的设计上
+
+- enter
+    - `gen = generator(); gen.next()`
+    - `gen = generator(); gen()`
+- exit
+    - yield 是只能在 generator 內使用关键字
+    - yield 是个函数
+
+此外，关于 generator 有两点要确定
+- yield 是 statement 还是 expression。大部分语言选择 expression，可以接收外部的返回值。
+- generator 返回什么。大部分语言选择抛出异常。
+
+---
+
+> CPS conversion provides insight into the nature of the program execution stack.
+> every continuation is actually the stack itself.
+
+> traditionally the stack is responsible for maintaining lexical scope,
+> which we get automatically because we are using closures in a
+> statically-scoped language.
+
+讲了程序运行中，stack 的职责（维持词法作用域）。
+而闭包加上静态作用域能达到一样的效果。
+
+> On yielding, the system swaps references to stacks.
+
+generator 中的 yield 就是在切换对 stack 的引用。
+
+> Coroutines, threads, and generators are all conceptually similar: they are
+> all mechanisms to create “many little stacks” instead of having a single,
+> global stack.
+
+coroutine/thread/generator 都是在创建 stack
+
+---
+
+> function calls do not themselves need to consume stack space: we only need
+> space to compute the arguments.
+
+函数调用本身是不需要消耗栈空间的，只是为了维持对参数的引用。
+
+> the term "tail call optimization" is misleading.
+> an optimization is optional, whereas whether or not a language promises to
+> properly implement tail calls is a semantic feature.
+
+尾递归优化的“优化”是错误的理解。
+优化在实现中是可选的，而是否消除尾递归的调用栈则属于程序语义的一部分。
 
