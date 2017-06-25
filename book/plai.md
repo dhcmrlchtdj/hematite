@@ -839,3 +839,49 @@ coroutine/thread/generator 都是在创建 stack
 尾递归优化的“优化”是错误的理解。
 优化在实现中是可选的，而是否消除尾递归的调用栈则属于程序语义的一部分。
 
+---
+
+> continuation at the point of invocation is always an extension of one at the
+> point of creation
+
+前面讲 CPS 时，关注的是 closure invocation 时的 continuation。
+接下来的 callcc 关注的则是 closure creation 时的 continuation。
+
+> maintaining a reference to (a copy of) the stack at the point of "procedure"
+> creation, and when the procedure is applied, ignoring the dynamic evaluation
+> and going back to the point of procedure creation.
+
+效果就是在 operator 调用的时候，回到创建 operator 时候。
+
+---
+
+`(letcc k ...)`
+不调用 k 就和什么都没发生过一样。
+调用 k 导致后面的结果结果被丢弃。
+（以前做过一些笔记，无法用 CPS 模拟出 `call/cc` 的全部特性。
+
+
+```scheme
+(letcc kont b)
+; =>
+(lambda (k)
+  (let ([kont (lambda (v dyn-k) (k v))])
+    ((cps b) k)))
+```
+
+观察下上面 letcc 的展开方式
+可以看到存在 k 和 kont 两个分支可以走。
+这可以被用于实现 stack-switching procedure。
+
+---
+
+- cooperative multitasking: manually yields control
+- preemptive multitasking: automtically yield without the user's permission
+
+---
+
+## 17 Alternate Application Semantics
+
+---
+
+
