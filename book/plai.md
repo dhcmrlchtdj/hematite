@@ -884,4 +884,122 @@ coroutine/thread/generator 都是在创建 stack
 
 ---
 
+> when parameters are reduced to values.
+> it is always useful to think of substitution as a design principle.
+讲 lazy 的语义。
+
+- eager / strict / applicative-order evaluation / call-by-value
+- lazy / non-strict / normal-order evaluation / call-by-name
+
+另外还有 call-by-need，就是 call-by-name + memoization。
+
+---
+
+`(define ones (cons 1 ones))`
+这样一个递归的结构，
+如果语言支持 mutation，应该用 lazy unfolding 来表示；
+如果不支持 mutation，则可以用 cyclic datum 来表示。
+否则，修改可能会导致后续使用时，值与预期不同。
+
+---
+
+> what happens at function application.
+> bundle the argument expression with its environment: create a closure.
+> thunk: closure has no parameters.
+
+lazy 语义下，参数应该表示成什么的问题。
+直接用表达式来替换，会出现各种作用域问题。
+解决方案就是 thunk 了。
+
+---
+
+> something must force a suspension to be lifted.
+> strictness point: expression position that undo suspensions.
+
+lazy 下，什么都可能延迟求值，那么最后返回的可能只是一个 thunk。
+所以要定义某些场景（strictness point），在这些场景下，thunk 会被求值。
+
+> limit suspension to applications give us the rich power of laziness, without
+> making the language absurd.
+
+如果不做这样的限制，程序会陷入 infinite loop。
+
+---
+
+> inserting a few calls to strict, and replacing interp with suspendV in the
+> argument position of application, we have turned our eager application
+> interpreter into one with lazy application.
+
+在之前的 interpreter 的基础上。
+设置了两个 strictness point，分别是加法和这里说的获取函数，然后将函数的参数 thunk 化。
+这样就将 interpreter 从 eager 转换到饿了 lazy。
+
+---
+
+> lazy evaluation enables us to build infinite data structures and avoids
+> computation until necessary.
+
+> lazy evaluation changes when computations occur.
+> programmers greatly lose predictability of ordering.
+
+lazy 的优势在于避免了无用的计算，但会导致程序员无法判断计算发生在何时。
+当程序要支持 mutation 的时候，这个问题就很严重了。
+
+> the core of every lazy language is free of mutation
+
+所以 lazy 语义的语言，都不支持 mutation。
+像 haskell 就需要 monad 来保证代码线性执行（直接把这些东西加入到了类型系统里）。
+
+---
+
+前面讲了 lazy，接下去讲的是 reactive。
+
+---
+
+> inversion of control.
+> Instead of the application program calling the operating system, the
+> operating system has now been charged with calling (into) the application
+> program.
+
+回调其实算是一种 IOC。
+
+> their only purpose must be to mutate the store or have some other side-effect.
+因为操作系统是不知道语言的类型系统。
+所以不少涉及操作系统的回调函数签名都是 `unit -> unit`。
+这些调用通常都是为了实现一些副作用。
+
+---
+
+> behavior: a value that changes over time
+> dataflow / functional reactive programming: every time the behavior updates,
+> the entire application happens afresh
+> dataflow graph: a graph of behavior expression dependencies
+
+FRP 先勾画出完整的依赖关系，然后系统中任意的 behavior 更新，都会触发整个系统的更新。
+
+---
+
+`(> (add1 seconds) seconds)`
+
+在这个例子里（seconds 是 behavior），执行结果可能受 behavior 更新顺序影响。
+由执行顺序造成的错误结果，被叫做 glitch。
+解决的方案是对语句进行 topologically sort 来决定更新顺序。
+
+> there is no danger of seeing outdated or inconsistent values.
+
+---
+
+reactive evaluation 可以借助 laziness evaluation 来实现。
+
+---
+
+最后说的是 backtracking application。
+是类似 SICP 中的 AMB 操作吧。
+
+---
+
+## 15 Checking Program Invariants Statically: Types
+
+---
+
 
