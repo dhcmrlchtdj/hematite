@@ -1018,4 +1018,102 @@ reactive evaluation 可以借助 laziness evaluation 来实现。
 
 ---
 
+> type environment: maps names to types
+
+一开始只是把 value 都换成了 type，遍历时从求值改成了类型判断。
+值得注意的一点是何时修改 environment，
+求值是在调用时修改 env，类型检查是在定义时修改 env。
+
+---
+
+> Even the humble if introduces several design decisions.
+
+对于一个 if 语句
+- condition 应该是 boolean 还是 truthy/falsy？
+    - 在 ocaml 里，condition 必须是 bool
+- then/else 返回的类型是否要相同？
+    - 在 ocaml 里，then/else 返回值要相同，没写 else 要求都返回 unit。
+
+---
+
+- `((lambda (f) (f f)) (lambda (f) (f f)))` 能够无限循环
+- `((fun f -> f f) (fun f -> f f))` 无法通过类型检查
+
+> strong normalization: every expression that has a type will terminate
+> computation after a finite number of steps.
+
+在 strong normalization 的语言中，无法定义出无限循环。
+
+> a type system not only prevents a few buggy programs from running but also
+> change the semantics of a language.
+
+---
+
+> now we must make it an explicit part of the typed language.
+
+要实现递归函数，就要把递归函数加入到类型系统里。
+
+> the rule for typing recursion duplicates the -> in the body that refers to itself.
+
+话看着很玄，实际不那么复杂。
+定义普通函数的时候，环境中只新增一个参数的类型定义。
+定义递归函数的时候，环境中还要额外增加一个函数自己的类型定义。
+之后验证函数的返回值是否符合函数签名，符合则递归定义就成立了。
+
+---
+
+要定义递归数据，则需要 algebraic datatype。
+
+- sum type / or
+- product type / and
+
+---
+
+> pattern-matching does not need to be in the core language and can instead be
+> delegated to desugaring.
+
+> expansion depends on the type environment, while type-checking depends on the
+> result of expansion.
+
+pattern-matching 这样的特性，可以用 desugar 来实现。
+但是在一个有类型的语言里，macro expansion 时需要 type 的信息，结果又要经过 type-checking。
+作者也只留下一句 is a little more intricate than doing so for an untyped language。
+
+---
+
+> types have a genuine space (saving representation) and
+> time (eliminating run-time checks) performance benefit for programs.
+
+类型检查在运行前保证了类型正确，那么运行时就不需要再携带类型信息了。
+
+> when variants are present, the run-time system must sacrifice bits to
+> distinguish between the variants
+
+程序在运行时或许还是要携带一些 variant 的信息，但这相比全部类型信息还是要小不少。
+
+---
+
+> In some ways, types have a simple interaction with mutation, and this is
+> because in a classical setting, they don’t interact at all.
+
+> traditional type checkers adopt a simple policy: types must be invariant
+> across mutation.
+
+type 和 mutable 同时出现的时候，为保持简单，可以要求修改值的时候不能修改类型。
+值可变，类型不可变。
+
+---
+
+A type system is usually a combination of three components:
+- a language of types
+- a set of type rules
+- an algorithm that applies these rules to programs
+
+> The standard way of proving this theorem is to prove it in two parts, known
+> as progress and preservation.
+
+从 progress 和 preservation 两个方向去证明一个 type system 是 sound 的。
+
+---
+
 
