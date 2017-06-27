@@ -994,11 +994,27 @@ reactive evaluation 可以借助 laziness evaluation 来实现。
 ---
 
 最后说的是 backtracking application。
-是类似 SICP 中的 AMB 操作吧。
+是类似 SICP 中的 AMB 操作？
 
 ---
 
 ## 15 Checking Program Invariants Statically: Types
+
+---
+
+> type and static type checking enforce program invariants.
+
+通过保持不变性来保证程序的正确性。
+
+---
+
+> static type checking: checking (declared) types before the program even executes.
+
+> type-checking is a generalization of parsing.
+> parsing: whether the program obeys a context-free syntax.
+> type-checking: whether the program obeys a context-sensitive (or richer) syntax.
+
+类型检查和 parsing 都是在执行程序前完成的，都是为了检查语法是否符合某些规则。
 
 ---
 
