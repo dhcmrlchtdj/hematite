@@ -32,3 +32,12 @@ $ docker exec mysql-json sh -c 'exec mysqldump --all-databases -uroot -p"$MYSQL_
 
 JSON 本质还是字符串，但这个字符串要符合 JSON 要求。
 感觉提供的 JSON 表达能力不强啊。
+
+---
+
+https://stackoverflow.com/questions/15534977/mysql-cannot-add-foreign-key-constraint
+
+建索引出错的时候，可以执行 `SHOW ENGINE INNODB STATUS;`。
+输出的 `LATEST FOREIGN KEY ERROR` 里有详细的错误信息。
+
+
