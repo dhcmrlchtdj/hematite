@@ -1116,4 +1116,79 @@ A type system is usually a combination of three components:
 
 ---
 
+关于类型的很多细节，读 Types and Programming Languages 去吧。
+
+- what is the type of a type?
+- do we really want to be calling map with four arguments on every instantiation?
+- do we really mean to take the type parameters first before any actual values?
+
+---
+
+参数化的多态？
+
+- type variables: `'a` `'b`
+- parametric polymorphism: parameterization over types
+    - `'a -> 'b` 指定类型后，可以变成 `int -> string`/`bool -> int` 等等
+    - 整个签名就是个函数，给定参数后，变成具体的签名
+
+---
+
+- `rank-1 polymorphism` = `predicative polymorphism` = `prenex polymorphism`
+    - SML / typed racked / haskell (early version) / C++ with template / Java/C# with generics
+    - nothing, no, yes（前面那三个问题）
+- 将类型分成两类
+    - `monotypes`, concrete types and type variables
+    - `polytypes`, parameterized types
+- the type variables can only be substituted with monotypes. （全部替换完就都是 concrete type 了）
+
+---
+
+> desugaring strategy does not require type checker to “know” about polymorphism.
+> the core type language can continue to be monomorphic, and all the
+> (rank-1) polymorphism is handled entirely through expansion.
+> it is a cheap strategy for adding polymorphism to a language.
+
+```scheme
+(define-poly (id t) (lambda ([x : t]) : t x))
+(define id_num (id number))
+;=>
+(define id_num (lambda ([x : number]) : number x))
+```
+
+签名里使用 type variable 的函数都被实现为 macro。
+调用的时候，就进行宏展开，替换掉类型。
+（之前说 macro 时也说了，macro expansion 是 syntax -> syntax 的映射，还是函数。
+
+---
+
+使用 macro 实现 rank-1 polymorphism 虽然简单，也有痛点。
+
+一是定义 recursive polymorphic function 时可能写出无限循环，用户定义时要小心。
+（这个问题在实现用，可以用 cache 来处理。不处理就是把问题抛给用户，这是不好的。
+
+二是关于相等（same）的判断，expansion 的话其实是到处复制代码，不同的展开都算不相等。
+（这点没看懂
+
+---
+
+> the “caching” approach
+> we never need to instantiate a polymorphic function at the same type twice.
+
+> after type-checking at each used type, the polymorphic instantiator may keep
+> track of all the special types at which a function or data structure was
+> used, and provide this information to the compiler for code-generation.
+
+---
+
+> relationally parametric: functions that not inspect the actual values.
+
+像 map/filter 这些 polymorphic 的函数，
+虽然会改变数据，但本身只是流程控制，不需要知道数据具体是什么。
+
+而在函数中使用 instanceof 之类的操作，意味着函数要知道具体的类型。
+这样就不能叫 relationally parametric 了。
+
+---
+
+
 
