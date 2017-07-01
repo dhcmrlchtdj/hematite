@@ -1190,5 +1190,105 @@ A type system is usually a combination of three components:
 
 ---
 
+> type inference.
+> find a type to fill into every type annotation position.
+> find a type for every expression.
+
+类型推断，顾名思义，把所有没明确指定的类型都确定下来。
+
+> first generate constraints on what the types must be,
+> then solve constraints to identify inconsistencies and join together
+> constraints spread across the function body.
+
+第一步是遍历输入，生成 constraint 的集合。
+第二部是进行 unification。
+
+> the goal of unification is generate a substitution, or mapping from variables
+> to terms that do not contain any variables.
+
+---
+
+unification 时有两类数据，base type 和 constructed type。
+
+> unification algorithm automatically computes principal type for an expression.
+> the most general type.
+
+> the types we have inferred through unification are not actually polymorphic.
+
+unification 的过程能推断出一些 sum type，但这不是 type variables。
+
+> let-polymorphism: when a term with type variables is bound in a lexical
+> context, the type is automatically promoted to be a quantified one.
+
+ML 等语言为了能在 unification 过程中推断出 type variables，
+实现了 let-polymorphism 的机制。
+
+---
+
+> the point of a union type is to represent a disjunction, or "or".
+
+> tagged unions / discriminated unions: union of union type.
+
+在 ML 里，tagged union 对应的是 variant。
+
+---
+
+> Any language that permits types to be named must contend with this question:
+> is naming merely a convenience, or are the choices of names intended to be
+> meaningful?
+
+相同的结构，不同的类型名，是否算相同的类型？
+structural 认为名字无关紧要，结构才是类型的本质。
+nominal 认为名字不同就是不同类型，不考虑结构是否相同。
+
+---
+
+- union type: a value belongs to one of the types in the union
+    - disjunction / or
+- intersection type: the value belongs to all the types in the intersection
+    - conjunction / and
+
+> how can a value belong to more than one type?
+
+> function overload
+> ad hoc polymorphism
+
+---
+
+> we can write the recursive type as a union over variants.
+
+> the definition of recursive type can be thought of as syntactic sugar.
+
+> a recursive type can be treated as equivalent to its unfolding.
+
+---
+
+> subtyping formalizes the notion of substitutability.
+> S <: T, S is subtype, T is supertype
+
+- unions: `T <: (S U T)`
+- intersections: `(S ∧ T) <: S`
+- functions: `(S2 <: S1)` and `(T1 <: T2)` then `(S1 -> T1) <: (S2 -> T2)`
+    - return type is covariance with function
+        - both vary in the same direction.
+        - `T1 <: T2` then `(S -> T1) <: (S -> T2)`
+    - argument type is contravariant with function
+        - goes against the direction of function subtyping.
+        - `S2 <: S1` then `(S1 -> T) <: (S2 -> T)`
+
+---
+
+> types for objects are typically riven into two camps: nominal and structural.
+
+作者主要讲了下 structural 的 subtyping。
+
+- width subtyping. Obtain a supertype by dropping fields from an object’s type.
+- depth subtyping. Obtain a supertype by replacing fields with its supertype.
+
+---
+
+## 16 Checking Program Invariants Dynamically: Contracts
+
+---
 
 
