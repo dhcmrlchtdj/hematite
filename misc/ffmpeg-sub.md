@@ -18,3 +18,9 @@ $ ffmpeg -i <input.mp4> -i <input.ass> -c copy -c:s mov_text <output.mp4>
 ```
 $ ffmpeg -i video.avi -vf subtitles=subtitle.srt out.avi
 ```
+
+---
+
+```
+$ ffmpeg -i <input> -c:v copy -c:a copy -ss 00:01:00 -to 00:02:00 <output>
+```
