@@ -1291,4 +1291,35 @@ nominal 认为名字不同就是不同类型，不考虑结构是否相同。
 
 ---
 
+> trade-off
+> not all non-trivial properties of programs can be verified statically.
+> the burdens of annotation and computational complexity may be too great.
+> some of the properties must either be ignored or settled only at run-time.
 
+有些东西不适合加入静态类型系统里。
+（比如一个奇数的数组，ocaml 这样的类型系统就无法表达
+
+> in languages without static types, these properties might start with simple
+> type-like assertions.
+
+> contracts make perfect sense even in a typed world, because they enhance the
+> set of invariants that a programmer can express.
+
+---
+
+> contract return the supplied value or error.
+
+contract 指的是那些 `assert` 之类的判断、某个值是否满足某些条件的校验等。
+
+---
+
+runtime 提供的通常是 tag，其中的信息比 type 要少很多。
+比如只知道一个值是 object，至于这个 object 有哪些 field，需要语言支持 reflection 等。
+又比如 js 中的 `typeof`，只能确定一个值是函数，但不知道其输入的类型和返回的类型。
+
+像函数这种情况，就要在函数内部定义 contract 了。
+
+---
+
+> storing a contracted value in mutable state.
+> writing a contract for mutable state.
