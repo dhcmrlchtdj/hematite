@@ -2,6 +2,11 @@
 
 ---
 
+https://www.haskell.org/tutorial/
+http://www.cs.nott.ac.uk/~pszgmh/pih.html
+
+---
+
 - polymorphic type
     - `a` in `length :: [a] -> Int`
     - `a/b` in `fst :: (a,b) -> a`
@@ -50,4 +55,7 @@
 
 ---
 
+- `type IO a = State -> (a, State)`
+    - `getChar :: IO Char`
+    - `putChar :: Char -> IO ()`
 
