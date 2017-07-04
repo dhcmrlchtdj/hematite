@@ -138,4 +138,45 @@ instance IMonad IO where
 
 ---
 
+> by defining an operation monadically, we can hide underlying machinery in a
+> way that allows new features to be incorporated into the monad transparently.
+
+- `(>>) :: m a -> m b -> m b`
+- `(>>=) :: m a -> (a -> m b) -> m b`
+- `do e1; e2` => `e1 >> e2`
+- `do p <- e1; e2` => `e1 >>= \p -> e2`
+
+---
+
+## monads for functional programming
+
+---
+
+- exception
+    - 每次函数调用，都要判断返回值是否为异常，然后执行下一步
+- state
+    - 每次调用都要传递当前状态，读取返回值的状态，传递给下一次调用
+- output
+
+这些操作，有共通的模式可以抽取出来，也就是 monad。
+（其实这里的共通模式，都是下一步操作依赖于上一步的结果。
+
+---
+
+> A monad is a triple (M, unit, bind) consisting of a type constructor M and
+> two operations of the given polymorphic types.
+
+- `unit :: a -> M a`
+- `bind :: M a -> (a -> M b) -> M b`
+
+---
+
+- `do a <- m; n` => `m >>= (\a -> n)` => `bind m (\a -> n)`
+    - => `let a = m in n`
+
+把前面那些操作里，重复出现的模式放在了 bind 操作里面，从而隐藏了细节。
+所以 monad 被叫做 programmable semicolon 是有道理的，这里主要就是控制了执行顺序。
+
+---
+
 
