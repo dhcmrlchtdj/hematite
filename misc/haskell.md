@@ -108,7 +108,6 @@ instance IApplicative IO where
         g <- mg
         x <- mx
         return (g x)
-
 ```
 
 - monad, `class Applicative m => Monad m where ...`
@@ -135,6 +134,10 @@ instance IMonad IO where
     -- (>>=) :: IO a -> (a -> IO b) -> IO b
     mx >>= f = ...
 ```
+
+---
+
+## gentle introduction to haskell
 
 ---
 
@@ -176,6 +179,33 @@ instance IMonad IO where
 
 把前面那些操作里，重复出现的模式放在了 bind 操作里面，从而隐藏了细节。
 所以 monad 被叫做 programmable semicolon 是有道理的，这里主要就是控制了执行顺序。
+
+---
+
+## essence of functional programming
+
+---
+
+- `bindM` serves a role similar to a `let` expression
+
+```
+k :: a->b
+h :: b->c
+\a -> let b = k a in h b :: a->c
+
+k :: a -> M b
+h :: b -> M c
+(\a -> k a) >>= (\b -> h b) :: a -> M c
+```
+
+---
+
+- the type `Value` represents a value
+- the type `M Value` representing a computation
+- the purpose of `unitM` is to coerce a value into a computation
+- the purpose of `bindM` is to evaluate a computation, yielding a value.
+
+- An advantage of the monadic style is that the types make clear where effects occur.
 
 ---
 
