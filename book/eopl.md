@@ -2,6 +2,29 @@
 
 ---
 
+## preface
+
+### goal
+
+> What does a program do?
+> The study of interpreters tells us this.
+
+### organization
+
+- programming language (1,2)
+- interpreter (3)
+- state (4)
+- CPS interpreter (5,6)
+- type checker / type infer (7)
+- module (8)
+- object-oriented (9)
+
+### usage
+
+> exercises are a vital part of the text and are scattered throughout.
+
+---
+
 ## ch1
 
 ---
