@@ -40,4 +40,8 @@ https://stackoverflow.com/questions/15534977/mysql-cannot-add-foreign-key-constr
 建索引出错的时候，可以执行 `SHOW ENGINE INNODB STATUS;`。
 输出的 `LATEST FOREIGN KEY ERROR` 里有详细的错误信息。
 
+---
 
+```
+$ docker exec mysql-json sh -c 'exec mysqldump --compact --skip-extended-insert -uUSER -pPASSWORD test <table1> <table2>'
+```
