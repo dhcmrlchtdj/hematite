@@ -2,7 +2,7 @@
 
 ---
 
-## preface
+## 0. preface
 
 ### goal
 
@@ -25,7 +25,7 @@
 
 ---
 
-## ch1
+## 1. Inductive Sets of Data
 
 ---
 
@@ -48,7 +48,7 @@
 
 ---
 
-## ch2
+## 2. Data Abstraction
 
 ---
 
@@ -61,35 +61,57 @@
 
 ---
 
-## ch3
+> Data abstraction divides a data type into two pieces: an interface and an implementation.
+
+- abstract data type
+- interface / implementation
+- data abstraction, opaque vs transparent
+
+数据抽象，接口与实现分离，让改动只在小范围里进行。
+
+- representation-independent
+- constructor: build elements of the data type
+- observer: extract information from values of the data type
 
 ---
 
-> Chapter 3 uses these foundations to describe the behavior of programming
-> languages.
-> It introduces interpreters as mechanisms for explaining the runtime behavior
-> of languages and develops an interpreter for a simple, lexically scoped
-> language with first-class procedures and recursion.
-> The chapter ends by giving a thorough treatment of a language that uses
-> indices in place of variables and as a result variable lookup can be via a
-> list reference.
+- environment: associate variables with values
 
-- 实现一个解释器
+后面就是用各种表示方式来实现 environment 的接口
+
+- procedural representation: data is represented by procedure
+- defunctionalized representation
 
 ---
 
-## ch4
+> A domain-specific language is a small language for describing a single task
+> among a small, well-defined set of tasks.
+
+扯到了 DSL，但这里其实只是在定义类型然后 pattern match，
+也就是 constructor 和 observer。
 
 ---
 
-> Chapter 4 introduces a new component, the state, which maps locations to
-> values.
-> Once this is added, we can look at various questions of representation.
-> In addition, it permits us to explore call-by-reference, call-by-name, and
-> call-by-need parameter-passing mechanisms.
+- concrete syntax, external representation
+- abstract syntax, internal representation
+- abstract syntax tree
+- parser, parsing, parser generator
 
-- 引入 state 的概念
-- 如何描述数据
-- 不同的参数传递方式
+基本还是概念性的东西
 
 ---
+
+## 3. Expressions
+
+---
+
+> illustrate the binding and scoping of variables by implement interpreters.
+
+> environment: keeps track of the meaning of each variable in the expression
+> being evaluated.
+
+本章重点，environment 以及 scope。
+
+---
+
+
