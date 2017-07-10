@@ -114,4 +114,51 @@
 
 ---
 
+- source language => AST => interpreter (implementation language)
+- source language => AST => compiler => target language
+    - machine language => hardware machine
+    - bytecode => virtual machine
+- compiler = analyzer + translator
+- front end = scanning (characters=>tokens) + parsing (tokens=>AST)
+- parser generator
+
+---
+
+- LET，讲基本的环境和变量替换（居然没提到 subst 之类的
+- PROC，讲函数的表示，引出 lexical scope
+- LETREC，讲递归的表示，关键还是环境变量
+
+---
+
+- references vs declarations
+    - variable reference is a use of the variable
+    - variable declaration introduces the variable as a name for some value
+- scope (for declarations)
+    - binding: association between a variable and its value
+    - shadow: an inner declaration shadows the outer one
+    - static/lexical vs dynamic
+
+---
+
+- lexical/static depth
+- lexical addresses / de Bruijn indices
+- avoid explicitly searching for variables at run time
+
+如何做到不需要 environment
+
+---
+
+## 4. State
+
+---
+
+> state maps locations to values.
+
+> parameter-passing mechanisms: call-by-reference, call-by-name, and call-by-need
+
+讲 state，讲参数传递。
+
+---
+
+
 
