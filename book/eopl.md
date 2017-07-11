@@ -127,6 +127,7 @@
 - LET，讲基本的环境和变量替换（居然没提到 subst 之类的
 - PROC，讲函数的表示，引出 lexical scope
 - LETREC，讲递归的表示，关键还是环境变量
+    - ？，不是很确定，这里这种 letrec，应该只支持 let-body 里只有函数调用的情况，否则作用域就乱掉了。
 
 ---
 
@@ -160,5 +161,40 @@
 
 ---
 
+- effect is global. an effect affects the entire computation.
+- store: reference -> location -> storable value
+    - L-value: reference
+    - R-value: storable value
+- explicit references / implicit references
+    - with implicit references, every variable denotes a reference
+    - 两者的区别在于，ref 放在 denoted value 还是 expressed value
+
+---
+
+- parameter-passing mechanisms
+    - eager
+        - α-conversion
+        - call-by-value
+        - call-by-reference
+    - lazy (thunk, memoization
+        - β-reduction
+        - call-by-name
+        - call-by-need
+
+---
+
+## 5.Continuation-Passing Interpreters
+
+---
+
+> interpreter in continuation-passing style
+> exposes the control mechanisms of the interpreted language
+
+> extend the language with trampolining, exception-handling, and multithreading
+> mechanisms.
+
+讲 CPS 及其作用
+
+---
 
 
