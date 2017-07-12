@@ -197,4 +197,70 @@
 
 ---
 
+- continuation: an abstraction of the control context
+- environment: an abstraction of the data context
+
+- environment: a function from symbols to denoted values
+- continuation (of an expression): a procedure that takes the result of the
+    expression and completes the computation
+
+continuation 的作用和 environment 很像，一个是数据，一个是控制流。
+
+---
+
+新增绑定会改变 data context，表现出来就是 environment 变化。
+然后引出了什么导致 control context / continuation 变化这个问题。
+
+- recursive control behavior (function called in an operand position
+- iterative control behavior
+
+> It is evaluation of operands (actual parameters) makes the control context grow.
+
+> Tail calls don’t grow the continuation. (If the value of exp1 is returned as
+> the value of exp2, then exp1 and exp2 should run in the same continuation.)
+
+每次需要对参数进行求值的时候，都会引入一个新的 continuation。
+而函数调用本身，会将结果返回给当前的 continuation，不需要新增一个 continuation。
+
+---
+
+- procedural representation
+- data structure representation
+
+如何表示 continuation 的计算过程，可以有多种方式。
+这个就像 environment 也可以用不同的方法来表示一样。
+
+```ocaml
+type key = string and value = int
+type environ = | Empty | Extend of key * value * environ
+let empty () = Empty
+let extend env k v = Extend (k, v, env)
+let apply env k = match env with ...
+;;;
+type key = string and value = int
+type environ = (key * value) list
+let empty () = []
+let extend env k v = (k, v) :: env
+let apply env k = match env with ...
+```
+
+```ocaml
+type cont = | EndCout | IsZeroCont of cont | IfCont of exp * exp * env * cont | ...
+let apply_cont (k:cont) (v:exp_val) = match k with ...
+;;;
+let end_cont k = fun v -> ...
+let is_zero_cont k = fun v -> ...
+let if_cont e1 e2 e k = fun v -> ...
+let apply_cont (k:cont) (v:exp_val) = k v
+```
+
+感觉就像是 OOP 和 FP 从不同角度组织代码一样。
+
+---
+
+（作者的编排给人循序渐进的感觉，解释也很清晰。有基础的话，可以加快速度。
+
+---
+
+
 
