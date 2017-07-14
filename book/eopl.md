@@ -187,6 +187,10 @@
 
 ---
 
+### 5.1
+
+---
+
 > interpreter in continuation-passing style
 > exposes the control mechanisms of the interpreted language
 
@@ -262,5 +266,41 @@ let apply_cont (k:cont) (v:exp_val) = k v
 
 ---
 
+### 5.2
+
+---
+
+> most procedural languages add control context (the stack!) on every procedure call.
+
+> most languages store environment information on the stack, so every procedure
+> call must generate a control context that remembers to remove the environment
+> information from the stack.
+
+在很多语言中，函数调用意味着 stack 的增长，即每次调用都会让 control context 增长。
+而前面分析过，只有 operand 的求值对 control context 有强需求。
+
+这些语言这样实现的其中一个原因，是 data context 存储在 stack 上。
+每次调用时 stack 都变化，能够自动处理 environment 的变化。
+
+---
+
+- trampoline
+
+之前的理解，尾递归，递归改循环，避免栈溢出。
+这里定义的 `trampoline` 这个函数，做的就是执行循环得到最终值。
+
+> represents a snapshot of the computation in progress
+
+在这个章节里
+在解析的过程中，构造大量的 trampoline。
+在最终返回给用户前，对 trampoline 求值。
+
+---
+
+### 5.3
+
+---
+
+> A 0-argument tail call is the same as a jump.
 
 
