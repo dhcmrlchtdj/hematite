@@ -183,7 +183,7 @@
 
 ---
 
-## 5.Continuation-Passing Interpreters
+## 5. Continuation-Passing Interpreters
 
 ---
 
@@ -302,5 +302,65 @@ let apply_cont (k:cont) (v:exp_val) = k v
 ---
 
 > A 0-argument tail call is the same as a jump.
+
+- 一组函数，相互之间进行尾调用（tail call）
+    - even x 和 odd x
+- 那么这些调用可以改写为赋值（assignment）代替绑定（binding）
+    - x 提升为全局变量并直接进行赋值，而不是每次调用绑定一个新的值
+- 这样的赋值程序又可以被改写成 goto / flowchart
+    - 这样 even / odd 就成了 0-argument tail call，可以改成 goto
+
+这种改写的过程被叫做 registerization
+
+（整个过程改写下来，好像感觉对过程中的变化有了更直观的感受，又感觉很乱……
+改写的过程中，首先就是把尾调用的参数都提出来改成赋值语句，完
+
+---
+
+### 5.4
+
+---
+
+处理 try...catch../raise... 这个的流程。
+主要是 try 要保存好恢复用的环境信息，然后 raise 的时候去寻找最近的 try。
+
+---
+
+### 5.5
+
+---
+
+目标是提供抢占式调度的多线程支持。
+
+thread 的实现，和 trampoline 一样都是 thunk。
+只不过 trampoline 直接执行，而 thread 则是将任务加入队列中。
+
+---
+
+关于实现抢占的调度。
+
+本节提供的方法是，每个 continuation 的执行都进行计数。
+还允许就继续执行，时间用完了就丢回队列等待。
+
+这里会引出的一个问题是原子操作。
+然后就是多线程的同步问题了。
+
+---
+
+## 6. Continuation-Passing Style
+
+---
+
+> iterative control behavior
+
+
+> a systematic method for
+> transform any procedure into an equivalent procedure
+> whose control behavior is iterative
+
+将代码自动重写成满足 iterative control behavior 的代码。
+（具体实现方式，就是转写成 CPS 的形式
+
+---
 
 
