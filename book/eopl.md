@@ -351,15 +351,36 @@ thread 的实现，和 trampoline 一样都是 thunk。
 
 ---
 
-> iterative control behavior
-
-
 > a systematic method for
 > transform any procedure into an equivalent procedure
 > whose control behavior is iterative
 
 将代码自动重写成满足 iterative control behavior 的代码。
 （具体实现方式，就是转写成 CPS 的形式
+
+---
+
+### 6.1
+
+---
+
+> The CPS Recipe
+
+> To convert a program to continuation-passing style
+> 1. Pass each procedure an extra parameter (typically cont or k).
+> 2. Whenever the procedure returns a constant or variable, return that value to
+> the continuation instead
+> 3. Whenever a procedure call occurs in a tail position, call the procedure
+> with the same continuation cont.
+> 4. Whenever a procedure call occurs in an operand position, evaluate the
+> procedure call in a new continuation that gives a name to the result and
+> continues with the computation.
+
+---
+
+- inlining: taking each call to a continuation-builder in the program and replacing it by its definition
+
+> an accumulator is often just a representation of a continuation.
 
 ---
 
