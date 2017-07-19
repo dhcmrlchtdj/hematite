@@ -127,7 +127,6 @@
 - LET，讲基本的环境和变量替换（居然没提到 subst 之类的
 - PROC，讲函数的表示，引出 lexical scope
 - LETREC，讲递归的表示，关键还是环境变量
-    - ？，不是很确定，这里这种 letrec，应该只支持 let-body 里只有函数调用的情况，否则作用域就乱掉了。
 
 ---
 
@@ -351,6 +350,12 @@ thread 的实现，和 trampoline 一样都是 thunk。
 
 ---
 
+讲了 CPS 的两种用法。
+一个是改写程序，使其不需要构建额外的 control context。
+一个是将副作用给显式表示出来。
+
+---
+
 > a systematic method for
 > transform any procedure into an equivalent procedure
 > whose control behavior is iterative
@@ -383,5 +388,74 @@ thread 的实现，和 trampoline 一样都是 thunk。
 > an accumulator is often just a representation of a continuation.
 
 ---
+
+### 6.2
+
+---
+
+> It is evaluation of operands, not the calling of procedures, that makes the
+> control context grow.
+
+> Tail Calls Don’t Grow Control Context
+> If the value of exp1 is returned as the value of exp2, then exp1 and exp2
+> should run in the same continuation.
+
+- operand position
+- tail position
+    - tail call (procedure)
+    - tail form (expression)
+
+---
+
+> we must understand the meaning of a language in order to determine its tail
+> positions.
+
+在 operand 则生成新的 cont，在 tail 则复用现有的 cont。
+
+---
+
+- SimpleExp, never contain procedure calls
+- TfExp, be in tail form
+
+把表达式分成两类，一类没有函数调用，一类函数调用都是尾调用。
+这样的代码中，所有调用都不会改变 control context。
+
+> there is no completely general way of determining whether the control behavior
+> of a procedure is iterative or not.
+> Therefore the best we can hope for is to make sure that no procedure call in
+> the program will build up control context, whether or not it is actually
+> executed.
+
+很难判断程序本身是否属于 iterative，
+所以干脆要求所有表示式全部都不要创建新的 control context。
+
+---
+
+### 6.3
+
+---
+
+
+---
+
+### 6.4
+
+---
+
+> Another important use of CPS is to provide a model in which computational
+> effects can be made explicit.
+
+> In using CPS to model effects, our basic principle is that a simple expression
+> should have no effects.
+
+---
+
+- printing
+- store (using the explicit-reference model)
+- nonstandard control flow
+
+---
+
+
 
 
