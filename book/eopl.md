@@ -170,6 +170,12 @@
 
 ---
 
+重新读，一点点和 PLAI 上的概念整合起来了……
+explicit references 和 implicit references 分别对应 PLAI 里的 structure mutation
+和 variable mutation。
+
+---
+
 - parameter-passing mechanisms
     - eager
         - α-conversion
