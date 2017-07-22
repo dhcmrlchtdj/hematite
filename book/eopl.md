@@ -456,6 +456,16 @@ thread 的实现，和 trampoline 一样都是 thunk。
 
 ---
 
+> they find the first nonsimple operand and recur on that operand and on the
+> modified list of operands.
+
+转化的过程，先将输入的表达式分成两类，带 operand 和不带 operand。
+前面一再重复了，是对 operand 的求值，导致了 control context 的增长。
+要将普通表达式改写成 CPS 的形式，主要就是改写这些带 operand 的表达式。
+
+> our translator will Follow the Grammar
+
+这个过程就是在一句句翻译表达式，所以作者说这个过程是 follow the grammar。
 
 ---
 
@@ -472,8 +482,8 @@ thread 的实现，和 trampoline 一样都是 thunk。
 ---
 
 - printing
-- store (using the explicit-reference model)
-- nonstandard control flow
+- store (explicit-reference model)
+- nonlocal control flow
 
 ---
 
