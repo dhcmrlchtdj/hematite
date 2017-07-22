@@ -144,7 +144,10 @@
 - lexical addresses / de Bruijn indices
 - avoid explicitly searching for variables at run time
 
-如何做到不需要 environment
+最后说的这个 nameless environment 的解释器，
+把 string->value 的 environment 换成了 int->value 的 environment。
+
+然后书里提供了将普通版本翻译成 nameless 版本的翻译程序。
 
 ---
 
@@ -173,6 +176,18 @@
 重新读，一点点和 PLAI 上的概念整合起来了……
 explicit references 和 implicit references 分别对应 PLAI 里的 structure mutation
 和 variable mutation。
+区别在于，state 被作为一种类型呈现给用户，还是对用户不可见。
+
+---
+
+> A program is a statement.
+> A statement does not return a value, but acts by modifying the store and by
+> printing.
+
+书里讲解的语义，基本都是 expression 的，这里提了一句 statement。
+
+> a subroutine is like a procedure, except that it does not return a value and
+> its body is a statement, rather than an expression.
 
 ---
 
