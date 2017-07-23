@@ -31,3 +31,11 @@ https://blogs.janestreet.com/core-principles-uniformity-of-interface/
     - 不要定义太复杂的类型？
 - [ ] Don't be puritanical about purity
     - 该用就用，不要装纯
+
+---
+
+关于 exn，补充一点。
+最近写了一点代码后，确实能感受到这点。
+使用异常，就不知道程序到底能不能正常运行。
+而使用 option 或者 result 之类的结构，代码的正确性能通过类型检查来保证。
+不过传递、拆解时要 match，感觉还是有些繁琐……
