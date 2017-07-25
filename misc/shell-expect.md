@@ -35,3 +35,24 @@ expect {
 ```sh
 alias relay="expect -c 'spawn ssh $SERVER_NAME; expect \"Password:\" {send \"$PASSWORD\"; interact} \"bash\" interact'"
 ```
+
+---
+
+expect 默认有超时限制，可以设为 -1 去掉限制。
+
+```expect
+set timeout -1
+spawn ssh server
+expect { ... }
+```
+
+---
+
+如果要在 shell 里面直接写入多行的 expect，可以用 heredoc
+
+```sh
+cat << EOF | expect -
+spawn ssh server
+expect ...
+EOF
+```
