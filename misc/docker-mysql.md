@@ -8,7 +8,7 @@ https://hub.docker.com/_/mysql/
 
 ---
 
-```
+```sh
 $ docker pull mysql
 $ docker run \
     -p 3306:3306 \
