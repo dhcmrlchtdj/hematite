@@ -98,4 +98,41 @@ tail position 进行函数调用，可以不增加额外的 control context。
 
 ---
 
+source
+↓ compile
+instruction
+↓ VM
+value
+
+有价值的地方，大概是把 VM 和 compile 看懂。
+关键大概是 instruction 的设计。
+都是大概，因为还没看懂。
+状态不好，读不下去。
+
+---
+
+第五节做的是优化
+
+> compute for each variable its location in the environment, so that the virtual
+> machine can go straight to this location to find the variable’s value without
+> searching along the way.
+
+想要达成的效果，是简化 environment 的查找。
+
+> Scheme variables are statically scoped.
+> This means that the binding of any variable is apparent in the static
+> structure of the program.
+
+支持 static scope 是进行这种优化的条件。
+
+> The improvement given here is substantial and important
+这种优化似乎效果很明显？
+然后 stack-based 的模型好像还能更好。
+
+---
+
+## The Stack-Based Model
+
+---
+
 
