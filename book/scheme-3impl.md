@@ -6,6 +6,11 @@ http://www.cs.indiana.edu/~dyb/pubs/3imp.pdf
 
 ---
 
+感觉看错资料了。
+讲的是如何把 scheme 编译成 instruction，然后放到 VM 上执行。
+
+---
+
 ## Introduction && The Scheme Language
 
 ---
@@ -135,4 +140,17 @@ value
 
 ---
 
+---
 
+## Conclusions
+
+---
+
+> principle: it is important to support the most commonly-used features with the
+> greatest possible efficiency even if this means supporting the less common
+> features with less than optimal efficiency.
+
+> principle: if a language feature is difficult to implement efficiently, and if
+> the choice is between supporting the feature inefficiently and leaving it out,
+> the choice should be to support it inefficiently (assuming the feature is
+> worth having at all).
