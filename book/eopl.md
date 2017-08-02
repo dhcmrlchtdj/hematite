@@ -487,6 +487,24 @@ thread 的实现，和 trampoline 一样都是 thunk。
 
 ---
 
+## 7. Types
 
+---
+
+> use the same technology (interpreter) to analyze or predict the behavior of
+> programs without running them.
+
+---
+
+- sound
+    - If the analysis accepts the program, then we can be sure evaluation of the program will be safe.
+    - If the analysis cannot be sure that evaluation will be safe, it must reject the program.
+
+> An analysis that rejected every program would still be sound
+😂
+
+正确的程序可能无法通过检查，这是 sound 约束的不足。
+
+---
 
 
