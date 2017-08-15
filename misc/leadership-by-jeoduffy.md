@@ -54,4 +54,44 @@ http://joeduffyblog.com/2013/02/17/software-leadership-series/
 
 ---
 
+> The very notion of “authority” is 90% in your head.
+
+> telling everybody how they are doing things wrong is a recipe to not only get
+> you off on the wrong foot, but also permanently poison your relationship with
+> what would have been very important allies down the road.
+
+> The employees I love the most are those that ask tons of questions and aren’t
+> afraid to tell me when I’m wrong.
+
+---
+
+不要畏惧权威？
+还是不要给自己设限？
+有问题直接指出？
+
+---
+
+## Software Leadership #3: A Rising Tide Lifts All Boats
+
+---
+
+> there’s only a finite (read: small) number of truly amazing software
+> developers in the world
+
+> you should always strive to hire better and better people.
+> This applies to an entire company as well as individual teams.
+
+---
+
+寻找优秀的员工。
+（其效果不会仅是线性的，会更好
+
+---
+
+## Software Leadership #4: Slow Down to Speed Up
+
+---
+
+> remembering to take the necessary time to do the right thing
+
 
