@@ -100,11 +100,14 @@ http://joeduffyblog.com/2013/02/17/software-leadership-series/
 
 ---
 
-> there ought not to be a distinction between software research and software engineering.
+> there ought not to be a distinction between software research and software
+> engineering.
 
-> The first is theoretical computer science, and the second is applied computer science.
+> The first is theoretical computer science, and the second is applied computer
+> science.
 > I actually do agree that they require two very different skills.
-> The former is mathematics. The latter isn’t really science per se; rather, it’s really about engineering.
+> The former is mathematics. The latter isn’t really science per se; rather,
+> it’s really about engineering.
 
 理论与应用的不同在于，前者基础是数学，后者是工程。
 
@@ -119,9 +122,11 @@ http://joeduffyblog.com/2013/02/17/software-leadership-series/
 
 ---
 
-> (Reading the code) won’t give you a complete picture of the design and architecture.
+> (Reading the code) won’t give you a complete picture of the design and
+> architecture.
 
-（靠代码本身，不容易弄清楚系统的设计。这是之前和新人交流时，不推荐新人去研读开源代码的理由。
+靠代码本身，不容易弄清楚系统的设计。
+之前和新人交流的时候，用这个做理由，建议不要直接研读源码。
 
 > reading code is the most effective way to understand the inner workings of
 > your team at a very intimate level.
@@ -152,7 +157,8 @@ http://joeduffyblog.com/2013/02/17/software-leadership-series/
 > No matter how smart of a leader you are, you’re going to be wrong sometimes.
 > Often even. And you won’t always have the best ideas.
 
-> there are people with better ideas, who are smarter than you, in your group, anyway.
+> there are people with better ideas, who are smarter than you, in your group,
+> anyway.
 
 > It’s critical to create an environment where the best ideas are heard,
 > discussed, and ultimately able to grow into things that are much bigger.
@@ -182,4 +188,110 @@ http://joeduffyblog.com/2013/02/17/software-leadership-series/
 
 ---
 
+> An architect at a startup may be more like a tech lead, checking in code like
+> mad, but also keeping the rest of the team in check.
+> An architect at a medium sized IT shop might focus on connecting disparate
+> business systems together at a high level, but without diving down into code.
+> And a software architect at Microsoft can play an even varied number of roles
+> because the company is so large and diversity of projects so great.
 
+小型公司，中型公司，大型公司，架构的不同意义。
+
+> an architect is the guy (or gal) who is in charge of making those decisions
+> which, if made incorrectly, could sink the project.
+
+感觉这个可以和之前看到的一个 senior 定义对比一下。
+能解决问题的是 junior，能发现问题的是 senior。
+这里，决策能决定项目生死的，称得上 architect。
+
+> An architect’s success is measured by what he or she ships to customers, and
+> not by the amazing ideas that were ultimately never realized.
+
+---
+
+### 0. Inspire and empower people to do their best work.
+
+> You can’t do it all yourself.
+> This is a tough pill to swallow.
+> But it’s a sad fact of life that you need to learn to be comfortable with.
+
+> Architects should also welcome all ideas with open arms.
+
+> an architect who won’t even entertain new ideas from the team often drive
+> away the best engineers. Great engineers hate to be told what to do. They
+> don’t want to feel like they are walking in the shadows of somebody else.
+
+> Part of your role as the team’s architect is to recognize who on the team has
+> the most potential, and to arrange for them to have as much leeway and
+> creative freedom as possible.
+> You don’t want to end up with a bunch of lackeys whose job is to “just
+> implement” your ideas, because you’ll get what you paid for.
+
+### 1. Oversight, but not dictatorship.
+
+> In fact, the architect may have very little to say over specific project
+> management, scheduling, and budget decisions, but is typically on the senior
+> leadership team for the project.
+
+> The initial vision and idea is far from a shipping solution, and software
+> engineering only gets interesting once you actually try to build something.
+> Ideas are cheap.
+
+### 2. Taste is a hard thing to measure, but is invaluable.
+
+> engineering is more of an art than a science
+
+> In fact, good taste is perhaps one of the most important skills an architect
+> needs to have.
+
+> In my best estimation, good taste can be learned from paying close attention
+> to the right things, taking a step back and viewing designs from afar often
+> enough, being learned in what kinds of software has been built and was
+> successful in the past, and having a true love of the code.
+
+### 3. Write code and get your hands dirty.
+
+> If you’re not writing actual product code, you’re not an architect: you’re an
+> ivory tower has-been, and probably doing more damage than you are helping
+> matters.
+
+> People need to respect your abilities, and you want your team to look up to
+> you.
+> You want them to come and ask for your advice because they want it, and enjoy
+> it, and not force them to deal with you simply because of your position on the
+> team.
+
+其他人想要知道你的意见，想要得到你的建议。
+这才是团队影响里最直接的体现啊。
+
+### 4. The power of the dyad: know your weaknesses.
+
+> Architects need to play a dual role in understanding both business and
+> technical needs and strategy.
+
+业务架构师和技术专家的区别？
+
+> The best architects I know realize their relative weakness on the business end
+> of things and partner up with another senior leader with complementary skills,
+> to fill in the gaps: this forms a harmonic interval.
+
+> These are things that, being a technology guy (or gal), wouldn’t immediately
+> come to mind. But remember: it’s all about the customer.
+
+### 5. It’s for the customer, not you.
+
+> The best engineers often succeed because they focus on scratching a personal
+> itch.
+
+> You get to prove your ideas by having real human beings to use the end product.
+> If you never get to that state, ... You’re a researcher, not an architect.
+
+### 6. Admit when you’re wrong, fall on your sword, and then fix it.
+
+> Being an architect requires a careful balance between sticking to your guns—
+> your guiding principles and technical vision—and realizing when things aren’t
+> working out and course correcting before it’s too late.
+
+### In conclusion
+
+> Being an architect, in the end, is all about helping others to succeed.
