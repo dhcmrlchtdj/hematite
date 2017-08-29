@@ -44,6 +44,9 @@ ReactDOM.render(<App state={state} />, document.getElementById('app'))
 https://github.com/grammarly/focal/blob/a4fed7cfcbd7c3965e6ceeca2db00c47ba1a8780/src/react/react.ts#L39-L118
 
 F 的相关实现，在代码里看到 calmm。
+（按 readme 自己的说法，focal 在整体设计上和 calmm 是一致的，最初是 calmm 的一个 folk
+（https://github.com/calmm-js/documentation/blob/master/introduction-to-calmm.md
+
 实现本身，就是依靠 react 的几个生命周期函数，subscribe 了 observable。
 
 ---
@@ -132,25 +135,23 @@ Opinionated, transactional, MobX powered state container
 
 ---
 
+a state container that combines
+- the simplicity and ease of mutable data
+- the traceability of immutable data
+- the reactiveness and performance of observable data
 
+这大杂烩……
 
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-## calmm
-
-https://github.com/calmm-js/documentation/blob/master/introduction-to-calmm.md
+- immutability
+    - transactionality
+    - traceability
+    - composition
+- mutability
+    - discoverability
+    - co-location
+    - encapsulation
 
 ---
+
+living tree 本身是可变的，框架自动生成不可变的 snapshot
+看了一圈，暂时没明白……
