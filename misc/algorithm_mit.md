@@ -75,9 +75,43 @@
 ---
 
 ### Heaps and Heap Sort
+
+---
+
+- priority queue
+- heap
+    - array
+    - nearly complete binary tree
+    - parent(i)=i/2; left(i)=2i; right(i)=2i+1
+    - complexity
+        - heapify, O(lgN)
+        - build_heap, O(NlgN)
+- heap sort
+    - build heap
+    - swap(A[0],A[N])
+    - heapify(A[0, N-1])
+    - swap, heapify, swap, heapify
+
+---
+
 ### Binary Search Trees, BST Sort
+
+---
+
+- BST
+    - height, H
+    - complexity
+        - search, O(H)
+        - insert, O(H)
+
+---
+
 ### AVL Trees, AVL Sort
+
 ### Counting Sort, Radix Sort, Lower Bounds for Sorting and Searching
+
+---
+
 ## Hashing
 ### Hashing with Chaining
 #### Simulation Algorithms
