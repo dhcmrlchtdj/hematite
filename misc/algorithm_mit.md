@@ -42,7 +42,38 @@
 ---
 
 ## Sorting and Trees
+
+---
+
 ### Insertion Sort, Merge Sort
+
+---
+
+- problems that become easy once items are in sorted order
+
+- insertion sort
+    - compare A[i] with A[i-1], A[i-2], ..., A[0]
+    - A[0]...A[i-1] is sorted, so we can use binary search to compare
+    - binary insertion sort
+        - O(logN) for compare, O(n) for swap
+- selection sort
+- bubble sort
+
+- merge sort
+    - split && merge
+    - T(N) = 2T(N/2) + cN
+        - height = 1 + lgN
+
+- recurrence complexity
+    - `1 + 1/2 + 1/4 + ... < 2`
+    - T(N) = 2T(N/2) + cN => O(NlgN)
+    - T(N) = 2T(N/2) + c => O(N), leave=N
+    - T(N) = 2T(N/2) + cN^2 => O(N^2), root=N^2
+
+- in-place sort is better than merge sort in auxiliary space usage
+
+---
+
 ### Heaps and Heap Sort
 ### Binary Search Trees, BST Sort
 ### AVL Trees, AVL Sort
