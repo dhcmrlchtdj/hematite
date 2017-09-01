@@ -155,3 +155,96 @@ a state container that combines
 
 living tree 本身是可变的，框架自动生成不可变的 snapshot
 看了一圈，暂时没明白……
+
+---
+
+## calmm
+
+https://github.com/calmm-js/documentation/blob/master/introduction-to-calmm.md
+https://github.com/calmm-js/documentation/blob/master/redux-vs-calmm.md
+
+---
+
+```javascript
+const createStore = (reducer, initial) => {
+    const bus = Bacon.Bus()
+    const store = bus.scan(initial, (state, action) => reducer(state, action))
+    store.dispatch = action => bus.push(action)
+    return store
+}
+// createStore :: (state -> action -> state) -> state -> IO (Store action state)
+// dispatch :: Store action state -> action -> IO ()
+```
+
+```javascript
+const Atom = initial => {
+    const bus = Bacon.Bus()
+    const atom = bus.scan(initial, (state, action) => action(state))
+    atom.modify = action => bus.push(action)
+    return atom
+}
+// Atom :: state -> IO (Atom state)
+// modify :: Atom state -> (state -> state) -> IO ()
+```
+
+可以对比下 store+dispatch 和 atom+modify
+
+- `createStore` is a higher-order function
+- `dispatch` is first-order data
+- redux reducers are composable
+
+- `Atom` is a first-order function
+- `modify` is a higher-order function
+- calmm atoms are decomposable
+    - Atoms can be decomposed using lenses and lenses can be composed
+
+---
+
+```javascript
+const Atom = initial => {
+    const bus = Bacon.Bus()
+    const atom = bus.scan(initial, (state, action) => action(state))
+    atom.modify = action => bus.push(action)
+    return atom
+}
+const createStore = (reducer, initial) => {
+    const atom = Atom(initial)
+    atom.dispatch = action => atom.modify(state => reducer(state, action))
+    return atom
+}
+```
+
+```javascript
+const createStore = (reducer, initial) => {
+    const bus = Bacon.Bus()
+    const store = bus.scan(initial, (state, action) => reducer(state, action))
+    store.dispatch = action => bus.push(action)
+    return store
+}
+const Atom = initial => {
+    const store = createStore((state, action) => action(state), initial)
+    store.modify = action => store.dispatch(action)
+    return store
+}
+```
+
+---
+
+> In order to make plug-and-play possible, ...
+> It must be possible to write individual components without knowledge about
+> the whole application state.
+
+---
+
+> specify dependent computations as observables.
+> store state in modifiable observable atoms.
+> use lenses to selectively decompose state in atoms.
+
+> Observables for dependent computations
+> Atoms for storing state
+> Lenses for decomposing state
+
+---
+
+> When an atom or lensed atom is modified, only a single modification to the
+> root atom is performed and then the change is propagated to observers.
