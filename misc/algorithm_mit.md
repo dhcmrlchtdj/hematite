@@ -173,14 +173,55 @@ def rebalance(self, node):
 
 ---
 
+- comparision model
+- decision tree, binary decision tree
+    - lower bounds
+        - searching, lgN
+        - sorting, NlgN
+- linear-time sorting for integer
+    - O(n) for small integer
+    - counting sort (not what we want)
+        - RAM
+        - A[0...N] => map[Ai] => sortedA[0, N]
+        - 根据数组内容（最大值），用数组构造了一个 map
+        - 比如 Ai 出现了 2 次，就可以有 map[Ai] = [Ai,Ai]
+        - 根据 map 输出排序后的数组
+        - 但是数字如果很大，array 就会很大了。
+    - radix sort
+        - use counting sort as subroutine
+        - 对每一位进行排序，只会有 0~9，所以数组本身能够很小
+        - 每次排序其实都依赖于之前排序的结果，所以 subroutine 必须是 stable 的
+
+---
+
+> A sorting algorithm is **stable** if elements with the same key appear in the
+> output array in the same order as they do in the input array.
+
+---
+
 ## Hashing
+
+---
+
 ### Hashing with Chaining
 #### Simulation Algorithms
+
+---
+
 ### Table Doubling, Karp-Rabin
 #### DNA Sequence Matching
+
+---
+
 ### Open Addressing, Cryptographic Hashing
 #### Quiz 1 Review
+
+---
+
 ## Numerics
+
+---
+
 ### Integer Arithmetic, Karatsuba Multiplication
 ### Square Roots, Newton's Method
 ## Graphs
