@@ -108,6 +108,67 @@
 
 ### AVL Trees, AVL Sort
 
+---
+
+- BST, height, H
+- AVL
+    - property, `abs(Hleft - Hright) <= 1`
+        - not about leaves
+        - about height of subtree
+    - insert
+        - simple BST insert
+        - fix AVL perperty
+            - 新插入的节点，要么直接满足 AVL property
+            - 不满足，就 rotation，一直向上，直到全部满足 AVL property
+- rotation
+
+```
+left_rotate(x) x 变成 y 的左子树
+
+  x                           y
+ / \    left_rotate(x)->     / \
+A   y   <-right_rotate(y)   x   C
+   / \                     / \
+  B   C                   A   B
+```
+
+```python
+def height(node):
+    if node is None:
+        return -1
+    else:
+        return node.height
+
+def rebalance(self, node):
+    while node is not None:
+        node.height = max(height(node.left), height(node.right)) + 1
+        if height(node.left) >= 2 + height(node.right):
+            if height(node.left.left) >= height(node.left.right):
+                self.right_rotate(node)
+            else:
+                self.left_rotate(node.left)
+                self.right_rotate(node)
+        elif height(node.right) >= 2 + height(node.left):
+            if height(node.right.right) >= height(node.right.left):
+                self.left_rotate(node)
+            else:
+                self.right_rotate(node.right)
+                self.left_rotate(node)
+        node = node.parent
+```
+
+- AVL sort, O(NlgN)
+    - build AVL tree, O(NlgN)
+    - in-order traversal, O(N)
+
+---
+
+- abstract data type (ADT): interface specification
+- data structure (DS): algorithm for each operations
+- priority queue is ADT, heap/AVL is DS
+
+---
+
 ### Counting Sort, Radix Sort, Lower Bounds for Sorting and Searching
 
 ---
