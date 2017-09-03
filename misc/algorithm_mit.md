@@ -268,7 +268,7 @@ def rebalance(self, node):
         - 比如计算 abcde 和 bcdef 的 hash，中间 bcde 可以不重复计算
     - H = C1*A^(k-1) + C2*A^(k-2) + ... + C(k-1)*A^1 + Ck*A^0
         - C 是每一位的 char
-        - A 可以理解成进制
+        - A 可以理解成进制（比如 ascii 可以当成 256 进制？）
         - append(C) => H*A + C
         - dropHead(C) => H - C*A^(k-1)
         - 这个算 prehash，结果可能很大。不过其实只是为了比较，也没什么关系吧？
@@ -302,18 +302,6 @@ def rebalance(self, node):
         - one-way
         - collsion-resistance
         - target collsion-resistance
-
----
-
-#### Simulation Algorithms
-
----
-
-#### DNA Sequence Matching
-
----
-
-#### Quiz 1 Review
 
 ---
 
