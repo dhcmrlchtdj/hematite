@@ -204,16 +204,115 @@ def rebalance(self, node):
 ---
 
 ### Hashing with Chaining
-#### Simulation Algorithms
+
+---
+
+- dictionary
+- simple approach: direct-access table
+    - store items in an array, indexed by key
+    - prehash, map keys to integers
+    - hashing, reduce all keys down to reasonable size M for table
+        - hash function
+        - collision
+            - chaining
+            - open addressing
+- chaining
+- simple uniform hashing (assumption)
+    - n = count(keys)
+    - m = count(slots)
+    - load factor A = n / m
+        - expected keys count per slot
+        - expected length of a chain
+    - time complexity for searching, O(1+A)
+- hash function
+    - division, h(k) = k mod m
+        - m must be prime
+    - multiplication, h(k) = [(a*k) mod 2^w] >> (w-r)
+        - k is w bit integer
+        - r can be any integer which less than w
+        - m = 2^r
+        - 看课件的图会容易理解一些
+    - universal hashing, h(k) = [(ak+b) mod p] mod m
+        - p is large prime which larger than any k
+        - a and b are random integer which less than p
 
 ---
 
 ### Table Doubling, Karp-Rabin
-#### DNA Sequence Matching
+
+---
+
+- how to choose m (how large should table be)
+    - want m = O(n); m too small => slow; m too big => wasteful
+    - start small constant, grow or shrink as necessary
+    - rehashing, move all items from old table to new table
+- amortized analysis
+    - operation has amortized cost T(N)
+        if k operations cost less than or equal to kT(N)
+- resizable arrays
+    - 感觉，n/m=2/3 => m'=m/2*3; n/m=1/3 => m'=m*2/3 比较好点？
+
+---
+
+- string matching
+    - does S occur as substring of T?
+- simple algorithm
+    - time complexity O(|S| * |T|)
+    - O(|S|) for each comparision
+    - compare O(|T| - |S|) times
+- karp-rabin algorithm
+    - compare by hash
+    - 利用 hash，让 compare 从 O(|S|) 变成 O(1)
+    - 计算 hash 本身还是一个 O(|S|) 的操作
+    - 选择合适的 hash function (rolling hash) 能够进一步简化 hash 的计算
+        - 比如计算 abcde 和 bcdef 的 hash，中间 bcde 可以不重复计算
+    - H = C1*A^(k-1) + C2*A^(k-2) + ... + C(k-1)*A^1 + Ck*A^0
+        - C 是每一位的 char
+        - A 可以理解成进制
+        - append(C) => H*A + C
+        - dropHead(C) => H - C*A^(k-1)
+        - 这个算 prehash，结果可能很大。不过其实只是为了比较，也没什么关系吧？
 
 ---
 
 ### Open Addressing, Cryptographic Hashing
+
+---
+
+- open addressing
+    - one item per slot
+    - probing strategy
+        - linear probing
+            - cluster
+        - double hashing
+    - uniform hash assumption
+        - each key is equally like to have any one of the m! permutations as its
+            probe sequence.
+        - (not really true
+
+- open addressing: better cache performance (better memory usage, no pointer needed)
+- chaining: less sensitive to hash functions and the load factor
+
+---
+
+- cryptographic hashing
+    - a deterministic procedure that takes an arbitrary block of data and
+        returns a fixed-size bit string, the (cryptographic) hash value
+    - desirable property
+        - one-way
+        - collsion-resistance
+        - target collsion-resistance
+
+---
+
+#### Simulation Algorithms
+
+---
+
+#### DNA Sequence Matching
+
+---
+
 #### Quiz 1 Review
 
 ---
