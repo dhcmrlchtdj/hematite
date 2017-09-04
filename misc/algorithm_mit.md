@@ -311,20 +311,66 @@ def rebalance(self, node):
 
 ### Integer Arithmetic, Karatsuba Multiplication
 ### Square Roots, Newton's Method
+
+---
+
+- irrational
+- 卡特兰数 catalan number
+- 不懂……
+
+---
+
+- newton's method
+    - Xi+1 = Xi - F(Xi)/F'(Xi)
+
+- high precision multiply
+    - karatsuba's method
+    - 不懂
+
+- 不懂
+
+---
+
 ## Graphs
+
+---
+
 ### Breadth-First Search (BFS)
+
+---
+
+
+
+---
+
 ### Depth-First Search (DFS), Topological Sorting
+
+---
+
+
+
+---
+
 ## Shortest Paths
+
+---
+
 ### Single-Source Shortest Paths Problem
 ### Dijkstra
 ### Bellman-Ford
 ### Speeding up Dijkstra
 #### Quiz 2 Review
+
+---
+
 ## Dynamic Programming
 ### Memoization, Subproblems, Guessing, Bottom-up; Fibonacci, Shortest Paths
 ### Parent Pointers; Text Justification, Perfect-Information Blackjack
 ### String Subproblems, Pseudopolynomial Time; Parenthesization, Edit Distance, Knapsack
 ### Two Kinds of Guessing; Piano/Guitar Fingering, Tetris Training, Super Mario Bros.
+
+---
+
 ## Advanced Topics
 ### Computational Complexity
 ### Algorithms Research Topics
