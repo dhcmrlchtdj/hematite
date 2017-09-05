@@ -339,7 +339,26 @@ def rebalance(self, node):
 
 ---
 
+- graph G = (V, E)
+    - V = set of vertices
+    - E = set of edges
+        - directed / undirected
 
+- graph representation
+    - adjacency lists
+        - map(vertexA, [edge from vertexA])
+        - space complexity, O(V+E)
+    - implicit graphs
+    - object-oriented variations
+    - incidence lists
+
+- breadth-first search (BFS)
+    - explore graph level by level
+    - O(V+E) time
+    - implementation
+        - queue
+        - seen mark
+    - shortest path property (from root to vertex)
 
 ---
 
@@ -347,7 +366,31 @@ def rebalance(self, node):
 
 ---
 
+- depth-first search (DFS)
+    - recursively explore graph, backtracking as necessary
+    - O(V+E) time
+    - implementation
+        - recursive
+        - seen mark
 
+- edge classification
+    - tree edges (DFS visit order)
+        - 按照 DFS 遍历的顺序，可以画出一颗树来
+    - nontree edges
+        - 非 tree 的边，可以继续分成三类（还是按照相对 tree 顺序来说的）
+        - back edge: to ancestor
+        - forward edge: to descendant
+        - corss edge: to another subtree
+    - only tree & back edges exist in undirected graph
+        - 此时 forward 变成了 back
+        - 此时 cross 变成了 tree
+
+- cycle detection
+    - graph G has a cycle === DFS has a back edge
+    - (can be detected by seen mark with level?
+
+- topological sort
+    - run DFS then output reverse order = topological sort order
 
 ---
 
