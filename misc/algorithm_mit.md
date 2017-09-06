@@ -348,6 +348,8 @@ def rebalance(self, node):
     - adjacency lists
         - map(vertexA, [edge from vertexA])
         - space complexity, O(V+E)
+    - adjacency matrix
+        - two dimension array
     - implicit graphs
     - object-oriented variations
     - incidence lists
@@ -381,6 +383,10 @@ def rebalance(self, node):
         - back edge: to ancestor
         - forward edge: to descendant
         - corss edge: to another subtree
+        - 判断方法
+            - 有个递增的全局变量 clock
+            - 在开始遍历节点前记录 start=clock++，在完成遍历时记录 end=clock++
+            - 如果指向了遍历中或遍历过的节点，可以通过 start end 判断出当前边属于哪种
     - only tree & back edges exist in undirected graph
         - 此时 forward 变成了 back
         - 此时 cross 变成了 tree
@@ -399,14 +405,45 @@ def rebalance(self, node):
 ---
 
 ### Single-Source Shortest Paths Problem
+
+---
+
+- weighted graphs
+    - Graph = (Verteces, Edges, Weight)
+    - shortest path algorithm: Dijkstra / Bellmen-Ford
+
+- single source shortest paths
+    - subpaths of shortest paths are shortest paths
+    - DP，其实很符合直觉
+    - 通常用 DFS
+
+- negative-weight edges
+    - wtf
+    - might have negative weight cycles
+    - Dijkstra 算法就不能处理这种情况
+
+---
+
 ### Dijkstra
+
+---
+
 ### Bellman-Ford
+
+---
+
 ### Speeding up Dijkstra
+
+---
+
 #### Quiz 2 Review
 
 ---
 
 ## Dynamic Programming
+
+---
+
 ### Memoization, Subproblems, Guessing, Bottom-up; Fibonacci, Shortest Paths
 ### Parent Pointers; Text Justification, Perfect-Information Blackjack
 ### String Subproblems, Pseudopolynomial Time; Parenthesization, Edit Distance, Knapsack
