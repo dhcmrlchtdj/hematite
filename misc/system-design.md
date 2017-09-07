@@ -26,14 +26,18 @@
 - how you might address each of them
 - what are the alternatives and Trade-Offs for each
 
+- 对 server 结构进行比较细的拆分
+    - user => server => API => service => storage
+    - cache (memory cache / CDN cache / ...)
+
 ---
 
 ## scale
 
-- load balancer with multiple web servers
-- CDN for statics
-- master-slave replicas
-- consistent hashing
+- 看到文件存储，考虑能否使用 CDN
+- 看到服务，考虑能否去单点，负载均衡
+    - 进行多机部署，考虑是否需要一致性哈希等方法来进行负载均衡
+- 看到数据库，考虑是否需要缓存，是否需要主从等拆分，是否需要 nosql
 
 ---
 
@@ -42,3 +46,4 @@
 - when to update cache? how many strategies?
 - sql or nosql? what's advantage or disadvantage?
 - cache cluster design?
+    - where / when / how
