@@ -428,11 +428,33 @@ def rebalance(self, node):
 
 ---
 
+- shortest paths in DAGs
+- shortest paths in graphs without negative edges
+
+---
+
+- Dijkstra
+    - 有向图，单源最短路问题。起点到各个点的最短路。
+    - BFS
+    - 从起点 S 出发，遍历相邻节点，得到到每个节点的最短路径。
+    - 选择待处理节点中，距离 S 最短的点。遍历相邻节点。得到 S 到这些节点的最短路。
+    - 可能会重复处理到刚才已经走过的节点，此时以路径最短的为准。
+
+---
+
 ### Bellman-Ford
 
 ---
 
+
+---
+
 ### Speeding up Dijkstra
+
+---
+
+
+
 
 ---
 
