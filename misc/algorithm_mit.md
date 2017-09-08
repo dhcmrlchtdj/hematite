@@ -436,9 +436,10 @@ def rebalance(self, node):
 - Dijkstra
     - 有向图，单源最短路问题。起点到各个点的最短路。
     - BFS
-    - 从起点 S 出发，遍历相邻节点，得到到每个节点的最短路径。
-    - 选择待处理节点中，距离 S 最短的点。遍历相邻节点。得到 S 到这些节点的最短路。
-    - 可能会重复处理到刚才已经走过的节点，此时以路径最短的为准。
+    - 所有节点都对应一个距离，起点是 0，其他节点 ∞
+    - 标记已处理的点和未处理的点
+    - 取未处理的节点中，最小的那个点。处理该点所有的边，进行 relax 操作。然后将该节点标记为已处理。
+    - 重复处理过程，直到所有节点处理完。
 
 ---
 
@@ -446,6 +447,24 @@ def rebalance(self, node):
 
 ---
 
+- 能够处理 negative edges
+- 能够发现 negative-weight cycles（这种情况下是没有最短路的
+
+---
+
+- Bellman-Ford
+    - 分成两步，第一步计算出起点到任意节点的最短路
+        - 一开始起点是 0，起点节点是 ∞
+        - 遍历所有的边 `(u, v)`，执行 `relax(u, v)`
+            - `relax(u, v) => if d(v)>d(u)+w(u,v) then d(v)=d(u)+w(u,v)`
+        - 上述操作重复执行 `|v|-1` 次
+    - 第二步判断是否存在 negative-weight cycle
+        - 遍历所有的边 `(u,v)`
+        - 如果 `d(u) + w(u, v) < d(v)` 就说明存在 negative-weight cycle
+
+- 和 Dijkstra 其实有点像
+    - Dijkstra 是每次选择距离最小的那个节点，只处理这个节点的边
+    - Bellman-Ford 每次都处理所有的边
 
 ---
 
@@ -453,12 +472,19 @@ def rebalance(self, node):
 
 ---
 
+- single-source single-target Dijkstra
+    - 只要求一个点，那么就不需要遍历完全部节点（废话啊……
 
+- bidirectional search
+    - 同时从起点 s 和终点 t 进行搜索
+    - 假如某个点，既在 s 的搜索结果中，又在 t 的搜索结果中，那么这条路径就确定了
+    - 继续进行其他点的处理，直到所有节点的最短路都确定下来
+    - （这样的操作，相比直接从头到位查找，有实际效果吗？
 
-
----
-
-#### Quiz 2 Review
+- goal-directed search / A-star
+    - modify the edge weights with potential function over vertices.
+    - `w'(u,v) = w(u,v) - lambda(u) + lambda(v)`
+    - 挑选合适的函数，让修改后的 w' 都变成正数，然后就可以套用 Dijkstra
 
 ---
 
@@ -467,12 +493,30 @@ def rebalance(self, node):
 ---
 
 ### Memoization, Subproblems, Guessing, Bottom-up; Fibonacci, Shortest Paths
+
+---
+
 ### Parent Pointers; Text Justification, Perfect-Information Blackjack
+
+---
+
 ### String Subproblems, Pseudopolynomial Time; Parenthesization, Edit Distance, Knapsack
+
+---
+
 ### Two Kinds of Guessing; Piano/Guitar Fingering, Tetris Training, Super Mario Bros.
 
 ---
 
 ## Advanced Topics
+
+---
+
 ### Computational Complexity
+
+---
+
 ### Algorithms Research Topics
+
+---
+
