@@ -540,6 +540,7 @@ def rebalance(self, node):
     - DP
         - 如何定义效果好不好。为每一行计算一个 badness，让最后的 badness 的总和最小
         - 如何定义 badness，超过行宽则 `∞`，不超过行宽则 `(line_len - words_len)^3`
+            - 目标肯定是让每行的空格都尽可能少，但为什么要用 `^3`，似乎是因为 latex 选了这个函数
         - `DP[i] = min(badness(i,j) + DP[j] for j in (i+1,n))`
         - 如何拆解问题
             - 假设一共 N 个词
@@ -621,7 +622,34 @@ def rebalance(self, node):
 
 ---
 
+- computational difficuly
+    - P   = { problems solvable in polynomial time }
+    - NP  = { problems solvable in polynomial time via a "lucky" algorithm }
+        - = { decision problems with solutions that can be "checked" in polynomial time }
+    - EXP = { problems solvable in exponential time }
+    - R   = { problems solvable in finite time }
+    - `P < NP < EXP < R < uncomputable`
+        - `P < NP < NP-hard`, NP/NP-hard 的交集被叫做 NP-complete
+        - `P < NP < EXP < EXP-hard`, EXP/EXP-hard 的交集被叫做 EXP-complete
+
+- uncomputable: no algorithm solves it correctly in finite time on all inputs
+- decision problem: answer is YES or NO
+- most decision problems are uncomputale
+    - 比如 halting problem
+
+- reductions: convert your problem into a problem you already know how to solve
+
+---
+
+- P 就是能在多项式时间内解决的问题
+- NP 就是能在多项式时间验证答案正确与否的问题
+- P=NP，对于一个问题，如果能在多项式时间内验证答案的正确性，问能否在多项式时间内求解
+
+---
+
 ### Algorithms Research Topics
 
 ---
 
+- 提了下利用多核
+- 提了下后续课程
