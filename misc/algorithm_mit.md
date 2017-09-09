@@ -563,7 +563,53 @@ def rebalance(self, node):
 
 ---
 
+- useful subproblems for strings/sequences x
+    - suffixes `x[i:]` O(|x|)
+    - prefixes `x[:i]` O(|x|)
+    - substrings `x[i:j]` O(|x|^2)
+
+---
+
+- edit distance
+    - edit: insert c, delete c, replace c
+    - (if insert&delete cost 1, replace cost 0; it's equivalent to finding longest common subsequence
+    - subproblems, `edit_distance(x[i:],y[j:])`
+        - 每个子问题，都能拆成三个子问题
+        - `cost(delete(x[i]) + edit_distance(x[i+1:],y[j:])`
+        - `cost(insert(y[j]) + edit_distance(x[i:],y[j+1:]))`
+        - `cost(replace(x[i],y[j]) + edit_distance(x[i+1:],y[j+1:]))`
+        - 然后看哪种开销最小
+
+---
+
+- knapsack （背包问题）
+    - question
+        - knapsack of size S
+        - list of items, each item has integer size Si and value Vi
+        - choose subset of items of max total value
+    - solution
+        - 其实和前面的 text justification 是很像的
+        - 分成 S1...Sn 这样 N 个子任务，子问题变化的是背包的大小，从 S 变成 S-Si
+        - 整合结果的时候，V1...Vn 加上子问题的结果，取最大的那个即可
+    - not polynomial time
+
+---
+
+- polynomial - good
+- exponential - bad
+- pseudopolynomial - so so
+
+---
+
 ### Two Kinds of Guessing; Piano/Guitar Fingering, Tetris Training, Super Mario Bros.
+
+---
+
+- 2 kinds of guessing
+    - guess which other subproblems to use (used by every DP except Fibonacci)
+    - create more subproblems to guess/remember more structure of solution (used by knapsack DP)
+        - effectively report many solutions to subproblem
+        - lets parent subproblem know features of solution
 
 ---
 
