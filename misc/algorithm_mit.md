@@ -485,6 +485,7 @@ def rebalance(self, node):
     - modify the edge weights with potential function over vertices.
     - `w'(u,v) = w(u,v) - lambda(u) + lambda(v)`
     - 挑选合适的函数，让修改后的 w' 都变成正数，然后就可以套用 Dijkstra
+    - 不懂
 
 ---
 
@@ -496,7 +497,65 @@ def rebalance(self, node):
 
 ---
 
+- DP
+    - careful brute force
+    - recursion + memoization + guessing
+    - shortest paths in some DAG
+
+- DP
+    - memoize & re-use solution to subproblem
+    - time complexity = number of subproblems * time/subproblem
+- bottom-up DP
+    - topological sort of subproblem depencency DAG
+    - no recursion (practically faster)
+    - save space (no need remember all subproblem result)
+    - 其实不复杂
+        - 一开始说的 DP，是直接计算需要的值，逐步分解到小问题
+        - bottom-up DP，是先计算小问题，逐步推导到需要的值
+- subproblem depencency should be acyclic
+
+- graph with cycles
+
+---
+
 ### Parent Pointers; Text Justification, Perfect-Information Blackjack
+
+---
+
+- 5 steps to DP
+    - define subproblems
+    - guess (part of solution)
+    - relate subproblem solutions
+    - recuse + memoize
+        - or build DP table bottom-up
+        - check subproblems acyclic/topological order
+    - solve original problem
+
+- 感觉 DP 第一步就很有难度了，如何拆解问题
+
+---
+
+- text justification: split text into "good" lines
+    - 比较直接，但效果不好的方法：每行都尽可能塞下更多词（greedy），然后行内平分间距。
+    - DP
+        - 如何定义效果好不好。为每一行计算一个 badness，让最后的 badness 的总和最小
+        - 如何定义 badness，超过行宽则 `∞`，不超过行宽则 `(line_len - words_len)^3`
+        - `DP[i] = min(badness(i,j) + DP[j] for j in (i+1,n))`
+        - 如何拆解问题
+            - 假设一共 N 个词
+            - 假设第一行最多可以放 M 个词
+            - 子问题就是对 (N-1) ... (N-M) 个词进行 justification
+            - （问题拆开后，就可以看到和最短路问题相同的模式了
+
+- parent pointers
+    - 在处理问题的过程中做缓存（实际编码应该能注意到？重复计算的地方
+    - remember which guess was best
+    - just like memoization and button-up, but automatic (no thinking required)
+
+- longest increasing subsequence
+    - 关键应该是问题拆解？
+    - 对于 x，子问题应该是找出右边大于 x 的值的 LIS，都算好后，取最长的那个加上 x
+    - 其实这种过程，和 map-reduce 很类似啊
 
 ---
 
