@@ -85,4 +85,9 @@ https://github.com/janestreet/incremental_kernel/blob/master/src/incremental_int
         - If the vdom is large and complicated, this is a serious problem.
         - 即使如此，大部分时候，其实挺好呀
 
+---
 
+http://lambda-the-ultimate.org/node/4900
+http://wiki.c2.com/?FunctionalReactiveProgramming
+http://wiki.c2.com/?FlowBasedProgramming
+http://lambda-the-ultimate.org/node/2057
