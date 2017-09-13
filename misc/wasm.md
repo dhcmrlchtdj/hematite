@@ -32,3 +32,16 @@ https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_form
 
 - WASM text format (.wat) 和 WASM binary format (.wasm) 是 1:1 对应的
 - wat 用的是 S-exp
+
+---
+
+http://webassembly.org/getting-started/js-api/
+
+基本的 JS 交互，导入导出函数。
+
+---
+
+http://webassembly.org/docs/faq/
+
+---
+
