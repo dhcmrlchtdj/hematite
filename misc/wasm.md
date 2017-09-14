@@ -42,6 +42,3 @@ http://webassembly.org/getting-started/js-api/
 ---
 
 http://webassembly.org/docs/faq/
-
----
-
