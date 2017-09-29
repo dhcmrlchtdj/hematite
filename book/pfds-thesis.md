@@ -181,22 +181,88 @@ N 次 O(1) 的操作，也只够平摊一次 O(n) 的操作。
 
 ---
 
+> ocaml doc:
 > If x has already been forced,
 > Lazy.force x returns the same value again without recomputing it.
 
 ---
 
-### The Banker’s Method
+#### cs3110
+
+http://www.cs.cornell.edu/courses/cs3110/2013sp/lectures/lec21-amortized/lec21.html
+http://www.cs.cornell.edu/courses/cs3110/2013sp/supplemental/recitations/rec21.html
+
+- aggregate method
+    - where the total running time for a sequence of operations is analyzed
+- accounting (or banker's) method
+    - where we impose an extra charge on inexpensive operations and use it to pay for expensive operations later on.
+- potential (or physicist's) method
+    - in which we derive a potential function characterizing the amount of extra work we can do in each step.
+
+---
+
+## 4.Eliminating Amortization
+
+---
+
+> in some application areas, it is important to bound the running times of
+> individual operations, rather than sequences of operations.
+> Real-time systems / Parallel systems / Interactive systems
+
+> it is sometimes easier to design an amortized data structure, and then
+> convert it to a worst-case data structure.
+
+> scheduling is a technique for converting many lazy amortized data structures
+> to worst-case data structures by systematically forcing lazy components in
+> such a way that no suspension ever takes very long to execute.
+
+---
+
+### Scheduling
+
+---
+
+> worst-case data structures that use lazy evaluation internally.
+
+> To achieve worst-case bounds, we must guarantee that every suspension executes
+> in less than the allotted time.
+
+---
+
+> The first step in converting an amortized data structure to a worst-case data structure is to
+> reduce the intrinsic cost of every suspension to less than the desired bounds.
+> The second step in converting an amortized data structure to a worst-case data structure is to
+> avoid cascading forces by arranging that, whenever we force a suspension, any other suspensions on which it depends have already been forced and memoized.
+
+---
+
+### Real-Time Queues
 
 ---
 
 
+```ocaml
+let enqueue x { front=f; rear=r; } = schedule { front=f; rear=x::r }
+let dequeue = function
+    | { front=[]; } -> empty
+    | { front=fh::ft; rear=r; } -> schedule { front=ft; rear=r }
+```
 
-
+大约是说，使用类似上面的做法，将原本比较耗时的操作，分散到操作中。
+在 schedule 的时候，可能执行一部分的合并操作。
+（此处没完全理解……
 
 ---
 
-### The Physicist’s Method
+## Lazy Rebuilding
+
+---
+
+> lazy rebuilding, a variant of global rebuilding
+
+---
+
+### Batched Rebuilding
 
 ---
 
