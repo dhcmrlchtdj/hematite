@@ -254,11 +254,13 @@ let dequeue = function
 
 ---
 
-## Lazy Rebuilding
+## 5.Lazy Rebuilding
 
 ---
 
 > lazy rebuilding, a variant of global rebuilding
+
+主要是为了讲 lazy，先介绍下 batched 和 global。
 
 ---
 
@@ -266,4 +268,80 @@ let dequeue = function
 
 ---
 
+批量更新。
 
+> it is usually too expensive to restore perfect balance after every update
+
+> an attractive alternative is to postpone rebalancing until after a sequence
+> of updates, and then to rebalance the entire structure, restoring it to
+> perfect balance
+
+假设目标是平摊后时间复杂度为 O(f(n))，进行一次完整转化的时间复杂度为 O(g(n))。
+则可以在 C*g(n)/f(n) 进行一次完整的转化。
+
+---
+
+BST 之类的数据结构，操作时要保证结构满足某些特性，才能保证时间复杂度。
+这里的核心思路就是不急着去满足这些特性，比如删除了就先标记，不急着重新平衡。
+等到积累了一定量的操作后，一次性重构整个平衡树。
+
+比如一次完整重构的时间复杂度为 g(n)=O(n)，
+目标是平摊后删除操作的时间复杂度为 f(n)=O(logN)，
+则需要 n = g(n)/f(n) 个删除来平摊这一次完整重构的开销。
+
+---
+
+> Under persistent usage, the amortized bounds degrade to the cost of the
+> rebuilding transformation because it is possible to trigger the transformation
+> arbitrarily often.
+> In fact, this is true for all data structures based on batched rebuilding.
+
+前面分析过这种问题，进行完整重构的操作可能会被重复。
+（不过前面也说了 lazy 来解决呀？
+
+---
+
+### Global Rebuilding
+
+---
+
+全局副本？
+
+> The basic idea is to execute the rebuilding transformation incrementally,
+> performing a few steps per normal operation.
+
+> Unlike batched rebuilding, global rebuilding has no problems with persistence.
+> Unfortunately, global rebuilding is often quite complicated.
+
+---
+
+同时维护两份数据，primary 和 secondary。
+
+外部能接触到的读写都在 primary 进行。
+然后每次操作时，都在 secondary 跑一点重建数据结构的操作，使得 secondary 满足约束。
+等到 secondary 满足约束后，就替换调 primary。
+可以等几次操作后，就生成一个新的 secondary，又开始进行结构的重建。
+
+一个问题是 primary 的写操作如何同步到 secondary。
+文章里说到用 buffer，然后每步重建都批量执行一点。
+
+（这个 secondary 这么搞，感觉确实挺复杂的……
+
+---
+
+### Lazy Rebuilding
+
+---
+
+> Global rebuilding has two advantages over batched rebuilding:
+> it is suitable for implementing persistent data structures
+> and it yields worst-case bounds rather than amortized bounds.
+
+> Lazy rebuilding shares the first advantage, but yields amortized bounds.
+> if desired, worst-case bounds can often be recovered using the scheduling techniques
+
+---
+
+## 6.Numerical Representations
+
+---
