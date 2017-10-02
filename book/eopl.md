@@ -507,4 +507,25 @@ thread 的实现，和 trampoline 一样都是 thunk。
 
 ---
 
+> type structure
+
+> a value can be of more than one type
+
+---
+
+- expression is well-typed: we can assign an expression to a type
+- expression is ill-typed: we can't
+
+---
+
+- how to find the type for the bound variable
+    - Type Checking
+        - the programmer is required to supply the missing information about
+            the types of bound variables
+    - Type Inference
+        - the type-checker attempts to infer the types of the bound variables
+            based on how the variables are used in the program
+
+---
+
 
