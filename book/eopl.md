@@ -528,4 +528,32 @@ thread 的实现，和 trampoline 一样都是 thunk。
 
 ---
 
+### 7.4
+
+---
+
+type inference
+
+- traverse the abstract syntax tree
+- generate equations between types, possibly including these unknowns
+- solve the equations for the unknown types
+
+> To infer the type of an expression, we’ll introduce a type variable for every
+> subexpression and every bound variable, generate the constraints for each
+> subexpression, and then solve the resulting equations.
+
+感觉上就是解方程啦。
+代码给出了一个个表达式，然后对部分变量求解。
+
+- 从 expressions 得到 type variables，每个表达式都有对应的类型
+- 从 expressions 得到 equations，每个表达式都能构造出部分关系
+- 从 equations 得到 substitutions，通过逐步替换得到每个变量的真实类型
+
+最后可能部分类型仍是自由变量，就成 polymorphic 了。
+可能出现类型冲突，也就是代码出问题了。
+
+> No variable bound in the substitution occurs in any of the right-hand sides
+> of the substitution.
+
+---
 
