@@ -345,3 +345,98 @@ BST 之类的数据结构，操作时要保证结构满足某些特性，才能�
 ## 6.Numerical Representations
 
 ---
+
+numerical representation: choose a representation of natural numbers with
+certain desired properties and define the functions on the container objects
+accordingly.
+
+---
+
+random-access list / heap 这样的容器，和数字在表示、操作上都存在相似之处。
+介绍一些在操作数字时，递增 O(1)，相加 O(logN) 的表示方式。
+
+---
+
+### Positional Number Systems
+
+---
+
+> each digit Bi has weight Wi, the value is SUM(Bi*Wi).
+
+就是数字表示啦，对 Bi/Wi 加一点限制，就是二进制、十进制了。
+
+---
+
+### ???
+
+---
+
+## 7.Data-Structural Bootstrapping
+
+---
+
+> problems whose solutions require solutions to (simpler) instances of the same problem.
+
+- data-structural bootstrapping
+    - structural decomposition: involves bootstrapping complete data structures from incomplete data structures
+    - structural abstraction: involves bootstrapping efficient data structures from inefficient data structures
+
+---
+
+### Structural Decomposition
+
+---
+
+1. taking an implementation that can handle objects only up to some bounded size
+2. extending it to handle objects of unbounded size
+
+---
+
+分治？
+
+---
+
+### Structural Abstraction
+
+---
+
+> For many implementations, designing an efficient insert function is easy,
+> but designing an efficient join function is difficult.
+
+> Structural abstraction creates collections that contain other collections as
+> elements. Then two collections can be joined by simply inserting one
+> collection into the other.
+
+> The basic idea of structural abstraction is to somehow represent bootstrapped
+> collections as primitive collections of other bootstrapped collections.
+
+- primitive type / bootstrapped type
+
+---
+
+### ???
+
+---
+
+## 8.Implicit Recursive Slowdown
+
+---
+
+### Recursive Slowdown
+
+---
+
+> recursive slowdown is a variant of binary numbers that can be incremented in
+> O(1) worst-case time.
+
+---
+
+### Implicit Recursive Slowdown
+
+---
+
+> The essence of the recursive-slowdown implementation of binary numbers is a
+> method for executing carries incrementally.
+
+> By combining the ideas of recursive slowdown with lazy evaluation, we obtain
+> a new technique, called implicit recursive slowdown.
