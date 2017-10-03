@@ -557,3 +557,155 @@ type inference
 
 ---
 
+试着从实现角度再描述一下
+
+- 首先是 subst 的结构，可以用 hash table，`my_type => my_type`
+- 然后是 type_of 的逻辑，每个表达式都会再 subst 里添加映射关系，得到的新的 subst。
+    - 从每个表达式本身，还能得到一些类型间的映射关系。比如表达式是 `a-b`，则 a/b/(a-b) 都肯定是 int
+    - 通过 unifier 操作，将这种关系应用到 subst，又得到一个新 subst
+- unifier 需要几个参数，`lhs_type, rhs_type, subst`。
+    - 先从 subst 找到 lhs_type 及 rhs_type 对应的类型，进行比较
+    - 相同则没有信息量，直接返回
+    - 其中一个类型 a 是变量的话，则可以用另一个类型 b 来代替变量（当然这里要保证 b 里面没有出现 a
+    - 两边都是函数的话，递归地对参数和返回值进行 unifier
+    - 两边都是不能在替换的类型，又不相同，肯定出错了。比如 int => bool 之类的
+
+---
+
+## 8. Modules
+
+---
+
+- use module to
+    - separate the system into relatively self-contained parts
+    - control the scope and binding of names
+    - enforce abstraction boundaries
+    - combine these parts flexibly
+- use the type system to create and enforce abstraction boundary
+
+---
+
+- module
+    - simple module: a set of bindings
+    - module procedure: take a module and produce another
+- interface
+
+> understanding the scoping and binding rules of the language will be the key
+> to both analyzing and evaluating programs in the language.
+
+---
+
+### 8.1
+
+---
+
+- simple variables: variables in implementation
+- qualified variables: variables from other module
+
+---
+
+整体上分成两部分，Interpreter 和 Checker，一个检查内容，一个检查签名，可以分开。
+区别和之前不是很大，主要是增加了 qualified variable 这个表达式，
+然后在 env 里相应地加上了 module 相关的结构。
+
+---
+
+checker 会涉及到一个签名比较的问题。（width-subtyping
+另外书中的实现都是用的链表，所以限制比较多。（很多时候 hash 还是比较好用的
+
+---
+
+### 8.2
+
+---
+
+- type declarations: transparent and opaque
+    - transparent / concrete /  type abbreviations
+    - opaque / abstract
+        - the type checker guarantees that no program manipulates the values
+            provided by the interface except through the procedures that the
+            interface provides
+
+这两个都是接口上的标记。
+transparent 只是别名，使用者能知道具体的数据格式。
+opaque 则隐藏了具体实现，外部只知道导出的名称。
+
+---
+
+在对 opaque / transparent 进行 width-subtyping 的比较时，需要特殊处理。
+
+`transparent t=int <: opaque t`
+
+> something with a known type is always usable as a thing with an unknown type
+
+---
+
+### 8.3
+
+---
+
+- module procedures / parameterized modules
+
+---
+
+## 9.Objects and Classes
+
+---
+
+- object: managed piece of state
+    - fields
+    - methods
+- message-passing: call a method
+- class: structure that specify the fields and methods of each object
+- instance: object
+- inherit/extend: define a new class as a small modification of an existing class
+- state
+- behavior
+
+> A procedure is an object whose state is contained in its free variables.
+
+---
+
+- object system
+    - can define opaque types
+    - a data structure with behavior
+    - have many objects of the same class
+- module system
+    - can define opaque types
+    - a set of bindings
+    - functor (ocaml)
+
+> Modules and classes can work fruitfully together.
+
+---
+
+- dynamic dispatch: we do not know what kind of node we are sending the message
+    to. Instead, each node accepts the sum message and uses its sum method to
+    do the right thing.
+
+---
+
+- parent / superclass
+- child / subclass
+
+- single inheritance
+- multiple inheritance (powerful and problematic)
+
+- subclass polymorphism: an instance of a child class can be used anywhere an
+    instance of its parent can be used
+
+- shadow: redeclare a field in subclass
+- override: redeclare a method in subclass
+- host class: which class the original method defined
+- super call
+
+- static method dispatch: the method to be invoked can be determined from the
+    text, independent of the class of self
+
+---
+
+- interface
+- subclass polymorphism
+- interface polymorphism
+- cast / instanceof
+- covariant in the result type and contravariant in the argument type
