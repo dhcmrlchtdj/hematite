@@ -740,6 +740,21 @@ let fix f = (fun (`X x) -> f(x (`X x))) (`X(fun (`X x) y -> f(x (`X x)) y));;
 
 ---
 
+> unification is the process of finding a substitution that makes two given terms equal.
+> pattern matching is done by applying unification to OCaml expressions.
+> type inference is done by applying unification to type expressions.
+
+---
+
+> The unification algorithm consists of two mutually recursive procedures
+> `unify` and `unify_one`, which try to unify a list of pairs and a single pair,
+> respectively.
+
+> The result of the computation is the most general unifier for the list of
+> pairs or the pair, respectively.
+
+---
+
 ## Continuations and CPS Conversion
 
 ---
