@@ -65,11 +65,14 @@ http://caml.inria.fr/pub/docs/manual-ocaml/
     - `let f ~x:a ~y:b = a - b`
     - `f ~x:3 ~y:2`
     - `f 3 2`
+    - `let x=3 in f ~x ~y:2`
     - `let f ~x:a ~x:b ~x:c = a + b + c`
 - optional arguments
     - `let f ?(x=10) y = x - y`
     - `f 5`
     - `f ~x:20 5`
+    - `f ?x:(Some 20) 5`
+    - `f ?x:None 5`
     - `let bump ?step x = match step with | None -> x | Some y -> x + y`
 - polymorphic variant
     - `[\`On; \`Off]`

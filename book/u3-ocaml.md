@@ -6,6 +6,10 @@ https://caml.inria.fr/pub/docs/u3-ocaml/index.html
 
 ---
 
+## Core ML
+
+---
+
 - syntax
 - dynamic semantics
     - approaches to defining the semantics
@@ -26,3 +30,36 @@ https://caml.inria.fr/pub/docs/u3-ocaml/index.html
 - recursion
     - fix-point combinator
     - recursive types
+
+---
+
+---
+
+## The core of OCaml
+
+---
+
+- data type, pattern matching
+- mutable storage, side effects
+- exceptions
+
+---
+
+## The object layer
+
+---
+
+
+---
+
+## The module language
+
+---
+
+
+---
+
+## Mixing modules and objects
+
+---
+
