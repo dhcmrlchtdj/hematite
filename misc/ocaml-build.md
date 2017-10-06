@@ -11,11 +11,11 @@ https://github.com/ocaml/ocamlbuild/blob/master/manual/manual.adoc
 ```
 $ ocamlbuild \
     -tag debug -tag profile \
-    -tag 'color(always)' \
     -tag safe_string -tag strict_sequence -tag strict_formats -tag short_paths -tag keep_locs \
-    -tag 'warn(@A-4)' \
-    -use-ocamlfind -package str \
-    filename.{byte,native}
+    -tag 'color(always)' \
+    -tag 'warn(@A-4-27-60)' \
+    -use-ocamlfind -pkgs 'str,lwt' \
+    filename.{byte,inferred.mli}
 
 $ ocamlbuild clean
 ```
