@@ -132,10 +132,57 @@ small-step 和 big-step 其实就是 SICP 里的替换模型和环境模型啦�
 
 ---
 
+> the fix-point combinator, and more generally the whole lambda-calculus,
+> can be encoded using variant datatypes.
+
+---
+
+> store-reduction preserves store-typings.
+> store locations cannot be polymorphic.
+
+> value-only polymorphism is unambiguously the best compromise between
+> simplicity and expressiveness.
+
+---
+
 ## The object layer
 
 ---
 
+- type
+- class
+    - build from scratch `object ... end`
+    - build from other classes by inheritance `object interit <super_class> ... end`
+    - class types are not regular types
+- object
+    - create from classes by instantiation `new <class_name>`
+    - create from other objects by cloning or overriding `Oo.copy <object_name>`
+    - object types are regular types
+
+---
+
+- there is no correspondence to be made between sub-classing and subtyping
+    - classes may be in an sub-classing relation
+    - object types may be in a subtyping relation
+- subtyping should not be confused with inheritance
+    - inheritance relates classes
+    - subtyping relates object types (not even class types)
+
+- subtyping: an object with a larger interface may be used in place of an object
+    with a smaller one.
+- parametric classes are polymorphic, objects of parametric classes are not.
+
+- binary methods: the argument is an object of the same type as the type of self
+    - inheriting from such classes in often a problem
+
+---
+
+- objects are not structural.
+- object types are structural.
+    - use row variables to allow polymorphism
+
+- Structural types mean that the structure of types is always transparent and
+    cannot be hidden by opaque names.
 
 ---
 
@@ -143,6 +190,7 @@ small-step 和 big-step 其实就是 SICP 里的替换模型和环境模型啦�
 
 ---
 
+- a functor is a function from modules to modules.
 
 ---
 
@@ -150,3 +198,11 @@ small-step 和 big-step 其实就是 SICP 里的替换模型和环境模型啦�
 
 ---
 
+- module
+    - can be embedded
+    - can be parameterized by types and values
+    - allow value and type abstraction on a large scale
+- class
+    - provide inheritance
+    - provide late binding mechanism
+    - can be parameterized by values on a small scale
