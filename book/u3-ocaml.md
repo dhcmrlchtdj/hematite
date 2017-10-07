@@ -99,9 +99,7 @@ small-step 和 big-step 其实就是 SICP 里的替换模型和环境模型啦�
 
 ---
 
-
-
-
+> Type soundness asserts that well-typed programs cannot go wrong.
 
 ---
 
