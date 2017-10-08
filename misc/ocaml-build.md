@@ -60,3 +60,33 @@ $ cat jbuild
 $ jbuilder build filename.{bc,exe}
 $ jbuilder clean
 ```
+
+---
+
+```merlin
+B _build
+FLG -w @A -keep-locs -safe-string -short-paths -strict-formats -strict-sequence
+```
+
+```makefile
+targets := $(patsubst %.ml,%,$(wildcard *.ml))
+
+all: $(targets)
+
+clean:
+	-ocamlbuild -clean
+
+$(targets):
+	-@ocamlbuild \
+		-tag 'color(always)' \
+		-tag 'warn(@A)' \
+		-tag safe_string \
+		-tag strict_sequence \
+		-tag strict_formats \
+		-tag short_paths \
+		-tag keep_locs \
+		-use-ocamlfind -pkgs 'str' \
+		$@.{byte,inferred.mli}
+
+.PHONY: all clean $(targets)
+```
