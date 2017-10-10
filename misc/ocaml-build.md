@@ -64,7 +64,9 @@ $ jbuilder clean
 ---
 
 ```merlin
-B _build
+S src/**
+B _build/**
+PKG lwt
 FLG -w @A -keep-locs -safe-string -short-paths -strict-formats -strict-sequence
 ```
 
@@ -74,10 +76,10 @@ targets := $(patsubst %.ml,%,$(wildcard *.ml))
 all: $(targets)
 
 clean:
-	-ocamlbuild -clean
+	@ocamlbuild -clean
 
 $(targets):
-	-@ocamlbuild \
+	@ocamlbuild \
 		-tag 'color(always)' \
 		-tag 'warn(@A)' \
 		-tag safe_string \
