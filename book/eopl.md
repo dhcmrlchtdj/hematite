@@ -130,13 +130,29 @@
 
 ---
 
+### 3.5
+
+---
+
 - references vs declarations
     - variable reference is a use of the variable
     - variable declaration introduces the variable as a name for some value
+
+我理解这个说的是 lhs 和 rhs
+比如 `(let ((x (+ y 7))) (+ x 3))` 里第一个 x 是 declaration，第二个 x 是 reference。
+
+---
+
 - scope (for declarations)
     - binding: association between a variable and its value
     - shadow: an inner declaration shadows the outer one
     - static/lexical vs dynamic
+        - static means something can be computed without executing the program
+        - dynamic means something only determinable at run-time
+
+---
+
+### 3.6
 
 ---
 
@@ -148,6 +164,10 @@
 把 string->value 的 environment 换成了 int->value 的 environment。
 
 然后书里提供了将普通版本翻译成 nameless 版本的翻译程序。
+
+---
+
+变成 nameless 版本后，其实就是 hash 变成了 array，可以更高效的索引。
 
 ---
 
