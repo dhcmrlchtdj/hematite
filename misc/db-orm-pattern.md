@@ -6,6 +6,7 @@ http://jgaskins.org/blog/2012/04/20/data-mapper-vs-active-record/
 https://martinfowler.com/eaaCatalog/activeRecord.html
 https://martinfowler.com/eaaCatalog/dataMapper.html
 http://culttt.com/2014/06/18/whats-difference-active-record-data-mapper/
+http://typeorm.io/#/active-record-data-mapper
 
 ---
 
