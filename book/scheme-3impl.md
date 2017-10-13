@@ -144,6 +144,35 @@ value
 
 ---
 
+> Functions are allowed as parameters, but they are not first class objects
+> since they cannot be reliably retained and invoked after the defining scope
+> no longer exists.
+
+（可以作为参数，却不是 first-class 的函数
+
+---
+
+- call stack 的结构 （下面这种 push 顺序，便于 tail call 优化）
+    - static link (pushed last)
+        - frame pointer
+        - point to the the called function
+        - a pointer to the next rib of an environment
+    - last argument ... first argument
+    - next expression
+        - return address
+    - dynamic link (pushed first)
+        - frame pointer
+        - point to the caller's frame
+        - a pointer to the next frame in the control stack
+
+> Separation of the dynamic and static chains facilitates the support of
+> closures and tail calls.
+
+---
+
+
+---
+
 ## Conclusions
 
 ---
