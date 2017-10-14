@@ -168,8 +168,8 @@ value
 > Separation of the dynamic and static chains facilitates the support of
 > closures and tail calls.
 
----
-
+> call frames and variable bindings are placed on a true stack rather than in
+> a heap-allocated linked structure.
 
 ---
 
