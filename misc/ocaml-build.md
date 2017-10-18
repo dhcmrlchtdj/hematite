@@ -71,24 +71,24 @@ FLG -w @A -keep-locs -safe-string -short-paths -strict-formats -strict-sequence
 ```
 
 ```makefile
-targets := $(patsubst %.ml,%,$(wildcard *.ml))
+OCB_FLAGS := \
+	-tag 'color(always)' \
+	-tag 'warn(@A)' \
+	-tags safe_string,strict_sequence,strict_formats,short_paths,keep_locs \
+	-use-menhir -tag explain \
+	-use-ocamlfind -pkgs 'str'
+OCB := ocamlbuild $(OCB_FLAGS)
 
-all: $(targets)
+mlis := $(patsubst %.ml,%,$(wildcard src/*.ml))
+
+main: $(mlis)
+	@$(OCB) src/main.byte
+
+$(mlis):
+	@$(OCB) $@.inferred.mli
 
 clean:
 	@ocamlbuild -clean
 
-$(targets):
-	@ocamlbuild \
-		-tag 'color(always)' \
-		-tag 'warn(@A)' \
-		-tag safe_string \
-		-tag strict_sequence \
-		-tag strict_formats \
-		-tag short_paths \
-		-tag keep_locs \
-		-use-ocamlfind -pkgs 'str' \
-		$@.{byte,inferred.mli}
-
-.PHONY: all clean $(targets)
+.PHONY: main clean $(mlis)
 ```
