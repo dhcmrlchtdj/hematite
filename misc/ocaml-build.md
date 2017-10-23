@@ -10,11 +10,13 @@ https://github.com/ocaml/ocamlbuild/blob/master/manual/manual.adoc
 
 ```
 $ ocamlbuild \
-    -tag debug -tag profile \
-    -tag safe_string -tag strict_sequence -tag strict_formats -tag short_paths -tag keep_locs \
+    -tag debug \
+    -tag profile \
     -tag 'color(always)' \
-    -tag 'warn(@A-4-27-60)' \
-    -use-ocamlfind -pkgs 'str,lwt' \
+    -tags 'warn(+a),warn_error(-a+31)' \
+    -tags safe_string,strict_sequence,strict_formats,short_paths,keep_locs \
+    -use-menhir -tag explain \
+    -use-ocamlfind -pkgs 'str'
     filename.{byte,inferred.mli}
 
 $ ocamlbuild clean
@@ -67,13 +69,13 @@ $ jbuilder clean
 S src/**
 B _build/**
 PKG lwt
-FLG -w @A -keep-locs -safe-string -short-paths -strict-formats -strict-sequence
+FLG -w +a -warn-error -a+31 -keep-locs -safe-string -short-paths -strict-formats -strict-sequence
 ```
 
 ```makefile
 OCB_FLAGS := \
 	-tag 'color(always)' \
-	-tag 'warn(@A)' \
+	-tags 'warn(+a),warn_error(-a+31)' \
 	-tags safe_string,strict_sequence,strict_formats,short_paths,keep_locs \
 	-use-menhir -tag explain \
 	-use-ocamlfind -pkgs 'str'
