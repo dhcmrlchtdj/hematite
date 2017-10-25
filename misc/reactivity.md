@@ -84,6 +84,7 @@ productor 会缓存数据等待 consumer 读取，但 publisher 不会等待 sub
 + promise / resolver / deferred，读／写／统称
 + resolver 可以理解为只有一个返回值的 generator，可以 return/throw，
     只有一个返回值，自然就没有 yield 了。
+
 ---
 
 ### asynchronous functions
