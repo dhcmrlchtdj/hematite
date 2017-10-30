@@ -80,4 +80,44 @@ http://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-ma
 
 ---
 
+写之前考虑清楚各种 operator
+有各种不同维度的属性
 
+- unary, binary, ternary
+- prefix, postfix, infix, mixfix/distfix, closefix
+- left associative, right associative
+- precedence
+
+---
+
+在解析的时候，这些属性需要综合考虑。
+不过整理后也不是很复杂，下面是些常见的例子。
+
+- prefix, `-a` `!x` `++i`
+- closefix `(a)`
+
+- postfix, `i++`
+- infix-left, `x+y` `x+y+z`
+- infix-right, `x^y` `x^y^z`
+
+- mixfix
+    - `b?x:y` `X ? bb?bx:by : cc?cx:cy`
+    - `a[i]` `a[ b[i] ]`
+    - `fn(a1,a2)` `f1( f2() )`
+
+---
+
+- closefix 和 mixfix 都是两个符号组成
+    - closefix 是 unary
+    - mixfix 是 ternary
+    - 实现时，都要考虑两个符号的匹配
+- associative 在实现上，可以靠 precedence 解决
+    - mixfix 可以重置 precedence
+    - infix 可以增加一个是否相等的判断
+- prefix 和 closefix 会先读取 operator，其他类型都是先读取 operand
+    - 实现时，可以先判断之前是否有 operand，来确定接下来是 prefix/closefix，还是另外一种
+    - 先进行一次 lookbehind，来判断 lookahead 是什么
+
+吐槽一句
+语法，确实是人为的给自己造成困难。
+全部 lisp 就完全不需要这些操作了……
