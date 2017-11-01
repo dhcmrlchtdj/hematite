@@ -2,25 +2,23 @@
 
 ---
 
-re => NFA 图
+`a` / `(a)` / `a*` / `ab` / `a|b`
+暂时只考虑这几种组合
 
-- a
-- ab
-- a|b
-- a?
-- a+
-- a*
-
-NFA 图 => DFA 图
+`a+ = aa*` / `a? = a|epsilon` / `[a-z] = a|...|z`
+还有更复杂的先不管了。
 
 ---
 
-re => ast
+### string => AST
+
+---
 
 - recursive descent
     - 定义所有操作的优先级
     - parse_alternation, parse_concatenation, parse_repeation, parse_atom
     - 实际写了下，会有大量递归，而且是非尾调用。不是简单的 LL(1)，还是有不少特例要处理。
+
 - shunting yard
     - 定义所有操作优先级
     - operator stack 和 operand stack
@@ -44,6 +42,7 @@ re => ast
                 - `a ^ b ^ c` `a|b` `a* ^ b` `a ^ (b)` `(a) ^ b`
                 - 对于每一种 token，前面后面是否应该插入，就都很清晰了。
                 - 实现的时候，需要 lookahead(2) 来判断是否需要插入
+
 - precedence climbing
     - 和 shunting yard 其实很像。不过是递归的实现。
     - 同样是比较优先级，遇到高优先级符号时进行递归调用，就是入栈遇到了更高优先级操作符先对栈进行处理。对应的。
@@ -51,11 +50,70 @@ re => ast
     - 括号，还有其他特殊符号，也都一样，需要特殊处理。
     - 简单的正则处理起来还是比较容易的，结合性可以全部当作右结合，优先级只要处理 concat,alter,repeat,group 就可以了。
     - 考虑几点，首先是优先级，然后是 binary/unary 及结合性的判断。
+
 - pratt
     - 前面三种算法，只有 shunting yard 写出了尾递归的版本……
     - 按说 pratt 的模式，比前面的更通用？期待下吧。
     - 算是看完了 Bob Nystrom 的 pratt 教程，几个关键点
         - arity, associativity, precedence
-        - prefix, postfix, infix-left, infix-right, ternary-left, ternary-right, group
+        - prefix, postfix, infix-left, infix-right, ternary, group
     - 优先级的设想，和 precedence climbing 是一样的
     - 再想想，感觉自己写了假的 pratt，完全没有什么 nud，led
+
+---
+
+再总结一次，加深下印象。
+
+- 整个解析过程都是以 operator 为中心。
+    - 每个 operator 都要定义优先级（比如 `*/` 高于 `+-`
+    - 结合性可以用优先级来表达
+    - 相同的字符，在不同的位置，可以有不同的优先级（比如 `-2` 和 `2-1`
+- 一开始，就要将所有 operator 归类
+    - prefix like
+        - closfix: '(' expr ')'
+        - prefix: token expr
+        - operand: expr
+    - infix like
+        - postfix: expr token
+        - infix left/right: expr token expr
+        - mixfix:
+            - conditional: expr '?' expr ':' expr
+            - apply: expr '(' expr* ')'
+            - subscript: expr '[' expr ']'
+- 优先级决定了一个解析过程是返回当前结果，还是继续吃掉下一个 expr
+- prefix like 不关心之前的优先级，只需要普通 lookahead 往前解析就好了
+- infix like 都是先吃掉一个 expr，在吃掉一个 token，视情况要不要继续吃其他内容
+    - infix like 不能无脑 lookahead 向前走，需要比较优先级
+    - 优先级决定了第一个 expr 属于前面的其他 token，还是属于正要解析的下一个 token
+- mixfix 可以用相同的思路解析，不过要注意下 mixfix 的第二个 token
+
+由于 infix 这种会去解析第二个 expr，再构造 infix 的 ast。
+所以代码组织起来就不是尾调用的。
+这可以通过将状态维护到栈上来解决，就又到 shunting yard 了。
+
+---
+
+### AST -> NFA
+
+---
+
+AST 如下
+
+```ocaml
+type re =
+    | Epsilon
+    | Character of char
+    | Repeation of re
+    | Concatenation of re * re
+    | Alternation of re * re
+```
+
+NFA 的图就不画了
+
+- 每一种 re 对应两个 state，表示起止。比如 `S1 --a--> S2`
+- state 需要两个出口，因为 `a|b` 这种需要根据 a b 进入不同的状态
+    - 如果需要更多的出口，可以靠增加 state 来表示
+- 如果要保持变量的不可变性，在构造 state 的时候，要从出口往入口构建
+    - `val build: ast -> out_state -> in_state`
+    - 传入 AST 和出口的 state，返回 AST 入口的 state
+    - 每一种 re 都根据自己的需要，来新增一些 state，用 epsilon 边连接起来
