@@ -117,3 +117,8 @@ NFA 的图就不画了
     - `val build: ast -> out_state -> in_state`
     - 传入 AST 和出口的 state，返回 AST 入口的 state
     - 每一种 re 都根据自己的需要，来新增一些 state，用 epsilon 边连接起来
+    - 实际写了下，不可变给自己挖坑。
+        - 其他状态还好，Repeation 的会遇到问题
+        - `a*` 的生成顺序会是 `S4 --> S3-a->S2 --> S1 --> Sout`
+        - 其中 S1 S4 又需要互相引用，就导致了鸡生蛋蛋生鸡的问题（上 mutable 了
+        - 搜了一下，haskell 里的 state monad，temporary mutable state 什么鬼
