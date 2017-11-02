@@ -121,3 +121,14 @@ http://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-ma
 吐槽一句
 语法，确实是人为的给自己造成困难。
 全部 lisp 就完全不需要这些操作了……
+
+---
+
+在 re 那边写了不少了，确实比较散。
+在改成 shunting yard 的过程中，感觉会进一步加深对 pratt 的理解。
+在 mixfix 的场景下，确实需要对符号的优先级进行进一步处理。
+确实没一种 mixfix 都很特别，都要单独分析。
+`f(x,y)` 和 `(a+b)` 都用到了括号，所以在分析 operator 时，要注意的细节更多了。
+
+算是写完了，真的是面条式代码……
+虽然不优雅，可可扩展性也比较差，好歹是写好了。
