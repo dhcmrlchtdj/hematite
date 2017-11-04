@@ -140,5 +140,59 @@ NFA 的图就不画了
 
 给 NFA 换了新的数据结构之后，整个世界都变干净了。
 
+之前的
+
+```ocaml
+type edge = Eps | Ch of char
+and out = (edge * state) option
+and state = {
+    state: int;
+    _end: bool;
+    mutable next1: out;
+    mutable next2: out;
+}
+```
+
+之后的
+
+```ocaml
+type state = int
+and edge = Eps | Ch of char
+and arrow = state * edge * state
+and states = arrow list
+and nfa = states * state
+```
+
 ---
 
+### NFA -> DFA
+
+---
+
+在纸面上梳理逻辑很简单。
+但在实现时要做到不可变的话，就把代码搞复杂了。
+总归都是思维不够活络。
+
+---
+
+写完之后，感觉心情不错的。
+包括匹配的实现都比 NFA 简单很多。
+
+DFA 的基本结构
+
+```ocaml
+type state = int * bool
+and edge = char
+and arrow = state * edge * state
+and states = arrow list
+and dfa = states * state
+```
+
+---
+
+### AST -> Inst
+
+---
+
+对于 VM 这块，确实还比较陌生。
+正好熟悉下。
