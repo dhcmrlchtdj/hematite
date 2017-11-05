@@ -248,3 +248,54 @@ $ cat cat _build/counter.inferred.mli
     - 只用到了 7 个寄存器
     - bytecode 使用的是一种 `ZINC model`，编译的原生代码不是
 - runtime 由字节码解释器、GC、实现基本语意的 C 函数三个部分组成
+
+---
+
+## Error Handling
+
+https://dev.realworldocaml.org/07-error-handling.html#choosing-an-error-handling-strategy
+
+---
+
+> OCaml supports both exceptions and error-aware return types
+
+常见的错误处理，就这么两种方式了。
+比如 C 语言经常自己判断 -1 之类的返回值，而 js/py 就是直接抛出异常。
+
+在接受了类型之后，现在是感觉 `error-aware return types` 这种方式更好些。
+调用的时候能够明确的知道会不会出错。（当然，语言配套设施要齐全才会好用
+
+ocaml 的标准库，写的时候偶尔就会担心是否会抛出异常。
+我觉得这样是不好的……
+
+---
+
+> Exceptions are more concise because they allow you to defer the job of error
+> handling to some larger scope, and because they don't clutter up your types.
+> exceptions are all too easy to ignore
+
+> Error-aware return types are fully manifest in your type definitions, making
+> the errors that your code might generate explicit and impossible to ignore.
+
+异常和返回值的优缺点。
+
+---
+
+> The right trade-off depends on your application.
+> The maxim of "use exceptions for exceptional conditions" applies.
+> for errors that are omnipresent, error-aware return types may be overkill.
+
+关于怎么权衡。
+作者认为应该在生产环境依靠 `error-aware return types` 来提供更高的安全性。
+但是不拒绝 `exceptions`。
+确实是异常的、到处蔓延的，比如 out-of-memory，直接异常就好了。
+
+> In short, for errors that are a foreseeable and ordinary part of the
+> execution of your production code and that are not omnipresent, error-aware
+> return types are typically the right solution.
+
+---
+
+最后稍微提一点配套设施。
+ocaml 本身其实是缺乏相应处理工具的，需要用 core 之类的其他库来补充。
+（我个人是感觉 swift 这方面不错啦

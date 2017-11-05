@@ -16,7 +16,7 @@ $ ocamlbuild \
     -tags 'warn(+a),warn_error(-a+31)' \
     -tags safe_string,strict_sequence,strict_formats,short_paths,keep_locs \
     -use-menhir -tag explain \
-    -use-ocamlfind -pkgs 'str'
+    -use-ocamlfind -pkgs 'str,'
     filename.{byte,inferred.mli}
 
 $ ocamlbuild clean
@@ -68,7 +68,7 @@ $ jbuilder clean
 ```merlin
 S src/**
 B _build/**
-PKG lwt
+PKG lwt, ppx_deriving.std
 FLG -w +a -warn-error -a+31 -keep-locs -safe-string -short-paths -strict-formats -strict-sequence
 ```
 
@@ -78,7 +78,7 @@ OCB_FLAGS := \
 	-tags 'warn(+a),warn_error(-a+31)' \
 	-tags safe_string,strict_sequence,strict_formats,short_paths,keep_locs \
 	-use-menhir -tag explain \
-	-use-ocamlfind -pkgs 'str'
+	-use-ocamlfind -pkgs 'str,ppx_deriving.std'
 OCB := ocamlbuild $(OCB_FLAGS)
 
 mlis := $(patsubst %.ml,%,$(wildcard src/*.ml))
