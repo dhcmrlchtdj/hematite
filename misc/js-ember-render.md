@@ -35,3 +35,20 @@ https://github.com/glimmerjs/glimmer-vm/tree/master/guides
 > porting the core VM to WebAssembly
 
 wow
+
+---
+
+http://yehudakatz.com/2017/04/05/the-glimmer-vm-boots-fast-and-stays-fast/
+https://news.ycombinator.com/item?id=14050625
+
+---
+
+- initial render performance (vs Virtual DOM)
+- updating performance (vs Key-Value Observing)
+
+- static optimizations
+    - compile templates into "append-time" opcodes for a bytecode VM
+    - the process of running the "append-time program" produces the "updating program"
+    - run (update) every time the inputs change
+- dynamic optimizations
+    - reduce the portion of the updating program
