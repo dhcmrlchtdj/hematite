@@ -7,7 +7,6 @@ https://engineering.linkedin.com/blog/2017/03/glimmer--blazing-fast-rendering-fo
 https://engineering.linkedin.com/blog/2017/06/glimmer--blazing-fast-rendering-for-ember-js--part-2
 https://www.linkedin.com/pulse/glimmers-optimizing-compiler-chad-hietala/
 https://thefeedbackloop.xyz/designing-and-implementing-glimmer-like-a-programming-language/
-https://github.com/glimmerjs/glimmer-vm/tree/master/guides
 
 ---
 
@@ -52,3 +51,28 @@ https://news.ycombinator.com/item?id=14050625
     - run (update) every time the inputs change
 - dynamic optimizations
     - reduce the portion of the updating program
+
+---
+
+- the Glimmer VM is built on top of References and Tags
+- every reference has an associated tag
+
+- 处理模版的时候，为每个变量生成一个 reference
+- 修改页面、数据的时候，将 tag 标记为 dirty
+- 检查整个模版，看哪些部分需要更新
+
+---
+
+https://github.com/glimmerjs/glimmer-vm/tree/master/guides
+
+---
+
+guide 里讲得还挺清晰的。
+
+最主要的两个结构，ref 和 tag。
+ref 就是一个容器，里面内容可变。
+tag 是 ref 是否发生变化的标记，如果 tag 变化就重新计算 ref。
+
+ref 和 tag 都是 pull 的模式，需要时才重新计算，这就要求有外部代码进行驱动。
+ember 里的做法是，要求数据要使用 `set` 进行修改。
+`set` 则会更新 tag 并触发数据状态检查，然后重新渲染更新的部分。
