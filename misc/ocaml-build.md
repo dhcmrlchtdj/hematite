@@ -69,16 +69,17 @@ $ jbuilder clean
 S src/**
 B _build/**
 PKG lwt, ppx_deriving.std
-FLG -w +a -warn-error -a+31 -keep-locs -safe-string -short-paths -strict-formats -strict-sequence
+FLG -w +a -thread -safe-string -short-paths -strict-sequence -keep-locs -keep-docs -principal
 ```
 
 ```makefile
 OCB_FLAGS := \
 	-tag 'color(always)' \
-	-tags 'warn(+a),warn_error(-a+31)' \
-	-tags safe_string,strict_sequence,strict_formats,short_paths,keep_locs \
+	-tags safe_string,short_paths,strict_sequence,keep_locs,keep_docs,principal \
 	-use-menhir -tag explain \
-	-use-ocamlfind -pkgs 'str,ppx_deriving.std'
+	-use-ocamlfind -pkgs 'str,ppx_deriving.std' \
+    -pkg core -tag thread \
+	-tags 'warn(+a),warn_error(-a+31)'
 OCB := ocamlbuild $(OCB_FLAGS)
 
 mlis := $(patsubst %.ml,%,$(wildcard src/*.ml))
