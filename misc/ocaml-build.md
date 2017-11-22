@@ -68,8 +68,12 @@ $ jbuilder clean
 ```merlin
 S src/**
 B _build/**
-PKG lwt, ppx_deriving.std
-FLG -w +a -thread -safe-string -short-paths -strict-sequence -keep-locs -keep-docs -principal
+PKG lwt
+PKG ppx_deriving.std
+PKG batteries
+FLG -safe-string -short-paths -strict-sequence -keep-locs -keep-docs -principal
+FLG -w +a-4
+FLG -thread
 ```
 
 ```makefile
@@ -77,9 +81,11 @@ OCB_FLAGS := \
 	-tag 'color(always)' \
 	-tags safe_string,short_paths,strict_sequence,keep_locs,keep_docs,principal \
 	-use-menhir -tag explain \
-	-use-ocamlfind -pkgs 'str,ppx_deriving.std' \
-    -pkg core -tag thread \
-	-tags 'warn(+a),warn_error(-a+31)'
+	-use-ocamlfind \
+	-pkg ppx_deriving.std \
+	-pkg batteries \
+	-pkg core -tag thread \
+	-tags 'warn(+a-4),warn_error(-a+31)'
 OCB := ocamlbuild $(OCB_FLAGS)
 
 mlis := $(patsubst %.ml,%,$(wildcard src/*.ml))
