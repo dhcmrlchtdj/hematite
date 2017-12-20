@@ -36,4 +36,38 @@ https://dataintensive.net/
 ---
 
 
+### Data Models and Query Languages
+
+---
+
+由于不同的数据关系，发展出了不同的存储模型
+
+- one-to-many
+    - hierarchical model
+    - document databases
+- many-to-one, many-to-many
+    - network model
+    - relational model
+- many-to-many
+    - graph model
+        - property graph model
+        - triple-store model
+
+---
+
+> If the data in your application has a document-like structure, then it’s probably a good idea to use a document model.
+> if your application does use many-to-many relationships, the document model becomes less appealing.
+> For highly interconnected data, the document model is awkward, the relational model is acceptable, and graph models are the most natural.
+
+---
+
+> Document databases target use cases where data comes in self-contained documents and relationships between one document and another are rare.
+> Graph databases target use cases where anything is potentially related to everything.
+
+---
+
+### Storage and Retrieval
+
+---
+
 
