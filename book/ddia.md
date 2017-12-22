@@ -70,4 +70,37 @@ https://dataintensive.net/
 
 ---
 
+这一章是介绍存储引擎。
+数据间是什么关系，数据被怎么使用，决定了使用什么数据库。
+（虽然这种话是老生常谈，但是通过书里的介绍，对如何选择能带来不少帮助
+
+---
+
+这个章节主要介绍两类引擎
+
+- log-structured storage engines
+- page-oriented storage engines
+
+---
+
+> well-chosen indexes speed up read queries, but every index slows down writes.
+
+这里介绍的一种策略是用 hash 做索引
+- 写入都用 append，然后在 hash 里记录最后一次写入的位置（Bitcask 使用了这种策略）
+    - 用于 key-value 的数据，hash 里面是 key-location
+- 为了避免浪费大量空间，定期进行 compaction（删除被覆盖了的记录
+    - 一开始写入数据时划分成一个个 segment
+    - 因为写入都是 append，所以可以在不影响读写的情况下进行 compaction
+    - 将旧的 segment 压缩完之后进行替换，整个过程对读写都不可见
+- 一些实现上要关注的点
+    - File format
+    - Deleting records
+    - Crash recovery
+    - Partially written records
+    - Concurrency control
+- 优势：append 的策略是顺序读写，更快；并发和错误恢复更简单；通过合并能减少碎片
+- 不足：要把整个 hash 装入内存来加速；不支持 range 的查询
+
+---
+
 
