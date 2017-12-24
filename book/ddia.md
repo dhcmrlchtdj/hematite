@@ -103,4 +103,60 @@ https://dataintensive.net/
 
 ---
 
+- online transaction processing, OLTP
+    - high availability
+    - low latency
+- online analytic processing, OLAP
+    - data warehouse
+    - ETL (extract from OLTP, transform, load into data warehouse
+
+---
+
+### Encoding and Evolution
+
+---
+
+- backword compatibility
+- forward compatibility
+
+---
+
+- encoding
+    - JSON, XML
+    - Thrift, Protocol Buffers, Avro
+        - schema
+- dataflow
+    - database
+    - RPC, REST
+    - message passing
+
+---
+
+## Distributed Data
+
+---
+
+- scalability
+- fault tolerance / high availability
+- latency
+
+---
+
+- shared-memory architecture
+- shared-disk architecture
+- shared-nothing architecture
+    - horizontal scaling
+    - scaling out
+
+---
+
+- replication
+- partitioning
+
+---
+
+### Replication
+
+---
+
 
