@@ -159,4 +159,64 @@ https://dataintensive.net/
 
 ---
 
+- replicate data
+    - reduce latency
+    - increase availability
+    - increase read throughput
+
+---
+
+> all of the difficulty in replication lies in handling changes to replicated data.
+
+- single-leader
+- multi-leader
+- leaderless
+
+---
+
+- leader-based relication
+    - writes only accepted on the loader (followers are read-only
+- synchronous vs asynchronous
+    - semi-synchronous, one of the followers is synchronous, and the others are asynchronous.
+- how to setup new followers
+- how to handle node outages
+    - follower, catch-up recovery
+    - leader, failover
+- problems in distributed system
+    - node failures
+    - unreliable networks
+    - trade-offs around replica consistency, durability, latency
+- replication logs
+- guarantee
+    - strong consistency
+    - eventual consistency
+    - read-after-write consistency
+    - monotonic read
+    - comsistent prefix read
+
+---
+
+- multi-leader
+    - allow more than one node to accept writes.
+    - each leader simultaneously acts as a follower to the other leaders.
+    - pros: performance, tolerance of datacenter outages, tolerance of network problems
+    - cons: the same data may be concurrently modified in two different datacenters
+        - those write conflicts must be resolved
+- use case
+    - multi-datacenter operation
+    - clients with offline operation
+        - each device is a datacenter, and the network connection between them is extermely unreliable
+    - collaborative editing
+- handle write conflicts
+    - ensure that requests from a user are always routed to the same datacenter
+    - database must resolve the conflit ina convergent way.
+        - all replicas must arrive at the same final value when all changes have been replicated
+    - custom conflict resolution logic
+- replication topology
+    - all-to-all
+    - circular
+    - star
+
+---
+
 
