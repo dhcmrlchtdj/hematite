@@ -103,6 +103,14 @@ https://dataintensive.net/
 
 ---
 
+- SSTables
+    - 在内存里用 balanced tree 来存储数据
+    - 内存使用增长后，将有序的数据存储到硬盘
+    - 为了避免出现数据丢失，同时将一份未排序的数据直接写入硬盘
+- LSM-trees are typically faster for writes, B-trees are faster for reads
+
+---
+
 - online transaction processing, OLTP
     - high availability
     - low latency
