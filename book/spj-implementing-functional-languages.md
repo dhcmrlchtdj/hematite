@@ -6,7 +6,7 @@ https://www.microsoft.com/en-us/research/publication/implementing-functional-lan
 
 ---
 
-## 0.preface
+## 0. preface
 
 ---
 
@@ -19,3 +19,11 @@ https://www.microsoft.com/en-us/research/publication/implementing-functional-lan
     - G-machine
     - TIM (Three Instruction Machine)
     - Parallel G-machine
+
+---
+
+## 1. the core language
+
+---
+
+
