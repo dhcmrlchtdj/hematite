@@ -227,4 +227,32 @@ https://dataintensive.net/
 
 ---
 
+### Partitioning
 
+---
+
+- break the data up into partitions/sharding. (for scalability)
+- partitioning
+    - by key range
+        - hot spot
+    - by hash of key
+        - consistent hashing
+- secondary indexes
+    - document-based partitioning
+    - term-based partitioning
+        - make read more efficient than document-based
+        - writes are slower and more complicated
+- rebalancing, moving load from one node in the cluster to another
+- request routing
+    - approaches
+        - allow clients to contact any node
+        - send all request from clients to a routing tier first
+        - require that clients be aware of the partitioning and the assignment of partitions of nodes
+    - key problem
+        - how does the component making the roiting decision learn about changes in the assignment of partitions to nodes
+
+---
+
+### Transactions
+
+---
