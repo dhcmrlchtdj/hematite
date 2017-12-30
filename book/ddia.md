@@ -256,3 +256,40 @@ https://dataintensive.net/
 ### Transactions
 
 ---
+
+- ACID
+    - atomicity
+        - if transaction aborted, nothing changed
+    - consistency
+        - consistency is a property of the application but not database
+    - isolation
+        - race conditions
+            - dirty reads, (by read committed
+            - dirty writes, (by any
+            - read skew (nonrepeatable reads), (by MVCC
+            - lost updates, (snapshot isolation
+            - write skew, (serializable isolation
+            - phantom reads, (snapshot isolation
+        - solutions
+            - read committed
+                - row-level locks
+            - snapshot isolation / repeatable read
+                - use write locks to prevent dirty writes
+                - MVCC, multi-version concurrency control
+            - serializable isolation
+                - execute transactions in a serial order
+                - 2PL, two-phase locking
+                    - writers not just block other writers, but also readers and vice versa
+                - SSI, serializable snapshot isolation
+                    - an optimistic concurrency control technique
+    - durability
+
+---
+
+### The Trouble with Distributed Systems
+
+---
+
+
+
+
