@@ -290,6 +290,45 @@ https://dataintensive.net/
 
 ---
 
+- problems
+    - network. packet may be lost or arbirarily delayed.
+    - clock. may be significantly out of sync with other nodes.
+    - pause. perhaps due to a stop-the-world garbage collector.
+- hard to detect partial failures
+    - most distributed algotithms relay on timeouts to determine whether a remote node is still available
 
+---
+
+### Consistency and Consensus
+
+---
+
+- consistency model
+    - linearizability
+    - causality
+- consensus
+    - leaderless and multi-leader replication systems typically do not use global consensus
+    - a single-leader database can provide linearizability without executing a algotithm on every write
+        - but requires consensus to maintain its leadership and for leadership changes
+
+---
+
+## Derived Data
+
+---
+
+- previous discussion assumed that there was only one database in the application
+- integrating disparate systems is one of the most important things that needs to be done in a nontrivial application
+
+---
+
+- system of record (source of truth)
+- derived data systems (such as caches, indexes, ...)
+
+---
+
+### Batch Processing
+
+---
 
 
