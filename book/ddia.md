@@ -359,4 +359,24 @@ TODO
 
 ---
 
+- message brokers
+    - AMQP message broker
+        - no order
+        - deleted after sent
+    - log-based message broker
+        - order
+        - saved to disk
+- join
+    - stream-stream joins
+    - stream-table joins
+    - table-table joins
+- fault tolerance
+- exactly-once
+
+---
+
+### The Future of Data Systems
+
+---
+
 
