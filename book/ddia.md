@@ -313,6 +313,10 @@ https://dataintensive.net/
 
 ---
 
+TODO
+
+---
+
 ## Derived Data
 
 ---
@@ -328,6 +332,30 @@ https://dataintensive.net/
 ---
 
 ### Batch Processing
+
+---
+
+- systems
+    - services (online systems)
+        - response time
+        - availability
+    - batch processing systems (offline systems)
+        - throughput
+    - stream processing systems (near-real-time systems)
+- two main problems
+    - partitioning
+    - fault tolerance
+- join algotithm
+    - sort-merge joins
+    - broadcast hash joins
+    - partitioned hash joins
+- the input data is bounded: it has a known, fixed size
+- callback functions (mappers and reducers) are assumed to be stateless and to
+    have no externally visible side effects besides their designated output
+
+---
+
+### Stream Processing
 
 ---
 
