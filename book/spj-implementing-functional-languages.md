@@ -31,4 +31,8 @@ https://www.microsoft.com/en-us/research/publication/implementing-functional-lan
 
 ---
 
+## 2. template instantiation
+
+---
+
 
