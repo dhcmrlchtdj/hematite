@@ -64,3 +64,31 @@
     - modes
     - use cases / components
     - layers
+
+---
+
+> separation of concerns.
+> divide the software into layers.
+> at least one layer for business rules, and another layer for user and system interfaces.
+
+- independent of frameworks
+- testable
+- independent of the UI
+- independent of the database
+- independent of any external agency
+
+---
+
+- clean architecture
+    - entities (critical business rules)
+    - use cases (application-specific business rules)
+    - interface adapters (gateways, controllers, presenters, ...)
+    - frameworks and drivers (UI, DB, web, external interfaces, ...)
+
+> source code dependencies must point only inward, toward higher-level policies.
+> nothing in an inner circle can know anything at all about something in an outer circle.
+> when we pass data across a boundary, it is always in the form that is most convenient for the inner circle.
+
+---
+
+
