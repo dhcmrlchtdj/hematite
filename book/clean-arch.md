@@ -91,4 +91,18 @@
 
 ---
 
+> the architecture of a system is defined by the boundaries drawn within that system,
+> and by the dependencies that cross those boundaries.
 
+---
+
+### my thought
+
+- 人员架构决定系统架构
+- 看书学不会架构
+    - 架构的核心是业务，如何满足业务，需要独立思考
+- 不懂细节做不好架构
+    - 虽然高层架构不依赖细节，但是思维方式会有影响
+    - 手上拿着锤子，就想到处敲一敲，这大概是人之常情
+    - 有能力才有选择
+- 感觉还是太虚。像 DDIA 那种对技术介绍较多的书读得更愉快
