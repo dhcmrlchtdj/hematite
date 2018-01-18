@@ -6,7 +6,7 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
-## ch3. lambda-calculus
+## ch3. λ-calculus
 
 ---
 
@@ -54,5 +54,40 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
+## ch4. ISWIM
 
+---
+
+> one goal of this book is to illustrate the design, analysis and use of
+> equational theories like the λ-calculus in the context of programming
+> language design and analysis.
+
+---
+
+- goal
+    - define the idealized core of all programming languages and an equational calculus that defines its semantics
+- ISWIM vs λ-calculus
+    - more like real programming languages (comes with a set of basic constants and primitive operations
+    - more closely models the core of call-by-value languages such as Scheme and ML
+    - call-by-value reduction rules
+        - call-by-value: the arguments to a function must be fully evaluated before the function is applied
+- ISWIM
+    - expression, value, reduction
+    - functions in ISWIM accept only fully-evaluated arguments
+    - the core (only) reduction relation for ISWIM is β
+        - α-equivalence is used to compare expressions
+- consistency
+- observational equivalence: program evaluation, program transformation
+
+---
+
+- Y-combinator
+    - `Y f` -> `(λf.(λx.f (x x)) (λx.f (x x))) f` -> `(λx.f (x x)) (λx.f (x x))` -> `f ((λx.f (x x)) (λx.f (x x)))`
+        - the argument to f in the outermost application is not a value, and cannot be reduced to a value
+        - avoid the infinite reduction by changing each application M within Y to (λX.M X)
+            - inverse-η transformation puts a value in place of an infinitely reducing application
+    - `Yv` = `(λf.(λx.( (λg.(f (λx.((g g) x)))) (λg.(f (λx.((g g) x)))) x )))`
+    - Yv combinator works when applied to a function that takes a function and returns another one
+
+---
 
