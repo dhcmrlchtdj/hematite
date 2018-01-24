@@ -6,6 +6,12 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
+> https://www.zhihu.com/question/42315543/answer/226226734
+> 操作语义（Operational Semantics）即形式化地定义和描述解释器是如何运行的
+> 使用小步语义（Small-Step Operational Semantics）描述解释器的运行原理用，得到抽象机（Abstract Machine）
+
+---
+
 ## ch3. λ-calculus
 
 ---
@@ -90,4 +96,5 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
     - Yv combinator works when applied to a function that takes a function and returns another one
 
 ---
+
 
