@@ -30,7 +30,7 @@
     - vertical layered architecture
     - based on related features, domain concepts, aggregate roots
     - the top-level organization of the code now screams something about the business domain
-- ports and adpters
+- ports and adapters
     - hexagonal architecture
     - boundaries, controllers, entities
     - business/domain-focused code is independent and separate from the technical implementation details
