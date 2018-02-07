@@ -97,4 +97,14 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
+## PART III
 
+---
+
+- types
+- polymorphism
+- type inference
+- recursive types
+- data abstraction and existential types
+- subtyping
+- objects and classes
