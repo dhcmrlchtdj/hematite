@@ -7,8 +7,8 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 ---
 
 > https://www.zhihu.com/question/42315543/answer/226226734
-> 操作语义（Operational Semantics）即形式化地定义和描述解释器是如何运行的
-> 使用小步语义（Small-Step Operational Semantics）描述解释器的运行原理用，得到抽象机（Abstract Machine）
+> 操作语义（Operational Semantics），形式化地定义和描述解释器是如何运行的
+> 抽象机（Abstract Machine），使用小步语义（Small-Step Operational Semantics）描述解释器的运行原理
 
 ---
 
@@ -94,6 +94,26 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
             - inverse-η transformation puts a value in place of an infinitely reducing application
     - `Yv` = `(λf.(λx.( (λg.(f (λx.((g g) x)))) (λg.(f (λx.((g g) x)))) x )))`
     - Yv combinator works when applied to a function that takes a function and returns another one
+
+---
+
+## ch5. Standard Reduction
+
+---
+
+
+
+---
+
+## ch6. Machines
+
+## ch7. SECD, Tail Calls, and Safe for Space
+
+## ch8. Continuations
+
+## ch9. Errors and Exceptions
+
+## ch10. Imperative Assignment
 
 ---
 
