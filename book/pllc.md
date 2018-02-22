@@ -8,7 +8,7 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 > https://www.zhihu.com/question/42315543/answer/226226734
 > 操作语义（Operational Semantics），形式化地定义和描述解释器是如何运行的
-> 抽象机（Abstract Machine），使用小步语义（Small-Step Operational Semantics）描述解释器的运行原理
+> 抽象机（Abstract Machine），使用小步语义（Small-Step Operational Semantics）描述解释器如何运行
 
 ---
 
@@ -101,19 +101,127 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
+- the **standard reduction** defines a **textual machine** for **ISWIM**
+- A good evaluation strategy based on reductions should only pick redexes that are outside of abstractions.
+    - 某些规约方式，可能陷入循环，得不到结果。这里提出了正确的规约过程，应该满足什么条件
+    - https://softwareengineering.stackexchange.com/questions/228722/redex-and-reduction-strategies
+    - If the expression is an application and all components are values, then, if the expression is a redex, it is the next redex to be reduced; if not, the program cannot have a value.
+    - If the program is an application such that at least one of its sub-expressions is not a value, pick the leftmost non-value and search for a redex in there.
+- divide a program into an application consisting of values and a context
 
+---
+
+- Two expressions are of the same kind if both are values or both are applications (non-values).
+
+---
+
+- what kind of behavior can we expect from a machine given an arbitrary program?
+- A program in pure ISWIM can only evaluate to a **value**, a **stuck program**, or **diverge**.
+    - 程序或许可以规约成一个预期的值（value），也可能出现死循环等情况而没有结果（diverge）
+    - stuck 有点不好理解。
+        - value 是规约出了结果，diverge 是可以无限规约。
+        - stuck 是还没规约出结果，但已经无法继续规约了。
+        - 比如，调用了一个没有实现的函数。理论上应该执行调用，但却无法进行。
+- programs for which  −→v is undefined are called stuck states
 
 ---
 
 ## ch6. Machines
 
+---
+
+- Every evaluation cycle in the standard-reduction textual machine performs three steps:
+    - It tests whether the program is a value; if so, the machine stops.
+    - If the program is an application, the machine partitions the program into an evaluation context, E, and an application, (U V ) or (on V1 . . . Vn).
+    - If the application is a βv or δ redex, the machine constructs the contractum M and fills the evalutaion context E with the contractum M.
+
+---
+
+- CC Machine
+    - separate program states into the “current subterm of interest” and the “current evaluation context”
+    - these two elements are paired together to form the machine’s state: ⟨M,E⟩
+    - In addition to the reduction tasks of the textual machine, the CC machine is responsible for finding the redex
+    - eval_CC = eval_V
+
+- SCC Machine (Simplified CC)
+    - simplified CC machine has fewer transitions and no side-conditions
+    - eval_SCC = eval_CC
+
+- CK Machine (continuation)
+    - The  −→ck relation maps an expression-continuation pair to a new expression-continuation pair.
+    - given an SCC state, we can find a corresponding CK state and vice versa
+    - eval_CK = eval_SCC
+
+- CEK Machine (environment, continuation)
+    - (CC/SCC/CK) the reduction of a βv-redex requires the substitution of a value in place of all occurrences of an identifier.
+    - delay the work of substituion until it is actually needed. (closure, environment)
+    - continuations in CEK machine contain closures instead of expressions (in CK machine)
+    - eval_CEK = eval_CK
+
+---
+
+- CC 是 standard reduction 的直译
+- SCC 是简化了一部分过程的表示
+- CK 是用 continuation 来表示一些过程
+- CEK 推迟替换这一操作，引入了环境变量
+
+---
+
 ## ch7. SECD, Tail Calls, and Safe for Space
+
+---
+
+- Since we are trying to work towards a realistic implmentation of ISWIM, we must consider resource-usage issues as well as efficiency issues.
+- SECD machine, evaluates expressions to the same result as eval_V, but which has different resource-usage properties.
+- the notion of tail calls, and of continuations as values
+
+---
+
+- SECD machine does not work directly on source ISWIM expressions
+- first compile ISWIM source expressions to a sequence of “bytecodes”
+- eval_SECD = eval_CEK
+
+---
+
+- The difference between SECD and CEK is in how context is accumulated and saved while subexpressions are evaluated.
+    - CEK, context is created when evaluating an application function or argument
+        - λ-calculus, scheme
+    - SECD, context is created by function calls
+        - C, JAVA
+- forever loop, `Ω = (λx.x x)(λx.x x)`
+    - CEK machine's state will never grow beyond a certain size while evaluating
+    - SECD machine's state will grow in size forever
+    - the CEK machine evaluates Ω as a loop, while the SECD machine evaluates Ω as infinite function recursion
+    - In languages that support tail calls, a recursive definition can be just as efficient as a loop.
+
+---
+
+- CEK might use more space than SECD
+- A machine with the same space consumption as  −→v is called _safe for space_.
+
+---
 
 ## ch8. Continuations
 
+---
+
+
+
+---
+
 ## ch9. Errors and Exceptions
 
+---
+
+
+
+---
+
 ## ch10. Imperative Assignment
+
+---
+
+
 
 ---
 
