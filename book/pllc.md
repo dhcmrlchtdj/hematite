@@ -12,7 +12,11 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
-## ch3. λ-calculus
+## PART I
+
+---
+
+### ch3. λ-calculus
 
 ---
 
@@ -60,7 +64,11 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
-## ch4. ISWIM
+## PART II
+
+---
+
+### ch4. ISWIM
 
 ---
 
@@ -97,7 +105,7 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
-## ch5. Standard Reduction
+### ch5. Standard Reduction
 
 ---
 
@@ -122,11 +130,12 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
         - value 是规约出了结果，diverge 是可以无限规约。
         - stuck 是还没规约出结果，但已经无法继续规约了。
         - 比如，调用了一个没有实现的函数。理论上应该执行调用，但却无法进行。
+    - 死循环和 stuck 其实都算在 diverge 里
 - programs for which  −→v is undefined are called stuck states
 
 ---
 
-## ch6. Machines
+### ch6. Machines
 
 ---
 
@@ -167,7 +176,7 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
-## ch7. SECD, Tail Calls, and Safe for Space
+### ch7. SECD, Tail Calls, and Safe for Space
 
 ---
 
@@ -197,31 +206,70 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 ---
 
 - CEK might use more space than SECD
-- A machine with the same space consumption as  −→v is called _safe for space_.
+- A machine with the same space consumption as  −→v is called *safe for space*.
 
 ---
 
-## ch8. Continuations
+### ch8. Continuations
 
 ---
 
+- The CEK machine explains how a language like ISWIM can be implemented on a realistic machine:
+    - Each of three parts of state in the CEK machine (the current expression, environment, and continuation) can be stored in a register.
+    - Each CEK step can be implemented with a fairly simple sequence of processor instructions. Environment lookup has a fairly obvious implementation.
+- register
+    - the C register contains an expression
+    - the E register contains an environment, can be captured by using a λ (to form a closure)
+    - the K register does not correspond to anything that the programmer can write or capture within the language
 
+- the only useful operation on a continution is replacing the current continuation
+- extend ISWIM with *letcc* and *cc* forms
+
+- a continuation is an inside-out evaluation context
+    - error-handling mechanism
+    - cooperative threads
+    - saving and restoring speculative computations
+
+- `callcc = λf.(letcc k (f (λy.(cc k y))))`
 
 ---
 
-## ch9. Errors and Exceptions
+### ch9. Errors and Exceptions
 
 ---
 
+- 直接中文总结一下。
+    - 首先是解释器本身可能进入 stuck state（比如除 0），需要有个机制把状态抛出来
+    - 其次是程序需要主动抛出错误的场景（比如用户输入有误），也需要某种机制支持
+    - 所以需要有异常机制
+    - 有了异常机制，很自然会想要异常处理机制
+    - 纯 ISWIM 缺少异常及异常处理的机制
 
+- Error ISWIM, adding error constructs to the syntax of ISWIM
+- Handler ISWIM, extends plain ISWIM with *throw* and *catch* forms
+
+- CCH machine (handler stack)
+    - the standard context of a CC machine state is represented as a stack of handlers and evaluation contexts
+    - given such a stack, we can simply create a single standard context that creates the stack
 
 ---
 
-## ch10. Imperative Assignment
+### ch10. Imperative Assignment
 
 ---
 
+- extend the syntax of ISWIM expressions with a assignment expression
+- A mathematical variable represents some fixed value, but assignable identifiers denote a varying association between names and values
+- We call the association of an identifier with a current value as its *state* and refer to the execution of assignments as *state changes*
+- our experience with CEK suggests that we shouldn’t try to think of the variable mapping as exactly an environment
+    - the solution is to think of memory as a new slot in the machine
+    - variable lookup is replaced by slot lookup, and assignment corresponds to changing the value of a slot
+    - the collection of slots is called a *store*
+- forgetting unused slots is the essence of garbage collection
 
+- CS machine
+- CEKS machine
+    - a store in the CEKS machine maps slot addresses to value closures
 
 ---
 
@@ -229,7 +277,24 @@ https://www.cs.utah.edu/~mflatt/past-courses/cs7520/public_html/s06/
 
 ---
 
-- types
+### ch11. types
+
+---
+
+- expression checkers that can detect and reject “bad” expressions before evaluating them
+    - the “expression” (`+ 1 -`) does not get struck, does not signal an error, and does not loop forever; because it’s not an expression at all.
+    - the expression (`+ 1 (λx.9)`) will get stuck if we try to evaluate it
+
+- A language that consists of an expression grammar, evaluation relation, and type relation is a typed language.
+- A language that comprised only an expression grammar and a reduction relation is an untyped language.
+
+- A typed language is *sound* if its type system and evaluation rules are consistent
+    - if the type system assigns an expression a type, then the expression does not get stuck when evaluated
+
+---
+
+### ch xx
+
 - polymorphism
 - type inference
 - recursive types
