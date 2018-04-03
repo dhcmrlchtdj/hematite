@@ -41,4 +41,14 @@ OTP 是一个 framework，规划了各种场景、制定了各种约定。
 
 ---
 
+## Releases && Release Handling
+
+---
+
+- release 先生成 package，package 再被部署成 target system
+- Release Resource File 是配置文件，用来生成 boot script 和 release package
+- 在 erlang 中进行动态的 code replacement 操作，称为 release handling
+
+---
+
 
