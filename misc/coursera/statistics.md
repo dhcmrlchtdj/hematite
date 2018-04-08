@@ -88,7 +88,8 @@
     - variance = SD^2
         - `VAR = \frac {\sum (X-M)^2} {N}`
         - MS (mean squares)
-        - SS (sum of squares)
+            - SS (sum of squares)
+            - MS = SS/N = SD^2
 
 - formulae
     - `M = \frac {\sum X} {N}`
@@ -99,7 +100,30 @@
 
 ---
 
+- correlation
+    - measure and describe the relationship between two variables
+    - range `+1 / 0 / -1`, 0 means independence
+    - (if correlated) one variable can be used to predict the other variable
+- caution
+    - correlation does not imply causation
+    - the magnitude of a correlation depends upon many factors
+    - the correlation coefficient is a sample statistic, just like the mean
+- types of correlation coefficients
+    - pearson product-moment correlation coefficient (r)
+    - phi coefficient
+    - ...
 
+---
 
-
-
+- correlation is standardized COV
+- r, pearson product-moment correlation coefficient
+    - raw score
+        - `r = \frac {SP_{xy}} {\sqrt {SS_x * SS_y}}`
+        - `r = \frac {\sum [(X-M_x)*(Y-M_y)]} {\sqrt {\sum(X-M_x)^2 * \sum(Y-M_y)^2}}`
+    - Z-score
+        - `r = \frac {Z_x * Z_y} {N}`
+        - `r = \frac {{\frac {X-M_x} {SD_x}} * {\frac {X-M_y} {SD_y}}} {N}`
+- variance = MS = SS/N
+- covariance = COV = SP/N
+    - divide by N for descriptive
+    - divide by N-1 for inferential
