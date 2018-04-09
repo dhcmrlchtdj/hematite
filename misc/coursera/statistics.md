@@ -127,3 +127,33 @@
 - covariance = COV = SP/N
     - divide by N for descriptive
     - divide by N-1 for inferential
+
+---
+
+- assumptions when interpreting r
+    - normal distributions for X and Y
+    - linear relationship between X and Y
+    - homoscedasticity 🙄️
+
+---
+
+- measurement
+    - reliability
+        - raw score = true score + bias + error
+        - estimate reliability
+            - test / re-test
+            - parallel tests
+            - inter-item estimates
+    - validity
+        - construct validity
+            - content validity
+            - convergent validity
+            - divergent validity
+            - nomological validity
+    - sampling
+        - sampling error: the difference between the population and the sample
+            - estimate sampling error
+                - increase the size of the sample
+                - decrease variance
+        - standard error: an estimate of amount of sampling error
+            - StandardError = StandardDeviationOfSample / SQRT(Size)
