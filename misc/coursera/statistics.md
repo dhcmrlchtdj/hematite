@@ -157,3 +157,12 @@
                 - decrease variance
         - standard error: an estimate of amount of sampling error
             - StandardError = StandardDeviationOfSample / SQRT(Size)
+
+---
+
+- regression
+    - a statistical analysis used to predict scores on an outcome variable, based on scores on one or multiple predictor variables
+    - simple/multiple regression
+    - minimize the residuals in regression model
+
+
