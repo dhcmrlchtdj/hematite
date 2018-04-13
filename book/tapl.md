@@ -54,4 +54,34 @@
 
 ---
 
+### 05. The Untyped Lambda-Calculus
+
+---
+
+> In lambda-calculus, all computation is reduced to the basic operations of function definition and application
+
+关于 lambda-calculus，PLLC 里内容更丰富
+
+---
+
+### 06. Nameless Representation of Terms
+
+---
+
+在 EOPL 里也降到 nameless 这种优化。
+我理解，主要的好处就是把查询环境变量变成一个 O(1) 的操作。
+
+---
+
+### 07. An ML Implementation of the Lambda-Calculus
+
+---
+
+## Simple Types
+
+---
+
+## 08. Typed Arithmetic Expressions
+
+---
 
