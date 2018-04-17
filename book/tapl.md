@@ -81,7 +81,30 @@
 
 ---
 
-## 08. Typed Arithmetic Expressions
+### 08. Typed Arithmetic Expressions
 
 ---
+
+> Properties of the typing relation will often be proved by induction on
+> derivation trees, just as properties of the evaluation relation are typically
+> proved by induction on evaluation derivations.
+
+- the most basic property of type system is safety (soundness)
+- a well-typed term can never reach a stuck state during evaluation
+    - stuck state: a closed term is stuck if it is in normal form but not a value.
+- Safety = Progress + Preservation
+    - Progress: A well-typed term is not stuck (either it is a value or it can take a step according to the evaluation rules).
+    - Preservation: If a well-typed term takes a step of evaluation, then the resulting term is also well typed.
+
+---
+
+到这里为止，所有的内容还是比较易读的。
+不过这个易读的前提，是已经有了一定的知识储备。
+
+---
+
+### 09. Simply Typed Lambda-Calculus
+
+---
+
 
