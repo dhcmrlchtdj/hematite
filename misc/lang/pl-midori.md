@@ -6,6 +6,25 @@ http://joeduffyblog.com/2015/11/03/blogging-about-midori/
 
 ---
 
+## Blogging about Midori
+
+---
+
+> programming language, compilers, OS, services, applications, programming models
+> language, compilers, core frameworks, concurrency models, and IDEs/tools
+
+巨大的野心
+
+> Most of my blog entries will focus on the key lessons that we're now trying to
+> apply back to the products, like asynchrony everywhere, zero-copy IO,
+> dispelling the false dichotomy between safety and performance,
+> capability-based security, safe concurrency, establishing a culture of
+> technical debate, and more.
+
+复盘，对于成长有重要意义。
+
+---
+
 ## A Tale of Three Safeties
 
 ---
@@ -34,5 +53,8 @@ http://joeduffyblog.com/2015/11/03/blogging-about-midori/
 
 ---
 
+## Objects as Secure Capabilities
+
+---
 
 
