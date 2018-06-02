@@ -88,5 +88,61 @@ http://joeduffyblog.com/2015/11/03/blogging-about-midori/
 
 ---
 
+- ultra-lightweight, fine-grained processes
+- strongly typed message passing interfaces
+
+---
+
+- promise
+    - all asynchrony is expressed in the type system
+    - `Promise<T>`
+- async/await
+    - `T / Result<T> / Async<T> / Async<Result<T>>`
+    - `Promise<T> -> AsyncResult<T>`
+    - async/await encouraged a pull-style of concurrency
+    - `IObservable<T> / IObserver<T>` offered bridges between pull and push
+
+- 个人想法
+    - 异步，始终是个需要特殊处理的事物。要有类型系统支持，最好还要特殊语法支持
+    - 不仅仅是异步，很多语言特性，有了语法糖吃得才甜
+
+---
+
+- C#'s implementation of async/await is entirely a front-end compiler trick
+
+- ultra-lightweight processes
+    - each process had a distinct heap that was independently collectible
+    - stack start as small as 128 bytes and grow as needed (doubled each time)
+    - execute all non-asynchronous code on classical stacks
+
+- message passing
+    - all of the data structures necessary to talk cross-process were in user-mode, so no kernel-mode transitions were needed
+    - pipelining
+    - three-party handoff
+
+---
+
+- cancellation
+    - use-case, how to implement the browser's "cancel" button reliably
+    - CancellationToken
+- state management
+    - message passing systems don't have race conditions is an outright lie
+    - Statelessness was by far the easiest pattern. Isolation was a close second. Everything else was just a little dirty.
+- ordering
+    - Distributed systems are unordered. It sucks. Don’t fight it. You’ll regret trying.
+- debugging
+    - The solution, as with many such challenges, was tooling.
+- resource management
+    - self-control vs automatic resource management
+
+- 个人想法
+    - 作者这个章节，反复提及 scale
+    - 设计上需要支持系统开发到应用开发，之前 C# 使用的一些方案就不适用了
+
+---
+
+## Safe Native Code
+
+---
 
 
