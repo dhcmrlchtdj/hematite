@@ -145,4 +145,42 @@ http://joeduffyblog.com/2015/11/03/blogging-about-midori/
 
 ---
 
+- AOT / JIT
+- compliation architecture
+    - compiler / high-level IR / low-level IR
+- optimizations
+    - bounds check elimination
+    - overflow checking
+    - inlining
+    - code size
+- system architecture
+    - GC
+        - conservative / precise
+        - cooperative / preemptive
+        - generational collector
+        - concurrent mark-sweep compacting collector
+    - separate compilation
+    - parametric polymorphism
+    - virtual dispatch
+    - async model
+        - the compiler was key to making linked stacks work
+    - memory ordering model
+    - error model
+        - exceptions / return codes
+        - ended up being a hybrid of two things
+            - Fail-fast for programming bugs.
+            - Typed exceptions for dynamically recoverable errors.
+    - contracts
+
+
+- 个人想法
+    - 这里很多东西，没有动手实现过
+    - 很多概念不是第一次看到，但还不足以完全理解
+
+---
+
+## The Error Model
+
+---
+
 
