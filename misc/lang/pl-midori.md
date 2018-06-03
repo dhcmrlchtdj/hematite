@@ -183,4 +183,95 @@ http://joeduffyblog.com/2015/11/03/blogging-about-midori/
 
 ---
 
+> the whole system was written in it, including drivers, the domain kernel, and all user code.
+
+> Like many other things we did in Midori,
+> a "whole system" approach was necessary to getting it right,
+> taking several iterations over several years.
+
+这点被作者反复提及。
+
+---
+
+- fail-fast (abandonment), for programming bugs
+- statically checked exceptions, for recoverable errors
+
+---
+
+- error codes
+    - coupled with a dataflow-style of programming and pattern matching
+    - option types help to address this (forget to check a return code) for functional languages
+    - some languages (ML family) mix this elegant model with the world of unchecked exceptions. This taints the elegance of the monadic data structure approach.
+    - (rust's try! macro) leads us to a beautiful sweet spot
+
+- exceptions
+    - unchecked exceptions model
+        - any function call can throw an exception, transferring control non-locally somewhere else. Where? Who knows.
+    - checked exceptions
+        - java exceptions are used to communicate unrecoverable bugs
+        - You don't actually know everything that might be thrown in java, thanks to our little friend RuntimeException.
+    - universal problems
+        - throwing an exception is usually ridiculously expensive
+        - exceptions can significantly impair code quality
+        - control flow for throws is usually invisible
+
+> For a significant class of error, none of these approaches are appropriate!
+
+---
+
+the difference between recoverable errors and bugs
+
+- recoverable error
+    - usually the result of programmatic data validation
+    - programs are expected to recover
+    - it will happen in well-constructed programs no matter what you do
+
+- bug
+    - a kind of error the programmer didn't expect
+    - it cannot be handled or fixed at runtime, it can only be fixed by its developer
+
+> The key thing is not preventing failure per se, but rather knowing how and when to deal with it.
+
+---
+
+> an operating system is just a distributed network of cooperating processes,
+> much like a distributed cluster of microservices or the Internet itself.
+> The main differences include things like latency; what levels of trust you can
+> establish and how easily; and various assumptions about locations, identity, etc.
+
+> As programs continue moving to the cloud, and become aggressively decomposed
+> into smaller independent services, this clear separation of transient and
+> persistent state is even more important.
+
+---
+
+- isolation is critical
+- isolation encourages simplicity
+
+- 个人理解
+    - 隔离好不同进程，能方便从各种异常中恢复
+    - erlang 在异常和并发两个方面，都值得学习
+
+---
+
+> - The functional perspective would be to use dataflow for all errors, but exceptions were very control-flow-oriented.
+> - You’re in a statically typed programming language, and the dynamic nature of exceptions is precisely the reason they suck.
+> - Exceptions thrown by a function became part of its signature, just as parameters and return values are.
+
+- 个人想法
+    - rust 的做法比较让人喜欢
+    - ocaml 的 oo 和 exception 都喜欢不起来
+    - 该不该有语法糖，还没想清楚优劣
+
+---
+
+- Retrospective
+    - An architecture that assumed fine-grained isolation and recoverability from failure.
+    - Distinguishing between bugs and recoverable errors.
+
+---
+
+## Performance Culture
+
+---
 
