@@ -275,3 +275,22 @@ the difference between recoverable errors and bugs
 
 ---
 
+> Great infrastructure and supporting processes are a must
+
+> Setting goals,
+> communicating regularly,
+> and obsessively tracking goals
+> and customer-facing metrics is paramount.
+
+- 个人想法
+    - 一直提的东西
+    - 缺少实践
+    - 没怎么看懂
+
+---
+
+## 15 Years of Concurrency
+
+---
+
+
