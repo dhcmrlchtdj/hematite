@@ -293,4 +293,45 @@ the difference between recoverable errors and bugs
 
 ---
 
+- 个人想法
+    - 有预感这篇也看不出什么道道
+    - 缺少写并发的经验
 
+---
+
+- We already had threads, thread-pools, locks, and basic events. Where to go from here?
+- STM
+- Parallel Language Integrated Query (PLINQ)
+    - auto-parallelize the classically parallelizable operations (map/filter/...)
+    - a developer needn't worry about scheduling, picking the right number of tasks, or synchronization
+    - data parallelism
+- Task Parallel Library
+    - `Task<T>`
+    - task parallelism
+
+---
+
+> the existing foundation was the wrong one to bet on.
+> Shared-memory multithreading really isn’t the future
+
+- isolation is paramount
+- message passing will connect many such isolated parties through strongly typed RPC interfaces
+- a single message loop inside of a process, no extra parallelism
+- promises-like programming model will be first class
+    - Synchronous blocking is disallowed
+    - All asynchronous activity in the system is explicit
+    - without locks and events
+
+> A very robust system could be built with nothing more than the above
+> the above foundation stood the test of time and underwent far fewer changes than what came next
+
+---
+
+- permission
+    - what you could do with the referent object
+    - mutable, immutable, readonly
+- ownership
+    - what operations are legal on a given reference
+    - isolated
+
+> All side-effects need to be exposed to the type system
