@@ -2,7 +2,11 @@
 
 ---
 
-## introduction
+## Part I Fundamentals of Compilation
+
+---
+
+### introduction
 
 ---
 
@@ -22,7 +26,7 @@
 
 ---
 
-## lexical analysis
+### lexical analysis
 
 ---
 
@@ -33,7 +37,7 @@
 
 ---
 
-## parsing
+### parsing
 
 ---
 
@@ -44,7 +48,7 @@
 
 ---
 
-## abstract syntax
+### abstract syntax
 
 ---
 
@@ -54,10 +58,9 @@
 - abstract parse tree / concrete syntax tree
 - positions (for error report)
 
-
 ---
 
-## semantic analysis (type-checking)
+### semantic analysis (type-checking)
 
 ---
 
@@ -67,3 +70,38 @@
         - hash table for imperative
         - binary search tree for functional
 
+- two separate name spaces
+    - types
+    - functions and variables
+
+- type-checker is a recursive function of the abstract syntax tree
+
+- mutually recursive types/functions
+    - first pass, gather "header" information to the ENV
+    - second pass, process "body" in the ENV
+    - (implement by `ref`
+
+---
+
+- 这章主要是演示了一下如何实现 type-checker
+- 示例代码很多
+
+---
+
+### activation records
+
+### translation to intermediate code
+
+### basic blocks and traces
+
+### instruction selection
+
+### liveness analysis
+
+### register allocation
+
+---
+
+## Part II Advanced Topics
+
+---
