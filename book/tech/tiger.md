@@ -137,3 +137,50 @@
 ## Part II Advanced Topics
 
 ---
+
+### garbage collection
+
+---
+
+- mark-and-sweep collection
+    - DFS (non recursive) 递归的栈使用可能非常大
+    - pointer reversal 重复利用回收的空间
+    - fragmentation 空间的碎片化问题
+- reference counts
+    - problems: cycle reference, operation is expensive
+- copying collection
+    - from-space and to-space
+        - to-space is compact (no fragmentation)
+    - forwarding pointers
+    - Cheney's algorithm (BFS, simple but poor locality)
+    - DFS (better locality, but inconvenient and slow)
+- generational collection
+    - newly created objects are likely to die soon
+- incremental/concurrent collection
+    - tricolor marking (white, grey, black)
+    - invariants
+        - no black object points to a white object
+        - every grey object is on the collector's data structure
+    - allow mutator to get work done while preserving the invariants
+    - write-barrier algorithm
+        - each write by mutator must be checked to make sure an invariant is preserved
+    - read-barrier algorithm
+        - each read instruction must be checked
+    - write/read barrier must synchronize with collector
+    - Baker's algorithm
+        - based on Cheney's copying collection algorithm
+
+---
+
+- data layout
+    - 比如 ocaml 好像是有 1bit 数据表示类型？
+
+（generational, tricolor mark-and-sweep 算是标配吗
+
+---
+
+### object-oriented language
+
+---
+
+
