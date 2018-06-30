@@ -127,7 +127,6 @@
 
 - control-flow graph
 
-
 ---
 
 ### register allocation
@@ -174,12 +173,53 @@
 
 - data layout
     - 比如 ocaml 好像是有 1bit 数据表示类型？
-
-（generational, tricolor mark-and-sweep 算是标配吗
+- generational, tricolor mark-and-sweep 算是标配吗
 
 ---
 
 ### object-oriented language
+
+---
+
+- inheritance
+    - single
+    - multiple
+- runtime type-tag
+- class (static) / prototype (dynamic)
+
+---
+
+### functional programming language
+
+---
+
+- flavors
+    - impure, higher-order functions (ML, scheme)
+    - strict, pure, higher-order functions (pure functional subset of ML)
+    - non-strict, pure, higher-order functions (Haskell)
+- closures (runtime representation)
+- continuations
+- inline expansion
+- lazy
+
+---
+
+### polymorphic types
+
+---
+
+- polymorphic (many shape)
+    - parametric polymorphic (generic)
+    - ad hoc polymorphic (overloading)
+        - dynamic overloading (overriding)
+- type constructor
+- Hindley-Milner type inference
+
+---
+
+- fully boxed
+- coercion-based
+- types as runtime arguments
 
 ---
 
