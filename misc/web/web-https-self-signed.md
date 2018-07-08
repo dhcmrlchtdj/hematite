@@ -23,10 +23,27 @@ openssl x509 -req -extfile <(printf "subjectAltName=DNS:example.com,DNS:*.exampl
 
 ```
 $ openssl ecparam -genkey -name secp384r1 -out ca.key
-$ openssl req -new -x509 -days 365 -key ca.key -subj "/C=CN/ST=BJ/O=company/CN=RootCA" -out ca.crt
+$ openssl req -new -sha384 \
+    -subj "/CN=RootCA" \
+    -x509 -days 365 \
+    -key ca.key \
+    -out ca.crt
 
-$ openssl x509 -in ca.crt -text -noout
+$ openssl ecparam -genkey -name secp384r1 -out domain.key
+$ openssl req -new -sha384 \
+    -subj "/CN=example.com" \
+    -reqexts SAN \
+    -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:example.com,DNS:*.example.com")) \
+    -key domain.key \
+    -out domain.csr
+$ openssl x509 -req -sha384 \
+    -extfile <(printf "subjectAltName=DNS:example.com,DNS:*.example.com") \
+    -days 365 \
+    -CA ca.crt -CAkey ca.key -CAcreateserial \
+    -in domain.csr \
+    -out domain.crt
 
-
-$ openssl x509 -in domain.crt -text -noout
+$ openssl req -noout -text -in domain.csr
+$ openssl x509 -noout -text -in domain.crt
+$ openssl x509 -noout -text -in ca.crt
 ```
