@@ -19,7 +19,12 @@ $ timedatectl set-ntp true
 ```
 $ lsblk
 $ cgdisk /dev/sdx
-$ mkfs.ext4 /dev/sdxY
+
+$ // 1M for GPT boot
+$ // type ef02
+
+$ mkfs.xfs /dev/sdxY
+
 $ mkswap /dev/sdxY
 $ swapon /dev/sdxY
 ```
