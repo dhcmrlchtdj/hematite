@@ -1,7 +1,7 @@
 ## online
 
-- https://github.com/dhcmrlchtdj/til/find/master
-- https://github.com/dhcmrlchtdj/til/search?utf8=%E2%9C%93
+- https://github.com/dhcmrlchtdj/note/find/master
+- https://github.com/dhcmrlchtdj/note/search?utf8=%E2%9C%93
 
 ## local
 
