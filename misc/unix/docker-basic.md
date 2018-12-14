@@ -35,4 +35,5 @@ $ docker exec <container-hash> /bin/bash
 # remove everything
 $ docker rm $(docker ps -a -q)
 $ docker rmi $(docker images --filter "dangling=true" -q)
+$ docker volume prune -f
 ```
