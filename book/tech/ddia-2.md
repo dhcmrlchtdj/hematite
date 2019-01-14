@@ -1,0 +1,248 @@
+# DDIA
+
+- distributed data
+    - why
+        - scalability
+        - high availability/fault tolerance
+        - latency
+    - how
+        - shared-memory architecture
+            - vertical scaling
+        - shared-disk architecture
+            - connected via network
+        - shared-nothing architecture
+            - horizontal scaling
+
+- replication
+    - why
+        - increase read throughout
+            - 机器多了
+        - increase availability
+            - 挂了一台也没事
+        - reduce latency
+            - 可以部署在距离用户更近的地方
+    - problem
+        - data change
+            - 机器间怎么同步数据
+    - how
+        - leader-based replication
+            - master-slave replication
+            - asynchronous vs synchronous
+                - 是否等待从库更新完成
+                - 等，性能差；不等，数据一致性没保证
+            - outage
+                - 不管是维护还是故障，如何替换节点
+                - leader
+                    - failover
+                        - 从库提升为主库
+                            - 如果主从异步，怎么处理数据丢失
+                            - 怎么选择新的主库
+                            - 怎么判断主库已经异常，超时多久
+                - follower
+                    - catch-up recovery
+                        - 靠 replication log 同步到最新状态
+            - replication log
+                - insert/update/delete statements
+                    - 分发语句
+                        - 存储过程之类的副作用
+                        - now() 之类的非确定性函数
+                - WAL
+                    - 分发物理修改
+                        - 依赖数据存储格式
+                - logical
+                    - 分发逻辑修改
+                        - 每一行变成了什么
+            - consistency
+                - eventually consistency 不够用的场景
+                    - 下面几个都是从库不同步导致的
+                - read-after-write consistency
+                    - 发个 twitter，不会刷新变没了
+                - monotonic reads
+                    - 别人发的 twitter，别一下有一下无
+                - consistent prefix reads
+                    - 别人的对话，时间顺序不能错
+        - multi-leader replication
+            - use case
+                - multi-datacenter
+                    - 每个数据中心一个 leader
+                    - 数据方面的多主，主要就是这种场景
+                        - 主要优势就是 replication 的那些优势
+                - offline apps
+                    - 比如日历，联网时同步。相当于手机、电脑都是可写的 leader
+                - collaborative editing
+                    - 文档协作，实时多人编辑
+            - write conflict
+                - asynchronous only
+                    - 同步不如直接 single leader
+                    - 冲突其实还是时序问题
+                - 自动处理冲突
+                    - CRDTs
+                        - two-way merge
+                    - mergeable persistent data structures
+                        - three-way merge
+                    - operational transformation
+                        - used by google docs
+            - topology
+                - all-to-all
+                - star
+                - circular
+        - leaderless replication
+            - how
+                - client send query to several replicas
+                - 三副本，两个写入成功就视为成功
+                - 读取也发给所有节点（需要处理可能的冲突
+                    - read repair
+                        - 数据带版本，读取时遇到旧版本，用新版覆盖
+                    - anti-entropy process
+                        - 独立进程，不间断处理出现的版本不一致
+
+- partitioning (sharding)
+    - why
+        - scalability
+        - 通常和 replication 一起用，保证容错能力
+    - how
+        - by key range
+            - 更容易出现热点
+        - by hash
+            - 不支持范围访问
+        - problem
+            - skewed
+                - 数据分布不均衡
+            - hot spot
+                - 读取不均衡
+    - topic
+        - secondary index
+            - 前面的 how 适用于 KV
+            - scatter/gather
+            - document partition
+            - term partition
+        - rebalancing
+        - request routing
+            - strategy
+                - 客户端知道自己该连接哪个节点
+                - 加个中间层做分发，客户端连中间层
+                - 每个节点都能做分发，客户端随便连
+            - service discovery
+                - 有哪些节点
+
+- transaction
+    - ACID
+    - problems
+        - 假如去掉并发，不会出现下面这些情况
+        - dirty write
+            - 没有隔离，数据覆盖
+            - read committed
+        - dirty read
+            - 读到其他事务未提交的数据
+            - read committed
+        - read skew (unrepeatable read)
+            - 事务开始时读一下，结束时读一下，两次结果不同
+                - 其他事务 update 操作
+            - snapshot isolation
+        - lost update
+            - 两个事务更新同一个值，一个结果被覆盖
+            - serializable
+        - write skew
+            - serializable
+        - phantom read
+            - 同 read skew
+                - 其他事务 insert/delete 操作
+            - serializable
+        - serialization anomaly
+    - isolation
+        - read committed
+            - no dirty read, no dirty write
+                - 事务未结束时，修改不会被外部读取
+                - 最终修改的，都是其他事务提交过的值
+            - implement
+                - 对于写，用 row-level lock 保证。事务结束时释放
+                - 对于读，同时记录新旧两个值。事务结束时新覆盖旧
+        - repeatable read / snapshot isolation
+            - read skew
+                - snapshot 保证数据没被其他事务修改过
+                    - 适合只读的事务
+            - implement
+                - 对于写，一样用 row-level lock
+                - MVCC
+                    - multi-version concurrency control
+                    - 每行都可能存在多个版本
+                - 每个事务，读写的都是自己的 snapshot，避免相互影响
+            - problem
+                - index and mvcc
+                    - 多版本，如何更新索引
+        - serializable isolation
+            - implement
+                - 真 序列化执行
+                - two-phase locking (2PL)
+                    - 读和读可以一起
+                    - 写和读互斥，写和写互斥
+                    - 获得锁和释放锁，two-phrase
+                    - 实现事务时要做死锁的检查
+                    - 并发少，吞吐量小
+                - serializable snapshot isolation (SSI)
+                    - 类似乐观锁，或者 STM 软件事务内存
+
+- problem of distribution
+    - construct a reliable system from a less reliable underlying base
+    - network
+        - problem
+            - 网络故障，没送到或没送回来
+            - 服务故障，送到了处理不了，处理慢了
+    - clock
+        - leap second
+        - problem
+            - NTP 本身可能出错
+                - NTP 没错，机器本身时间也可能差很远，导致时间快速变化
+
+- consensus
+    - linearizability
+        - strong consistency
+            - behavior as though there is only a single copy of data
+            - 是对 replication 的要求。通常认为只有 single leader 架构下能实现
+        - vs serializability
+            - 序列化描述事务，涉及多个数据的变化
+            - 线性化只涉及单个数据，不涉及事务
+            - 比如
+                - SSI 是 serializable 但不是 linearizable
+                - 2PL 同时满足 serializable  和 linearizable
+                - 2PL 加锁了，所以读到的肯定是最新的。而 SSI 读到的可能是快照里的过期数据
+        - use case
+            - distributed lock
+            - leader election
+            - linearizability 或许不是唯一的方法，但肯定是上层应用最容易理解的
+            - 实践中还是用得少
+                - 连多核 CPU 在读内存时，都不能保证 linearizability。有 cpu cache 
+                - 主要原因还是性能不满足需求
+        - CAP
+            - 在网络出问题的时候，选择 数据一致性 还是 服务可用性
+            - 三个关键字，考虑的可能性太少，意义又模糊。建议讨论问题时，换更准确的描述
+    - ordering
+        - causal consistency
+            - linearizability implies casuality
+            - 不受网络延迟影响，网络异常时保持高可用
+        - sequence number
+            - lamport timestamp
+                - (counter, node_id)
+                - 和物理时钟无关，记录操作次数这种相对值
+                - 先比较 counter，一样再比较 node_id。值大的说了算
+                - enforce a total ordering
+            - 事后解决冲突够用了，但处理请求时不够用
+                - 一开始提交成功，合并其他节点数据时失败。上层应用受不了
+        - total order broadcast
+            - asynchronous
+            - 写请求，以相同的顺序，被分发到所有节点
+                - 不保证分发到达和写入完成的时间
+    - consensus
+        - get several nodes to agree on something
+            - 节点拿出不同的值，一致性算法决定用哪个
+        - use case
+            - atomic commit
+            - leader election
+        - implement
+            - two-phrase commit (2PC)
+                - 事务提交前，向所有节点发 prepare 请求，都确认后，向所有节点发 commit 请求，或者 abort 请求
+                - prepare 完成，意味着各个节点都确认事务没问题
+                - 最后的 commit/abort，可以无限重试，直到各个节点都完成
+                - 这些中间过程，由 coordinator 组件完成
+            - zab
+            - raft
