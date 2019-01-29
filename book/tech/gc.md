@@ -4,7 +4,25 @@
 
 ## mark-sweep
 ## mark-compact
+
+---
+
 ## copying
+
+- 空间消耗较大，但是实现简单、速度快、没有碎片化问题
+- Cheney algorithm
+    - 维护 `scan/free` 两个指针。
+    - `scan` 指向接下来要扫描的对象，`free` 指向剩余空间。
+    - `scan` 到 `free` 中间是待扫描的对象。
+
+- locality
+    - 按什么顺序遍历存活的对象，能让 locality 最优。
+    - DFS/BFS 都有自己的适合和不适合的场景，没有最优解，NP 问题。
+
+- issue
+    - allocation
+    - space and locality
+    - moving objects
 
 ---
 
