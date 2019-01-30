@@ -86,6 +86,13 @@
 
 ---
 
-## generational
+## generational GC
 
+## concurrent GC
+- mark-sweep
+- copying & compaction
+- reference counting
 
+## parallel GC
+
+## realtime GC
