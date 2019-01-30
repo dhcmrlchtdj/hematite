@@ -2,7 +2,26 @@
 
 ---
 
+## allocation
+
+- sequential
+- free list: first-fit, next-fit, best-fit
+- segregated-fit: multiple free list
+
+---
+
 ## mark-sweep
+
+- mutator: one or more. user process. `new/read/write` memory.
+- collector: single. stop the world.
+
+- tricolor
+    - black: alive
+    - grey: scanning
+    - white: dead
+
+- bitmap
+- lazy sweep
 
 ---
 
@@ -66,4 +85,7 @@
     - trial deletion。减少计数看下会不会被回收掉
 
 ---
+
+## generational
+
 
