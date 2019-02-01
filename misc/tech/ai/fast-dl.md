@@ -46,4 +46,31 @@ interp.most_confused(min_val=2)
 
 ---
 
+# lesson 2
+
+- 使用之前训练好的模型
+- 炼丹
+    - 检查训练集，排除异常的数据
+    - 调整 learning rate 和 epoch
+        - LR 过高，表现为 validation loss 会很高
+        - LR 过低，表现为 metric 变化很慢（增加 epoch 次数，metric 变化不明显）
+        - epoch 过少，表现为 training loss 比 validation loss 高很多
+        - epoch 过多，表现为 metric 忽好忽坏（结果就是过拟合）
+    - LR 选取的时候，可以看图（`learn.lr_find();learn.recorder.plot()`），找下降最多的区间
+- 本次只想知道 text 处理相关的，数学细节就先跳过了
+    - Stochastic Gradient Descent (SGD) 随机梯度下降
+    - epoch
+    - learning rate
+    - loss function
+
+```python
+previous_learned.export() # export model
+###
+learn = load_learner(path) # load model
+pred_class, pred_idx, outputs = learn.predict(img)
+print(pred_class)
+```
+
+---
+
 
