@@ -17,6 +17,7 @@ http://caml.inria.fr/pub/papers/xleroy-zinc.pdf
 
 - 关于运行
     - 可以编译到 machine code / high-level language / bytecode
+    - （时代局限性啊，现在肯定会考虑一下 LLVM IR
 
 - 关于 REPL
     - 暴露 compiler linker interpreter 接口，实现易用的交互
@@ -24,6 +25,9 @@ http://caml.inria.fr/pub/papers/xleroy-zinc.pdf
 ---
 
 ## abstract machine
+
+- 主要是讲一个不同于 SECD 的 abstract machine
+- 具体实现的寄存器，包括 `acc / env / arg / return`
 
 ---
 
