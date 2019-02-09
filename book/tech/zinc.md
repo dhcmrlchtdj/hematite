@@ -33,6 +33,22 @@ http://caml.inria.fr/pub/papers/xleroy-zinc.pdf
 
 ## value and memory
 
+- sum-of-product
+- three-class data types
+    - atomic, predefined types: integer, float-point number, character, string, arbirary-precision integer
+    - predefined type constructor: function (closure), vector, dynamic
+    - concrete type (用户自定义的类型)
+- memory
+    - unboxed object 只有 integer
+    - boxed object 的 header 由 `size(22bit), GC flag(2bit), tag(8bit)` 组成
+        - 还分 structured / unstructured
+- value
+    - `int/char` 都是 31bit 的（还有 1bit 用于标记这是 unboxed object）
+    - `int/char` 等其他类型，都是 unstructured 的
+    - `float-point number` 使用 boxed object，主要是为了实现 IEEE 标准
+
+还是有一些概念不太懂
+
 ---
 
 ## compiler
