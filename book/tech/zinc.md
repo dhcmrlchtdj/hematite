@@ -53,6 +53,15 @@ http://caml.inria.fr/pub/papers/xleroy-zinc.pdf
 
 ## compiler
 
+- 编译过程，AST 到 lambda (tree) 到 bytecode (linear list)
+- parsing / type inference / lambda compiler / bytecode compiler
+
+---
+
+> 多练多看，重要的东西总是会重复出现
+
+比如这节出现 pattern match 展开、Brujin indexes。
+
 ---
 
 ## runtime
