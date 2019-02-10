@@ -65,3 +65,14 @@ http://caml.inria.fr/pub/papers/xleroy-zinc.pdf
 ---
 
 ## runtime
+
+- linker 把前面 compiler 生成的指令合并起来
+    - ZINC 的指令，比之前 scheme 3impl 要多很多啊
+- ZINC 的 interpreter 是 C 语言实现的
+    - 寄存器有
+        - pc
+        - argument stack
+        - return stack
+        - environment
+        - accumlator
+        - ...
