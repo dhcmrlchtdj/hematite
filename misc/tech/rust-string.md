@@ -31,8 +31,22 @@ https://doc.rust-lang.org/book/ch04-03-slices.html
 怎么选择 `&str` 和 `String` 呢？
 
 http://www.ameyalokare.com/rust/2017/10/12/rust-str-vs-String.html
+
 google 搜出来第一条这么说的
 
 - function parameter, `&str`
 - read-only string, `&str`
 - ownership or mutable, `String`
+
+https://doc.rust-lang.org/book/ch04-03-slices.html#string-slices-as-parameters
+
+文档说应该用 `&str` 做参数
+
+> If we have a string slice, we can pass that directly.
+> If we have a String, we can pass a slice of the entire String
+
+```rust
+fn pass(s: &str) -> &str { s }
+fn pass(s: &String) -> &str { s }
+```
+
