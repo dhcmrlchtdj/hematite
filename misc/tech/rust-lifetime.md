@@ -31,3 +31,7 @@ https://doc.rust-lang.org/stable/std/primitive.reference.html
 
 - 我倾向使用 copy/move 而不是 borrow，减少 lifetime 的问题……
 - 用到 reference 的时候，都应该留意下 lifetime 是不是符合预期。
+
+---
+
+- 实际写两天后，根本减少不了 borrow 啊。简直了……
