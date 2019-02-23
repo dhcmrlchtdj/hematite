@@ -1,4 +1,4 @@
-# compiler design
+# compiler design virtual machines
 
 ---
 
@@ -49,3 +49,23 @@
         - `G_fp[main_pc,main_fp,G_ret_val,..,var_F,var_x],F_fp[G_pc,G_fp,F_ret_val,F_arg(x),...]`
 
 ---
+
+## object-oriented
+- compose
+    - modularization
+    - resuability of modules
+    - extensibility of modules
+    - abstraction
+- concepts
+    - extension of imperative
+    - object (attribute + method)
+    - class
+    - inheritance
+    - generic
+- implement
+    - register COP (current object pointer)
+
+---
+
+## functional
+
