@@ -69,3 +69,19 @@
 
 ## functional
 
+- architecture
+    - instruction, register PC (program counter)
+        - `while (true) { IR = instruction[PC]; PC++; execute(IR); }`
+    - stack memory, register SP (stack pointer), 0->max
+        - values are always created in the heap
+        - the reference to heap object is stored in the stack
+        - （之前看 scheme-3impl，第一种 heap 实现也是非常粗暴，直接把调用链都放在 heap 上，靠存储调用链实现 continuation
+        - every heap object has a type tag
+    - stack frame, register FP (frame pointer)
+    - GP (global pointer)
+- instruction
+    - expression
+        - getbasic / mkbasic
+    - variable
+        - let
+        - free
