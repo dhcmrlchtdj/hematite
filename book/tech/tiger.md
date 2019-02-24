@@ -100,6 +100,9 @@
     - stack pointer
 - 嵌套函数能够访问上层变量，这种特性被叫做 block structure
     - 实现方式有 static link / display / lambda lifting
+    - lambda lifting
+        - 把闭包需要的环境变量，都改写成显式参数传递，这样就没有 free variable 了
+        - 再把闭包提出来，就没有嵌套函数了
 
 - 研究发现函数的参数一般少于四个，几乎都不超过六个。然后编译器会在这个假设的基础上做优化。（这都行 🙄️
 
