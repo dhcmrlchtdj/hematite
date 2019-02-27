@@ -49,3 +49,30 @@ GraphQL 到底是哪一层的设施？
 怎么和后端服务通信？怎么避免多次调用后端服务？
 我脑袋里始终建立不了这种实现上的分层、概念映射。
 网站上的例子都太过简单了。
+
+---
+
+# principled graphql
+
+https://principledgraphql.com/
+
+- integrity
+    - one graph
+    - federated implmentation
+    - schema registry
+- agility
+    - demand-oriented schema
+    - agile
+        - it should be possible to change the graph many times a day
+    - performance
+    - metadata
+- operation
+    - access control
+        - per-client
+    - logging
+        - trace
+    - layer architecture
+        - separate the graphql layer from the service layer
+
+以为是 12factor 那种有启发性的东西。
+结果，有点水啊。
