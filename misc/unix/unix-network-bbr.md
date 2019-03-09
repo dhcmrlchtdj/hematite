@@ -55,3 +55,11 @@ https://www.bufferbloat.net/projects/codel/wiki/
 > net.core.default_qdisc = fq - for fat servers, fq_codel for routers.
 
 大概是说，超过 10GigE 才应该选择 fq？
+
+---
+
+```
+echo "net.ipv4.tcp_fastopen = 3" | tee -a /etc/sysctl.d/66-bbr.conf
+echo "net.core.default_qdisc = fq" | tee -a /etc/sysctl.d/66-bbr.conf
+echo "net.ipv4.tcp_congestion_control = bbr" | tee -a /etc/sysctl.d/66-bbr.conf
+```
