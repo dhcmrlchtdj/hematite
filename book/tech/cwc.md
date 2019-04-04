@@ -2,7 +2,7 @@
 
 ---
 
-## 01.OVERVIEW
+## 01.overview
 
 ---
 
@@ -61,7 +61,17 @@
 
 ---
 
-## 02.CONTINUATION-PASSING STYLE
+## 02.continuation-passing style
+
+---
+
+in a well-formed CPS expressions
+- the arguments to a function are always atomic (variables or constants)
+- a function application can never be an argument of another application
+
+- 会有这种性质，是因为这是在对冯诺伊曼机进行建模，每次操作的参数都是寄存器的值
+- 程序的控制流（control flow）在转换到 CPS 时确定了，比如参数的求职顺序。
+- 所有的函数调用，都变成了尾调用。
 
 ---
 
