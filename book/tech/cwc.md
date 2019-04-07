@@ -79,3 +79,24 @@ in a well-formed CPS expressions
 
 ---
 
+> In the CPS language it is possible to write syntactically correct but meaningless programs.
+
+这就是类型系统想解决的问题呀
+
+---
+
+## 04. ml-specific optimizations
+
+https://dev.realworldocaml.org/runtime-memory-layout.html
+
+---
+
+> most optimizations (partial evaluation, dataflow, register allocation, etc.) are done in the CPS representation.
+
+在编译成 CPS 之前，可以进行一些语法、类型相关的优化。
+
+---
+
+## 05. CONVERSION INTO CPS
+
+---
