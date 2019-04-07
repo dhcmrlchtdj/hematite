@@ -34,3 +34,44 @@ https://ice1000.org/2018/11/18/SomeProspectsAboutOwO/
 
 有一点点、朦胧的……
 加了这样的定语，其实就是不懂吧。
+
+---
+
+lambda cube 里面有
+- type 依赖 term
+- type 依赖 type
+- term 依赖 type
+
+那么 term 依赖 term 是什么？
+
+到底什么算是依赖类型？
+比如 ts 里 type x = 1|2 算依赖类型吗？
+
+type 可以说是 term 的集合
+比如 uint8 是 0~255 的集合，也就是 0~255 的 untagged union
+所以，上面的全部都可以归结成 term 依赖 term？
+
+---
+
+这里的依赖两字，要怎么理解呢？
+只能用公式化的定义去描述吗？
+
+首先明确一点，这一切描述的都是类型系统。
+然后作为基础的 simply typed lambda calculus 满足 term dependent on term。
+
+- `int -> string`
+- `'a -> 'a`
+- `speed = fast | slow`
+- `int[5]`
+
+是在描述这几种类型的构造方式吗？
+SLTC 的表达能力，说的是函数吧？
+
+---
+
+http://lambda-the-ultimate.org/node/3142
+
+> In the lambda-cube the three axes represent static relationships
+> that are formalized through a type system
+
+比如 java 的 sub-typing，这种动态分发是发生在运行时的，是与 lambda cube 不同的维度。
