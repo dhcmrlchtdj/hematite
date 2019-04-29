@@ -100,3 +100,21 @@ https://dev.realworldocaml.org/runtime-memory-layout.html
 ## 05. CONVERSION INTO CPS
 
 ---
+
+---
+
+## 16. THE RUNTIME SYSTEM
+
+---
+
+> The most important job of a runtime system is to manage and garbage collect
+> the heap, and do so as efficiently as possible.
+
+这节其实主要是讲 GC。
+
+- Cheney's copying collection algorithm
+    - 广度优先遍历
+    - to space 充当了 queue 的角色
+    - scan 之后值待处理，next 之后的空余空间，scan 和 next 重合，就处理完了
+- generational garbage collection
+- data format
