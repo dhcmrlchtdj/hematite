@@ -127,4 +127,114 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 
 ---
 
+- spatial && temporal
+    - when to read pages into memory
+    - when to write pages to disk
+    - where to write pages on disk
+- buffer pool is memory, page(datatbase files) is disk
+
+---
+
+- buffer pool, array of fixed-size pages, in-memory cache
+- page table, track of pages that already in memory
+    - page table, in memory, page_id to buffer pool
+    - page directory, in disk, page_id to datatbase files
+- dirty-flag
+    - dirty pages will be written back to disk
+- pin counter
+- optimization
+    - multiple buffer pools
+    - pre-fetching
+    - scan sharing
+
+---
+
+- locks
+    - protect the database logical contents from other transactions
+    - held for transactions duration
+    - need to be able to rollback changes
+- latches
+    - protect the DBMS internal data structure from other threads
+    - held for operation duration
+    - do not need to be able to rollback changes
+
+---
+
+- buffer replacement
+    - LRU
+    - clock
+    - LRU-K
+    - localization
+    - priority hints
+
+---
+
+## Hash
+
+---
+
+- DBMS data structure
+    - meta-data
+    - core data storage
+    - temporary data sturctures
+    - table index
+
+---
+
+- hash table
+    - hash function
+    - hashing schema
+- open addressing hashing
+- cuckoo hashing
+    - multiple hash tables with different hash functions
+- chained hashing
+- extendible hashing
+- linear hashing
+
+---
+
+## Trees Indexes
+
+---
+
+- DBMS data structure
+    - meta-data
+    - core data storage
+    - temporary data sturctures
+    - table index
+
+---
+
+- B-tree
+- skip list
+    - less memory but not cache friendly
+- radix tree
+
+---
+
+- inverted indexes
+    - full-text search indexes
+
+---
+
+## Index Concurrency Control
+
+---
+
+- lock vs latch(mutex)
+    - read / write latch
+    - 就是读写锁
+- latch crabbing, allow multiple threads to access/modify B+Tree at the same time
+    - get latch for parent
+    - get latch for child
+    - release latch for parent if child is safe node
+        - safe node, will not split or merge when updated
+        - not full on insertion or more than half full on deletion
+- search
+    - acquire latch on child and then unlatch parent
+- insert/delete
+    - set READ latches as if for search, go to leaf, and set WRITE latch on leaf.
+    - if leaf is not safe, release all latches, restart transaction
+
+---
 
