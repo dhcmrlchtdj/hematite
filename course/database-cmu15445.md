@@ -386,3 +386,63 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
         - physiological logging
 
 ---
+
+## Distributed OLTP Database Systems
+
+- system architecture
+    - shared everything
+    - shared memory
+    - shared disk: aurora, spanner
+        - a single logical disk
+        - scale execution layer independently from the storage layer
+    - shared nothing: tidb, redis
+        - communicate via network
+        - easy to increase capacity
+        - hard to ensure consistency
+- design issues
+- partitioning schemes
+    - native table partitioning
+    - horizontal partitioning, partitioning key
+        - physical partitioning (shared nothing)
+        - logical partitioning (shared disk)
+- distributed concurrency
+    - distributed transaction requires expensive coordination
+    - coordinator
+- atomic commit protocol
+    - two-phase commit, blocks if coordinator fails
+    - paxos, non-blocking as long as a majority participants are alive
+    - raft
+    - zab
+    - 2pc 要求所有节点状态一致，paxos 放宽了限制，大部分一致即可
+- replication
+    - master-replica vs multi-master
+    - k-safety
+    - synchronous vs asynchronous vs semi-synchronous
+        - integrity vs performance
+- consistency issues (CAP)
+- federated databases
+
+---
+
+## Distributed OLAP Database Systems
+
+- OLTP databases -> ETL -> OLAP database
+- execution models
+    - push query to data, send query to the node that contains the data
+    - pull data to query, send the data to the node that executes query
+    - fault tolerance
+        - take snapshots of the intermediate result
+        - use snapshots to recover after a crash
+- query planning
+    - physical operators
+        - generate a single query plan
+        - break up into partition-specific fragments
+    - SQL
+        - rewrite query into partition-specific queries
+- distributed join algorithm
+- cloud systems
+
+---
+
+## Concurrency Control Theory
+
