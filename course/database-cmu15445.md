@@ -46,9 +46,6 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
     - DML
     - DDL
     - DCL
-
----
-
 - SQL
     - window functions
         - likes an aggregation but still returns the original tuples
@@ -171,16 +168,11 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 
 ## Hash
 
----
-
 - DBMS data structure
     - meta-data
     - core data storage
     - temporary data sturctures
     - table index
-
----
-
 - hash table
     - hash function
     - hashing schema
@@ -195,31 +187,21 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 
 ## Trees Indexes
 
----
-
 - DBMS data structure
     - meta-data
     - core data storage
     - temporary data sturctures
     - table index
-
----
-
 - B-tree
 - skip list
     - less memory but not cache friendly
 - radix tree
-
----
-
 - inverted indexes
     - full-text search indexes
 
 ---
 
 ## Index Concurrency Control
-
----
 
 - lock vs latch(mutex)
     - read / write latch
@@ -238,3 +220,169 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 
 ---
 
+## Query Processing
+
+- query plan
+    - use an index as much as possible
+- processing model, how the system executes a query plan
+    - iterator model / volcano model / pipeline model
+        - top-down
+        - each operator implement a `next` function, return a single tuple or null
+        - allows for tuple pipelining
+            - some operators will block (join, subquery, orderby)
+        - general (OLTP, OLAP)
+    - materialization model
+        - bottom-up
+        - each operator processes input all at once, then emits output all at once
+        - better for OLTP
+            - most OLTP only access a small number of tuples
+    - vectorization model / batch model
+        - top-down
+        - every operator implement a `next` function, return a vector of data
+        - ideal for OLAP
+- access methods
+    - sequential scan
+        - optimizations
+    - index scan
+    - multi-index scan / bitmap scan
+- expression evaluation
+
+---
+
+## Sorting & Aggregation Algorithms
+
+- sorting
+    - external merge sort
+- aggregations (such as group by, distinct)
+    - sorting
+    - hashing
+
+---
+
+## Joins Algorithms
+
+- join
+    - use smaller table as outer table, DBMS will buffer outer table in memory
+        - smaller means smaller `count(*)`
+    - join operator output, tuple vs record_id
+        - record_id, ideal for column store, called late materialization
+    - IO cost analysis
+- nested loop join
+    - simple nested loop join
+        - fetch every tuple (outer table) from disk
+        - sequential scan
+    - block nested loop join
+        - fetch block (outer table) but not tuple
+        - sequential scan
+    - index nested loop join
+        - outer table will be the one without the index
+        - inner table will be the one with the index
+- sort-merge join
+    - useful if one or both tables are sorted on join attributes
+    - sort table on join key, then perform a sequential scan on sorted table to compute the join
+- hash join
+    - split table into smaller chunks by hash algorithm
+    - only be used for equi-joins
+    - basic hash join
+    - grace hash join
+    - hashing is almost always better than sorting
+        - sorting is better on non-uniform data
+        - sorting is better when result needs to be sorted
+
+---
+
+## Query Optimization (TODO)
+
+- rule-based query optimization (heuristics)
+    - query rewriting
+        - predicate push-down
+        - projections push-down
+        - expression simplification
+- cost-based query optimization
+    - cost model: CPU, disk, memory, network
+- nested sub-query
+    - sub-queries are writtern to a temporary table, and discarded after the query finishes
+
+---
+
+## Parallel Execution
+
+- background
+    - why
+        - performance (throughput and latency)
+        - availability
+        - lower TCO (total cost of ownership)
+    - parallel DBMS
+        - communication is assumed to be fast and reliable
+    - distributed DMBS
+        - communication is slower and failures cannot be ignored
+    - inter-query parallelism
+        - executes different queries are concurrently
+        - increases throughput and reduces latency
+    - intra-query parallelism
+        - executes the operations of a single query in parallel
+        - decreases latency for long-running queries
+        - intra-operator parallelism
+        - inter-operator parallelism
+- process models
+    - process per worker
+    - process pool
+    - thread per worker
+    - the DBMS always knows more than the OS
+- execution parallelism
+    - inter-query parallelism
+        - 多个 query 并行
+    - intra-query parallelism
+        - 单个 query 内多个 operation 并行
+        - intra-operator (horizontal)
+            - 数据分块处理，再合并。分治。
+        - inter-operator (vertical) / pipelined parallelism
+            - 单行数据走完完整流程。流式处理。
+            - common in stream processing systems
+- I/O parallelism
+    - multi-disk parallelism
+    - partitioning (vertical / horizontal)
+
+---
+
+## Embedded Database Logic
+
+- user-defined function
+- stored procedure
+- trigger
+- change notification
+- user-defined type
+- view
+
+---
+
+## Logging Schemes
+
+- crash recovery
+    - UNDO: removing the effects of an incomplete or aborted transaction
+    - REDO: re-installing the effects of a committed transaction
+- failure classification
+    - transaction failure
+    - system failure
+    - storage media failure
+- buffer pool mamagement policy
+    - steal policy: allows a transaction to write uncommitted changes to disk
+    - force policy: ensure changes written to disk on committed
+- shadow paging
+    - NO-STEAL + FORCE
+    - copy page table is expensive, commit overhead is high
+    - two separate copies of the database (master, shadow)
+    - update on the shadow copy, the shadow becomes the new master when transaction committed
+- write-ahead logging
+    - STEAL + NO-FORCE
+    - fastest runtime performance, but recovery time is slow
+    - records all the changes made to the database in a log file before the change is made to a disk page
+    - checkpoints
+        - the log file will grow forever
+        - takes a checkpoint where DBMS flushes all buffers out to disk
+    - schemes
+        - physical logging
+        - logical logging
+        - physiological logging
+
+---
