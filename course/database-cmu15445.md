@@ -451,11 +451,18 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 - atomicity
     - shadow paging vs logging
 - consistency
-    - TODO
 - isolation
     - look like that transactions are executed in serial order
     - concurrency control protocol
         - pessimistic vs optimistic
+    - correct: if the schedule is equivalent to some serial execution
+        - Serial Schedule
+        - Equivalent Schedules
+        - Serializable Schedule
+    - conflict
+        - read-write (unrepeatable reads)
+        - write-read (dirty reads)
+        - write-write (overwrite uncommitted data)
 - durability
 
 ---
@@ -463,15 +470,19 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 ## Two-Phase Locking
 
 - locks
-    - shared lock
-    - exclusive lock
+    - shared lock (S-LOCK)
+    - exclusive lock (X-LOCK)
 - 2PL is a pessimistic concurrency control protocol
     - growing, request locks
     - shrinking, release locks
     - 拿到锁、释放锁，两个阶段
 - guarantee conflict serializability
     - serializable 的充分不必要条件
+    - locking limits concurrency
 - strict 2PL
+    - 2PL may still have dirty reads
+    - 普通的 2PL 在 shrinking 阶段逐步释放不再使用的锁
+    - strict 2PL 直到 commit/abort 才释放锁
 - deadlock handing
     - deadlock detection
         - waits-for graph, node is transaction (T), edge is T1 waits T2
@@ -491,10 +502,26 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 
 - timestamp ordering (T/O) is a optimistic concurrency control protocol
     - system clock, logical counter, hybrid
+    - every object X is tagged with timestamp of the last transaction that successfully read/write
+        - 比较 TS(T) 和 R-TS(X) / W-TS(X)
 - optimistic concurrency control (OCC)
     - assume: conflicts are rare, transactions are short lived
     - creates a private workspace for each transaction
     - three phases: read, validation(when commit), write
+- partition-based timestamp ordering
+- isolation level
+    - serializable
+        - problem: none
+        - strict 2PL
+    - repeatable reads
+        - problem: phantom
+        - 2PL
+    - read committed
+        - problem: unrepeatable read, phantom
+        - S locks are released immediately
+    - read uncommitted
+        - problem: dirty read, unrepeatable read, phantom
+        - no S locks
 
 ---
 
