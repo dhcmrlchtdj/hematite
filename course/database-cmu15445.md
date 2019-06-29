@@ -446,3 +446,88 @@ https://15445.courses.cs.cmu.edu/fall2018/schedule.html
 
 ## Concurrency Control Theory
 
+- transaction
+    - ACID
+- atomicity
+    - shadow paging vs logging
+- consistency
+    - TODO
+- isolation
+    - look like that transactions are executed in serial order
+    - concurrency control protocol
+        - pessimistic vs optimistic
+- durability
+
+---
+
+## Two-Phase Locking
+
+- locks
+    - shared lock
+    - exclusive lock
+- 2PL is a pessimistic concurrency control protocol
+    - growing, request locks
+    - shrinking, release locks
+    - 拿到锁、释放锁，两个阶段
+- guarantee conflict serializability
+    - serializable 的充分不必要条件
+- strict 2PL
+- deadlock handing
+    - deadlock detection
+        - waits-for graph, node is transaction (T), edge is T1 waits T2
+    - deadlock prevention
+        - assign priority (timestamp) to transaction
+        - if T1 has higher priority than T2
+            - if T1 waits T2, T1 waits
+            - if T2 waits T1, T2 aborts
+- lock granulary
+    - intention locks
+        - lock higher level node
+        - not need to check all descendant nodes
+
+---
+
+## Timestamp Ordering
+
+- timestamp ordering (T/O) is a optimistic concurrency control protocol
+    - system clock, logical counter, hybrid
+- optimistic concurrency control (OCC)
+    - assume: conflicts are rare, transactions are short lived
+    - creates a private workspace for each transaction
+    - three phases: read, validation(when commit), write
+
+---
+
+## Multi-Version Concurrency Control
+
+- The DBMS maintains multiple physical versions of a single logical object in the database
+    - when a transaction writes to an object, the DBMS creates a new version of the object
+    - when a transaction reads an object, it reads the newest version that existed when transaction started
+- key property
+    - writers don't block the readers
+    - readers don't block the writers
+- important MVCC design decisions
+    - concurrency control protocol
+        - 2PL, T/O, OCC
+    - version storage
+        - create a version chain per logical tuple
+        - approach
+            - append-only storage
+                - oldest-to-newest
+                - newest-to-oldest
+            - time-travel storage
+            - delta storage
+    - garbage collection
+        - remove reclaimable physical versions from database
+        - approach
+            - tuple level GC
+                - background vacuuming
+                - cooperative cleaning
+            - transaction level GC
+    - index management
+        - primary key indexes
+            - always point to version chain head
+        - secondary indexes
+            - approach
+                - logical pointers
+                - physical pointers
