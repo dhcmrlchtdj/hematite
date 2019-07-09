@@ -75,7 +75,43 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - concurrency
         - machine failures
         - network partitions
+
 - GFS
+    - TODO
+    - read
+        - 64MB chunk
+        - 3x replication
+        - master server
+        - worker server
+    - write
 
+---
 
+## Primary/Backup Replication
 
+- ideal properties
+    available: still useable despite  some class of failures
+    strongly consistent: looks just like a single server to clients
+    transparent to clients
+    transparent to server software
+    efficient
+- fault tolerance, replication
+    - two or more servers, if one replica fails, others can continue
+- question
+    - what state to replicate
+    - when to cut over to backup
+    - does primary have to wait for backup
+- approaches
+    - state transfer
+        - primary executes the operations, sends new state to backups
+        - more simpler
+    - replicated state machine
+        - all replicas execute all operations
+        - more efficient
+            - operations are small compared to data
+            - complex to get right (same start state, same operations, same order, deterministic)
+
+- Fault-Tolerant Virtual Machines
+    - two machines, primary and backup
+    - primary sends all inputs to backup over logging channel
+    - the backup must lag by one event (one log entry)
