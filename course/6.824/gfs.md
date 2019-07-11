@@ -1,0 +1,41 @@
+# The Google File System
+
+- 根据 G 内部应用的情况，结合现状与未来规划，做出了与现有文件系统不同的假设、决策
+- 现状
+    - 大量廉价机器，随时可能出现各种异常（需要监控、异常发现、容灾、自动恢复
+    - 文件体积能有几 GB。每个文件又包含多个对象。（属于业务场景，可以针对大文件读写做优化
+    - 修改主要是追加内容，而不是覆盖。写入后主要是顺序读。（属于业务场景
+    - 最大的一个集群，超过 1000 台机器，300TB 硬盘，上百个客户端同时请求（可以作为对标指标
+- design
+    - assumption
+    - interface: create, delete, open, close, read, write, snapshot, append
+    - architecture
+        - one master, multiple chunkserver
+        - 文件被分割成 fixed-size chunk，每个 chunk 在创建时都生成一个 64bit 的 chunk handle
+        - each chunk is replicated on multiple chunkservers
+        - master 和 chunkserver 通过发送 instruction 和收集 state 实现 heartbeat 检查
+        - too large to cache，所以客户端读取的时候，不做缓存
+    - master
+        - 单 master
+        - GFS client 从 master 获取 chunkserver 列表，然后去 chunkserver 读取文件
+        - chunkserver 列表会被缓存一段时间
+        - 这里的 GFS client 不是上层应用。上层应用通过 GFS client 这个中介去读文件
+    - chunk size
+        - 64MB (much larger than typical file sys- tem block sizes
+        - 应用场景主要是顺序读写，chunk 大一些，能有效减少和 master 的通信
+    - metadata
+        - the file and chunk namespaces
+        - the mapping from files to chunks
+        - the locations of each chunk's replicas
+        - 三类数据都放在 master 的内存里，前两者会持久化到硬盘，最后一个是 master/chunkserver 连上的时候从 chunkserver 获取的
+        - 持久化的时候，记录成 operation log
+        - 通过 heartbeat，获取 chunkserver 的最新 location 信息。这样定时更新避免了同步问题，增减 chunkserver 也更方便。
+        - master 只有一个，但是 operation log 会有多个远程备份。和 WAL 一样，会用到 checkpoints 等技术。
+    - consistency
+        - GFS
+            - consistent: all clients will always see the same data from any replica
+            - namespace 的原子性，靠 master 上锁保证
+            - 修改分为 writes 和 record appends
+            - 通过 chunk version number 保证所有 replica 都更新到最新版本
+            - 通过 checksum 保证文件完整性。发现文件出错，从其他 replica 的正确文件恢复
+        - application
