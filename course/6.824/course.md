@@ -222,6 +222,31 @@ https://pdos.csail.mit.edu/6.824/schedule.html
     - performance
         - many situations don't require high performance
         - (raft) sacrifice performance for simplicity
+    - faq
+        - sacrifice performance for simplicity
+            - 操作要持久化到硬盘
+            - 乱序到达的消息，会被丢弃
+            - 快照可能很大（创建、传输都慢）
+            - 日志要求有序，可能导致无法利用多核
+        - While Paxos requires some thought to understand, it is far simpler than Raft
+            - But Paxos solves a much smaller problem than Raft
+        - real-world systems are derived from Paxos
+            - Chubby, Spanner, Megastore, Zookeeper/ZAB
+        - real-world users of Raft
+            - docker, etcd, CockroachDB, RethinkDB, TiKV
+        - systems can survive and continue to operate when only a minority of the cluster is active
+            - do it with different assumptions, or different client-visible semantics
+            - human decide，机器不知道宕机还是网络问题，但人能知道
+            - allow split-brain operation (eventual consistency), such as Bayou and Dynamo
+        - raft works under all non-Byzantine conditions
+            - either follow the Raft protocol correctly, or they halt
+        - Raft may not preserve it across a leader change
+            - the client will know that its request wasn't served, and will re-send it
+            - the system has to be on its guard against duplicate requests
+        - always a majority of all servers, dead and alive
+        - randomize election timeouts
+        - if more than half of the servers die
+            - t will keep trying to elect a leader over and over
 
 - 截止目前反复出现的主题
     - 主从结构，多副本
