@@ -247,9 +247,14 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - randomize election timeouts
         - if more than half of the servers die
             - t will keep trying to elect a leader over and over
+    - raft 所有读写都经过 leader。加节点实现容错，并不能增加吞吐量。
 
 - 截止目前反复出现的主题
     - 主从结构，多副本
     - 快照，用于异常恢复
-    - 靠单 master 保证一致性、时序
+    - 单 master 保证一致性、时序
     - 多机模拟单机表现，根据单机行为判断分布式行为是否符合预期
+
+---
+
+
