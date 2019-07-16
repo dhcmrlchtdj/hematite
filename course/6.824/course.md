@@ -142,13 +142,13 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 - two partition-tolerant replication schemes, Paxos and View-Stamped Replication
 
-- raft
+- Raft
     - elections, log handling, persistence, client behavior, snapshots
     - overview
-        - diagram: clients, k/v layer, raft layer
-            - raft 选出 leader
+        - diagram: clients, k/v layer, Raft layer
+            - Raft 选出 leader
             - client 发送操作到 leader 的 kv
-            - raft 将操作发送到 followers，followers 记录到 local log 并返回给 leader
+            - Raft 将操作发送到 followers，followers 记录到 local log 并返回给 leader
             - leader 等 majority 操作成功，所有 replica 开始操作 kv
             - leader 将 kv 的操作结果返回给 client
         - log
@@ -160,7 +160,7 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - terms (number)
             - 每个 term 可以有一个 leader（也可能选主失败没有 leader
                 - leader 要有 majority 同意，所以能保证最多只有一个 leader
-            - 谁大谁就是 leader，谁大谁就说了算（疑问，数字一直自增？溢出了怎么办？
+            - 谁大谁就是 leader，谁大谁就说了算
         - when
             - leader 发送 heartbeat 到 followers
             - 如果 followers 过了一段时间还没收到，就会认为 leader 故障了，开始新的选主程序（term 增大
@@ -179,7 +179,7 @@ https://pdos.csail.mit.edu/6.824/schedule.html
             - lowest random delay
             - 网络可能各种问题，所以 timeout 至少要够几个 heartbeat 来回
             - 选主也要时间，所以 timeout 至少也要够整个系统完成一次选主
-    - raft log
+    - Raft log
         - replicated vs. committed entries
             - committed 说明 majority 同意，不会变了
             - replicated 只是完成复制，可能会变
@@ -207,7 +207,7 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - log 可能比 state 大得多，所以可以取 state 的快照，减少需要重放的日志数量
         - 做 state 快照的时候，未 committed 的 log 要保留（可能被算在 majority 里了
         - snapshot reflects only committed entries
-        - service's on-disk state = service's snapshot + raft's persistent log
+        - service's on-disk state = service's snapshot + Raft's persistent log
     - configuration change
         - configuration = set of servers
             - 增删节点
@@ -221,7 +221,7 @@ https://pdos.csail.mit.edu/6.824/schedule.html
             - leader 将新配置下发到 followers，新旧配置都 committed 之后，再切换到新配置
     - performance
         - many situations don't require high performance
-        - (raft) sacrifice performance for simplicity
+        - (Raft) sacrifice performance for simplicity
     - faq
         - sacrifice performance for simplicity
             - 操作要持久化到硬盘
@@ -231,14 +231,14 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - While Paxos requires some thought to understand, it is far simpler than Raft
             - But Paxos solves a much smaller problem than Raft
         - real-world systems are derived from Paxos
-            - Chubby, Spanner, Megastore, Zookeeper/ZAB
+            - Chubby, Spanner, Megastore, ZooKeeper/ZAB
         - real-world users of Raft
             - docker, etcd, CockroachDB, RethinkDB, TiKV
         - systems can survive and continue to operate when only a minority of the cluster is active
             - do it with different assumptions, or different client-visible semantics
             - human decide，机器不知道宕机还是网络问题，但人能知道
             - allow split-brain operation (eventual consistency), such as Bayou and Dynamo
-        - raft works under all non-Byzantine conditions
+        - Raft works under all non-Byzantine conditions
             - either follow the Raft protocol correctly, or they halt
         - Raft may not preserve it across a leader change
             - the client will know that its request wasn't served, and will re-send it
@@ -247,7 +247,48 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - randomize election timeouts
         - if more than half of the servers die
             - t will keep trying to elect a leader over and over
-    - raft 所有读写都经过 leader。加节点实现容错，并不能增加吞吐量。
+    - Raft 所有读写都经过 leader。加节点实现容错，并不能增加吞吐量。
+    - raft
+        - usage
+            - fault-tolerant key/value database
+            - fault-tolerant master
+            - fault-tolerant locking service
+        - read request and no-op
+            - 为了保证 linearizable，可以先给 follower 发 no-op
+            - 也可以使用 lease，在 heartbeat 之后一段时间内，不允许变更
+                - lease 内，可以不发 no-op 直接返回
+                - the no other leader is allowed to be elected for the next 100 milliseconds
+                - the leader can serve read-only requests for the next 100 milliseconds without further communication with the followers
+            - 刚成为 leader 的时候，需要发几次 no-op，保证 committed log 一致
+        - linearizability
+            - the most common and intuitive definition formalizes behavior expected of a single server
+            - an execution history is linearizable if one can find a total order of all operations, and in which each read sees the value from the write preceding it in the order.
+        - duplicate RPC detection
+            - case
+                - server deaded, or request dropped (safe)
+                - server executed but response dropped (dangerous)
+            - detection
+                - client picks an ID for each request
+                    - same ID in re-sends of same RPC
+                - k/v service maintains table indexed by ID
+                    - record value after executing
+                - when can we delete table entries
+                    - one table per client
+                    - client numbers RPCs sequentially
+                    - client won't re-send older RPCs
+                    - so server can forget client's lower entries
+                - how does a new leader get the duplicate table
+                    - all replicas update their duplicate tables as they execute command
+                - if server crash, how does it restore its table
+                    - from snapshot or replay the log to build table
+        - read-only operations
+            - read-only 发送 no-op 是为了保证当前节点仍是 leader，当前的 committed log 是最新的
+            - many applications are read-heavy. how to avoid commit for read-only operations?
+            - idea: leases
+                - a new leader cannot execute Put()s until previous lease period has expired
+                - 保证不会有新 leader 修改数据，那么这段时间内即使已经不是 leader，返回的数据仍是正确的
+                - 是为了保证 linearizable
+        - 🤔️ 疑问 分布式里经常用数字做序号，数字自增，都不考虑溢出吗？
 
 - 截止目前反复出现的主题
     - 主从结构，多副本
@@ -257,4 +298,4 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
-
+## ZooKeeper
