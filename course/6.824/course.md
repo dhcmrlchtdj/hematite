@@ -299,3 +299,75 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 ---
 
 ## ZooKeeper
+
+- ZooKeeper
+    - a generic coordination service
+        - widely-used replicated state machine service
+        - inspired by Chubby (google's global lock service)
+    - many applications in datacenter cluster need to coordinate
+        - application that need a fault-tolerant "master" don't need to roll their own
+        - GFS, MapReduce, load balancer, crawler, ...
+    - high performance
+        - asynchronous calls
+        - allows pipelining
+        - (faster than raft (100x faster
+    - alternative
+        - vs DNS, too slow, fail-over will take a long time
+- API overview
+    - operations are performed in global order
+    - znode, the replicated object
+        - hierarchy, named by pathnames
+        - types
+            - regular
+            - empheral
+            - sequential (name + seq_no)
+        - metadata of application
+            - configuration (server list + which is the primary)
+            - timestamps
+            - version number
+    - sessions
+        - client sign into ZooKeeper
+        - client must send a heartbeat to the server to refresh session
+            - ZooKeeper considers client "dead" if timeout
+- operations on znodes
+    - all operations (exclude sync) are asynchronous
+    - all operations are FIFO-ordered per client
+    - op: create/delete/get/set/exist/get_child/sync
+- ordering guarantees
+    - all write operations are totally ordered
+    - all operations are FIFO-ordered per client
+    - implications
+        - read can return stale data
+- not an end-to-end solution
+    - with ZooKeeper
+        - at least master is fault tolerant
+        - won't run into split-brain problem
+- implementation
+    - overview
+        - two layers: ZooKeeper service + ZAB layer
+            - vs. KV service + Raft layer
+    - duplicate requests
+        - primary 返回的结果丢失，客户端重试
+        - in Raft, use table to detect duplicates
+        - in ZooKeeper
+            - test-version-and-then-do-op
+    - read operations
+        - performance is slow if read ops go through Raft
+            - 每次都要 majority 同意
+        - read may return stale data if only master performs it
+            - master 可能不再是 master 了，但自己不知道（比如网络故障
+        - ZooKeeper: don't promise non-stale data
+            - reads can be executed by any replica
+                - can increase throughput by adding servers
+            - read returns the last zxid it has seen
+                - new primary can catch up to zxid before serving the read
+                - avoids reading from past
+        - sync-read guarantees data is not stale
+            - sync optimization
+                - avoid ZAB layer for sync-read
+                - leader puts sync in queue between it and replica
+                - in same spirit read optimization with raft
+    - performance
+        - reads inexpensive ，吞吐量和机器数成正比
+        - writes expensive ，吞吐量和机器数成反比
+        - quick failure recovery
