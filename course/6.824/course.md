@@ -290,12 +290,6 @@ https://pdos.csail.mit.edu/6.824/schedule.html
                 - 是为了保证 linearizable
         - 🤔️ 疑问 分布式里经常用数字做序号，数字自增，都不考虑溢出吗？
 
-- 截止目前反复出现的主题
-    - 主从结构，多副本
-    - 快照，用于异常恢复
-    - 单 master 保证一致性、时序
-    - 多机模拟单机表现，根据单机行为判断分布式行为是否符合预期
-
 ---
 
 ## ZooKeeper
@@ -371,3 +365,15 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - reads inexpensive ，吞吐量和机器数成正比
         - writes expensive ，吞吐量和机器数成反比
         - quick failure recovery
+
+---
+
+- 截止目前反复出现的主题
+    - 主从结构，多副本
+    - WAL 日志、快照，用于异常恢复
+    - 单 master 保证一致性、时序
+    - 多机模拟单机表现，根据单机行为判断分布式行为是否符合预期
+
+---
+
+

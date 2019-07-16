@@ -60,6 +60,33 @@
             - 和普通 lock 差不多，给 read/write 分别创建锁。然后和普通的读写锁检查一样
 
 - ZooKeeper implementation
+    - component
+        - write_request -> request_processor -> atomic_broadcast -> replicated_database -> response
+        - read_request -> replicated_database -> response
+    - ZK provide high availability by replication
+    - the replicated database is an in-memory database
+        - ZK keep a write-ahead log of committed operations and generate periodic snapshots of the in-memory database
+        - each znode store a maximum of 1MB of data
+    - read request simply reads the state of the local database
+    - write request is forwarded to leader
+    - request processor
+        - leader transforms write request into a idempotent transaction
+    - atomic broadcast
+        - ZAB, an atomic broadcast ptotocal
+        - ZK can only work if a majority of servers are correct (2f+1 和 raft 一样)
+        - transaction 幂等，顺序对的情况下，重复发送重复执行也没关系
+    - replicated database
+        - fuzzy snapshots, do not lock the ZK state to take the snapshot
+        - 只靠 snapshot 可能不对，需要重放之前幂等的 transaction 才能恢复到正确状态
+    - client-server interactions
+        - read locally
+            - may return a stale value
+            - key to archiving the excellent performance with read-dominant workloads
+        - each response is tagged with a zxid that corresponds to the last txn seen by the server
+        - 当 client 切换到新 server，靠对比 zxid 可以知道新 server 的状态是否满足一致性
+            - 如果新 server 的 zxid 比较小，说明该 server 可能 lag 严重，会切换到其他 server
+            - 保证 client 不会读到旧的消息
+        - session timeout
 
 - conclusion
     - wait-free by exposing wait-free objects to clients
@@ -74,3 +101,8 @@
     - configuration metadata
     - failure detect and group membership (track the status of the master and slaves)
     - leader election (handle master failover)
+
+- 疑问
+    - ZAB 怎么工作的？
+    - 怎么获得 majority 同意？
+    - 怎么选主？
