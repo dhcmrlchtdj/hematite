@@ -18,6 +18,46 @@
         - watch mechanism, a client can watch for an update to a given data object
 
 - ZooKeeper service
+    - terminology: client, server, znode
+        - znode is in-memory data node, organized in a hierarchial namespace
+        - example: /A/B/C
+    - znode types: regular, ephemeral
+        - ephemeral znode will be deleted when session closed
+        - client can set sequential flag when creating a new node
+            - 假设新节点 /p/n_x，那么 /p/n_x 的 seq 不会小于 /p 之前创建的子节点
+    - watch
+        - watches are unregistered once triggered or the session closes
+        - 一次性的，且和 session 绑定的
+    - session
+        - a client connects to ZK and initiates a session
+        - 靠 heartbeat 检测 session 状态，timeout 就干掉 session
+        - session 能在 server 之间转移，保证 client 不受 ZK 节点变化影响
+    - client API
+        - all methods have both a synchorous and an asynchronous version
+        - all update methods take an expected version number for conditional updates
+            - 就像浏览器的 conditional requests, If-Match 的玩法
+    - guarantee
+        - two basic ordering guarantees
+            - linearizable writes
+                - A-linearizability (asynchronous linearizability)
+                - all requests that update the state of ZK are serializable and respect precedence
+            - FIFO client order
+                - all request from a given client are executed in the order that they were sent by the client
+        - client A/B may see different configuration
+            - slow read (sync + read)
+            - sync causes a server to apply all pending write request before processing the read
+    - example
+        - configuration management
+            - 存储配置的 znode 节点 Z_cfg，客户端读取的时候加上 watch。之后变更就会提醒客户端
+        - group membership
+            - 靠 ephemeral 自动删除异常节点
+            - 客户端获取节点列表，就能知道有哪些可用节点。也可以加上 watch 监控节点变化情况
+        - lock
+            - 创建 ephemeral 的 lock file，后续操作使用 sync 版本
+            - 如果创建失败，说明其他程序持有锁。可以用 watch 监控其他程序何时释放锁。
+            - 这种 watch 会唤醒所有等待锁的程序。要优化可以配合 sequential，每个程序都等待之前一个锁，避免被一起唤醒。
+        - read/write lock
+            - 和普通 lock 差不多，给 read/write 分别创建锁。然后和普通的读写锁检查一样
 
 - ZooKeeper implementation
 
