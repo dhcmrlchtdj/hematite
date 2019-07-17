@@ -365,6 +365,30 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - reads inexpensive ，吞吐量和机器数成正比
         - writes expensive ，吞吐量和机器数成反比
         - quick failure recovery
+    - FAQ
+        - linearizability and serializability
+            - linearizability
+                - used for systems without transactions
+                - single-operation, single-object, real-time order
+                - a real-time guarantee on the behavior of a set of single operations on a single object
+                - linearizability is composable
+                - atomic consistency, C in the CAP
+            - serializability
+                - used for systems that provide transactions
+                - multi-operation, multi-object, arbitrary total order
+                - the execution of a set of transactions over multiple items is equivalent to some serial execution (total ordering) of the transactions
+                - serializability is not composable
+                - I in the ACID (ACID 的 C 描述单个 transaction，I 描述多个 txn 之间的关系)
+        - pipelining
+            - ZK 的 async API 使用 callback 的方式告诉 client 调用结果
+            - ZooKeeper guarantees FIFO for client operations
+        - fuzzy snapshots
+            - doesn't require blocking all writes while the snapshot is made
+            - construct a consistent snapshot by replaying the logs
+            - all updates in ZooKeeper are idempotent and delivered in the same order
+            - leader turn the operation into a transaction which is idempotent
+        - leader election
+            - ZAB (ZooKeeper Atomic Broadcast)
 
 ---
 
