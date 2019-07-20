@@ -401,3 +401,65 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 ---
 
 
+## Distributed Transactions
+
+- transaction, hide interleaving and failure from application writers
+    - atomic
+    - serializable, transaction executed one by one
+    - durable
+- distributed transactions = concurrency control + atomic commit
+
+- atomic commit by two-phase commit
+    - transaction coordinator
+        - PREPARE + COMMIT/ABORT
+        - 2PC 由 transaction coordinator 居中协调
+        - 所有节点都 prepare 则 commit，任一节点失败都 abort
+        - if node voted YES, it must "block": wait for TC decision
+    - used by distributed databases for multi-server transactions
+        - when a transaction uses data on multiple shards
+    - slow，每个操作都要求所有节点参与，全部成功，所以性能差，可靠性也差
+    - vs Raft
+        - Raft 通过 replicate 实现 high availability
+            - 所有 server 都执行相同的操作，保证 majority 一致
+        - 2PC 保证整个系统的一致性
+            - 不同 node，执行不同的操作（比如一个事务的两张表，执行不同操作
+        - Raft 的一致和 2PC 的一致，针对的不是一个层面的对象
+        - 两个可以一起用
+
+- concurrency control
+    - serial means one at a time, no parallel execution
+        - 具体实现可以并发，但执行结果要和序列执行一致
+        - serializability lets programmer ignore concurrency
+    - two classes
+        - pessimistic, conflicts cause delays (waiting for locks)
+        - optimistic, conflict causes abort+retry
+- pessimistic concurrency control
+    - two-phase locking，获得锁，释放锁
+    - strong strict two-phase locking, locks until after commit/abort
+        - serializable 的充分不必要条件
+    - 2PC 的锁在 record 上，比 simple locking（全表加锁）更高效
+- optimistic concurrency control
+
+---
+
+- build a reliable system out of unreliable components
+- metrics
+    - MTTF = mean time to failure           = 30 days = 43,200 minutes
+    - MTTR = mean time to repair            = 10 minutes
+    - availability = MTTF / (MTTF + MTTR)   = 43,200 / 43,210 = .9997
+- transactions, which provide atomicity and isolation, while not hindering performance
+    - atomicity: shadow copies vs. logs
+    - isolation: two-phase locking
+- distributed transactions: to run transactions across multiple machines
+    - message loss, message re-ordering
+        - reliable transport
+        - exactly-once semantics
+    - two-phase commit (2PC)
+        - two phases: prepare phase, commit phase
+        - client + coordinator + worker
+        - abort if failure happened before commit point
+        - retry if failure happened after commit point
+
+---
+
+
