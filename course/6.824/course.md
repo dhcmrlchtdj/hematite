@@ -472,4 +472,38 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
+## Spark
+
+- Spark
+    - restricted programming model, but more powerful than MapReduce
+    - better programming model for iterative computations
+    - targets batch, iterative applications
+    - not good for build key/value store
+    - can express MapReduce, Pregel
+- performance
+    - MapReduce uses replicated storage after reduce
+    - Spark only spills to local disk
+- Spark keep data in memory
+- RDDs
+    - immutable
+    - support transformations and actions
+        - transformations compute a new RDD from existing RDDs
+        - transformations are lazy
+        - transformation is a description of the computation
+        - actions is used for when results are needed
+- RDD lineage
+    - Spark creates a lineage graph on an action
+    - Spark uses the lineage to schedule job
+- lineage and fault tolerance
+    - one machine fails, we want to recompute only its state
+    - the lineage tells us what to recompute
+    - follow the lineage to identify all partitions needed
+- RDD
+    - list of partitions
+    - list of (parent RDD, wide/narrow dependency)
+        - wide, depends on serval parent partitions (eg, join)
+        - narrow, depends on one parent partition (eg, map)
+    - function to compute
+    - partitioning scheme
+    - computation placement hint
 
