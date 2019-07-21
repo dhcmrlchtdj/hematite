@@ -477,20 +477,29 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 - Spark
     - restricted programming model, but more powerful than MapReduce
     - better programming model for iterative computations
+        - MapReduce 不是不能表达 iterative，不过需要拆分成多个 MapReduce 任务，比 Spark 复杂
     - targets batch, iterative applications
+        - batch 之外，也有 streaming 等应用形态，然后 spark 也搞出了 Streaming Spark
     - not good for build key/value store
     - can express MapReduce, Pregel
 - performance
     - MapReduce uses replicated storage after reduce
     - Spark only spills to local disk
+    - 如果计算符合 MapReduce 模型，架构上讲，Spark 并没优势
+        - Spark's in-memory RDD caching will offer no benefit since no RDD is ever re-used
+        - 没有优势，但计算 MapReduce 类型的任务也没有劣势
 - Spark keep data in memory
-- RDDs
+- RDDs (Resilient Distributed Dataset)
     - immutable
     - support transformations and actions
         - transformations compute a new RDD from existing RDDs
         - transformations are lazy
         - transformation is a description of the computation
         - actions is used for when results are needed
+    - key ideas behind RDDs
+        - deterministic, lineage-based re-execution
+        - the collections-oriented API
+    - after Spark 2.0, RDDs are replaced by Dataset
 - RDD lineage
     - Spark creates a lineage graph on an action
     - Spark uses the lineage to schedule job
@@ -498,6 +507,7 @@ https://pdos.csail.mit.edu/6.824/schedule.html
     - one machine fails, we want to recompute only its state
     - the lineage tells us what to recompute
     - follow the lineage to identify all partitions needed
+    - 用户可以指定哪些 RDD 需要 replication
 - RDD
     - list of partitions
     - list of (parent RDD, wide/narrow dependency)
@@ -506,4 +516,7 @@ https://pdos.csail.mit.edu/6.824/schedule.html
     - function to compute
     - partitioning scheme
     - computation placement hint
+    - each RDD has location information associated with it, in its metadata
+
+---
 
