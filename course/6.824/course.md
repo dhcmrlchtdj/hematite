@@ -437,8 +437,18 @@ https://pdos.csail.mit.edu/6.824/schedule.html
     - two-phase locking，获得锁，释放锁
     - strong strict two-phase locking, locks until after commit/abort
         - serializable 的充分不必要条件
-    - 2PC 的锁在 record 上，比 simple locking（全表加锁）更高效
-- optimistic concurrency control
+    - 2PC 的锁在 record 上，部分场景比 simple locking（全表加锁）更高效
+- optimistic concurrency control (OCC)
+    - works best if few conflicts
+
+- NVRAM, non-volatile RAM
+    - RAM write is faster than SSD/HDD
+    - write to f+1 machines to tolerate f failures
+    - 备用电池，断电后仍可运行几分钟
+        - 停止处理事务
+        - RAM 写入 SSD，待开机后恢复
+- performance bottleneck, network
+    - kernel bypass
 
 ---
 
