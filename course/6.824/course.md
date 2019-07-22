@@ -520,3 +520,42 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
+
+
+---
+
+## Bitcoin
+
+- bitcoin
+    - a digital currency
+    - a public ledger to prevent double-spending
+    - no centralized trust or mechanism
+    - malicious users (Byzantine faults)
+- problem
+    - forgery
+    - double spending
+    - theft
+- idea, signed sequence of transactions
+- transaction record contains
+    - pub(user1), public key of new owner
+    - hash(prev), hash of this coin's previous transaction record
+    - sig(user2), signature by previous owner's private key
+- forgery
+    - current owner's private key needed to sign next transaction
+- block chain
+    - goal, agreement on transaction log to prevent double-spending
+    - 疑问。查所有交易记录，要拥有完整的日志。这个查询效率是怎么保证的？
+    - the block chain contains transactions on all coins
+    - payee doesn't believe transaction until it's in the block chain
+    - block contains
+        - hash(prev_block)
+        - transactions
+        - nonce
+        - current time (wall clock timestamp)
+    - create new block
+        - requirement: hash(block) has N leading zeros
+        - try nonce values until this works out
+            - 易验证，难伪造
+    - fork
+        - switch to longer chain if peers become aware of one
+        - temporary double spending is possible, due to forks

@@ -1,0 +1,28 @@
+# Bitcoin
+
+- introduction
+    - 非对称密钥，能够解决认证
+    - 要解决双花问题，又不想依赖第三方（或者说中心化服务），搞出了区块链
+        - trust based model 的问题是，记录是可变的（比如信用卡能撤销交易
+    - based on cryptographic proof instead of trust
+    - a solution to the double-spending problem
+    - using a peer-to-peer distributed timestamp server to generate computational proof of the chronological order of transactions
+    - the system is seacure as long as honest nodes collectively control more CPU power than any cooperating group of attacker nodes
+- transaction
+    - 通过 hash(prev_tnx), pub_key(new_owner), sig(old_owner) 组成的 transaction，表达货币的流转
+    - 问题是不能验证 old_owner 是否双花
+    - 避免双花，要么中心化服务验证，要么检查所有交易记录（transaction）
+    - 这就要求所有交易记录都公开，且所有参与者记录的交易顺序都相同
+- timestamp server
+    - each timestamp includes the previous timestamp in its hash, forming a chain
+- proof-of-work
+    - POW 其实就是一种绑架多数人吧，大家利益关联起来
+    - block 由 (prev_hash, nonce, tnxs) 组成
+    - 疑问，一开始怎么连上其他 node 呢？中心化节点？
+- incentive
+    - 还是利益，矿工的
+    - transaction fee
+    - block 的第一个 transaction 会创建新 coin 给矿工
+- reclaiming disk space
+    - 具体 transaction 存储到其他地方，block chain 只保存 metadata
+    - 是这个意思吗？
