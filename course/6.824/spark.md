@@ -29,10 +29,31 @@
             - allow pipeline execution on one cluster node （map/filter 等操作，可以在一台机器上顺序执行）
             - recovery from a node failure is more efficient （某个 rdd 异常了，把前面的顺序操作再执行一次即可）
         - wide dependencies
-            - 像 join 等操作，要等多个上游 RDD 都准备好才能下一步
+            - 像 groupBy 等操作，要等上游 RDD 准备好才能下一步
             - 比如之后某个 RDD 异常，而 wide 操作又没有 persistence，则 wide 依赖的 RDD 也都要重新计算
 
 - implementation
+    - job scheduler
+        - when user runs an action
+            - the scheduler examines RDD's lineage graph to build a DAG of stages to execute
+                - stage 会包含尽可能多的 narrow transformations
+                - wide transformations 是 stage 的边界
+                - 边界也可以是之前已经计算完的 stage
+        - scheduler assigns tasks to machines based on data locality
+        - task failure, re-run it on another node（有 DAG，算出所有需要重新计算的任务，然后重新算
+        - scheduler failure, do nothing （最初设计是挂了重启？
+    - memory management
+        - storage of persistent RDDs
+            - in-memory storage as deserialized Java objects (fastest performance
+            - in-memory storage as serialized data (more memory-efficient
+            - on-disk storage (useful for too large data
+        - LRU eviction policy
+    - checkpointing
+        - lineage is used to recover RDDs after a failure
+        - recovery may be time-consuming for RDDs with long lineage chains
+        - checkpointing is useful for RDDs with long lineage graphs containing wide dependencies
+        - leaves the decision of which data to checkpoint to the user
+        - RDDs can be written out in the background (because RDD is immutable
 
 - related work
     - cluster programming models
