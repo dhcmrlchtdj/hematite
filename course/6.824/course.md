@@ -524,6 +524,65 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
+## P2P, DHT
+
+- decentralized systems
+    - build reliable systems out of many unreliable computers
+    - shift control/power from organizations to users
+- peer-to-peer
+    - spreads network/caching costs over users
+    - advantage: 设备成本低，单用户故障不影响系统，每个用户的负担都不大
+    - disadvantage: 数据分散不好找，用户机器不可靠，开放的网络有被攻击的风险
+    - usage: file sharing, chat, bitcoin
+
+- BitTorrent
+    - the tracker is a weak part of the design
+        - torrent file with content hash and IP address of tracker
+        - app talks to tracker
+    - tracker may not be reliable
+- DHT (distributed hash table)
+    - DHT is more reliable than tracker
+    - DHT a decentralized key/value store
+    - DHT is weak consistency
+    - Kademlia
+        - the key is the torrent file content hash
+        - the value is the IP address of peers
+    - each node has references to only a few other nodes
+    - lookups traverse the data structure
+
+- Chord, peer-to-peer lookup system
+    - Kad (Kademlia) is inspired by Chord
+    - topology
+        - ring, all IDs are 160bit numbers
+        - each node has an ID, hash(IP address)
+        - each key has an ID, hash(key)
+    - key_ID and node_ID
+        - key is stored at the key ID's successor node
+        - closeness is defined as the "clockwise distance"
+        - 如果 hash 保证均匀分布，那么节点的负载就是均衡的
+    - routing
+        - basic
+            - each node knows its successor on the ring
+            - forward query in a clockwise direction until done
+            - data structure is a linked list, linear search is slow
+        - log(n) finger table
+            - each node keep a finger table containing up to M nodes
+            - periodically looks up each finger to maintain table
+        - why not binary tree
+            - hot-spot at the root
+            - failure on root would be a big problem
+            - finger table distributes the load
+    - stabilization
+        - each node keeps track of its current predecessor
+    - node failures
+        - recover from dead next hop by using next-closest finger-table entry
+
+---
+
+
+
+---
+
 ## Bitcoin
 
 - bitcoin
@@ -559,3 +618,4 @@ https://pdos.csail.mit.edu/6.824/schedule.html
     - fork
         - switch to longer chain if peers become aware of one
         - temporary double spending is possible, due to forks
+
