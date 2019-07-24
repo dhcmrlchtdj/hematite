@@ -579,7 +579,51 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
+## Dynamo
 
+- Database, eventually consistent, write any replica
+    - Like Bayou, with reconciliation
+    - Like Parameter Server, but geo-distributed
+- SLA, constant failures, always writeable
+- big picture: each item replicated at a few random nodes, by key hash
+
+- consistent hashing
+    - node_ID = random
+    - key_ID = MD5(key)
+    - coordinator: successor of key. (clients send put/get to coordinator)
+    - preference list: replicas at successors
+    - coordinator forwards put/get to nodes on the preference list
+- failures
+    - temporary, store new puts elsewhere until node is available
+    - permanent, make new replica of all content
+    - Dynamo itself treats all failures as temporary
+        - administrator can remove node permanent
+- always writeable
+    - no master: sloppy quorums
+    - conflicting versions (when failures happend): eventual consistency
+- sloppy quorum
+    - quorum: R+W > N
+        - never wait for all N
+    - sloppy quorum means R/W overlap not guaranteed
+    - coordinator
+        - sends put/get to first N reachable nodes, in parallel
+        - put: waits for W replies
+        - get: waits for R replies
+- eventual consistency
+    - allow reads to see stale or conflicting data
+    - if conflicts, reader must merge and then write
+    - no atomic operations (eg. CAS)
+- version vectors
+    - Dynamo deletes least-recently-updated entry (threshold=10 now)
+- N, R, W
+    - n3r2w2, default, reasonable fast R/W, reasonable durability
+    - n3r1w3, fast R, slow W, durable
+
+- anti-entropy using Merkle trees
+    - to determine what is different between two replicas, Dynamo traverses a Merkle representation of the two replicas
+- gossip protocol
+    - a system that doesn't have a master that knows about all participants in the system
+    - gossip protocol: the protocol used in such system to to find other members
 
 ---
 
