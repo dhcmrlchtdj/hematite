@@ -520,6 +520,59 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
+## Naiad
+
+- streaming and incremental computation
+- Naiad vs Spark
+    - Spark improved performance for iterative computations
+    - better, incremental and streaming computations
+    - equal (maybe better), batch and iterative processing
+    - worse, interactive queries
+    - worse, Spark is well-integrated with existed systems
+- incremental processing
+    - fixed data-flow
+    - input vertices
+        - file or stream of events
+        - inject records into graph
+    - stateful vertices
+        - like cached RDDs but mutable
+- data-flow cycles
+    - vs Spark
+        - Spark has no cycles (DAG)
+        - iterate by adding new RDDs
+        - no RDD can depend on its own child
+    - loop contexts
+        - can nest arbitrarily
+        - cannot partially overlap
+- ordering
+    - avoid time-travelling updates
+    - timestamps form a partial order
+    - timely dataflow is low-level infrastructure
+- low-level vertex API
+    - deal with timestamps
+    - different strategies
+        - incrementally release records for a time, finish up with notification
+        - buffer all records for a time, then release on notification
+- progress tracking
+    - protocol to figure out when to deliver notifications to vertices
+    - single-threaded
+    - distributed
+        - aggregate events locally before broadcasting
+        - global aggregator merges updates from different workers
+- fault tolerance
+    - log all messages to disk before sending
+        - high common-case overhead
+    - write globally synchronous, coordinated checkpoints
+        - induces pause times while making checkpoints
+
+---
+
+
+
+
+
+
+
 
 
 ---
