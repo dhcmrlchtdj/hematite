@@ -520,6 +520,58 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
+
+
+
+
+
+
+
+---
+
+## Bayou
+
+- ideas that are worth knowning
+    - eventual consistency
+    - conflict resolution
+    - logging operations rather than data
+    - use of timestamps to help agreement on order
+    - version vectors
+    - causal consistency via Lamport logical clocks
+- ideas to remember
+    - log of operations is equivalent to data
+    - log helps eventual consistency (merge, order, and re-execute)
+    - log helps conflict resolution (write operations easier than data)
+    - causal consistency via Lamport-clock timestamps
+    - quick log comparison via version vectors
+
+- the log holds the truth; the DB is just an optimization
+- ordered update log
+    - syncing == ensure both devices have same log (same updates, same order)
+    - DB is result of applying update functions in order
+    - same log + same order = same DB content
+- eventual consistency is the best you can do if you want to support disconnected operation
+- timestamp
+    - timestamp = (T, I)
+    - T = creating device's wall-clock time
+    - I = creating device's ID
+- uses "Lamport logical clocks" for causal consistency
+    - Lamport clock
+        - Tmax = highest timestamp seen from any device
+        - T = max(Tmax + 1, wall-clock time)
+    - 保证新的 timestamp 不会比之前小
+- "primary replica" to commit updates
+    - one device is the "primary replica"
+    - primary marks each received update with a Commit Sequence Number
+- anti-entropy
+- version vector
+    - a summary of state known by a participant
+- discard committed updates from log
+    - keep a copy of the DB as of the highest known CSN
+    - never need to roll back farther
+
+---
+
 ## Naiad
 
 - streaming and incremental computation
