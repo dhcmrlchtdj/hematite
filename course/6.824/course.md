@@ -392,15 +392,6 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
-- 截止目前反复出现的主题
-    - 主从结构，多副本
-    - WAL 日志、快照，用于异常恢复
-    - 单 master 保证一致性、时序
-    - 多机模拟单机表现，根据单机行为判断分布式行为是否符合预期
-
----
-
-
 ## Distributed Transactions
 
 - transaction, hide interleaving and failure from application writers
@@ -520,58 +511,6 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
-
-
-
-
-
-
-
----
-
-## Bayou
-
-- ideas that are worth knowning
-    - eventual consistency
-    - conflict resolution
-    - logging operations rather than data
-    - use of timestamps to help agreement on order
-    - version vectors
-    - causal consistency via Lamport logical clocks
-- ideas to remember
-    - log of operations is equivalent to data
-    - log helps eventual consistency (merge, order, and re-execute)
-    - log helps conflict resolution (write operations easier than data)
-    - causal consistency via Lamport-clock timestamps
-    - quick log comparison via version vectors
-
-- the log holds the truth; the DB is just an optimization
-- ordered update log
-    - syncing == ensure both devices have same log (same updates, same order)
-    - DB is result of applying update functions in order
-    - same log + same order = same DB content
-- eventual consistency is the best you can do if you want to support disconnected operation
-- timestamp
-    - timestamp = (T, I)
-    - T = creating device's wall-clock time
-    - I = creating device's ID
-- uses "Lamport logical clocks" for causal consistency
-    - Lamport clock
-        - Tmax = highest timestamp seen from any device
-        - T = max(Tmax + 1, wall-clock time)
-    - 保证新的 timestamp 不会比之前小
-- "primary replica" to commit updates
-    - one device is the "primary replica"
-    - primary marks each received update with a Commit Sequence Number
-- anti-entropy
-- version vector
-    - a summary of state known by a participant
-- discard committed updates from log
-    - keep a copy of the DB as of the highest known CSN
-    - never need to roll back farther
-
----
-
 ## Naiad
 
 - streaming and incremental computation
@@ -619,13 +558,105 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ---
 
+## Parameter Server
 
+- TODO
 
+---
 
+## Frangipani
 
+- why
+    - performance via caching
+    - cache coherence
+    - decentralized design
+    - per-client log for decentralized recovery
+- Frangipani is a network file system, works transparently with existing apps
+    - Petal: block storage service; replicated; striped+sharded for performance
+    - Frangipani: decentralized file service; cache for performance
+- workstation cache
+    - all operations entirely local to workstation
+        - allows updates to cached files/directories without network traffic
+        - updates proceed without any RPCs if everything already cached
+    - eg. create new file
+        - read directory information from Petal into cache
+        - create file just in the cache (donot immediately write back to Petal)
+- challenges
+    - cache coherence
+        - the lock server
+            - acquire, then read from Petal
+            - write to Petal, then release
+        - don't cache unless you hold the lock
+        - force reads to see last write
+    - atomic transactions
+        - the lock server
+            - acquires locks on all file system data that it will modify
+    - crash recovery
+        - write-ahead logging
+        - a separate log for each workstation
+- version number
+    - version number in each meta-data block (i-node) in Petal
+    - version number(s) in each logged op is block's version plus one
+    - recovery replays only if op's version > block version
+- log metadata only
+    - linux 等系统的 file system 在行为上是一致的，应用层使用相同的处理方式即可
+    - Frangipani recovery defends the file system's own data structures
 
+- FAQ
+    - each client having its own log, tored in a public place so that anyone can recover from it
+    - all changes have to be written to Petal twice: once to the log, and once to the file system
+    - file content written just before a crash may be lost （metadata log 落盘了，data 还没落盘）
+    - the new file is completely lost （metadata log 落盘也是 batch 操作，可能 batch 之前就崩了）
+    - Petal maintains a mapping from virtual to physical block numbers
 
+---
 
+## Memcache
+
+- TODO
+
+---
+
+## Bayou
+
+- ideas that are worth knowning
+    - eventual consistency
+    - conflict resolution
+    - logging operations rather than data
+    - use of timestamps to help agreement on order
+    - version vectors
+    - causal consistency via Lamport logical clocks
+- ideas to remember
+    - log of operations is equivalent to data
+    - log helps eventual consistency (merge, order, and re-execute)
+    - log helps conflict resolution (write operations easier than data)
+    - causal consistency via Lamport-clock timestamps
+    - quick log comparison via version vectors
+
+- the log holds the truth; the DB is just an optimization
+- ordered update log
+    - syncing == ensure both devices have same log (same updates, same order)
+    - DB is result of applying update functions in order
+    - same log + same order = same DB content
+- eventual consistency is the best you can do if you want to support disconnected operation
+- timestamp
+    - timestamp = (T, I)
+    - T = creating device's wall-clock time
+    - I = creating device's ID
+- uses "Lamport logical clocks" for causal consistency
+    - Lamport clock
+        - Tmax = highest timestamp seen from any device
+        - T = max(Tmax + 1, wall-clock time)
+    - 保证新的 timestamp 不会比之前小
+- "primary replica" to commit updates
+    - one device is the "primary replica"
+    - primary marks each received update with a Commit Sequence Number
+- anti-entropy
+- version vector
+    - a summary of state known by a participant
+- discard committed updates from log
+    - keep a copy of the DB as of the highest known CSN
+    - never need to roll back farther
 
 ---
 
@@ -768,3 +799,15 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - switch to longer chain if peers become aware of one
         - temporary double spending is possible, due to forks
 
+---
+
+- 主从结构，多副本
+- WAL 日志、快照，用于异常恢复
+- 单 master 保证一致性、时序
+- 多机模拟单机表现，根据单机行为判断分布式行为是否符合预期
+- 日志才是本体，数据只是快照。那日志要存储什么呢
+- 设计时考虑如何扩展（scale）
+- 要高可用，主从、多副本，replication
+- replication 考虑一致性问题，比如单一 leader
+- 要一致性，消息确认，ack，牺牲一点性能
+- 通过各种序号来确认时序
