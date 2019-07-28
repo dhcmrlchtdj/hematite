@@ -613,7 +613,43 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ## Memcache
 
-- TODO
+- web sites, evolution over time
+    - one machine, application + DB
+        - application takes too much CPU time
+    - many applications + one shared DB
+        - application is stateless
+        - single DB is the bottleneck
+    - many application + cluster of DBs
+        - partition data by key
+        - cross-shard transactions and queries probably don't work
+            - 经常看到说，国内互联网公司不推荐使用 join 等查询
+            - 这就正好符合 Dynamo 只有主键查询的模型了？
+    - many applications + many caches for reads + many DBs for writes
+        - DB and cache can get out of sync
+        - DB write is the bottleneck (and is hard to solve
+- "look-aside" cache
+    - memcache doesn't know anything about DB
+    - tolerate modest staleness: no freshness guarantee
+- partition vs replication
+    - partition: server i, key k -> mc server hash(k)
+    - replicate: server i, key k -> mc server hash(i)
+    - partition is more memory efficient (one copy of each k/v)
+    - replication works better if a few keys are very popular
+- DB, replica, master-slave
+    - DB replicas help only read performance, no write performance
+    - FB 的例子里，DB 已经跨机房了，write 需要跨机房发送给 master
+- thundering herd
+    - one client updates DB and delete()s a key, lots of clients get() but miss
+    - just give the first missing client a "lease"
+        - lease = permission to refresh from DB
+        - tells others "try get() again in a few milliseconds"
+- consistency
+    - read-your-own-writes is a big driving force
+    - replication, delay can be considerable
+    - DB + cache, concurrent clients had races
+        - leases （更新时，不让其他 client 进行 set
+        - two-second hold-off （删除后，两秒内不让 client 更新
+        - remote mark （删除后，在 master 同步到 slave 之前，标记为 remote。告诉 client 需要去 master 读
 
 ---
 
