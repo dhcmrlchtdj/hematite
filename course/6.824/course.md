@@ -77,7 +77,6 @@ https://pdos.csail.mit.edu/6.824/schedule.html
         - network partitions
 
 - GFS
-    - TODO
     - read
         - 64MB chunk
         - 3x replication
@@ -560,7 +559,41 @@ https://pdos.csail.mit.edu/6.824/schedule.html
 
 ## Parameter Server
 
-- TODO
+- machine learning
+    - models are function approximators
+        - function is typically very high-dimensional
+    - two phases: training and inference
+        - during training, expose model to many examples of data
+        - during inference, apply trained model to get predictions for unseen data
+        - parameter server is about making the training phase efficient
+- parameters
+    - parameters form a giant vector of numbers
+    - train, compute changes, apply update, train again
+- architecture
+    - partition training data, run in parallel on partitions
+    - all workers need access to parameters
+        - each worker can access any parameter
+        - but typically needs only small subset
+- parameter server
+    - parameter server aggregating parameter changes from multiple workers
+    - bottleneck
+        - worker: CPU (training compute)
+        - parameter server: network (talk to workers)
+    - apply operations (push/pull/update) on key ranges
+- consistent hashing
+    - well-known technique (Dynamo)
+    - replicate parameters on multiple server
+- fault tolerance
+    - worker
+        - restart on another machine
+    - parameter server
+        - lose all parameters stored
+        - neighboring backup takes over key range
+- vector clocks
+    - vector clocks for each key
+    - overhead would be ridiculous if PS stored a vector clock for every key
+        - range allows amortizing it
+- ML is an example of an application where inconsistency is often okay
 
 ---
 
