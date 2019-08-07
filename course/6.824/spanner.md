@@ -1,0 +1,67 @@
+# Spanner
+
+- introduction
+    - scalable, multi-version, globally-distributed, synchronously-replicated database
+    - cross-datacenter replicated data
+        - shard data across many sets of Paxos state machines
+        - replication is used for globally availability and geographic locality (failover between replicas)
+    - database features on top of distributed system
+        - MVCC, transaction, SQL
+        - each version is timestamped with its commit time
+    - externally consistent reads/writes, globally-consistent reads
+        - assign timestamps to transaction
+        - the timestamps reflect serialization order
+        - TrueTime API, uncertainty clock (keep uncertainty small, less than 10ms)
+
+- implementation
+    - universe
+        - universe = universe_master + placement_driver + N*zone
+        - zone = zone_master + N * location_proxy + N * span_server
+        - universe 下面有多个 zone
+        - zone 作为最小单元，可以动态增减、可以部署到不同 datacenter
+        - placement_driver 定期和 span_server 通信，判断哪些数据需要被移动（不太理解
+    - spanserver
+        - tablet = a bag of mappings
+            - (key:string,timestamp:int64)->string
+            - more like a multi-version database than a key-value store
+            - built on top of Colossus (the successor to GFS)
+            - a single Paxos state machine on top of each tablet
+                - tablet 在不同 datacenter 有 replica
+                - （tablet 本身构建在 Colossus 上也就是在 datacenter 内部又有 replica
+            - 一个 spanserver 有成百上千个 tablet，每个 tablet 都有一个 Paxos
+        - lock table
+            - state for two-phase locking
+            - map ranges of keys to lock state
+        - transaction manager
+            - for distributed transaction (two-phase commit)
+            - if a transaction involves more than one Paxos group
+                - 如果只涉及单个 Paxos group，只需要 lock table 和 Paxos 就足以实现事务
+                - 涉及多个 Paxos group 才需要 transaction manager 出场，使用 2PC 实现事务
+            - used to implement participant leader
+        - participant leader
+    - placement / directory
+        - a set of contiguous keys that share a common prefix
+        - all data in a directory has the same replication configuration
+        - Spanner move a directory to shed load from a Paxos group
+            - 比如，把经常一起访问的数据，移动到一个 group 内
+        - directory is the unit of data movement between Paxos groups
+    - data model
+        - Spanner's data model is not purely relational, in that rows must have names
+            - the primary keys form the name for a row
+            - each table defines a mapping from the primary-key columns to the non-primary-key columns
+
+- TrueTime
+    - TT.now(), TT.after(t), TT.before(t), TTinterval[earliest,latest]
+    - TrueTime guarantees that for an invocation tt = TT.now(), `tt.earliest <= T_abs(event) <= tt.latest`
+    - GPS and atomic clock
+    - a set of time master machines per datacenter and a timeslave daemon per machine
+
+- concurrency control
+    - transaction
+        - read-write transaction
+        - read-only transaction (snapshot-isolation transaction)
+        - snapshot read
+    - Paxos leader lease
+        - use timed leases to make leadership long-lived (10s by default)
+    - Spanner assigns timestamps to Paxos writes in monotonically increasing order, even across leaders
+        - 单调增的 timestamp 能给事务带来什么好处呢？
