@@ -19,13 +19,6 @@ $ # ???
 
 ---
 
-### kotlin repl
-
-```
-$ kotlinc-jvm
-```
----
-
 ## kotlin script
 
 ```
@@ -36,3 +29,27 @@ $ kotlinc-jvm -script a.kts
 ```
 
 ---
+
+### kotlin repl
+
+```
+$ kotlinc
+```
+---
+
+### kotlin jar
+
+```
+$ cat a.kt
+fun main() = println("hello")
+
+$ kotlinc a.kt
+$ file AKt.class
+AKt.class: compiled Java class data, version 50.0 (Java 1.6)
+$ kotlin AKt
+
+$ kotlinc -d a.jar -include-runtime a.kt
+$ file a.jar
+a.jar: Java archive data (JAR)
+$ java -jar a.jar
+```
