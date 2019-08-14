@@ -51,5 +51,5 @@ $ kotlin AKt
 $ kotlinc -d a.jar -include-runtime a.kt
 $ file a.jar
 a.jar: Java archive data (JAR)
-$ java -jar a.jar
+$ kotlin a.jar
 ```
