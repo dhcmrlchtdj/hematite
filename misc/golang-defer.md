@@ -29,3 +29,12 @@ func f() (ret int) {
 	return t
 }
 ```
+
+---
+
+https://blog.golang.org/defer-panic-and-recover
+
+即使碰到了 panic，defer 还是会被调用。
+没有 recover 的话，执行中的函数会以 panic 的方式返回。
+调用 recover，panic 停止，回到正常的流程。
+如果执行过代码块里没有对返回值赋值，就返回初始化的值了。
