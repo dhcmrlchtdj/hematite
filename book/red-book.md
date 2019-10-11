@@ -45,3 +45,41 @@ http://www.redbook.io
 
 ## Techniques Everyone Should Know
 
+- query plan/ query optimization
+    - three distinct subproblems
+        - cost estimation
+        - relational equivalences that define a search space
+        - cost-based search
+    - use of binary operators and cost estimation
+
+- concurrency control
+    - isolation
+    - lock-based serializability
+        - multi-granularity locking
+        - strict 2PL
+
+- database recovery
+    - WAL, write-ahead logging
+    - ARIES algorithm (No Force, Steal
+        - the database need not write dirty pages to disk at commit time (No force
+        - the database can flush dirty pages to disk at any time (Steal
+
+- distribution
+    - benefits to capacity, durability, and availability
+    - servers may fail, network links may be unreliable, network communication may be costly
+    - distributed transaction processing, atomic commitment (AC)
+        - a transaction that executes on multiple servers (whether multiple replicas, multiple partitions, or both)
+        - AC ensures that the transaction either commits or aborts on all of them
+        - 2PC
+    - consensus
+        - ("easier" than AC
+        - Paxos, Multi-Paxos, Viewstamped Replication, Raft, ZAB
+
+---
+
+
+
+
+
+
+
