@@ -77,8 +77,20 @@ http://www.redbook.io
 
 ---
 
+## New DBMS Architectures
 
+- column store for data warehouse
+    - （场景决定了列存储更适合
+- in-memory DBMS for OLTP
+    - the OLTP marketplace is now becoming a main memory DBMS marketplace
+    - new solutions are needed for concurrency control, crash recovery, and multi-threading
+- no SQL for semi-structured data types
 
+---
+
+## Large-Scale Dataflow Engines
+
+---
 
 
 
