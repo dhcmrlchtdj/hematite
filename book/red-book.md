@@ -2,6 +2,9 @@
 
 http://www.redbook.io
 
+看了下，感觉定位有点尴尬。
+入门的可能看不太懂，懂的可能不太需要。
+
 ---
 
 ## Background
@@ -89,6 +92,46 @@ http://www.redbook.io
 ---
 
 ## Large-Scale Dataflow Engines
+
+- MapReduce
+    - impact: schema, interface, architectural
+- Spark
+
+---
+
+## Weak Isolation and Distribution
+
+---
+
+## Query Optimization
+
+---
+
+## Interactive Analytics
+
+- OLAP
+    - precomputation
+    - sampling
+
+---
+
+## Languages
+
+- (SQL was originally designed with non-technical users in mind
+    - （结果只有程序员才会去操作 DBMS
+- abstraction for programmer
+    - transaction model
+        - transactions are (too) expensive
+    - declarative query languages (like SQL
+- other language embedding
+    - LINQ
+    - ORM
+        - (some good ideas take time to catch on
+- stream query
+    - CQL
+        - a new declarative query language for a data model of streams
+    - streams are something of a middle ground between databases and "events"
+- without transactions
 
 ---
 
