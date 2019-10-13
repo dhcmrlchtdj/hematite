@@ -87,7 +87,7 @@ http://www.redbook.io
 - in-memory DBMS for OLTP
     - the OLTP marketplace is now becoming a main memory DBMS marketplace
     - new solutions are needed for concurrency control, crash recovery, and multi-threading
-- no SQL for semi-structured data types
+- NoSQL for semi-structured data types
 
 ---
 
@@ -101,9 +101,26 @@ http://www.redbook.io
 
 ## Weak Isolation and Distribution
 
+- serializability is expensive
+    - 少数数据库默认设置为 serializability
+    - 不少数据库根本不提供 serializability
+- weak isolation
+    - (specifications for weak isolation are often incomplete, ambiguous, and even inaccurate
+    - (weak isolation is a challenge to reason about
+- why weak isolation seems to be "okay" is practice
+    - few applications today experience high degrees of concurrency（哈哈哈
+    - without concurrency, most implementations of weak isolation deliver serializable results
+- NoSQL, providing better availability of operations via weaker models
+- CAP
+- several high-value use cases frequently do not actually require coordination for “correct” behavior; thus, for these use cases, serializability is overkill
+
 ---
 
 ## Query Optimization
+
+- no query optimizer is truly producing "optimal" plans
+    - estimation, heuristics
+- volcano/cascades
 
 ---
 
@@ -132,9 +149,3 @@ http://www.redbook.io
         - a new declarative query language for a data model of streams
     - streams are something of a middle ground between databases and "events"
 - without transactions
-
----
-
-
-
-
