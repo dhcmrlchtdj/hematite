@@ -36,4 +36,18 @@
 
 ## module
 
+- module = packages + resource_files + depend_declares
+    - there is no hierarchical relationship between module.name.a and module.name.a.b
+    - there is no relationship between module.name and package.name
+    - reverse domain name convention
+    - `module(org.slf4j) = pkg(org.slf4j) + pkg(org.slf4j.spi) + pkg(org.slf4j.event) + pkg(org.slf4j.helpers)`
 
+- `module-info.java`
+
+```
+module module.name
+{
+    requires dep.name;
+    exports pkg.name;
+}
+```
