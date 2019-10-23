@@ -24,6 +24,8 @@
             - 最初创建的时候，leader 在 broker 的分布比较均衡，不会出现单个 broker 负载过高
             - 多次选主后，可能出现大量 leader 集中在某个 broker，导致负载增长
             - 假如 preferred leader 是 stay in sync 的，会切换 leader
+        - out-of-sync
+            - 和 ZK 断开，或者近期没有从 leader 获取数据，或者近期获取的没跟上最新数据
     - 小结一下就是强依赖 ZooKeeper，利用 ZK 实现选主、维护成员列表
 
 - how Kafka handles requests from producers and consumers
@@ -41,7 +43,7 @@
         - 写入是指写入 filesystem cache，kafka 不关心写没写入 disk（反正有 replica，丢就丢吧
         - 读取数据的时候也是直接从 filesystem cache 到 network，都在内核里
         - 读取数据时可以选择让 broker 去 buffer 一会儿，合并小数据直到某个阈值后一起发送
-        - 写入之后不是马上就能读取，要等 replica 同步成功。避免从异常中恢复后状态不一致
+        - 写入被 committed 之后，才会被读取。避免从异常中恢复后状态不一致
     - （截止到写书的时候，创建 topic 要去操作 ZooKeeper，不能直接在 Kafka 上完成
 
 - how Kafka handles storage (file format, indexes, ...
@@ -65,3 +67,24 @@
         - active segment is never compacted
         - start compacting when 50% of the topic contains dirty records
 
+---
+
+## Stream Processing
+
+- data stream: an abstraction representing an unbounded dataset
+    - attributes: ordered, immutable, replayable
+- paradigm
+    - request-response: milliseconds, low latency, blocking, OLTP
+    - batch processing: minutes to hours, high-latency/high-throughput, data warehouse
+    - stream processing: continuous, nonblocking
+- concept
+    - time
+        - event time, log append time, processing time, ...
+        - most stream applications perform operations on time windows
+    - state
+        - local/internal state, external state
+        - operation involve multiple events
+    - stream-table duality
+        - stream to table: apply the changes
+        - table to stream: capture the changes
+    - time windows
