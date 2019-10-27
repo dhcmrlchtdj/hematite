@@ -39,6 +39,23 @@
 
 ## structuring concurrency applications
 
+- tasks are abstract, logical units of work, threads are a mechanism that run tasks asynchronous
+    - task per thread
+    - thread pool
+- executor framework
+    - decouple task submission from execution policy
+
+- Java does not provide a preemptive mechanism for cancelling activities or terminating threads
+- interruption, a cooperative mechanism that lets one thread ask another to stop what it is doing
+- interrupt just requests the thread interrupt itself at the next convenient opportunity
+    - these opportunities are called cancellation points
+    - interruption is usually the most sensible way to implement cancellation
+- it is important to distinguish between how tasks and threads should react to interruption
+
+- thread pool
+    - ThreadLocal should not be used in pool threads to communicate values between tasks
+    - thread pools work best when tasks are homogeneous and independent
+
 ---
 
 ## liveness, performance, testing
@@ -58,7 +75,6 @@
     - solution: introduce some randomness into the retry mechanism
 
 - the quest for performance is probably the single greatest source of concurrency bugs
-    - 哈哈
 
 ---
 
