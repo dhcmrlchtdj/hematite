@@ -43,6 +43,23 @@
 
 ## liveness, performance, testing
 
+- deadlock
+    - lock-ordering deadlocks (Lock)
+        - example: dining philosophers
+            - order, or timeout, or limit concurrency
+        - free of lock-ordering deadlocks if
+            - all threads acquire the locks they need in a fixed global order
+            - (in Java, we can use System.identityHashCode to get the order
+        - strive to use open calls throughout your program
+            - open call: a call that doesn't use lock
+    - resource deadlock (Semaphore)
+- starvation
+- livelock
+    - solution: introduce some randomness into the retry mechanism
+
+- the quest for performance is probably the single greatest source of concurrency bugs
+    - 哈哈
+
 ---
 
 ## advanced topics
