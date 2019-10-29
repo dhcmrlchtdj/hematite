@@ -31,7 +31,81 @@
 
 ---
 
+- B-Tree
+    - high fanout and low height
+        - the desired properties for an optimal on-disk data structure
+        - fanout: the number of keys stored in each node
+    - efficiently execute both point and range queries
+    - (B+-Tree store values only in leaf nodes
+    - operations
+        - lookup
+        - insert and split
+        - remove and merge
+    - use buffering to reduce write amplification (which is caused by page rewrites)
+    - use immutability to reduce space amplification (which is caused by the reserve space in nodes for futere writes)
+    - variants
+        - copy-on-write B-Tree
+        - lazy B-Tree
+        - FD-Tree
+        - Bw-Tree
+        - cache-oblivious B-Tree
 
+- Log-Structured Merge Tree
+    - useful for applications where writes are far more common than reads
+    - all reads/writes are applied to a memory-resident table (memtable)
+    - read, write, and space amplification
+    - RUM Conjecture (Read, Update, and Memory) （又是三选二
+
+---
+
+- file formats
+
+---
+
+- transaction
+    - ACID
+- buffer
+    - page cache, cache pages read from disk in memory
+    - dirty, flush back, evicte
+    - this synchronization is a one-way process: from memory to disk
+    - eviction policy: FIFO, LRU, CLOCK, LFU, ...
+- recovery
+    - write-ahead log (WAL)
+    - every record has a unique, monotonically increasing log sequence number (LSN)
+    - physical log, logical log
+    - Steal policy, Force policy
+        - steal, allows flushing a page that modified by uncommitted transactions
+        - force, requires to flush all dirty page to disk before committing transaction
+    - ARIES
+        - steal + no-force
+        - logical log for undo, physical log for redo
+- concurrency control
+    - category
+        - pessimistic concurrency control (PCC)
+        - optimistic concurrency control (OCC)
+        - multiversion concurrency control (MVCC)
+    - read anomaly: dirty read, nonrepeatable read (read a row), phantom read (read a set of rows)
+    - write anomaly: lost update, dirty write, write skew
+    - isolation level
+        - serializability
+            - multiple operations executed in arbitrary order
+            - as if transactions were executed serially
+            - does not imply or impose any particular order on executing transactions
+            - isolation in ACID means serializability
+    - OCC
+        - read, validate, write
+    - MVCC
+        - at most one uncommitted value at a time
+        - MVCC can be implemented by 2PL or timestamp ordering
+        - use MVCC to implement snapshot isolation
+    - PCC
+        - PCC can be implemented by 2PL pr timestamp ordering
+        - deadlock
+            - timeout and abort
+            - waits-for graph
+            - priority
+        - lock and latch
+            - latch crabbing
 
 ---
 
