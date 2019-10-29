@@ -58,7 +58,34 @@
 
 ---
 
+
+- on-disk B-Tree is a page management mechanism
+    - algorithms have to compose and navigate pages
+
 - file formats
+    - binary format
+        - the main principle to create efficient page layouts
+        - primitive types (integer, float, date, ...)
+            - fixed size
+            - represented (serialized to and deserialized from) in their raw binary forms
+        - string and variable-size data
+            - size + data
+        - bit-packed data (boolean, enum, flag, ...)
+            - bit
+    - starts with a fixed-size header and may ends with a fixed-size trailer
+        - header + page list + trailer
+    - store records in data files and index files
+        - files are partitioned into fixed-size units called pages
+    - split the page into fixed-size segments, to simplify space management for variable-size records
+    - slotted pages
+    - cell layout (for flag, enum, primitive)
+    - version
+        - version prefixes in filenames
+        - version stores in a separate file
+        - version stores in the index file header (magic number)
+    - checksum / CRC
+        - compute before writing to disk
+        - write checksum together with the data
 
 ---
 
