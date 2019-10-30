@@ -26,8 +26,12 @@
 - column-oriented, row-oriented, wide column
     - depend on access patterns
 - data files, index files
-    - primary index, secondary index
-- storage structure, buffering, immutability, ordering
+    - primary index
+    - secondary index
+- storage structure
+    - buffering
+    - immutability
+    - ordering
 
 ---
 
@@ -41,8 +45,6 @@
         - lookup
         - insert and split
         - remove and merge
-    - use buffering to reduce write amplification (which is caused by page rewrites)
-    - use immutability to reduce space amplification (which is caused by the reserve space in nodes for futere writes)
     - variants
         - copy-on-write B-Tree
         - lazy B-Tree
@@ -53,11 +55,41 @@
 - Log-Structured Merge Tree
     - useful for applications where writes are far more common than reads
     - all reads/writes are applied to a memory-resident table (memtable)
-    - read, write, and space amplification
     - RUM Conjecture (Read, Update, and Memory) （又是三选二
 
----
+- read, write, space amplification
+    - buffering helps to reduce write amplification (which is caused by page rewrites)
+    - immutability helps to reduce space amplification (which is caused by the reserve space in nodes for futere writes)
+    - immutability may lead to deferred write amplification
+    - (immutability is friendly to concurrency
 
+- B-Tree implement
+    - page header
+        - magic number: page type, version, ...
+        - sibling links (like a double-linked list
+        - rightmost pointer, node high key
+        - overflow page, 当 variable-size value 超出大小，放置到另一个 overflow page 中
+    - cells 无序放置，cell pointers 是有序的数组
+    - propagate splits and merges
+        - split/merge 需要操作父节点
+        - 可以在 node 上存储指向父节点的指针，问题是父节点更新时要去更新子节点的指向
+        - 也可以在运行的时候，临时创建结构来存储节点层次信息
+    - reblance
+        - postpone split/merge operations to amortize the costs
+        - 需要 split/merge 的时候，不进行操作，二手把数据分给兄弟节点或者从兄弟节点拿数据
+        - 让叶子节点的分布更均衡，减少 split/merge 操作次数
+    - auto increasing value as primary key
+        - insert 只发生在最后，split 也就只发生在最后
+        - 空间够，可以直接插入
+        - 空间不够，创建新节点但不进行 split 操作（反正后面会追加插入，split 以后还要 merge
+        - 批量插入也可以类似的方式进行，避免 split/merge
+    - compression, trade-off between access speed and compression ratio
+        - data level, page level, file level
+    - vacuum / compaction
+        - page fragment
+        - garbage collection
+
+---
 
 - on-disk B-Tree is a page management mechanism
     - algorithms have to compose and navigate pages
