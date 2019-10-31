@@ -170,4 +170,48 @@
 
 ## distributed systems
 
+---
 
+- FLP impossibility, no algorithm can always reach consensus in bounded time
+- failure dectect
+    - heartbeat
+        - timeout
+        - timeout-free, heartbeat counter
+        - outsourcing heartbeat（P1 连不上 P2，P1 问 P3/P4 能否连上 P2
+    - phi-accrual
+    - gossip
+- leader election
+- replication
+- consistency model
+    - strict consistency (just theoretical, impossible to implement
+    - linearizability
+        - single object, single operation
+        - 允许同时写入时，后者覆盖前置；但写入后，就肯定能被读到
+        - compare-and-swap
+    - sequential consistency
+    - causal consistency
+- consensus
+    - ZAB
+        - atomicity + order
+        - leader handles requests, followers forwards requests to leader
+        - choose leader
+            - discovery
+            - synchronization
+            - broadcast
+        - 如果没有 heartbeat 不能联系到足够多（quorum）的 follower，会重新发起 leader 选举
+        - 在消息被 ack 之前，leader 不会处理下一条，保证顺序
+    - Posix
+    - Raft
+- distributed transactions
+    - 2PC
+        - propose phase + commit/abort phase
+        - cohort failure
+            - on propose phase, abort
+            - on commit phase, redo commit/abort on cohort
+        - coordinator failures
+            - before decision, block, redo propose on coordinator
+            - after decision, recover from cohort
+    - 3PC
+        - propose + prepare + commit/abort
+    - partition
+        - consistent hashing
