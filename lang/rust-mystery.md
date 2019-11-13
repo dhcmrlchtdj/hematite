@@ -2,8 +2,9 @@
 
 ---
 
-https://rust-unofficial.github.io/too-many-lists/
 http://faq.sealedabstract.com/rust/
+https://rust-unofficial.github.io/too-many-lists/
+https://doc.rust-lang.org/rust-by-example/
 
 ---
 
@@ -36,13 +37,26 @@ http://faq.sealedabstract.com/rust/
         - 通过 `Rc::clone(&x)` 新增 owner
         - 可以通过 `*Rc::get_mut(&mut x).unwrap()=42` 修改容器的内容
 
-
-写上面的时候，还正常。
-直到 `fn by_wtf(mut x: RefMut<i32>) {}` 我又感觉接受不了了。
-到底怎么理解 mut 这个关键字。
-
 ---
 
 - closure
+    - rust 里 closure 和 function 不是对等的关系
+        - 比如 function 里不能创建其他 function，只能 closure
+    - `Fn/FnMut/FnOnce`
+    - closure 引用外部变量，也像参数一样分成三种
+        - `&T / &mut T / T`
+        - 如何捕获变量，是编译器自己猜的，看哪种引用足以满足代码需求
+    - 如果明确要在引用时移交所有权，可以加上 move 关键字
+        - `move || {}`
+        - 只有一个标志位，所以看起来不能具体控制每一个变量的捕获方式
+        - 不行就当作参数传递咯
+
+---
 
 - lifetime
+
+---
+
+- thread
+    - `Arc/Mutex/RwLock`
+    - `Sync/Send`
