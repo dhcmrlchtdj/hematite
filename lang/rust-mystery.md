@@ -54,6 +54,10 @@ https://doc.rust-lang.org/rust-by-example/
 ---
 
 - lifetime
+    - `'static`
+        - the longest lifetime
+        - `&'static str`
+        - static vs const vs let
 
 ---
 
