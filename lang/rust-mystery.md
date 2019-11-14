@@ -63,4 +63,6 @@ https://doc.rust-lang.org/rust-by-example/
 
 - thread
     - `Arc/Mutex/RwLock`
-    - `Sync/Send`
+    - `Send` trait
+        - transfer ownership
+    - `Sync` trait

@@ -55,3 +55,16 @@ $ ll /Library/Extensions/
 ```
 
 删之
+
+---
+
+### debug / stdin and stdout
+
+https://erikslab.com/2011/02/04/logging-with-launchd/
+
+```
+<key>StandardOutPath</key>
+<string>/var/log/progname.log</string>
+<key>StandardErrorPath</key>
+<string>/var/log/progname_err.log</string>
+```
