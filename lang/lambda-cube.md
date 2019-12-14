@@ -29,8 +29,8 @@ https://ice1000.org/2018/11/18/SomeProspectsAboutOwO/
 
 > dependent types are the Curry-Howard interpretation of first-order logic
 > 什么是 Proof Assistant？我们一般称之为定理证明器，就是编程语言的类型系统达到一定能力后会进化而成的东西。
-> 类型即命题，程序即证明(Types are propositions, pro- grams are proofs)。
-> 一个编程语言在任何情况下需要程序员断言一个不可 能存在的异常的不存在，都是这门编程语言类型系统不够强 大的体现。
+> 类型即命题，程序即证明(Types are propositions, programs are proofs)。
+> 一个编程语言在任何情况下需要程序员断言一个不可能存在的异常的不存在，都是这门编程语言类型系统不够强大的体现。
 
 有一点点、朦胧的……
 加了这样的定语，其实就是不懂吧。
