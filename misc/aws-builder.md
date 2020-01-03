@@ -42,4 +42,46 @@ https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter
 
 ---
 
+https://aws.amazon.com/builders-library/workload-isolation-using-shuffle-sharding/
 
+## workload isolation using shuffle-sharding
+
+- 通过 hash 进行 sharding 的分区，避免单个客户的故障，影响其他客户
+- 应该也算是很常见方案，比如 gfs 的文件存储也是这样的
+
+---
+
+https://aws.amazon.com/builders-library/leader-election-in-distributed-systems/
+
+## leader election in distributed systems
+
+> Leases are relatively straightforward to understand and implement, and they
+> offer built-in fault tolerance. Leases work by having a single database that
+> stores the current leader. Then, the lease requires that the leader heartbeat
+> periodically to show that it's still the leader. If the existing leader fails
+> to heartbeat after some time, other leader candidates can try to take over.
+
+> In distributed systems, it's not possible to guarantee that there is exactly
+> one leader in the system. Instead, there can mostly be one leader, and there
+> can be either zero leaders or two leaders during failures.
+
+> Systems that perform work which is idempotent can often tolerate two leaders
+> with minimal loss of efficiency. With two leaders, systems can achieve higher
+> availability and choose weaker leader election approaches.
+
+---
+
+https://aws.amazon.com/builders-library/caching-challenges-and-strategies/
+
+## caching challenges and strategies
+
+- in-memory cache VS external cache
+    - external
+        - no cold start issue
+        - increase system complexity and operational load
+- read-through/write-through cache VS side cache
+- expiration
+    - TTL, LRU
+    - when downstream service return error
+- thundering herd
+    - request coalescing
