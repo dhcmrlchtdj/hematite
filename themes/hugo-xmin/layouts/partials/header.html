@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{{ .Title }}</title>
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            href="/index.xml"
+            title="{{ .Title }}"
+        />
+        {{ partial "style.html" . }}
+        {{ partial "icon.html" . }}
+    </head>
+    <body>
+        <nav>
+            <ul class="menu">
+                {{ range .Site.Menus.main }}
+                <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
+                {{ end }}
+            </ul>
+            <hr class="sep" />
+        </nav>
+    </body>
+</html>

@@ -1,0 +1,47 @@
+baseURL = "https://log.h11.io/"
+title = "log.h11.io"
+theme = "hugo-xmin"
+copyright = "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+languageCode = "zh-Hans"
+rssLimit = 10
+
+[[menu.main]]
+    name = "主页"
+    url = "/"
+    weight = 1
+[[menu.main]]
+    name = "标签"
+    url = "/tags/"
+    weight = 2
+[[menu.main]]
+    name = "关于"
+    url = "https://h11.io"
+    weight = 3
+[[menu.main]]
+    name = "订阅"
+    url = "/index.xml"
+    weight = 4
+
+[markup]
+    [markup.goldmark]
+        [markup.goldmark.extensions]
+            table = true
+            strikethrough = true
+            linkify = true
+            taskList = true
+            typographer = true
+        [markup.goldmark.parser]
+            attribute = true
+            autoHeadingID = true
+        [markup.goldmark.renderer]
+            hardWraps = true
+            unsafe = false
+    [markup.highlight]
+        codeFences = true
+        hl_Lines = ""
+        lineNoStart = 1
+        lineNos = false
+        lineNumbersInTable = true
+        noClasses = true
+        style = "solarized-light"
+        tabWidth = 4
