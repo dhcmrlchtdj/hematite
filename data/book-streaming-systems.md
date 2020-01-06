@@ -33,9 +33,56 @@
 
 ## The What, Where, When, and How of Data Processing
 
+> the core set of principles and concepts required for robust out-of-order data processing
 
+> if you care about both correctness and the context within which events
+> actually occurred, you must analyze data relative to their inherent event
+> times, not the processing time at which they are encountered during the
+> analysis itself.
 
+- concepts
+    - processing time, event time
+    - windowing
+    - trigger
+        - a mechanism for declaring when the output for a window should be materialized relative to some external singal
+    - watermark
+        - a notion of input completeness with respect to event times
+    - accumulation
+        - a mode specifies the relationship between multiple results that are observed for the same window
 
+- questions, critical to every unbouned data processing
+    - what results are calculated
+    - where in event time are results calculated
+    - when in processing time are results materialized
+    - how to refinements of results relate
 
+- batch processing
+    - what, transformations
+    - where, windowing
+
+- streaming processing
+    - when, triggers plus watermarks
+        - triggers
+            - triggers provide the answer to the when question
+            - there are only two useful types of triggers
+                - repeated update triggers
+                - completeness triggers
+        - watermarks
+            - it is an assertion, no more data with smaller event time will ever be seen again
+            - types: perfect watermarks, heuristic watermarks
+            - watermark is completeness trigger
+        - lateness
+    - how, accumulation
+        - modes
+            - discarding
+            - accumulating
+            - accumulating and retracting
+        - example
+            - input: `pane1=[3], pane2=[8,1]`
+            - discarding: `r1=3, r2=9`
+            - accumulating: `r1=3, r2=12`
+            - accumulating and retracting: `r1=3, r2=[12,-3]`
+
+---
 
 
