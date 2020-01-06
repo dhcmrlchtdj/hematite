@@ -31,7 +31,7 @@
 
 ---
 
-## The What, Where, When, and How of Data Processing
+## the what, where, when, and how of data processing
 
 > the core set of principles and concepts required for robust out-of-order data processing
 
@@ -84,5 +84,7 @@
             - accumulating and retracting: `r1=3, r2=[12,-3]`
 
 ---
+
+## watermarks
 
 
