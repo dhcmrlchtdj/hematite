@@ -1,0 +1,217 @@
+# database internals
+
+---
+
+## storage engines
+
+---
+
+- architecture
+    - transport (request -> query)
+        - cluster communication
+        - client communication
+    - query processor (query -> query plan)
+        - query parser
+        - query optimizer
+    - execution engine (query plan -> result)
+        - remote execution
+        - local execution
+    - storage engine
+        - buffer manager
+        - recovery manager
+        - access methods / storage structures
+        - transaction manager
+        - lock manager
+- memory-based, disk-based
+- column-oriented, row-oriented, wide column
+    - depend on access patterns
+- data files, index files
+    - primary index
+    - secondary index
+- storage structure
+    - buffering
+    - immutability
+    - ordering
+
+---
+
+- B-Tree
+    - high fanout and low height
+        - the desired properties for an optimal on-disk data structure
+        - fanout: the number of keys stored in each node
+    - efficiently execute both point and range queries
+    - (B+-Tree store values only in leaf nodes
+    - operations
+        - lookup
+        - insert and split
+        - remove and merge
+    - variants
+        - copy-on-write B-Tree
+        - lazy B-Tree
+        - FD-Tree
+        - Bw-Tree
+        - cache-oblivious B-Tree
+
+- Log-Structured Merge Tree
+    - useful for applications where writes are far more common than reads
+    - all reads/writes are applied to a memory-resident table (memtable)
+    - RUM Conjecture (Read, Update, and Memory) （又是三选二
+
+- read, write, space amplification
+    - buffering helps to reduce write amplification (which is caused by page rewrites)
+    - immutability helps to reduce space amplification (which is caused by the reserve space in nodes for futere writes)
+    - immutability may lead to deferred write amplification
+    - (immutability is friendly to concurrency
+
+- B-Tree implement
+    - page header
+        - magic number: page type, version, ...
+        - sibling links (like a double-linked list
+        - rightmost pointer, node high key
+        - overflow page, 当 variable-size value 超出大小，放置到另一个 overflow page 中
+    - cells 无序放置，cell pointers 是有序的数组
+    - propagate splits and merges
+        - split/merge 需要操作父节点
+        - 可以在 node 上存储指向父节点的指针，问题是父节点更新时要去更新子节点的指向
+        - 也可以在运行的时候，临时创建结构来存储节点层次信息
+    - reblance
+        - postpone split/merge operations to amortize the costs
+        - 需要 split/merge 的时候，不进行操作，二手把数据分给兄弟节点或者从兄弟节点拿数据
+        - 让叶子节点的分布更均衡，减少 split/merge 操作次数
+    - auto increasing value as primary key
+        - insert 只发生在最后，split 也就只发生在最后
+        - 空间够，可以直接插入
+        - 空间不够，创建新节点但不进行 split 操作（反正后面会追加插入，split 以后还要 merge
+        - 批量插入也可以类似的方式进行，避免 split/merge
+    - compression, trade-off between access speed and compression ratio
+        - data level, page level, file level
+    - vacuum / compaction
+        - page fragment
+        - garbage collection
+
+---
+
+- on-disk B-Tree is a page management mechanism
+    - algorithms have to compose and navigate pages
+
+- file formats
+    - binary format
+        - the main principle to create efficient page layouts
+        - primitive types (integer, float, date, ...)
+            - fixed size
+            - represented (serialized to and deserialized from) in their raw binary forms
+        - string and variable-size data
+            - size + data
+        - bit-packed data (boolean, enum, flag, ...)
+            - bit
+    - starts with a fixed-size header and may ends with a fixed-size trailer
+        - header + page list + trailer
+    - store records in data files and index files
+        - files are partitioned into fixed-size units called pages
+    - split the page into fixed-size segments, to simplify space management for variable-size records
+    - slotted pages
+    - cell layout (for flag, enum, primitive)
+    - version
+        - version prefixes in filenames
+        - version stores in a separate file
+        - version stores in the index file header (magic number)
+    - checksum / CRC
+        - compute before writing to disk
+        - write checksum together with the data
+
+---
+
+- transaction
+    - ACID
+- buffer
+    - page cache, cache pages read from disk in memory
+    - dirty, flush back, evicte
+    - this synchronization is a one-way process: from memory to disk
+    - eviction policy: FIFO, LRU, CLOCK, LFU, ...
+- recovery
+    - write-ahead log (WAL)
+    - every record has a unique, monotonically increasing log sequence number (LSN)
+    - physical log, logical log
+    - Steal policy, Force policy
+        - steal, allows flushing a page that modified by uncommitted transactions
+        - force, requires to flush all dirty page to disk before committing transaction
+    - ARIES
+        - steal + no-force
+        - logical log for undo, physical log for redo
+- concurrency control
+    - category
+        - pessimistic concurrency control (PCC)
+        - optimistic concurrency control (OCC)
+        - multiversion concurrency control (MVCC)
+    - read anomaly: dirty read, nonrepeatable read (read a row), phantom read (read a set of rows)
+    - write anomaly: lost update, dirty write, write skew
+    - isolation level
+        - serializability
+            - multiple operations executed in arbitrary order
+            - as if transactions were executed serially
+            - does not imply or impose any particular order on executing transactions
+            - isolation in ACID means serializability
+    - OCC
+        - read, validate, write
+    - MVCC
+        - at most one uncommitted value at a time
+        - MVCC can be implemented by 2PL or timestamp ordering
+        - use MVCC to implement snapshot isolation
+    - PCC
+        - PCC can be implemented by 2PL pr timestamp ordering
+        - deadlock
+            - timeout and abort
+            - waits-for graph
+            - priority
+        - lock and latch
+            - latch crabbing
+
+---
+
+## distributed systems
+
+---
+
+- FLP impossibility, no algorithm can always reach consensus in bounded time
+- failure dectect
+    - heartbeat
+        - timeout
+        - timeout-free, heartbeat counter
+        - outsourcing heartbeat（P1 连不上 P2，P1 问 P3/P4 能否连上 P2
+    - phi-accrual
+    - gossip
+- leader election
+- replication
+- consistency model
+    - strict consistency (just theoretical, impossible to implement
+    - linearizability
+        - single object, single operation
+        - 允许同时写入时，后者覆盖前置；但写入后，就肯定能被读到
+        - compare-and-swap
+    - sequential consistency
+    - causal consistency
+- consensus
+    - ZAB
+        - atomicity + order
+        - leader handles requests, followers forwards requests to leader
+        - choose leader
+            - discovery
+            - synchronization
+            - broadcast
+        - 如果没有 heartbeat 不能联系到足够多（quorum）的 follower，会重新发起 leader 选举
+        - 在消息被 ack 之前，leader 不会处理下一条，保证顺序
+    - Posix
+    - Raft
+- distributed transactions
+    - 2PC
+        - propose phase + commit/abort phase
+        - cohort failure
+            - on propose phase, abort
+            - on commit phase, redo commit/abort on cohort
+        - coordinator failures
+            - before decision, block, redo propose on coordinator
+            - after decision, recover from cohort
+    - 3PC
+        - propose + prepare + commit/abort
+    - partition
+        - consistent hashing

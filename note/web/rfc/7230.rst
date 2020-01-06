@@ -1,0 +1,217 @@
+.. contents::
+
+
+
+
++ 无状态 stateless
++ 应用级 application-level
++ 请求响应 request / response
+
+2
+==========
+
+2.3
+----------
++ user agent / origin server
++ http intermediary: proxy, gateway (reverse proxy), tunnel
++ upstream / downstream: 信息从 upstream 传递到 downstream
++ inbound: 发送到 O 的信息
++ outbound: 发送到 UA 的信息
+
++ proxy: 由 UA 主动选择
++ gateway: 对于 UA 而言，感觉就像服务器。实际上不处理请求，而是把请求发送给其他服务器。缓存请求回应以提高性能，负载均衡。
++ tunnel: 作为连接的中间人，不改变传递的信息。
+
+
+
+2.7
+----------
++ http-URI: "http:" "//" path [ "?" query ] [ "#" fragment ]
++ https-URI: "https:" "//" path [ "?" query ] [ "#" fragment ]
++ scheme 和 host 不区分大小写，剩下部分区分大小写
++ 保留字：": / ? # [ ] @ ! $ & ' ( ) * + , ; ="
++ 保留字要使用 percent-encoded (%HH) 进行转义
+
+
+3
+==========
++ http-message: start-line \*(header-field CRLF) CRLF [message-body]
++ SP: single space
++ OWS: optional whitespace
++ RWS: required whitespace
++ BWS: bad whitespace 这个是历史遗留，解析时应该无视掉
+
+3.1
+----------
++ start-line: request-line / status-line
++ request-line: method SP request-target SP HTTP-version CRLF
++ 推荐，最少要支持 8000-octet 长度的 request-line
++ status-line: HTTP-version SP status-code SP reason-phrase CRLF
+
+3.2
+----------
++ header-field: field-name ":" OWS field-value OWS
++ field-name 不区分大小写，和冒号中间不允许出现空格
++ field-value 前后可以有空格
++ 不该出现重复的 field-name
++ 如果出现重复的 field-name，可以用 "," 把 field-value 连接成一个新的 field-value
++ Set-Cookie 只能作为例外处理了
++ header-field 的长度数量都没有限制，如果超出处理能力，服务器应该返回 4xx，客户端可以直接把剩下的扔掉。
+
+3.3
+----------
++ message-body: \*octet
++ 也就是传输的时候都是 bytes
++ Content-Length 和 Transfer-Encoding 用于告知对方，message-body 长什么样
++ 响应 HEAD 和 CONNECT 请求时，不带 message-body
++ 返回状态为 1xx，204，304 时， 不带 message-body
+
+3.3.1
+``````````
++ recipient 必须能够处理 chunked
++ sender 只能将信息 chunked 一次
++ 使用多种方式进行编码时（比如同时进行 gzip 和 chunked），chunked 必须是最后一种。
++ Transfer-Encoding 是 HTTP/1.1 中定义的
++ Transfer-Encoding 也可以出现在 request 中
+
+3.3.2
+``````````
++ Content-Length 表示内容长度，不能与 Transfer-Encoding 同时出现
+
+3.3.3
+``````````
++ 检查 message-body 的长度依照如下算法：
+
+  1. 响应 HEAD 请求，或响应状态为 1xx，204，304。不带 message-body
+  2. 响应 CONNECT 请求，且响应状态为 2xx。不带 message-body
+  3. 如果同时出现 Transfer-Encoding 和 Content-Length，Transfer-Encoding 的优先级高
+
+     1. 带有 Transfer-Encoding，使用 chunked 作为最后编码。长度需要解析完 chunked 才知道
+     2. 带有 Transfer-Encoding，不用 chunked 作为最后编码。直到关闭连接为止，收到的全部信息都视为 message-body
+
+  4. 没有 Transfer-Encoding，有多个 Content-Length 或 Content-Length 不合法。关闭本次连接
+  5. 没有 Transfer-Encoding，Content-Lengh 合法。长度为 Content-Length 的值
+  6. 不满足上述情况的 request。视为不带 message-body
+  7. 不满足上述情况的 response。直到关闭连接为止，收到的全部信息都视为 message-body
+
+3.4
+----------
++ 服务器收到不完整的请求，应该发送回应，表示出错了。
+
+
+
+
+4
+==========
++ transfer-encoding: chunked, compress, deflate, gzip
++ 最新标准在 http://www.iana.org/assignments/http-parameters/http-parameters.xhtml
+
+4.1
+----------
++ chunked-body = \*chunk last-chunk trailer-part CRLF
+
++ chunk = chunk-size [chunl-ext] CRLF chunk-data CRLF
++ chunk-size 使用十六进制，表示 chunk-data 的大小，单位是 octet
+
++ last-chunk = "0" [chunk-ext] CRLF
++ 收到 last-chunk，也就是长度为 0 的 chunk 时，说明本次传输完成。
+
++ chunk-ext = \*(";" chunk-ext-name [ "=" chunk-ext-val ] )
++ 不支持相应拓展的话，忽略就可以了。
+
++ trailer-part = \*(header-field CRLF)
++ 传输完数据之后，继续修改 header 的途径
++ 某些 header 是不允许通过 trailer 修改的，recipient 必须忽略这些问题 header 或者干脆报错
++ 支持 trailer 的应该主动在 request 中说明，"TE: trailers"
++ 哪些不允许说得不是很清楚，大概包括 message framing/routing/request modifiers/authentication/response control data/payload process
+
+4.2
+----------
++ compress/x-compress: /usr/bin/compress
++ deflate: (LZ77 + huffman) in zlib
++ gzip/x-gzip: /usr/bin/gzip
+
+
+
+5
+==========
+
+5.3
+----------
++ request-target = origin-form / absolute-form / authority-form / asterisk-form
++ 这是啥？回去看 3.1
++ origin 和 absolute 是说只有 path 或者完整的 uri 都是可以的
++ authority 只能用于 CONNECT 请求 "CONNECT example.com:80 HTTP/1.1"
++ asterisk 只能用于 OPTIONS 请求 "OPTIONS * HTTP/1.1"
+
+5.4
+----------
++ Host = uri-host [ ":" port ]
++ HTTP/1.1 的请求中必须带有 Host
++ 服务器必须向不带 Host 的请求返回 400
+
+5.7.1
+----------
++ proxy 必须添加 Via
++ gateway 必须在 inbound 中添加 Via，outbound 不强制
+
+
+
+6
+==========
+
+6.1
+----------
++ Connection 表明发送方想要如何处理本次连接
++ proxy 和 gateway 在转发请求前必须对 Connection 进行合适处理
++ "Connection: close" 表明连接会在完成数据传输后关闭
++ 不支持 persistent connection 的 client 必须在请求中加入 "Connection: close"
++ 不支持 persistent connection 的 server 必须在响应中加入 "Connection: close"
+
+6.3
+----------
++ HTTP/1.1 默认开启 persistent connections
++ persistent connections 允许在一次连接中交换多个 request/response
++ 大约是 request->response->request->response->request->response
++ response 必须有明确的长度信息，或是使用 chunked 这种能确定长度的编码方式
+
++ 如果出现了 "close"，本次交换后关闭连接；
++ 否则，如果对方是 HTTP/1.1 及以上版本，本次交换后继续；
++ 否则，如果对方是带有 "keep-alive" 的 HTTP/1.0，且对方不是 proxy，本次交换后继续；
++ 否则，本次交换后关闭连接。
+
++ proxy 不允许和一个 HTTP/1.0 的 client 建立 persistent connection，即使 client 表示支持 keet-alive
+
+6.3.1
+``````````
++ proxy 不允许自动重试一个非幂等方法
++ user agent 不允许自动重试一个非幂等方法
+
+6.3.2
+``````````
++ 服务器处理 pipeline 的请求时，必须按照收到 request 的顺序返回 response
++ 如果 pipeline 还没收到 response，连接就关闭了，client 要重试。（这不废话吗）
++ 如果是意外关闭，即服务器没有返回 close，那么 client 在重试的时候，不允许对刚才导致断开连接的 request 使用 pipeline。
++ idempotent method 幂等方法可以在连接失败后重试。
++ non-idempotent method 非幂等方法得到响应前，user agent 不应该继续 pipeline 其他请求。
+
+6.7
+---------
++ "Connection: upgrade" 用于将当前连接从 HTTP/1.1 换成其他协议
++ client 可以在 Upgrade 中列出多个协议让 server 选择。"Upgrade: HTTP/2.0, SHTTP/1.3"
++ server 可以忽略请求，继续使用 HTTP/1.1
++ server 也可以返回 101 并选择新协议，同样用 Upgrade 列出
+
++ server 返回 426 要求切换协议的时候，必须带上 Upgrade
++ server 可能突然在某次回应时加上 Upgrade 表示可以切换协议
+
++ server 必须忽略掉来自 HTTP/1.0 的 Upgrade
++ 如果 server 在收到 Upgrade 的同时，还收到 "Expect: 100-continue"，必须先返回 100，再返回 101
++ Upgrade 只用于切换当前连接支持的协议，如果需要切换连接类型或是换用其他连接，应该使用 3xx
+
++ 目前支持的 Upgrade 类型可以在看 http://www.iana.org/assignments/http-upgrade-tokens
+
+
+9
+==========
++ security about HTTP message syntax, parsing, routing

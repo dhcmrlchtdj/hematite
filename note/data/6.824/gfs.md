@@ -1,0 +1,113 @@
+# The Google File System
+
+- 根据 G 内部应用的情况，结合现状与未来规划，做出了与现有文件系统不同的假设、决策
+- 现状
+    - 大量廉价机器，随时可能出现各种异常（需要监控、异常发现、容灾、自动恢复
+    - 文件体积能有几 GB。每个文件又包含多个对象。（属于业务场景，可以针对大文件读写做优化
+    - 修改主要是追加内容，而不是覆盖。写入后主要是顺序读。（属于业务场景
+    - 最大的一个集群，超过 1000 台机器，300TB 硬盘，上百个客户端同时请求（可以作为对标指标
+- design
+    - assumption
+    - interface: create, delete, open, close, read, write, snapshot, append
+    - architecture
+        - one master, multiple chunkserver
+        - 文件被分割成 fixed-size chunk，每个 chunk 在创建时都生成一个 64bit 的 chunk handle
+        - each chunk is replicated on multiple chunkservers
+        - master 和 chunkserver 通过发送 instruction 和收集 state 实现 heartbeat 检查
+        - too large to cache，所以客户端读取的时候，不做缓存
+    - master
+        - 单 master
+        - GFS client 从 master 获取 chunkserver 列表，然后去 chunkserver 读取文件
+        - chunkserver 列表会被缓存一段时间
+        - 这里的 GFS client 不是上层应用。上层应用通过 GFS client 这个中介去读文件
+    - chunk size
+        - 64MB (much larger than typical file sys- tem block sizes
+        - 应用场景主要是顺序读写，chunk 大一些，能有效减少和 master 的通信
+    - metadata
+        - the file and chunk namespaces
+        - the mapping from files to chunks
+        - the locations of each chunk's replicas
+        - 三类数据都放在 master 的内存里，前两者会持久化到硬盘，最后一个是 master/chunkserver 连上的时候从 chunkserver 获取的
+        - 持久化的时候，记录成 operation log
+        - 通过 heartbeat，获取 chunkserver 的最新 location 信息。这样定时更新避免了同步问题，增减 chunkserver 也更方便。
+        - master 只有一个，但是 operation log 会有多个远程备份。和 WAL 一样，会用到 checkpoints 等技术。
+    - consistency
+        - GFS
+            - consistent: all clients will always see the same data from any replica
+            - namespace 的原子性，靠 master 上锁保证
+            - 修改分为 writes 和 record appends
+            - 通过 chunk version number 保证所有 replica 都更新到最新版本
+            - 通过 checksum 保证文件完整性。发现文件出错，从其他 replica 的正确文件恢复
+        - application
+
+- interaction
+    - client, master, chunkservers
+    - master 是瓶颈，所以各种设计都尽可能减少 master 的 overhead
+    - mutation order
+        - master 选择一个 chunkserver 作为 primary
+        - primary 决定 mutation 的顺序
+        - 其他 chunkserver 根据 primary 指定的顺序执行 mutation
+        - master 通过 heartbeat 告知 chunkservers 当前的 primary 是哪个
+        - primary 失联了，可以及时更换新的 primary
+        - client 通过 master 得知 primary 是哪个
+    - data flow
+        - control flow 从 client 到 primary 再分发到 secondary，是树状的
+        - data flow 从 chunkserver 到 chunkserver，是线性的
+        - chunkserver 把数据分发到最近的另一个 chunkserver
+        - 传输时，借助 pipeline 高效利用带宽
+    - record append
+        - atomic
+        - at least once
+        - 传统的 write 需要 offset 和 data
+        - GFS 的 append 只需要 data，offset 由 GFS 自己选择
+        - 数据在某个 replica 写入失败的话，client 会重试写入操作。这可能导致之前写入成功的 replica 重复写入数据。
+            - 所以说只保证 at least once。数据是可能重复的
+        - 写入 data 的时候，如果 chunk 剩余的空间不足，会在 chunk 剩余空间里填充满 padding，让 client 重新写入
+    - snapshot
+        - master 先收回 lease，也就收回了 primary
+        - 新写入请求要先来 master 查找 primary，master 就有机会创建 snapshot
+        - copy on write
+            - master 会复制一份 metadata，但是指向相同的 chunk
+            - 有 client 想写入了，来 master 查找 primary
+            - master 发现 chunk 的 reference count 大于 1，会先给 chunkservers 发出指令，在 chunkservers 完成复制
+            - 复制完成后，master 再分配 primary，client 完成后续写入操作
+            - （复制操作在 chunkserver 内部完成，没有网络开销
+
+- master operation
+    - namespace and lock
+        - 没有传统的树结构
+        - `/a/b/c/leaf` 是由 `/a`, `/a/b`, `/a/b/c`, `/a/b/c/leaf` 组成的
+        - 每个节点都有自己的读写锁
+        - 通过保持 total order 来避免死锁（level + lexicographically）
+    - replica placement
+        - maximize data reliability and availability
+        - maximize network bandwidth utilization
+        - 光是不同机器还不够，还要分布到不同机架、甚至机房
+    - create, re-replication, rebalancing
+    - garbage collection
+        - 删除文件是 lazy 的
+        - 删除指令会重命名文件，加上删除时间。有进程定期清理三天前的删除的文件
+    - stale replica detection
+        - master maintains a chunk version number
+        - 每次授予 lease 的时候，都会对 chunk version number 进行自增
+        - chunkserver 的 version 较小，说明 chunkserver 需要更新
+        - master 的 version 较小，说明之前出现过异常，会选择一个新的 version
+
+- fault tolerance
+    - high available
+        - fast recovery
+            - 不管什么异常，秒级恢复服务
+        - chunk replication
+            - 3x 是默认值，可配置
+        - master replication
+            - operation log 和 checkpoints 有备份
+            - 通过 DNS 之类的服务去发现 master，方便及时更新 master 节点
+            - 通过 read-only "shadow" master 提升可用性
+    - data integrity
+        - 由于 record append 只满足 at least once，所以 replica 数据可能不同，所以每个 chunkserver 都要自己维护 checksum
+        - chunk 又被分成 64KB 的 block，每个 block 有 32bit checksum
+        - 读的时候会验证 checksum
+        - idle 的时候，会检查 inactive chunk 的 checksum，保证非活跃数据的正确性
+    - diagnostic logs
+        - 有日志，才能进行各种分析、检查
+        - sequentially and asynchronously，所以对性能影响很小

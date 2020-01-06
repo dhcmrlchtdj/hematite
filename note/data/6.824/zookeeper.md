@@ -1,0 +1,108 @@
+# ZooKeeper
+
+- introduction
+    - ZK is a service for coordinating processes of distributed applications
+    - ZK provides
+        - a per client guarantee of FIFO execution of requests
+        - linearizability for all requests that change the ZK state
+    - ZK can be used to implement configuration, group membership, leader election, lock
+        - lock can be used to implement group membership, leader election
+    - use replication to archive high available and performance
+    - wait-free data objects organized hierarchically as in file systems
+    - guarantee FIFO client ordering of all operations
+    - only writes are linearizable
+        - leader-based atomic broadcast protocal, Zab
+    - ZK application is dominated by read operations and it becomes desirable to scale read throughput
+        - servers process read operations locally, do not use Zab to totally order them
+    - caching data on the client side
+        - watch mechanism, a client can watch for an update to a given data object
+
+- ZooKeeper service
+    - terminology: client, server, znode
+        - znode is in-memory data node, organized in a hierarchial namespace
+        - example: /A/B/C
+    - znode types: regular, ephemeral
+        - ephemeral znode will be deleted when session closed
+        - client can set sequential flag when creating a new node
+            - 假设新节点 /p/n_x，那么 /p/n_x 的 seq 不会小于 /p 之前创建的子节点
+    - watch
+        - watches are unregistered once triggered or the session closes
+        - 一次性的，且和 session 绑定的
+    - session
+        - a client connects to ZK and initiates a session
+        - 靠 heartbeat 检测 session 状态，timeout 就干掉 session
+        - session 能在 server 之间转移，保证 client 不受 ZK 节点变化影响
+    - client API
+        - all methods have both a synchorous and an asynchronous version
+        - all update methods take an expected version number for conditional updates
+            - 就像浏览器的 conditional requests, If-Match 的玩法
+    - guarantee
+        - two basic ordering guarantees
+            - linearizable writes
+                - A-linearizability (asynchronous linearizability)
+                - all requests that update the state of ZK are serializable and respect precedence
+            - FIFO client order
+                - all request from a given client are executed in the order that they were sent by the client
+        - client A/B may see different configuration
+            - slow read (sync + read)
+            - sync causes a server to apply all pending write request before processing the read
+    - example
+        - configuration management
+            - 存储配置的 znode 节点 Z_cfg，客户端读取的时候加上 watch。之后变更就会提醒客户端
+        - group membership
+            - 靠 ephemeral 自动删除异常节点
+            - 客户端获取节点列表，就能知道有哪些可用节点。也可以加上 watch 监控节点变化情况
+        - lock
+            - 创建 ephemeral 的 lock file，后续操作使用 sync 版本
+            - 如果创建失败，说明其他程序持有锁。可以用 watch 监控其他程序何时释放锁。
+            - 这种 watch 会唤醒所有等待锁的程序。要优化可以配合 sequential，每个程序都等待之前一个锁，避免被一起唤醒。
+        - read/write lock
+            - 和普通 lock 差不多，给 read/write 分别创建锁。然后和普通的读写锁检查一样
+
+- ZooKeeper implementation
+    - component
+        - write_request -> request_processor -> atomic_broadcast -> replicated_database -> response
+        - read_request -> replicated_database -> response
+    - ZK provide high availability by replication
+    - the replicated database is an in-memory database
+        - ZK keep a write-ahead log of committed operations and generate periodic snapshots of the in-memory database
+        - each znode store a maximum of 1MB of data
+    - read request simply reads the state of the local database
+    - write request is forwarded to leader
+    - request processor
+        - leader transforms write request into a idempotent transaction
+    - atomic broadcast
+        - ZAB, an atomic broadcast ptotocal
+        - ZK can only work if a majority of servers are correct (2f+1 和 raft 一样)
+        - transaction 幂等，顺序对的情况下，重复发送重复执行也没关系
+    - replicated database
+        - fuzzy snapshots, do not lock the ZK state to take the snapshot
+        - 只靠 snapshot 可能不对，需要重放之前幂等的 transaction 才能恢复到正确状态
+    - client-server interactions
+        - read locally
+            - may return a stale value
+            - key to archiving the excellent performance with read-dominant workloads
+        - each response is tagged with a zxid that corresponds to the last txn seen by the server
+        - 当 client 切换到新 server，靠对比 zxid 可以知道新 server 的状态是否满足一致性
+            - 如果新 server 的 zxid 比较小，说明该 server 可能 lag 严重，会切换到其他 server
+            - 保证 client 不会读到旧的消息
+        - session timeout
+
+- conclusion
+    - wait-free by exposing wait-free objects to clients
+    - read-dominant workload
+    - weak consistency guarantee
+
+- performance
+    - throughput
+    - latency of requests
+
+- use case
+    - configuration metadata
+    - failure detect and group membership (track the status of the master and slaves)
+    - leader election (handle master failover)
+
+- 疑问
+    - ZAB 怎么工作的？
+    - 怎么获得 majority 同意？
+    - 怎么选主？

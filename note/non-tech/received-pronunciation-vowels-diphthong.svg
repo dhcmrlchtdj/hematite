@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="720" version="1">
+  <defs>
+    <marker id="a" orient="auto" overflow="visible">
+      <path fill-rule="evenodd" stroke="#000" stroke-width=".4pt" d="M-4 0l-2 2 7-2-7-2 2 2z"/>
+    </marker>
+  </defs>
+  <g fill="none" stroke="#000" stroke-width="4">
+    <path d="M21.137683 32.017609l876.006368-.928957 1.21312 657.989207-439.68078-1.21667L21.137683 32.017609zm438.467658 0l217.37592 655.84358m-509.06839-436.60975l729.23118-.92896"/>
+    <path d="M315.617021 470.485269l579.66911-1.85791h.92896v-.92896"/>
+  </g>
+  <text x="341.47232" y="160.40784" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="341.47232" y="160.40784" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">ɪə</tspan>
+  </text>
+  <path fill="none" stroke="#000" stroke-width="5" d="M319.70865 161.66368l137.75771 135.92664" font-size="60" marker-end="url(#a)"/>
+  <path d="M326.60138 144.8365457a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <path fill="none" stroke="#000" stroke-width="5.00000048" d="M306.12374 370.20558l65.77552-166.68891" font-size="60" marker-end="url(#a)"/>
+  <path d="M317.47448 389.9999997a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <text x="337.89874" y="405.57129" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="337.89874" y="405.57129" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">eɪ</tspan>
+  </text>
+  <path fill="none" stroke="#000" stroke-width="5.00000048" d="M359.66871 480.45653l100.59931-55.97597" font-size="60" marker-end="url(#a)"/>
+  <path d="M360.48372 489.6816957a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <text x="370.50647" y="513.25299" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="370.50647" y="513.25299" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">eə</tspan>
+  </text>
+  <path fill-rule="evenodd" stroke="#000" stroke-width="4.99999952" d="M592.00177 621.4081L442.50154 232.10034" font-size="60" marker-end="url(#a)"/>
+  <path d="M621.5707 638.8970557a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <text x="519.07507" y="656.46832" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="519.07507" y="656.46832" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">aɪ</tspan>
+  </text>
+  <path fill="none" stroke="#000" stroke-width="4.99999952" d="M829.4943 374.59044L510.42471 234.25248" font-size="60" marker-end="url(#a)"/>
+  <path d="M864.46719 384.7804737a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <text x="761.08203" y="408.35178" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="761.08203" y="408.35178" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">ɔɪ</tspan>
+  </text>
+  <path fill="none" stroke="#000" stroke-width="5" d="M717.34827 165.31998l-72.68388 131.47801" font-size="60" marker-end="url(#a)"/>
+  <path d="M741.57202 144.9999957a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <text x="748.58325" y="160.62988" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="748.58325" y="160.62988" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">ʊə</tspan>
+  </text>
+  <path fill="none" stroke="#000" stroke-width="4.99999952" d="M589.43518 378.15328l97.90017-161.44023" font-size="60" marker-end="url(#a)"/>
+  <path d="M594.62005 393.7617117a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <text x="601.71423" y="409.3916" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="601.71423" y="409.3916" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">əʊ</tspan>
+  </text>
+  <path fill="none" stroke="#000" stroke-width="5.00000048" d="M693.93036 614.74809l-5.95782-345.52326" font-size="60" marker-end="url(#a)"/>
+  <path d="M717.62603 634.9999957a18.0000005 17.9999995 0 1 1-36.000001 0 18.0000005 17.9999995 0 1 1 36.000001 0z" font-size="59.9768486"/>
+  <text x="726.61426" y="650.62988" style="text-align:start;line-height:100%" font-size="60" font-family="Bitstream Vera Sans">
+    <tspan x="726.61426" y="650.62988" style="text-align:start;-inkscape-font-specification:Bitstream Vera Serif" font-family="Bitstream Vera Serif">aʊ</tspan>
+  </text>
+</svg>

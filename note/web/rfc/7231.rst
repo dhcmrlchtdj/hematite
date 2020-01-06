@@ -1,0 +1,140 @@
+.. contents::
+
+
+3
+==========
+
+3.1
+----------
++ 如何处理 payload body
++ Content-Type 和 Accept 都使用 MIME ( Multipurpose Internet Mail Extensions ) 格式
+
++ media-type = type "/" subtype \*( OWS ";" OWS parameter)
++ parameter = token "=" ( token / quoted-string )
++ 全都是不区分大小写的
++ 'text/html; charset="utf-8"'
++ 如果没有 Content-Type，recipient 可以认为类型是 "application/octet-stream" 或者自己检测
+
++ Content-Encoding 主要用于表明内容使用了哪种压缩方式
++ "Content-Encoding: gzip" 不区分大小写
++ 这个和 Transfer-Encoding 是不同的。
+
+
+3.3
+----------
++ request 的 method 决定了 payload 的语义
++ PUT 的 payload 是资源的目标状态
++ POST 的 payload 是被目标资源处理的信息
++ response 的 payload 的语义受 method 和 status 的影响
+
+
+
+
+4
+==========
+
+4.1
+----------
++ 习惯上，method 全是大写字母
++ GET HEAD POST PUT DELETE CONNECT OPTIONS TRACE
++ 通用服务器必须实现 GET 和 HEAD，其他随意
++ IANA 还定义了其他方法
++ 可以在 Allow 中列出支持的方法
++ 不支持的方法返回 501，不允许的方法返回 405
+
+
+4.2
+----------
++ GET HEAD OPTIONS TRACE 在语义上是只读的，归类为安全方法
++ GET HEAD OPTIONS TRACE PUT DELETE 是幂等方法
++ 幂等指重复调用的结果和调用一次得到的结果相同
++ user agent 可以在失败后自动重试，可以进行预加载等等等等
++ 规范允许对 GET HEAD POST 的结果进行缓存
+
+
+4.3
+----------
++ GET 没有定义 payload 的语义
++ GET 的缓存可以用于 GET 和 HEAD
+
++ HEAD 是只要 header field 的 GET
++ 但两个方法得到的 header field 不是严格相等的
++ HEAD 经常被用于测试链接是否可用
++ HEAD 请求的结果会影响 GET 的缓存
+
++ POST 请求只有在明确指定了缓存方式的情况下才能进行缓存
++ POST 路径 A，返回 200，并且 Content-Location 的值为 A，
+  那么结果会被缓存，之后 GET  路径 A 会使用该缓存
+
++ PUT 是使用 payload 创建或替换资源，增
++ POST 是根据资源的语义去处理 payload，改
++ PUT 创建资源，必须返回 201
++ PUT 修改资源，必须返回 200 或 204
++ PUT 返回的 header field 中不能有与验证有关的 header，比如 Etag, Last-Modified
+
++ DELETE 是消除资源与路径的联系
++ DELETE 的 payload 没有语义
+
+
+
+5
+==========
+
+5.3
+----------
++ q, quality value, 0.001~1，表示优先级
++ weight = OWS ";" OWS "q=" qvalue
+
++ Accept 表明 user agent 接受哪些类型的数据。Accept: audio/\*; q=0.2, audio/basic
++ 服务器不能满足 Accept 的时候，可以返回 406 或者不理会 Accept
++ q 相同的情况下，类型条件越具体，优先级越高
+
++ Accept-Charset / Accept-Language，和 Accept 类似，不满足可以不理会
+
++ Accept-Encoding 内容的编码方式
++ Accept-Encoding 限制的是 Content-Encoding
++ identity（不要编码）, compress, gzip, * （任意编码）。
+  Accept-Encoding: identity;q=0, \*;q=0
++ 没有等同于任意编码
++ 服务器无法满足 Accept-Encoding 的时候，应该返回未编码的结果
+
+5.5
+----------
++ Referer = absolute-URI / partial-URI
++ Referer 为空用 "about:blank" 表示
+
+
+
+6
+==========
++ 如果不知道 status code 的确切含义，不允许进行缓存
++ 1xx Informational, 2xx Successful, 3xx Redirection, 4xx Client Error, 5xx Server Error
++ 200, 203, 204, 206, 300, 301, 404, 410, 414, 501，只有这些允许缓存
+
+
+7
+==========
++ HTTP-date = IMF-fixdate / obs-date
++ Internet Message Format 见 RFC5322，废弃的有两种，
+  RFC850 和 ANSI C 的 asctime()
++ 使用的都是 UTC，并且区分大小写
++ Date: Sun, 06 Nov 1994 08:49:37 GMT
++ Date 表示响应被创建的时间
++ 除了 1xx 和 5xx，响应都必须有 Date
+
+
++ Location: URI-reference
++ Location 可以是相对路径
++ 3xx 时，user agent 应该在必要时给 Location 加上 fragment。
+  必要是指当前路径有，但 Location 没有 fragment 的情况
+
+
++ Vary = "*" / field-name，不分大小写
++ Vary 表明哪些 field 发生变化时，资源会发生改变
++ Vary: accept-encoding, accept-language
++ 会影响缓存
++ 可以用 Cache-Control 取代 Vary
+
+
++ Retry-After: HTTP-date / delay-seconds。过多久后重试
++ Allow: #method。该资源支持的 HTTP method

@@ -1,0 +1,101 @@
+.. contents::
+
+
+3 Overview
+===========
++ 所有 response 里都可以设置 Set-Cookie
++ 客户端可以忽略 1xx 携带的 Set-Cookie，
+  其他情况下携带的 Set-Cookie 都要处理
+
+
+4 server requirements
+======================
+
+4.1.1 Set-Cookie syntax
+-------------------------
++ set-cookie-header = "Set-Cookie:" SP set-cookie-string
++ set-cookie-string = cookie-pair \*( ";" SP cookie-av )
++ cookie-pair = cookie-name "=" cookie-value
++ cookie-av = expires-av / max-age-av / domain-av /
+  path-av / secure-av / httponly-av / extension-av
++ 服务器不该在一个 Set-Cookie 中生成重复的 cookie-av
++ 服务器不该在一个 response 中生成重名的 cookie-name
+
+4.1.2 Set-Cookie semeantics
+---------------------------
++ cookie-name domain-value path-value 都相同的才会被视为同一个 cookie
++ 要清除某 cookie，可以设置一个过期的 expires 值
++ secure-av 表示该 cookie 必须走 HTTPS 之类的安全通道
++ httponly-av 表示该 cookie 只能由 HTTP 进行操作
+
+4.2.1 Cookie syantax
+----------------------
++ cookie-header = "Cookie:" OWS cookie-string OWS
++ cookie-string = cookie-pair \*( ";" cookie-pair )
+
+4.2.2 Cookie semeantics
+-------------------------
++ Cookie 只是名值对，服务器没有任何手段对 cookie 属性进行检测
++ Cookie 是无序的，可能因为 Domain / Path 的原因出现重名的 cookie
++ 同时出现，max-age 的优先级高于 expires。都没出现，作为一个会话 cookie。
+
+5 user agent requirements
+===========================
++ domain
+
+  - 在解析 Set-Cookie 时。
+    如果第一个字符为 "."，先会把 "." 去掉。
+    如 ".google.com"=>"google.com"。
+  - 在存储时。
+    如果有 domain，那么 host-only=false，cookie-doamin=domain。
+    如果没有 domain，那么 host-only=true，cookie-domain=request-host
+  - 在发送 Cookie 时。
+    如果 host-onnly=true 且 request-host==cookie-domain，可以发送；
+    如果 host-onnly=false 且
+    满足 domain-match(request-host, cookie-domain)，也可以发送。
+
++ path
+
+  - 在解析 Set-Cookie 时。
+    如果第一个字符不是 "/"，path=default-path
+  - 在存储时。
+    如果有 path，那么 cookie-path=path。
+    如果没有 path，那么 cookie-path=default-path。
+  - 在发送 Cookie 时。
+    如果满足 path-match(request-path, cookie-path)，那么可以发送。
+
++ domain-match(request-host, cookie-domain) 要求满如下列任一条件
+
+  - request-host==cookie-domain
+  - cookie-domain 是 request-host 的后缀，
+    且 request-host 中第一个不同的字符为 "."。
+    比如 domain-match("www.google.com", "google.com")
+
++ path-match(request-path, cookie-path) 要求满足下列任一条件
+
+  - request-path==cookie-path
+  - cookie-path 是 request-path 的前缀，
+    且 cookie-path 的最后一个字符为 "/"。
+    比如 path-match("/a/b", "/a/")
+  - cookie-path 是 request-path 的前缀，
+    且 request-path 中第一个不相同的字符为 "/"。
+    比如 path-match("/a/b", "/a")
+
++ default-path 按照如下方法计算
+
+  1. path=request-path
+  2. 如果 path 第一个字符不是 "/"，那么 path="/"
+  3. 如果 path 中只有一个 "/"，那么 default-path="/"，结束
+  4. 如果 path 最后一个字符是 "/"，把最后的 "/" 去掉后作为 default-path
+
++ Cookie 中 cookie 的顺序
+
+  - path 长的放在前面
+  - 创建时间早的放前面
+
+
+6 implementation
+====================
++ 4096-byte / cookie
++ 50 cookies / domain
++ 3000 cookies

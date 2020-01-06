@@ -1,0 +1,122 @@
+# Raft
+
+- introduction
+    - Raft is more understandable than Paxos
+    - Raft separates leader election, log replication, and safety
+    - novel features
+        - strong leader, log entries only flow from the leader to followers
+        - leader election, uses randomized timers to elect leader
+        - membership changes, joint consensus
+
+- replicated state machines
+    - RSMs are used to solve a variety of fault tolerance problems in distributed systems
+    - GFS/HDFS use a separate RSM to manage leader election and store configuration
+        - such as Chubby, ZooKeeper
+    - RSMs are implemented using a replicated log
+        - log contains the same commands in the same order
+    - properties of consensus algorithms
+        - safety under all non-Byzantine conditions
+        - available as long as majority of servers are operational
+        - do not depend on timing to ensure the consistency of the logs
+        - a minority of slow servers not impact overall system performance
+
+- Paxos
+    - Paxos defines a protocol for reaching agreement on a single decision
+        - combine multiple instances of this protocol to facilitate a series of decision (such as log)
+    - Paxos ensures safety and liveness, and it supports changes in cluster membership
+    - drawbacks (single-decree Paxos is dense and subtle)
+        - difficult to understand
+        - the Paxos architecture is poor for building practical systems
+
+- the Raft consensus algorithm
+    - raft implements consensus by first electing a leader
+        - having a leader simplies the management of the replicated log
+    - raft decomposes the consensus problem into three independent subproblems
+        - leader election
+        - log replication
+        - safety
+    - raft basics
+        - 2f+1 servers
+        - three possible state: leader, follower, candidate
+        - raft divides time into terms (consecutive integers)
+            - terms act as a logical clock
+            - 疑问，term 是数字，溢出了怎么办？
+        - at most one leader in a given term
+    - leader election
+        - 启动时都是 follower，直到 election timeout 都没收到消息，就变成 candidate 进入选主流程
+        - 自增 term 并向其他节点发送 RequestVote，得到 majority 支持就变成 leader
+        - 三种可能，成为 leader，别人成为 leader（变回 follower），没人成为 leader（进入下次选主流程）
+        - 为了避免 follower 同时变成 candidate，使用了 randomized election timeouts，即不同节点 timeout 不同
+        - 说是 random，但也是有范围的
+    - log replication
+        - if followers crash, the leader retries AppendEntries indefinitely, even after the leader has responded to the client
+        - log = log_index + term + action
+        - a log entry is committed once the leader that created the entry has replicated it on majority of the servers
+        - once a follower learns that a log entry is committed, it applies the entry to its local state machine
+        - log 被写入 majority 后，leader 就视为 committed。leader 会在 AppendEntries 中告诉 follower 哪个 log 已经 committed 了，follower 更新 state machine
+        - 每次 AppendEntries 都有 log_index 和 term，保证 follower 与 leader 状态是一致的 (consistency check)
+        - conflicting entries in follower logs will be overwritten with entries from the leader's log
+            - 冲突主要发生在 leader 切换的时候，部分 log 还没 commit
+        - the leader maintains a nextIndex for each follower
+            - 毕竟每个 follower 的进度可能都不一样，所以每个都需要单独的 nextIndex
+            - AppendEntries 会携带 nextIndex，如果和 follower 不匹配（consistency check 失败），leader 会减小 nextIndex 的值
+            - 等于一直回溯，直到找到 leader 和 follower 的共同祖先。然后再一点点同步到 leader 的最新状态
+            - （后面也提到，差太多，也会通过 snapshot 的方式快速更新到最新状态
+    - safety
+        - election restriction
+            - 要保证新 leader 包含所有 committed log
+            - 选主的时候，如果节点的 committed log 比 candidate 更新（up-to-date），会拒绝 candidate
+            - candidate 能获得 majority 支持，就一定包含了所有 committed log
+        - only log entries from the leader's current term are committed by counting replicas
+            - 之前的 log，即使已经复制到 majority，只要没 commit，都不管
+            - 新 leader 只会 commit 自己的 item
+        - safety
+            - leader completeness, leader 包含之前 commit 的 log
+            - state machine safety, 所有 replica 对 state machine 都是一致的
+    - follower and candidate crashes
+        - raft handles these failures by retrying indefinitely
+        - raft RPCs are idempotent
+    - timing and availability
+        - safety must not depend on timing
+        - timing requirement: MTBF >> electionTimeout >> broadcastTime
+        - MTBF is the average time between failures for a single server
+        - 其实是前面说的，electionTimeout 的上下限。大于节点通信的时间，小于节点故障的间隔。
+        - broadcast time and MTBF are properties of the underlying system
+
+- cluster membership changes
+    - in order to ensure safety, configuration changes must use a two-phase approach
+    - raft, first switch to joint consensus configuration, then transition to new configuration
+        - 一开始，C_old 的 majority 同意就能 commit，后来，C_new 的 majority 同意就能 commit
+        - 中间有一段时间，必须 C_old_new 都同意，才能 commit
+        - C_new 的生效时间，在 C_old_new commit 之后，C_new commit 之前（不用等到 commit，各个 replica 接收到，就开始生效
+    - issues
+        - new server without any log
+            - join cluster as non-voting members（收到新 log，但不记为 majority，知道跟上 leader 的状态
+        - leader not part of new configuration
+            - 在 C_new commit 的时候，leader 自己不算在 majority 里面，commit 成功后重新选主
+
+- log compaction
+    - snapshot is the simplest approach to compaction
+        - incremental approach, such as log cleaning and log-structured merge trees
+    - when? take a snapshot when the log reaches a fixed size in bytes
+    - each server takes snapshots independently
+        - the leader must occasionally send snapshots to followers that lag behind
+        - for example, a new server joining the cluster
+
+- client interaction
+    - how clients find the cluster leader
+        - client first connects to a randomly-choesen server
+        - follower reject the client's request and tell client the info about leader
+        - if leader crashes, client try again with randomly-choesen servers
+    - how raft supports linearizable semantics (execute exactly once
+        - write
+            - raft must prevent from execute a command multiple times
+            - leader crashes, after committed, before responding to client
+                - client will retry the command with a new leader
+            - client assign unique serial numbers to every command
+                - if the cluster receives duplicated command, it responds without re-executing the command
+        - read
+            - linearizable reads must not return stale data
+            - leader commit a blank no-op entry
+            - exchange heartbeat messages with a majority of the cluster before responding to client
+
