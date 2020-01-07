@@ -50,7 +50,7 @@
     - accumulation
         - a mode specifies the relationship between multiple results that are observed for the same window
 
-- questions, critical to every unbouned data processing
+- questions, critical to every unbounded data processing
     - what results are calculated
     - where in event time are results calculated
     - when in processing time are results materialized
@@ -86,5 +86,33 @@
 ---
 
 ## watermarks
+
+
+
+---
+
+## streams and tables
+
+- two orthogonal dimensions of data
+    - cardinality (bounded vs unbounded)
+    - constitution (stream vs table)
+- the special theory of stream and table relativity
+    - tables are data at rest
+        - stream -> table, the table is just the result of applying the log
+        - table is the snapshot
+    - streams are data in motion
+        - table -> stream, a stream is a changelog for a table
+        - stream is the log
+    - operations act upon a stream or table
+        - stream -> stream, non-grouping operations
+        - stream -> table, grouping operations
+        - table -> stream, ungrouping (triggering) operations
+        - table -> table, none
+
+- map-reduce
+    - TABLE -> MapRead -> STREAM -> Map -> STREAM -> MapWrite -> TABLE -> ReduceRead -> STREAM -> Reduce -> STREAM -> ReduceWrite -> TABLE
+    - map 和 reduce 的输入输出是 table，处理过程中是 stream
+
+---
 
 
