@@ -85,9 +85,22 @@
 
 ---
 
-## watermarks
+## exactly-once and side effects
 
+- the Lambda Architecture
+    - run a streaming stream to get fast but inaccurate results
+    - sometime later, a batch system runs to get the correct answer
+    - works only if the data stream is replayable
 
+- at-least-once
+    - performed aggregatins in memory (and thus their aggregatins could still be lost when machines crashed
+    - nonidempotent side effects are not guaranteed to execute exactly once
+    - the sender will retry RPCs until it receives positive acknowledgement of receipt
+- exactly-once
+    - retrying an RPC that really succeededmeans delivering a record twice
+        - needs some way of detecting and removing these duplicates
+    - every message sent is tagged with a unique identifier
+    - using checkpointing to make nondeterministic processing effectively deterministic
 
 ---
 
@@ -115,4 +128,16 @@
 
 ---
 
+## the practicalities of persistent state
 
+- persistent state is just the table
+- pipelines processing unbounded data are effectively intended to run forever
+- long-running pipeline need some sort of durable recollection of where they were before interruption
+    - this is where persistent state comes in
+- reprocessing the input
+    - if some piece of the processing pipeline fails
+    - and if the input data are still available
+    - simply restart the appropriate piece of the processing pipeline and lat it read the same input again
+- checkpoint
+    - at-most-once, doesnot need checkpoint
+    - at-least-once / exactly-once, any data that are no longer available for reprocessing must be accounted for in durable checkpoints
