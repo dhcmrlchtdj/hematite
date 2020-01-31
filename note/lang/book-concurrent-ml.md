@@ -291,6 +291,29 @@ synchronous channel 排查异常更容易
 
 ---
 
+> a language with synchronous communication must provide some mechanism for
+> selecting between communication alternatives.
+
+> use abstraction to hide the details of process interactions
+
+> there is a conflict between selective communication and using procedural
+> abstraction to implement abstract protocols
+
+把行为封装起来，就无法在外部 select 了。
+
+> Resolving this conflict requires introducing a new abstraction mechanism that
+> preserves the synchronous nature of the abstraction. This is the role of
+> first-class synchronous operations.
+
+> The motivation for first-class synchronous operations is to provide a way to
+> do selective communication with abstract communication protocols as the
+> choices.
+
+也就是前面说过的 event
+（还是没明白 event 是怎么解决问题的，好像是说用 event combinators 封装操作？
+
+---
+
 ## Implementing Concurrency in SML/NJ
 
 ---
