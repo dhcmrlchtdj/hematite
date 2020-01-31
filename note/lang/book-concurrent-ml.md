@@ -246,8 +246,48 @@ let send (ch, x) = (ch, x) |> sendEvt |> sync
 
 ---
 
+## The Rationale for CML
 
+---
 
+> (this chapter) focus on core CML -- synchronous message passing plus the event
+> combinators.
+
+> The actual side-effects are hidden in the context switching and communication
+> operations.
+
+> combining synchronization and communication into the same mechanism provides a
+> more robust programming model than shared-memory with mutex locks and
+> condition variables.
+
+CML 的核心是 message-passing
+把 synchronous 和 communicate 合并为一个流程，提供了一个更好的并发模型
+
+---
+
+> how much synchronization should be provided
+
+最终 CML 选择的是同步模型，下面是一些论据
+
+> Asynchronous message passing can be implemented with very low overhead.
+> Programs based on asynchronous message passing often require sending
+> acknowledgement messages explicitly; once the cost of these extra messages is
+> factored in, the performance advantages of asynchronous message passing may be
+> lost.
+
+asynchronous channel 实现起来性能更好，但开发中性能优势并不成立。
+
+> Synchronous message passing also has the advantage that its failure mode is
+> typically deadlock
+
+synchronous channel 排查异常更容易
+
+> If this protocol is based on synchronous message passing, then the semantics
+> of the local and distributed implementations are different.
+
+使用 synchronous channel 需要区别对待远程通信和本地通信。
+使用 asynchronous 能有更一致的模型。
+不过作者认为，远程、分布式的场景，差异很大，本来就应该单独处理。
 
 ---
 
@@ -306,4 +346,3 @@ type 'a event = ('a cont -> 'a)
 > The implementation of CML uses a two-level scheduling queue; interactive
 > threads are scheduled out of the primary queue, while computationally
 > intensive threads are sched- uled out of the secondary queue.
-
