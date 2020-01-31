@@ -2,7 +2,7 @@
 
 ---
 
-## perface
+## Perface
 
 ---
 
@@ -123,4 +123,187 @@ parallel 和 concurrent 的区别，已经被说无数次了。
 
 ---
 
+## An Introduction to Concurrent ML
+
+---
+
+> since SML provides updatable references, this is a fiction that must be
+> maintained by programming style and convention
+
+concurrent language 还是应该完全重新设计。
+
+---
+
+### thread
+
+```ocaml
+val spawn : (unit -> unit) -> thread_id
+val exit : unit -> 'a
+```
+
+> CML does not attach any semantics to the parent-child relationship.
+
+> the termination of the parent thread does not affect the child.
+> once created, the child thread is an independent agent.
+
+> such an exception is local to the thread in which it is raised;
+> it does not propagate to its parent.
+
+这个设计和 go 类似。不过我觉得 structural concurrency 更好。
+
+> the CML run-time system uses periodic timer interrupts to provide
+> preemptive scheduling.
+
+抢占式调度是我比较喜欢的。
+文中说到，抢占式有个好处，可以直接复用普通代码，不需要加调度逻辑。
+
+> incorporating sequential code into a concurrent program still requires some
+> care, since the code may not be reentrant
+> (it may use globally allocated mutable data structures)
+
+也不能完全无脑就是了。
+如果一开始就是 concurrent language，只有 message-passing，是不是就没问题了呢
+
+---
+
+### channel
+
+```ocaml
+type 'a chan
+val channel : unit -> 'a chan
+val recv : 'a chan -> 'a
+val send : ('a chan * 'a) -> unit
+```
+
+> message passing is synchronous.
+> message passing involves both communication of data and synchronization.
+
+用于通信和同步
+
+> do not name the sender or receiver
+> do not specify a direction of communication
+> more than one thread may attempt to send or recv a message on the same channel
+
+chan 的特点
+
+---
+
+### selective communication
+
+```ocaml
+val select : 'a event list -> 'a
+```
+
+> allow a thread to block on a nondeterministic choice of several blocking
+> communications -- the first communication that becomes enabled is chosen.
+> If two or more communications are simultaneously enabled, then one is chosen
+> nondeterministically.
+
+> The select operator is actually syntactic sugar for the composition of the
+> sync operator and the choose event combinator.
+
+这个 event combinator 见下文
+
+---
+
+### first-class synchronous operations
+
+```ocaml
+type 'a event
+
+(* base-event constructors *)
+val sendEvt : ('a chan * 'a) -> unit event
+val recvEvt : 'a chan -> 'a event
+
+(* operator *)
+val sync : 'a event -> 'a
+
+(* event combinators *)
+val choose : 'a event list -> 'a event
+val wrap : ('a event * ('a -> 'b)) -> 'b event
+val guard : (unit -> 'a event) -> 'a event
+```
+
+> The basic idea is to decouple the description of a synchronous operation
+> (e.g., "send the message m on channel c") from the actual act of
+> synchronizing on the operation.
+
+chan 操作，可以通过 event 操作组合出来的
+
+```ocaml
+val select : 'a event list -> 'a
+let select evt_list = evt_list |> choose |> sync
+
+val recv : 'a chan -> 'a
+let recv ch = ch |> recvEvt |> sync
+
+val send : ('a chan, 'a) -> unit
+let send (ch, x) = (ch, x) |> sendEvt |> sync
+```
+
+> The purpose of this separation is to permit user-defined communication and
+> synchronization abstractions that are "first-class citizens."
+
+---
+
+
+
+
+---
+
+## Implementing Concurrency in SML/NJ
+
+---
+
+- callcc
+- coroutine
+- shared-memory
+    - mutex
+    - condition variable
+    - concurrent-read, exclusive-write
+- message-passing
+    - asynchronous
+    - synchronous
+    - selective communication
+
+---
+
+> using the shared-memory primitives of the previous section, one can implement
+> higher-level concurrency mechanisms, such as message-passing primitives.
+
+> represent channels as a pair of queues:
+> one for pending sends and one for pending receives.
+
+在 shared-memory 的基础上，实现 message-passing
+
+> The select operation is structured into three phases:
+> first it polls for available input; if all of the channels are empty, then it
+> waits for input; and when resumed, it removes the unused input continuations.
+
+---
+
+```ocaml
+type 'a event = ('a cont -> 'a)
+```
+
+> an event value can be represented as a function that
+> abstracts over the resumption continuation
+
+直接实现 message-passing，可以先用 continuation 实现 event，再用 event 实现 channel。
+不过这种方式，无法实现 select 操作。
+
+---
+
+> CML uses preemptive thread scheduling.
+> This is done in a straightforward manner using an interval timer provided by
+> the operating system, and the SML/NJ signal mechanism.
+> The interval timer is set to generate an alarm signal every n milliseconds
+> (n is typically in the range from 10 to 50).
+> CML installs a signal handler that forces a context switch on each alarm.
+
+以前看 EOPL 是靠指令数量来分片的，这里 CML 是靠系统时钟。
+
+> The implementation of CML uses a two-level scheduling queue; interactive
+> threads are scheduled out of the primary queue, while computationally
+> intensive threads are sched- uled out of the secondary queue.
 
