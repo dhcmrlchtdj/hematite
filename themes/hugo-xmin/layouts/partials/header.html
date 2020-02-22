@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{{ .Title }}</title>
+        {{ template "_internal/opengraph.html" . }}
         <link
             rel="alternate"
             type="application/rss+xml"
@@ -22,5 +23,3 @@
             </ul>
             <hr class="sep" />
         </nav>
-    </body>
-</html>
