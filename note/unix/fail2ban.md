@@ -41,3 +41,16 @@ bantime  = 36000
 
 failregex = ^<HOST> \- \- \S+ \"\S+?\" 400 .+$
 ```
+
+---
+
+如果封错了 IP，可以通过 unbanip 处理
+
+```
+$ fail2ban-client status
+Status
+|- Number of jail:	1
+`- Jail list:	<jail_name>
+
+$ fail2ban-client set <jail_name> unbanip <ip1> <ip2> ...
+```
