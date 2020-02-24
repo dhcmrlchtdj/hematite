@@ -5,6 +5,7 @@
         <script>
             window.ga_tid = '{{ .Site.Params.Gatid }}';
             window.ga_api = '{{ .Site.Params.Gaapi }}';
+            if (navigator.doNotTrack !== '1')
             (function(window, document, navigator) {
                 var screen = window.screen,
                     encode = encodeURIComponent,
