@@ -8,7 +8,7 @@ rssLimit = 10
 [params]
 # https://github.com/SukkaW/cloudflare-workers-async-google-analytics
 gatid = "UA-78944716-1"
-gaapi = "https://log.h11.io/ga"
+gaapi = "https://log.h11.io/ana"
 
 [[menu.main]]
     name = "主页"

@@ -5,12 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{{ .Title }}</title>
         {{ template "_internal/opengraph.html" . }}
-        <link
-            rel="alternate"
-            type="application/rss+xml"
-            href="/index.xml"
-            title="{{ .Title }}"
-        />
+        <link rel="alternate" type="application/rss+xml" href="/index.xml" />
         {{ partial "style.html" . }}
         {{ partial "icon.html" . }}
     </head>
