@@ -25,13 +25,11 @@ BOT_TOKEN=''
 CHAT_ID=''
 
 text="<pre>from sshd:
-ip      = ${PAM_RHOST}
-user    = ${PAM_USER}
-service = ${PAM_SERVICE}
-tty     = ${PAM_TTY}
-type    = ${PAM_TYPE}
-date    = $(date --iso-8601=seconds)
-server  = $(uname -nr)
+ip     = ${PAM_RHOST}
+user   = ${PAM_USER}
+type   = ${PAM_TYPE}
+date   = $(date -u +'%Y-%m-%d %H:%M:%S')
+server = $(uname -nr)
 </pre>"
 
 json="{
