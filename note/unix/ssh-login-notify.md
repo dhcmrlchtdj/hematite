@@ -4,8 +4,6 @@ https://askubuntu.com/questions/179889/how-do-i-set-up-an-email-alert-when-a-ssh
 https://medium.com/@alessandrocuda/ssh-login-alerts-with-sendmail-and-pam-3ef53aca1381
 https://blog.502.li/linux-login-alarm-telegram.html
 
----
-
 看了 blog，感觉 telegram 监控 ssh 的想法不错
 
 ---
@@ -27,11 +25,10 @@ BOT_TOKEN=''
 CHAT_ID=''
 
 text="<pre>from sshd:
-rhost   = ${PAM_RHOST}
-ruser   = ${PAM_RUSER}
+ip      = ${PAM_RHOST}
+user    = ${PAM_USER}
 service = ${PAM_SERVICE}
 tty     = ${PAM_TTY}
-user    = ${PAM_USER}
 type    = ${PAM_TYPE}
 date    = $(date --iso-8601=seconds)
 server  = $(uname -nr)
