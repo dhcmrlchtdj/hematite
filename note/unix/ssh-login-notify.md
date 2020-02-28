@@ -21,7 +21,7 @@ https://blog.502.li/linux-login-alarm-telegram.html
 $ man 8 pam_exec
 $ cat login-notify.sh
 
-#/bin/bash
+#!/bin/bash
 
 BOT_TOKEN=''
 CHAT_ID=''
