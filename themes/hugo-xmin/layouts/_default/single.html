@@ -2,7 +2,15 @@
 
 <main>
     <article>
-        <h1><span class="title">{{ .Title | markdownify }}</span></h1>
+        <h1 class="title">
+            <span>{{ .Title | markdownify }}</span>
+            <ul class="tags">
+                {{ range (.GetTerms "tags") }}
+                <li><a href="{{ .Permalink }}">#{{ .LinkTitle }}</a></li>
+                {{ end }}
+            </ul>
+        </h1>
+
         {{ .Content }}
     </article>
 </main>
