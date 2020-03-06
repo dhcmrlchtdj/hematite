@@ -68,3 +68,24 @@ https://erikslab.com/2011/02/04/logging-with-launchd/
 <key>StandardErrorPath</key>
 <string>/var/log/progname_err.log</string>
 ```
+
+---
+
+### submit
+
+```
+$ # 生成
+$ launchctl submit -l 'label' -p '/path/to/executable' -o '/path/to/stdout' -e '/path/to/stderr'
+
+$ # 删除/停止
+$ launchctl remove 'label'
+
+$ # 查看状态
+$ launchctl list | grep -v 'com.apple'
+
+$ # 重启
+$ launchctl stop 'label'
+```
+
+~~不用写 plist 方便不少，其他查看 `man launchctl` 吧~~
+试了下，开机后就没了……还是手写 plist 吧
