@@ -1,4 +1,15 @@
 <style>
+    /*
+    :root {
+        --gray-200: #e1e4e8;
+        --bg-gray-light: #fafbfc;
+        --border-gray: #e1e4e8;
+        --text-gray-dark: #24292e;
+        --text-gray-light: #6a737d;
+        --text-blue: #0366d6;
+    }
+    */
+
     /* reset */
     * {
         box-sizing: border-box;
@@ -6,12 +17,13 @@
         padding: 0;
     }
 
-    html {
-        height: 100%;
-    }
-
     body {
         -webkit-text-size-adjust: 100%;
+        /*
+        background-color: var(--bg-gray-light);
+        color: var(--text-gray-dark);
+        */
+        background-color: #fafbfc;
         color: #24292e;
         font-family: sans-serif;
         font-size: 1rem;
@@ -33,6 +45,9 @@
 
     a {
         background-color: transparent;
+        /*
+        color: var(--text-blue);
+        */
         color: #0366d6;
         text-decoration: none;
     }
@@ -53,7 +68,10 @@
     img {
         border-style: none;
         max-width: 100%;
-        background-color: #fff;
+        /*
+        background-color: var(--bg-gray-light);
+        */
+        background-color: #fafbfc;
     }
 
     hr {
@@ -62,9 +80,13 @@
         height: 0.1rem;
         padding: 0;
         margin: 0 0 1rem 0;
-        background-color: #e1e4e8;
         border: 0;
-        border-bottom-color: #eee;
+        /*
+        border-bottom-color: var(--border-gray);
+        background-color: var(--border-gray);
+        */
+        border-bottom-color: #e1e4e8;
+        background-color: #e1e4e8;
     }
 
     hr::before,
@@ -88,8 +110,12 @@
     blockquote {
         margin: 0 0 1rem 0;
         padding: 0 1rem;
+        /*
+        color: var(--text-gray-light);
+        border-left: 0.2rem solid var(--border-gray);
+        */
         color: #6a737d;
-        border-left: 0.2rem solid #dfe2e5;
+        border-left: 0.2rem solid #e1e4e8;
     }
 
     blockquote > :first-child {
@@ -159,12 +185,15 @@
         font-family: monospace;
     }
 
-    code {
+    p code {
         padding: 0.2rem 0.4rem;
         margin: 0;
-        font-size: 1rem;
+        font-size: 0.8rem;
         line-height: 1.2rem;
-        background-color: rgba(27, 31, 35, 0.05);
+        /*
+        background-color: var(--gray-200);
+        */
+        background-color: #e1e4e8;
         border-radius: 0.1rem;
     }
 
@@ -174,7 +203,10 @@
         padding: 1rem;
         word-wrap: normal;
         overflow: auto;
-        background-color: #f6f8fa;
+        /*
+        border: 1px solid var(--border-gray);
+        */
+        border: 1px solid #e1e4e8;
         border-radius: 0.25rem;
     }
 
@@ -184,7 +216,8 @@
         margin: 0;
         border: 0;
         overflow: visible;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        line-height: 0.8rem;
         word-wrap: normal;
         word-break: normal;
         white-space: pre;
@@ -195,6 +228,7 @@
 
     .menu {
         padding: 0;
+        margin-bottom: 0.5rem;
     }
     .menu li {
         display: inline-block;
@@ -202,37 +236,42 @@
     }
     .menu a {
         text-decoration: none;
-        background: #eee;
+        font-weight: bold;
         padding: 0.2rem 0.5rem;
         border-radius: 0.2rem;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
     .menu a:hover {
-        background: #ddd;
+        /*
+        background-color: var(--gray-200);
+        */
+        background-color: #e1e4e8;
     }
 
     .list {
         list-style: none;
         padding: 0;
     }
-    .list span {
+    .list li {
+        display: flex;
         font-family: monospace;
-        font-size: 0.8rem;
-        display: inline-block;
-        height: 1.6rem;
     }
-    .list small {
-        display: inline-block;
+    .list span {
+        font-size: 0.6rem;
         height: 1.6rem;
+        display: inline-block;
+        margin-right: .6rem;
     }
     .list a {
-        display: inline-block;
         height: 1.6rem;
     }
 
     .sep {
         height: 0.15rem;
-        border-bottom: 0.2rem dashed #eee;
+        /*
+        border-bottom: 0.15rem dashed var(--border-gray);
+        */
+        border-bottom: 0.15rem dashed #e1e4e8;
         background-color: transparent;
     }
 
@@ -257,6 +296,6 @@
 
     footer {
         text-align: right;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
     }
 </style>

@@ -48,5 +48,5 @@ gaapi = "https://log.h11.io/ana"
         lineNos = false
         lineNumbersInTable = true
         noClasses = true
-        style = "solarized-light"
+        style = "github"
         tabWidth = 4
