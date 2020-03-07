@@ -2,7 +2,7 @@
 
 ---
 
-## 01.overview
+## 01. overview
 
 ---
 
@@ -61,7 +61,7 @@
 
 ---
 
-## 02.continuation-passing style
+## 02. continuation-passing style
 
 ---
 
@@ -100,6 +100,67 @@ https://dev.realworldocaml.org/runtime-memory-layout.html
 ## 05. CONVERSION INTO CPS
 
 ---
+
+- 把 lambda lang 转换成 CPS lang
+
+- pattern match
+
+- exception handling
+    - 作者给了两个方案，但是不管哪个，其实都是将 handler 存储在某个地方
+    - 方案一是全局变量，每次 handle 就写入新处理函数，raise 就读取执行
+    - 方案二是作为函数参数传递
+    - 全局变量 还是 函数参数，这种取舍其实日常也经常会碰到
+
+- callcc
+
+---
+
+### 06. OPTIMIZATION OF THE CPS
+### 07. BETA EXPANSION
+### 08. HOISTING
+### 09. COMMON SUBEXPRESSIONS
+
+---
+
+- 转换成 CPS 之后，还有三步
+    - CPS optimization
+        - more efficient
+        - 通过 beta-reduction, constant folding, argument expansion 等手段，得到相同语义但是更高效的 CPS 表示
+    - closure introduction
+        - unnest all functions and simplify the environments of variable bindings
+        - 让程序贴近 von Neumann machine 的表达方式
+    - abstract machine-code generation
+
+- 06-09 这几章都在讲 CPS 优化
+
+- beta-reduction
+    - 也就是函数 inline
+    - 属于比较危险的优化，不一定是有效，甚至可能负优化
+
+- hoisting
+    - narrow or broaden the scope of a variable in the CPS representation
+    - conservative approach: an operator will be hoisted only when the transformation is guaranteed to reduce execution time
+    - greedy approach: bottom up. for each FIX, we first attempt to push it down to join another FIX, if that fails, we pull the IFX up as far as its scope will allow
+
+- common-subexpression elimination
+    - 要考虑到，提取出来的公共表达式可能会出异常，影响原本的执行流程
+
+（必须吐槽，一堆 CPS IR 在一起，肉眼 parse 的成本挺高的。
+
+---
+
+### 10. CLOSURE CONVERSION
+
+---
+
+### 11. REGISTER SPILLING
+### 12. SPACE COMPLEXITY
+### 13. THE ABSTRACT MACHINE
+### 14. MACHINE-CODE GENERATION
+
+---
+
+### 15. PERFORMANCE EVALUATION
 
 ---
 
