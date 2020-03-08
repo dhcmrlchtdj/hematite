@@ -2,7 +2,7 @@
 
 ---
 
-## 01. overview
+## 01. OVERVIEW
 
 ---
 
@@ -61,7 +61,7 @@
 
 ---
 
-## 02. continuation-passing style
+## 02. CONTINUATION-PASSING STYLE
 
 ---
 
@@ -75,7 +75,7 @@ in a well-formed CPS expressions
 
 ---
 
-## 03. semantics of the cps
+## 03. SEMANTICS OF THE CPS
 
 ---
 
@@ -85,7 +85,7 @@ in a well-formed CPS expressions
 
 ---
 
-## 04. ml-specific optimizations
+## 04. ML-SPECIFIC OPTIMIZATIONS
 
 https://dev.realworldocaml.org/runtime-memory-layout.html
 
@@ -118,20 +118,20 @@ https://dev.realworldocaml.org/runtime-memory-layout.html
 
 ---
 
-### 06. OPTIMIZATION OF THE CPS
-### 07. BETA EXPANSION
-### 08. HOISTING
-### 09. COMMON SUBEXPRESSIONS
+## 06. OPTIMIZATION OF THE CPS
+## 07. BETA EXPANSION
+## 08. HOISTING
+## 09. COMMON SUBEXPRESSIONS
 
 ---
 
 - 转换成 CPS 之后，还有三步
     - CPS optimization
         - more efficient
-        - 通过 beta-reduction, constant folding, argument expansion 等手段，得到相同语义但是更高效的 CPS 表示
+        - 通过优化，得到相同语义，但是更高效的 CPS 表示
     - closure introduction
         - unnest all functions and simplify the environments of variable bindings
-        - 让程序贴近 von Neumann machine 的表达方式
+        - 让程序贴近 von Neumann machine 的表达方式（毕竟机器码没有 closure 的概念
     - abstract machine-code generation
 
 - 06-09 这几章都在讲 CPS 优化
@@ -152,7 +152,7 @@ https://dev.realworldocaml.org/runtime-memory-layout.html
 
 ---
 
-### 10. CLOSURE CONVERSION
+## 10. CLOSURE CONVERSION
 
 ---
 
@@ -197,14 +197,10 @@ let g : int -> (int -> int) = fun x ->
 
 ---
 
-### 11. REGISTER SPILLING
-### 12. SPACE COMPLEXITY
-### 13. THE ABSTRACT MACHINE
-### 14. MACHINE-CODE GENERATION
-
----
-
-### 15. PERFORMANCE EVALUATION
+## 11. REGISTER SPILLING
+## 12. SPACE COMPLEXITY
+## 13. THE ABSTRACT MACHINE
+## 14. MACHINE-CODE GENERATION
 
 ---
 
