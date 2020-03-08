@@ -110,6 +110,9 @@ https://dev.realworldocaml.org/runtime-memory-layout.html
     - 方案一是全局变量，每次 handle 就写入新处理函数，raise 就读取执行
     - 方案二是作为函数参数传递
     - 全局变量 还是 函数参数，这种取舍其实日常也经常会碰到
+    - https://stackoverflow.com/questions/8564025/ocaml-internals-exceptions/8567429#8567429
+        - When a try `expr` with `handle` is evaluated, a "trap" is placed on the stack, that contains information about the handler.
+        - A trap also stores the address of the previous trap, which is restored in the register at raise time.
 
 - callcc
 
@@ -150,6 +153,47 @@ https://dev.realworldocaml.org/runtime-memory-layout.html
 ---
 
 ### 10. CLOSURE CONVERSION
+
+---
+
+- 虎书里也有一节专门讲 activation records
+
+```ocaml
+let g : int -> (int -> int) = fun x ->
+    let f = fun y -> x + y in
+    f
+```
+
+- 以上面这个代码为例
+    - the function f is statically nested inside the function g
+    - f can refer to the variables of g
+- access links: the activation for the function f contains a pointer to the activation record for g
+- (pass f as an argument) a pair comprising the machine-code address for f and the activation record for g is passed
+    - such a pair is called a closure
+- closure
+    - the variables in the activation record of g may now be used after g has returned
+    - activation records can no longer be stored on a stack, but must instead be allocated on a heap
+
+---
+
+- closure-passing style
+    - representing closures as explicit records does not require the use of continuations
+- after closure conversion
+    - the function k is now a closure record
+    - k' is a function without free variables, which can thus be represented as just a machine-code pointer
+
+---
+
+- closure representation
+    - how free variables are to to be arranged in the closure record
+    - flat vs linked
+        - 顾名思义，展开成 array 那样的或者使用 linked-list 那种链表的形式
+- closure allocation
+    - It is not at all clear that stack allocation is worthwhile.
+    - Garbage collection need not be particularly expensive, so the difference in cost between stack allocation and heap allocation is not large.
+    - 至少 SML/NJ 用的是 heap allocation，而且他们觉得自己性能不错
+    - callcc 对于 stack allocation 也是个问题
+        - any continuation or downward-escaping function may have an arbitrary extent
 
 ---
 
