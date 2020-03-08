@@ -204,6 +204,64 @@ let g : int -> (int -> int) = fun x ->
 
 ---
 
+> The spill phase of the CPS compiler comes after closure conversion; its job is
+> to produce a CPS program obeying the rule that every subexpression has fewer
+> than N free variables, where N is the number of registers on the target machine.
+
+---
+
+> Another advantage of continuation-passing style for reasoning about garbage
+> collection is that there is no "runtime stack" of activation records. Only the
+> local variables of the current procedure (the procedure executing when the
+> collector is invoked) are "roots" of garbage collection.
+
+tracing gc 需要 root set
+
+> Starting with some "root set" of variables, the collector traverses all values
+> reachable from those variables, reclaiming the storage of the unreachable values.
+
+然后就是如何找到 root set
+
+> Upon entry to a function f(x), the value f is reachable, and the values x are
+> reachable.
+
+> This definition implies that it is permissible to invoke the collector only at
+> the beginning of a function.
+> In the CPS representation (after the spill phase), each variable will
+> correspond to a machine register; the collector can just use the registers as
+> roots of the reachable graph. At the beginning of each function, a test can be
+> made for exhaustion of the free space, and the garbage collector can be
+> conditionally invoked.
+
+---
+
+- 定义了 abstract-continuation-machine 这么一个 IR
+    - translate CPS into abstract-continuation-machine instructions
+    - translate the abstract-machine instructions into the machine code of a particular concrete machine
+
+> The abstract machine has a state comprising several parts: memory, integer
+> registers, floating-point registers, and a program counter.
+> The abstract-machine program is a linear sequence of instructions, labels, and
+> literal data; it is essentially an assembly-language program.
+
+---
+
+> the garbage collector must be able to understand which of the general-purpose
+> registers are pointers, and which are just integer values (or other nonpointers).
+
+（JS 里有 NaN Boxing，OCaml 有 tagged pointer
+
+这几章都在讲生成机器码的前置步骤，但我眼里看到的都是 GC 相关的……
+
+---
+
+> first, from abstract-machine into assembly code
+> then, from assembly code into machine code
+
+（一层套一层，说好三年又三年的感觉。作为一个不懂汇编的鶸……我肯定是选择输出 LLVM 的 bitcode
+
+---
+
 ## 16. THE RUNTIME SYSTEM
 
 ---
