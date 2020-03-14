@@ -22,10 +22,6 @@ gaapi = "https://log.h11.io/ana"
     name = "关于"
     url = "https://h11.io"
     weight = 3
-[[menu.main]]
-    name = "订阅"
-    url = "/index.xml"
-    weight = 4
 
 [markup]
     [markup.goldmark]
