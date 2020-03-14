@@ -1,8 +1,13 @@
 <script>
-    window.ga_tid = '{{ .Site.Params.Gatid }}';
-    window.ga_api = '{{ .Site.Params.Gaapi }}';
-    if (navigator.doNotTrack !== '1')
+    /*
+    source: https://github.com/SukkaW/cloudflare-workers-async-google-analytics
+    license: MIT
+    */
     (function(window, document, navigator) {
+        window.ga_tid = '{{ .Site.Params.Gatid }}';
+        window.ga_api = '{{ .Site.Params.Gaapi }}';
+        if (navigator.doNotTrack === '1') return;
+
         var screen = window.screen,
             encode = encodeURIComponent,
             max = Math.max,
@@ -37,19 +42,21 @@
                 'vp=' +
                     max(
                         document.documentElement.clientWidth,
-                        window.innerWidth || 0,
+                        window.innerWidth || 0
                     ) +
                     'x' +
                     max(
                         document.documentElement.clientHeight,
-                        window.innerHeight || 0,
+                        window.innerHeight || 0
                     ),
                 // plt: Page Loading Time
                 // open the page => window.onload
                 // (window.onload)
-                'plt=' + filterNumber(t.loadEventStart - t.navigationStart || 0),
+                'plt=' +
+                    filterNumber(t.loadEventStart - t.navigationStart || 0),
                 // dns: DNS Time
-                'dns=' + filterNumber(t.domainLookupEnd - t.domainLookupStart || 0),
+                'dns=' +
+                    filterNumber(t.domainLookupEnd - t.domainLookupStart || 0),
                 // pdt: Page Dowenload Time
                 // start download time => finish download time
                 'pdt=' + filterNumber(t.responseEnd - t.responseStart || 0),
@@ -67,9 +74,9 @@
                 // open the page => DOMContentLoaded
                 'clt=' +
                     filterNumber(
-                        t.domContentLoadedEventStart - t.navigationStart || 0,
+                        t.domContentLoadedEventStart - t.navigationStart || 0
                     ),
-                'z=' + Date.now(),
+                'z=' + Date.now()
             ];
 
             window.__ga_img = new Image();
