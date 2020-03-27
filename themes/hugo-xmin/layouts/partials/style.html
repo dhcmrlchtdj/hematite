@@ -216,8 +216,12 @@
         display: block;
         margin: 0;
         margin-right: 8px;
+    }
+    .menu a {
+        display: block;
         padding: 2px 6px;
         border-radius: 2px;
+        text-decoration: none;
         height: 26px;
         line-height: 22px;
         font-size: 14px;
@@ -226,14 +230,11 @@
         background-color: transparent;
         transition: background-color 0.2s linear;
     }
-    .menu li:hover {
+    .menu a:hover {
         /*
         background-color: var(--gray-200);
         */
         background-color: #e1e4e8;
-    }
-    .menu a {
-        text-decoration: none;
     }
 
     .list {
@@ -241,7 +242,7 @@
         padding: 0;
     }
     .list li {
-        display: flex;
+        display: block;
     }
     .list span {
         font-family: monospace;
@@ -252,7 +253,6 @@
     }
     .list a {
         display: inline-block;
-        flex: 1;
     }
 
     .sep {
