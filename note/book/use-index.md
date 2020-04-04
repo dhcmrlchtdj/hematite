@@ -66,4 +66,54 @@ https://use-the-index-luke.com/
 
 ---
 
+## Sorting and Grouping
 
+> SQL queries with an order by clause do not need to sort the result explicitly
+> if the relevant index already delivers the rows in the required order.
+> That means the same index that is used for the where clause must also cover the order by clause.
+
+> When using mixed ASC and DESC modifiers in the order by clause,
+> you must define the index likewise in order to use it for a pipelined order by.
+
+> SQL databases use two entirely different group by algorithms.
+> the hash algorithm (buffer the aggregated result)
+> the sort/group algorithm (materializes the complete input set)
+>  the hash algorithm needs less memory
+
+---
+
+## Selecting Top-N Rows
+
+> The database can only optimize a query for a partial result if it knows this from the beginning.
+
+> For efficient execution, the ranking must be done with a pipelined order by.
+> a pipelined top-N query does not depend on the table size
+
+## Fetching The Next Page
+
+> main advantage of offset method is that it is very easy to handle
+> This has two disadvantages:
+> (1) the pages drift when inserting new sales because the numbering is always done from scratch;
+> (2) the response time increases when browsing further back.
+
+> The seek method avoids both problems because it uses the values of the previous page as a delimiter.
+> You not only have to phrase the where clause very carefully—you also cannot fetch arbitrary pages.
+
+## Window-Functions
+
+> Window functions offer yet another way to implement pagination in SQL
+
+用 `ROW_NUMBER` 实现
+
+---
+
+## Insert
+
+> To optimize insert performance, it is very important to keep the number of indexes small.
+
+## Delete
+
+> the delete statement works like a select that is followed by an extra step to delete the identified rows.
+
+> PostgreSQL's delete performance therefore does not depend on the number of indexes on the table.
+> The physical deletion of the table row and the related index maintenance is carried out only during the VACUUM process.
