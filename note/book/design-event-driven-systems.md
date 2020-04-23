@@ -106,4 +106,157 @@ database 和 log 的关系，一体两面，不需要多说了。
 
 ---
 
+## III. Rethinking Architecture at Company Scales
 
+---
+
+### 8. Sharing Data and Services Across an Organization
+
+---
+
+> how do we design systems that age well at company scales and keep our businesses nimble?
+
+感觉整章都没讲什么东西
+
+> the more we reuse a component, the more dependencies that component has, and the harder it is to change.
+
+复用意味着耦合，增加了未来修改的难度。
+这还是在讲 bounded context 吧。
+
+---
+
+### 9. Event Streams as a Shared Source of Truth
+
+---
+
+> The “database inside out” idea is important because a replayable log, combined with a set of views, is a far more malleable entity than a single shared database
+> The different views can be tuned to different people’s needs, but are all derived from the same source of truth: the log.
+
+这章还是在讲 log 和 database 的关系。
+不同业务可以通过 log 构建不同的 view 去满足不同的 query。
+（数据库也有 materialized view 呀
+
+---
+
+### 10. Lean Data
+
+---
+
+> Lean data is a simple idea: rather than collecting and curating large
+> datasets, applications carefully select small, lean ones -- just the data they
+> need at a point in time -- which are pushed from a central event store into
+> caches, or stores they control.
+
+感觉还是在讲一样的东西
+
+---
+
+## IV. Consistency, Concurrency, and Evolution
+
+---
+
+### 11. Consistency and Concurrency in Event-Driven Systems
+
+---
+
+> When you write a record, it stays written. When you read a record, you read
+> the most recently written value.
+
+> If you perform multiple operations in a transaction, they all become visible
+> at once, and you don’t need to be concerned with what other users may be doing
+> at the same time.
+
+人话解释什么是 consistency
+
+---
+
+> A useful way to generify these ideas is to isolate consistency concerns into
+> owning services using the single writer principle.
+
+> We adapted eventual consistency with the single writer principle, keeping its
+> lack of timeliness but avoiding collisions.
+
+缺少实际经验，不知道 raft 之类强一致性会带来多少性能影响。
+什么样的性能需求，才需要牺牲强一致性呢？
+
+---
+
+### 12. Transactions, but Not as We Know Them
+
+---
+
+> Exactly Once Is Both Idempotence and Atomic Commit
+
+RPC 的三种情况，at-most-once / at-least-once / exactly-once
+
+- 作为 receiver，怎么保证 at-most-once 呢？可以像 database 一样要求数据加主键
+
+---
+
+> Now the aim of a transaction is to ensure only “committed” data is seen by
+> downstream programs. To make this work, when a consumer sees a Begin marker it
+> starts buffering internally. Messages are held up until the Commit marker
+> arrives. Then, and only then, are the messages presented to the consuming
+> program. This buffering ensures that consumers only ever read committed data.
+
+一个 Begin 加一个 Commit，将多个消息合并成事务。
+一个事务持续多久呢？心跳包？还是直接超时？
+
+> To ensure each transaction is atomic, sending the Commit markers involves the
+> use of a transaction coordinator.
+
+一个 coordinator 来分发 Begin 标记
+
+---
+
+### 13. Evolving Schemas and Data over Time
+
+---
+
+> Protobuf and JSON Schema are both popular, but most projects in the Kafka space use Avro
+
+嗯？
+
+---
+
+> Say you added a “return code” field to the schema for an order; this would be
+> a backward-compatible change.
+> Programs running with the old schema would still be able to read messages,
+> but they wouldn’t see the “return code” field (termed forward compatibility).
+> Programs with the new schema would be able to read the whole message, with the
+> “return code” field included (termed backward compatibility).
+> Unfortunately, you can’t move or remove fields from a schema in a compatible
+> way
+
+什么是向前什么是向后，分不清。
+前后是相对谁而言的呢……
+
+---
+
+> most of the time backward compatibility between schemas can be maintained
+> through additive changes (i.e., new fields, but not moves or deletes).
+> But periodically schemas will need upgrading in a non-backward-compatible way.
+> The most common approach for this is Dual Schema Upgrade Window, where we
+> create two topics, orders-v1 and orders-v2, for messages with the old and new
+> schemas, respectively.
+
+只要能接受数据冗余，直接分发多种格式的数据是最方便的吧。
+看起来也是唯一的方法。
+
+---
+
+## V. Implementing Streaming Services with Kafka
+
+---
+
+### 15. Building Streaming Services
+
+---
+
+> The orders service implements a blocking HTTP GET so that clients can read
+> their own writes.
+> This technique is used to collapse the asynchronous nature of the CQRS pattern.
+
+> block the GET operation until the event arrives
+
+处理第七章的 read-after-write 一致性
