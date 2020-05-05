@@ -583,8 +583,8 @@ without rowid 才是 clustered index
 > WITHOUT ROWID tables are implemented using ordinary B-Trees with content
 > stored on both leaves and intermediate nodes.
 
-rowid 是 b+tree
-without rowid 是 btree
+rowid 是 b*-tree
+without rowid 是 b-tree
 
 ---
 
@@ -617,12 +617,6 @@ page 默认是 4K
 
 ---
 
-table b-tree, "B*-Tree" stores all data in the leaves of the tree
-
-index b-tree, "B-Tree" stores both the key and the data together in both leaves and in interior pages
-
----
-
 > Each ordinary SQL table in the database schema is represented on-disk by a
 > table b-tree.
 > The rowid of the SQL table is the 64-bit signed integer key for each entry in
@@ -630,4 +624,10 @@ index b-tree, "B-Tree" stores both the key and the data together in both leaves 
 
 > A WITHOUT ROWID table uses an index b-tree rather than a table b-tree for storage.
 
-反正不管怎么样，都是用 btree 存储数据的
+---
+
+table b-tree, "B*-Tree" stores all data in the leaves of the tree
+
+index b-tree, "B-Tree" stores both the key and the data together in both leaves and in interior pages
+
+查了下，b*-tree 是 b+-tree 的变种。
