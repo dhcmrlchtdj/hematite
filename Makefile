@@ -1,6 +1,6 @@
 .PHONY:
 dev:
-	hugo serve
+	hugo -DEF serve
 
 build:
 	rm -rf ./public
