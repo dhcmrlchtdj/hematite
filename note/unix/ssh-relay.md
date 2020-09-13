@@ -20,3 +20,15 @@ Host <server>
 ```
 
 使用 `ProxyCommand` 来自动登录跳板机
+
+---
+
+有了个简化的 `ProxyJump`
+
+```
+Host <server>
+    User <user>
+    HostName <ip>
+    Port <port>
+    ProxyJump <relay>
+```
