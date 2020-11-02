@@ -13,10 +13,6 @@ rssLimit = 10
     name = "标签"
     url = "/tags/"
     weight = 2
-[[menu.main]]
-    name = "关于"
-    url = "https://h11.io"
-    weight = 3
 
 [markup]
     [markup.goldmark]
