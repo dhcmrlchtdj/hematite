@@ -1,5 +1,5 @@
 # 更新成 debian sid
-echo 'deb http://cdn-aws.deb.debian.org/debian sid main' | sudo tee /etc/apt/sources.list
+echo 'deb http://ftp.jp.debian.org/debian sid main' | sudo tee /etc/apt/sources.list
 sudo apt update && sudo apt dist-upgrade
 sudo apt update && sudo apt full-upgrade && sudo apt autoremove && sudo apt autoclean
 
