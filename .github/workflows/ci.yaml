@@ -1,0 +1,24 @@
+name: ci
+
+on:
+    push:
+        branches:
+            - master
+        paths-ignore:
+            - 'note/**'
+
+jobs:
+    deploy:
+        runs-on: ubuntu-20.04
+        steps:
+            - uses: actions/checkout@v2.0.0
+            - uses: peaceiris/actions-hugo@v2.4.13
+              with:
+                  hugo-version: 'latest'
+            - run: hugo --minify
+            - uses: peaceiris/actions-gh-pages@v3.7.3
+              with:
+                  deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+                  publish_dir: ./public
+                  publish_branch: gh-pages
+                  force_orphan: true
