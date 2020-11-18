@@ -32,13 +32,3 @@ wiki 越来越不乖了……
 ```
 $ parted /dev/sda print # 可以查看是哪种分区 MBR/GPT
 ```
-
----
-
-# locale
-
-```
-$ echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
-$ locale-gen
-$ echo "LANG=en_US.UTF-8" >> /etc/locale.conf
-```

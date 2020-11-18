@@ -16,7 +16,9 @@ sudo chsh -s /usr/bin/zsh admin
 
 # 配置 locale
 sudo dpkg-reconfigure locales
-sudo update-locale LC_CTYPE=en_US.UTF-8
+sudo update-locale LANG=en_US.UTF-8
+sudo update-locale LC_COLLATE=C
+cat /etc/default/locale
 
 # 编辑器
 sudo apt install neovim
