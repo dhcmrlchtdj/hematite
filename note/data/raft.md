@@ -2,14 +2,6 @@
 
 ---
 
-- basic raft algorithm /20
-- cluster membership changes /15
-- log compaction /17
-- client interaction /19
-- leader election evaluation /21
-
----
-
 ## basic raft algorithm
 
 ---
@@ -260,6 +252,60 @@ election_timeout 这个要自己判断。
     - other servers from then on should be initialized with empty logs
     - 启动的时候，只给一个节点最初的 membership configuration，只包含节点自己
     - 之后其他节点都用动态添加的方式加入 cluster
+
+---
+
+## log compaction
+
+- most of the responsibility of log compaction falls on the state machine
+    - writing the state to disk
+    - compacting the state
+- each server compacts the committed prefix of its log independently
+    - for very small state machines, a leader-based approach may be better
+- Raft retains the index and term of the last entry and the latest configuration
+    - last entry 用于 AppendEntries 定位
+    - latest configuration 用于维护 membership
+- 其他的 snapshot 用途不多说了，异常恢复、快速更新
+
+---
+
+### snapshot memory-based state machine
+
+- copy-on-write
+    - in-memory state machines can use fork to make a copy of the server's entire address space
+    - the child process can write out the state machine's state and exit
+    - the parent process continues servicing requests
+    - 记得 redis 也是这么做的
+
+- 什么时候生成 snapshot
+- servers take a snapshot once the size of the log exceeds the size of the previous snapshot times a configurable expansion factor.
+
+### snapshot disk-based state machine
+
+- applying each entry from the Raft log mutates the on-disk state
+    - once an entry is applied, it can be discarded from the Raft log
+    - 就是完全用硬盘存储了
+
+### incremental approach
+
+- log cleaning or log-structured merge tree
+- 作者讲了两种结构
+
+### leader-based approach
+
+- each follower already has the information needed to compact its own state
+- the leader's outbound network bandwidth is usually Raft’s most precious (bottleneck) resource
+    - 开篇讲了一堆 leader-based approach 的缺点
+
+- snapshot 直接作为 entry，实现上简单
+    - the leader would create a snapshot and store the snapshot as entries in the Raft log
+    - servers would not need separate mechanisms to transfer snapshots or persist them
+
+- 作者也觉得这个方案没啥用
+
+---
+
+## client interaction
 
 ---
 
