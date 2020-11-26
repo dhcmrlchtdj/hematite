@@ -6,6 +6,7 @@
 - cluster membership changes /15
 - log compaction /17
 - client interaction /19
+- leader election evaluation /21
 
 ---
 
@@ -139,6 +140,127 @@ election_timeout 这个要自己判断。
 
 停机维护之类的场景，需要主动交出 leadership。
 先将目标节点的 log 更新至最新状态，然后发一个 `TimeoutNow` 过去，触发选主。
+（这里是不是还要考虑下，自己又被选上的情况……不然自己被选上，状态机要加一点点条件
 
 ---
+
+## cluster membership changes
+
+- 增加两个 RPC 调用，AddServer/RemoveServer
+- 用于支持动态增删节点
+
+---
+
+### safety
+
+- 分析时要记住，raft leader 并不记录 follower 的 commit index
+
+- only one server can be added or removed from the cluster at a time
+    - disallow membership changes that could result in disjoint majorities
+    - at least one server overlaps any majority during the change
+    - preserving safety across configuration changes
+    - 每次只允许 增/删 一个节点，保证了修改前后 majority 是有重叠的，也就保证了不会出现 split brain
+
+- cluster configurations are stored and communicated using special entries in the replicated log
+    - 增删节点，通过追加 log 实现
+    - The configuration change is complete once the Cnew entry is committed
+    - servers always use the latest configuration in their logs
+    - 整个修改是 commit 才算完成，但是还没 commit 就已经在各个节点生效了
+    - a log entry for a configuration change can be removed (if leadership changes)
+    - 如果中途发生了选主，还把 Cnew 删除了，那么全部节点都要退回使用 Cold
+
+- 每次增删只允许一个，commit 之后才算完成一次增删操作
+
+- servers process incoming RPC requests without consulting their current configurations
+    - A server accepts AppendEntries requests from a leader that is not part of the server’s latest configuration
+    - A server grants its vote to a candidate that is not part of the server's latest configuration
+    - 这两条都是保证新节点能加入 cluster
+
+---
+
+### availability
+
+---
+
+#### catch up new server
+
+- when a server is added to the cluster, it typically will not store any log entries
+- its log could take quite a while to catch up to the leader's
+- until the new servers' logs were caught up to the leader's, the clusters would be unavailable
+- 就是节点初始化的问题
+- 如果出现新节点是 majority 成员的情况，新节点需要长时间去同步状态，可能导致 client 的响应时间很高
+
+- a new server joins the cluster as a non-voting member
+- The leader replicates log entries to it, but it is not yet counted towards majorities for **voting or commitment** purposes
+- raft 的解决方案是，新节点在完成同步前，不参与 majority 统计
+- The leader should also abort the change if the new server is unavailable or is so slow that it will never catch up
+- 新节点完不成同步，甚至会被拒绝
+
+（有没有必要追溯所有 log，没必要的话，定期 snapshot 可以加快新节点加入、异常恢复什么的
+
+- 怎么判断新节点能否完成同步
+    - The replication of entries to the new server is split into rounds
+        - 当前 leader 的 log index 为 A
+        - 新 follower 同步到 A 的时候，leader 新增 log 到了 log index B
+        - 则 A 至 B 的 log 就算一个 round
+    - The algorithm waits a fixed number of rounds (such as 10)
+    - If the last round lasts less than an election timeout, then the leader adds the new server to the cluster
+
+---
+
+#### remove the current leader
+
+- a leader that is asked to remove itself would transfer its leadership to another server, which would then carry out the membership change normally.
+- 简单的方法，先移交 leadership，然后由新 leader 删除节点
+
+- 没实现 leadership transfer 的话
+- a leader that is removed from the configuration steps down once the Cnew entry is committed
+- leader 确定 Cnew commit 了才下线。之后发生 timeout，触发选主
+
+- it replicates log entries but does not count itself in majorities.
+    - 广播了 Cnew 但还没 timeout，期间 leader 还会继续追加 log，但是自己不计入 majority
+
+- a server that is not part of its own latest configuration should still start new elections
+    - as it might still be needed until the Cnew entry is committed
+
+---
+
+#### disruptive servers
+
+- once the cluster leader has created the Cnew entry, a server that is not in Cnew will no longer receive heartbeats
+    - it will time out and start new elections
+    - it will not know that it has been removed from the cluster
+    - 自己被删了还不知道，还在努力的 RequestVote，怎么感觉有点惨呢
+    - it will send RequestVote with new term numbers, this will cause the current leader to revert to follower state
+    - 然后 leader 就变成 follower 了，然后再触发选主，再变 follower，无限循环
+
+- the Pre-Vote phase
+    - a candidate would first ask other servers whether its log was up-to-date enough to get their vote
+    - pre-vote 成功才有希望成为新 leader，只有成功了才增加 term，发送 RequestVote
+- 这并不难完全解决问题，如果被剔除的节点数据很新，pre-vote 可能成功
+- no solution based on comparing logs alone (such as the Pre-Vote check) will be sufficient to tell if an election will be disruptive
+    - 无解
+
+- Raft's solution uses heartbeats to determine when a valid leader exists
+    - if a server receives a RequestVote request within the minimum election timeout of hearing from a current leader
+    - it does not update its term or grant its vote
+- 节点收到 RequestVote，不会马上接受。要等节点达到 minimum election timeout 才会接受
+- 这样就避免了被踢出去的节点更新 term
+
+---
+
+### integration
+
+- it is preferable to add servers before removing servers
+- with dynamic membership changes, the static configuration file is no longer needed
+    - the system manages configurations in the Raft log
+- we recommend that
+    - the very first time a cluster is created
+    - one server is initialized with a configuration entry as the first entry in its log
+    - other servers from then on should be initialized with empty logs
+    - 启动的时候，只给一个节点最初的 membership configuration，只包含节点自己
+    - 之后其他节点都用动态添加的方式加入 cluster
+
+---
+
 
