@@ -1,5 +1,5 @@
 baseURL = "https://log.h11.io/"
-title = "Logs"
+title = "trivial"
 theme = "hugo-xmin"
 copyright = "https://creativecommons.org/licenses/by-nc-sa/4.0/"
 languageCode = "zh-Hans"
