@@ -307,6 +307,62 @@ election_timeout 这个要自己判断。
 
 ## client interaction
 
+- the consensus literature only addresses the communication between cluster servers
+- in real Raft-based systems, client interaction can be a major source of bugs
+
 ---
 
+### finding the cluster
+- raft membership 可能变化，所以要怎么连上 raft cluster 呢
+    - network broadcast or multicast
+    - external directory service (such as, DNS
 
+### routing requests to the leader
+- when a client first starts up, it connects to a randomly chosen server
+    - follower rejects the request and return to the client the address of the leader
+    - follower proxies the request to the leader
+
+### implementing linearizable semantics
+- raft provides at-least-once semantics for clients
+    - the at-least-once semantics are particularly **unsuitable** for a consensus-based system
+    - clients typically need stronger guarantee
+    - 不在 client 做任何判断，网络问题导致 raft 是 at-least-once 语义
+    - 比如 leader commit 之后 crash，client 可能再次发送相同的指令
+
+- 实现 exactly-once 语义，过滤重复请求
+- to achieve linearizability in Raft, servers must filter out duplicate requests
+    - each client is given a unique identifier
+    - clients assign unique serial numbers to every command
+    - server's state machine maintains a session for each client
+    - the session tracks the latest serial number processed for the client
+    - 前面这个只处理 latest 还是不够，需要支持并行就要记录所有完成前的指令
+    - the client includes the lowest sequence number for which it has not yet received a response
+    - the state machine then discards all responses for lower sequence numbers
+
+- 怎么处理 client session 过期的问题
+    - 每个 client 在最初都要申请一个 session id
+    - raft leader 和 client 通过 heartbeat 保持 session 存活（这样 leader 压力会不会很大？
+    - （要严格保证一致性，只能靠 client 自己做数据检查了？
+
+### processing read-only queries more efficiently
+- bypassing the log could lead to stale results for read-only query
+- a approach that more efficient than committing read-only queries as new entries in the log (还是有一些地方可以优化
+    - a leader has all committed entries, but at the start of its term (Leader Completeness Property
+        - each leader commit a blank no-op entry into the log at the start of its term
+        - 提交一个 no-op 保证当前 term 已经 commit
+    - 请求进来的时候，记录 commit index
+    - 通过一次 heartbeat 确保自己仍是 leader
+    - 只要 state-machine 跟上 commit index，就可以直接读取
+
+- lease
+    - the leader would use the normal heartbeat mechanism to maintain a lease
+    - once the leader’s heartbeats were acknowledged by a majority of the cluster, it would extends its lease
+        - new_lease = heartbeat_start + (election_timeout / clock_drift_bound)
+    - while the leader held its lease, it would service read-only queries without communication
+- 在 election_timeout/clock_drift_bound 之内，系统不可能选出新的 leader
+- the lease approach assumes a bound on clock drift across servers
+    - 作者其实不推荐这个强依赖于时间的方案
+
+- client 也可以配合一下，请求时携带 log index
+    - stale leader 发现 client log index 比自己的 committed log index 还大，就知道自己处理不了这次的请求
+    - 不能保证完全 linearizability，但可以保证递增
