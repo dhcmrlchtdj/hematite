@@ -229,7 +229,7 @@ election_timeout 这个要自己判断。
 - the Pre-Vote phase
     - a candidate would first ask other servers whether its log was up-to-date enough to get their vote
     - pre-vote 成功才有希望成为新 leader，只有成功了才增加 term，发送 RequestVote
-- 这并不难完全解决问题，如果被剔除的节点数据很新，pre-vote 可能成功
+- 这并不能完全解决问题，如果被剔除的节点数据很新，pre-vote 可能成功
 - no solution based on comparing logs alone (such as the Pre-Vote check) will be sufficient to tell if an election will be disruptive
     - 无解
 
@@ -366,3 +366,9 @@ election_timeout 这个要自己判断。
 - client 也可以配合一下，请求时携带 log index
     - stale leader 发现 client log index 比自己的 committed log index 还大，就知道自己处理不了这次的请求
     - 不能保证完全 linearizability，但可以保证递增
+
+---
+
+## leader election evaluation
+- when election timeouts are chosen randomly from a range of 10-20 times the one-way network latency, leaders are elected within about 20 times the one-way network latency on average
+- 99.9% of elections complete in less than 3 seconds when the one-way network latency is as high as 30-40 ms
