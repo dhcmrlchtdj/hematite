@@ -7,6 +7,7 @@ sudo apt update && sudo apt full-upgrade && sudo apt autoremove && sudo apt auto
 sudo apt install build-essential
 sudo apt install git htop
 sudo apt install zsh zsh-syntax-highlighting zsh-autosuggestions
+sudo apt install exa fzf ripgrep bat
 
 # 配置 ntp
 sudo apt remove chrony
