@@ -37,3 +37,8 @@ sudo apt install nginx-full certbot
 sudo systemctl disable --now nginx.service
 vim ~/.config/letsencrypt/cli.ini
 certbot ...
+
+# dns
+echo 'nameserver 1.1.1.1\nnameserver 1.0.0.1' | sudo tee /etc/resolv.conf
+chattr +i /etc/resolv.conf
+echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
