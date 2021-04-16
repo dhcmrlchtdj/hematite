@@ -1,16 +1,16 @@
 # 更新成 debian sid
-echo 'deb http://ftp.jp.debian.org/debian sid main' | sudo tee /etc/apt/sources.list
-sudo apt update && sudo apt dist-upgrade
-sudo apt update && sudo apt full-upgrade && sudo apt autoremove && sudo apt autoclean
+echo 'deb http://ftp.debian.org/debian sid main' | sudo tee /etc/apt/sources.list
+sudo apt update && sudo apt -y dist-upgrade && sudo apt -y full-upgrade
 
 # 环境
-sudo apt install build-essential
-sudo apt install git htop
-sudo apt install zsh zsh-syntax-highlighting zsh-autosuggestions
-sudo apt install exa fzf ripgrep bat
+sudo apt install -y build-essential
+sudo apt install -y git neovim htop tmux sshguard ldnsutils
+sudo apt install -y zsh zsh-syntax-highlighting zsh-autosuggestions
+sudo apt install -y exa fzf ripgrep bat
+sudo apt install -y nodejs npm
 
 # 配置 ntp
-sudo apt remove chrony
+sudo apt remove -y chrony
 
 # 切换 shell
 sudo chsh -s /usr/bin/zsh admin
@@ -22,23 +22,27 @@ sudo update-locale LC_COLLATE=C
 cat /etc/default/locale
 
 # 编辑器
-sudo apt install neovim
-sudo apt install nodejs npm
 sudo update-alternatives --config editor
 
 # 配置 ss
-sudo apt install ss-libev ss-plugin
-sudo systemctl disable --now ss-libev.service
+sudo apt install ss-libev ss-v2ray-plugin
 sudo vim /etc/ss-libev/config.json
-sudo systemctl enable --now ss-libev.service
+sudo systemctl restart ss-libev.service
 
 # 配置 nginx
-sudo apt install nginx-full certbot
-sudo systemctl disable --now nginx.service
+sudo apt install -y nginx-full certbot
+mkdir -p ~/.config/letsencrypt
 vim ~/.config/letsencrypt/cli.ini
-certbot ...
+certbot register --agree-tos --register-unsafely-without-email
 
 # dns
 echo 'nameserver 1.1.1.1\nnameserver 1.0.0.1' | sudo tee /etc/resolv.conf
-chattr +i /etc/resolv.conf
+sudo chattr +i /etc/resolv.conf
 echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
+
+# sshguard
+sudo mkdir -p /var/lib/sshguard
+sudo touch /var/lib/sshguard/blacklist.db
+
+# sysctl
+sudo touch /etc/sysctl.d/local.conf
