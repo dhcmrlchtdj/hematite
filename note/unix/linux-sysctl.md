@@ -2,7 +2,7 @@
 
 https://wiki.archlinux.org/index.php/sysctl
 https://www.starduster.me/2020/03/02/linux-network-tuning-kernel-parameter/
-
+https://github.com/shadowsocks/shadowsocks/wiki/Optimizing-Shadowsocks
 
 ```
 net.core.netdev_max_backlog = 10240
