@@ -64,4 +64,26 @@
 
 ---
 
+# key-value store
+
+> Since network failure is unavoidable, a distributed system must tolerate network partition.
+> Thus, a CA system cannot exist in real- world applications.
+之前看 RocksDB 的一个维护者喷 CAP 让问题变得模糊。
+如果说 P 必然存在，所以 CA system 不存在，那为什么不叫 CA 定理。
+
+## component
+- data partition
+- data replication
+- consistency (sloppy quorum
+- inconsistency resolution (version clock
+- handling failures
+    - gossip protocol 发现故障
+    - merkle tree 同步数据（减少需要同步的数据量
+
+## gossip
+> each node maintains a node membership list
+每个节点都只和几个节点进行定期通讯。（而不是和所有节点
+
+---
+
 
