@@ -50,3 +50,18 @@
 - multi data center
 - eventual consistency
 感觉这两点和 consensus 都是矛盾的…
+
+---
+
+# consistent hashing
+
+> To determine which server a key is stored on,
+> go clockwise from the key position on the ring until a server is found.
+
+> As the number of virtual nodes increases, the distribution of keys becomes more balanced.
+
+其实就两点，一个是 hash ring，一个是 virtual node
+
+---
+
+
