@@ -86,4 +86,23 @@
 
 ---
 
+# unique id generator
+
+## requirement
+- generate 10k ID per second
+
+## design
+- UUID
+- ticket server
+    - a Flickr ticket server is a dedicated database server, with a single database on it
+    - `REPLACE INTO Tickets64 (stub) VALUES ('a'); SELECT LAST_INSERT_ID();`
+    - 靠 unique key 自增的方式获取新的 id
+    - SPOF 的问题，双机做负载均衡，一个只生成奇数 ID，一个只生成偶数 ID
+- snowflake
+    - ID = time_stamp + data_center_id + machine_id + sequence_number
+
+（这种 ID 生成器好像都有一个问题，就是并不能严格排序
+
+---
+
 
