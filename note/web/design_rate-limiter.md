@@ -101,7 +101,11 @@
 - snowflake
     - ID = time_stamp + data_center_id + machine_id + sequence_number
 
-（这种 ID 生成器好像都有一个问题，就是并不能严格排序
+这种 ID 生成器好像都是趋势递增，但不保证单调递增。没什么经验，不知道实际要求如何。
+
+美团的 leaf 服务类似 ticket server，不过在 client 和 DB 之间有个 proxy。
+会在 proxy 里一次取一段 id 而不是每次都到 DB 生成，而 proxy 是可以扩展的。
+
 
 ---
 
