@@ -25,12 +25,13 @@ cat /etc/default/locale
 sudo update-alternatives --config editor
 
 # 配置 ss
-sudo apt install ss-libev ss-v2ray-plugin
-sudo vim /etc/ss-libev/config.json
-sudo systemctl restart ss-libev.service
+sudo apt install -y shadowsocks-libev shadowsocks-v2ray-plugin
+sudo vim /etc/shadowsocks-libev/config.json
+sudo systemctl restart shadowsocks-libev.service
 
 # 配置 nginx
 sudo apt install -y nginx-full certbot
+sudo vim /etc/nginx/nginx.conf
 mkdir -p ~/.config/letsencrypt
 vim ~/.config/letsencrypt/cli.ini
 certbot register --agree-tos --register-unsafely-without-email
@@ -41,8 +42,13 @@ sudo chattr +i /etc/resolv.conf
 echo "127.0.0.1 $(hostname)" | sudo tee -a /etc/hosts
 
 # sshguard
+sudo vim /etc/ssh/sshd_config
 sudo mkdir -p /var/lib/sshguard
 sudo touch /var/lib/sshguard/blacklist.db
+sudo vim /etc/sshguard/whitelist
+sudo vim /etc/sshguard/sshguard.conf
+sudo systemctl restart sshguard.service
 
 # sysctl
-sudo touch /etc/sysctl.d/local.conf
+sudo vim /etc/sysctl.d/66-bbr.conf
+sudo sysctl --system
