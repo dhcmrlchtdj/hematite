@@ -1,3 +1,17 @@
+# System Design Interview
+
+https://blog.pragmaticengineer.com/system-design-interview-an-insiders-guide-review/
+
+这篇文章吹得天花乱坠，看书时期待落空。
+本书更多是讲系统可以怎么组装出来，不会深入去讲某个子系统如何实现。
+
+用作者自己的话说
+- system design interviews are not about building everything from scratch
+- building scalable blob storage or CDN is extremely complex and costly
+虽然确实是这样，但作为读者，最好奇的不就是复杂问题如何被一步步解决吗？
+
+---
+
 # rate limiter
 
 ## algorithm
@@ -101,12 +115,66 @@
 - snowflake
     - ID = time_stamp + data_center_id + machine_id + sequence_number
 
-这种 ID 生成器好像都是趋势递增，但不保证单调递增。没什么经验，不知道实际要求如何。
+    这种 ID 生成器好像都是趋势递增，但不保证单调递增。没什么经验，不知道实际要求如何。
 
-美团的 leaf 服务类似 ticket server，不过在 client 和 DB 之间有个 proxy。
-会在 proxy 里一次取一段 id 而不是每次都到 DB 生成，而 proxy 是可以扩展的。
+    美团的 leaf 服务类似 ticket server，不过在 client 和 DB 之间有个 proxy。
+    会在 proxy 里一次取一段 id 而不是每次都到 DB 生成，而 proxy 是可以扩展的。
 
 
 ---
 
+# url shortener
+拿了一些篇幅讨论 hash function，我觉得直接拿 ID 就可以了
 
+---
+
+# web crawler
+
+---
+
+# notification system
+（太水了，不是在讲系统怎么设计，而是在讲怎么当 API caller
+
+---
+
+# news feed system
+
+> Fanout is the process of delivering a post to all friends
+- fanout on write (also called push model)
+    - the news feed is pre-computed during write time
+    - 优点是用户读取快
+    - 缺点是不适合头部用户（推送的量太大，而且推送给不活跃用户是在浪费算力）
+- fanout on read (also called pull model)
+    - the news feed is generated during read time
+    - 优缺点相反
+- hybrid
+    - 普通用户，发消息时主动 push
+    - 头部用户 follower 较多，让 follower 去 pull 消息
+
+---
+
+# chat system
+
+> the choice of network protocols is important
+但后文只是在讲 poll, long pull, websocket…
+
+- use k-v store for chat history data
+
+其实 chat, news feed, notification 三套系统很像吧，都是在推送消息。
+多人群组，就像信息流的头部用户一样。
+
+---
+
+# autocompletion
+- trie
+- data gathering service 用于分析热词
+
+---
+
+# youtube
+- CDN + S3
+
+---
+
+# google drive
+有了 S3 这种服务，上层更多是 metadata 的维护吧。
