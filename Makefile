@@ -4,4 +4,4 @@ dev:
 
 build:
 	rm -rf ./public
-	hugo --minify
+	hugo
